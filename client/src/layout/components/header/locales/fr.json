@@ -8,5 +8,6 @@
   "layout.header.nav.search.projects": "Financements",
   "layout.header.nav.search.authors": "Auteurs",
   "layout.header.nav.search.patents": "Brevets",
-  "layout.header.nav.networks": "Explorer les réseaux"
+  "layout.header.nav.networks": "Explorer les réseaux",
+  "layout.header.nav.chat": "Chatter"
 }

@@ -23,14 +23,14 @@ function ChatPage() {
             <Link href="/">
               <FormattedMessage id="chat.top.breadcrumb.home" />
             </Link>
-            <Link current>{intl.formatMessage({ id: "chat.top.breadcrumb.explore" })}</Link>
+            <Link current>{intl.formatMessage({ id: "chat.top.breadcrumb.chat" })}</Link>
           </Breadcrumb>
           <Row gutters className="fr-pb-4w fr-mb-2w">
             <Col xs="12" sm="8" lg="8">
               <SearchBar
                 key={0}
                 isLarge
-                buttonLabel={intl.formatMessage({ id: "chat.top.main-search-bar" })}
+                buttonLabel={intl.formatMessage({ id: "chat.top.main-search-button" })}
                 defaultValue={""}
                 placeholder={intl.formatMessage({ id: "chat.top.main-search-bar" })}
                 onSearch={() => {}}
