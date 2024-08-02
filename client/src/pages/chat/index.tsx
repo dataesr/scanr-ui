@@ -17,13 +17,14 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 }, {})
 
 const CHAT_TYPES = [
+  { label: "Trends", key: "trends" },
   { label: "RAG", key: "rag" },
   { label: "Function Calling", key: "function_calling" },
 ]
 
 function ChatPage() {
   const intl = useIntl()
-  const [chatType, setChatType] = useState("rag")
+  const [chatType, setChatType] = useState("trends")
   const { messages, addMessage, clearMessages } = useMessages()
   const { data, error, isFetching } = useChat(messages, chatType)
 
@@ -54,7 +55,7 @@ function ChatPage() {
             <Col xs="12" sm="4" lg="4">
               <select
                 className="fr-select"
-                defaultValue={chatType || CHAT_TYPES[0].key}
+                defaultValue={chatType}
                 onChange={(matcher) => {
                   clearMessages(), setChatType(matcher.target.value)
                 }}

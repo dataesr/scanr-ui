@@ -3,8 +3,10 @@ import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import chatRAG from "../../../api/chat/rag"
 import chatFunctionCalling from "../../../api/chat/function_calling"
+import chatTrends from "../../../api/chat/trends"
 
 const CHAT_FUNCTIONS = {
+  trends: chatTrends,
   rag: chatRAG,
   function_calling: chatFunctionCalling,
 }
