@@ -41,13 +41,13 @@ export default async function chatFunctionCalling(
       const tool_call = completion.choices[0].message.tool_calls[0]
       console.log("tool_call", tool_call)
 
-      const result = TOOLS_MAPPING[tool_call.function.name](tool_call.function.arguments)
+      const result = await TOOLS_MAPPING[tool_call.function.name](JSON.parse(tool_call.function.arguments))
       console.log("result", result)
 
       if (result) {
         const tool_answer = { role: "tool", name: tool_call.function.name, content: JSON.stringify(result) }
         const tool_messages = [...messages, message, tool_answer]
-        answer = await chatCompletion(tool_messages, "small").then((response) => response)
+        answer = await chatCompletion(tool_messages, "small")
       }
     }
 
