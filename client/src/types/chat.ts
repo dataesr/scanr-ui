@@ -13,6 +13,7 @@ export type ChatOptions = {
   stream?: boolean
   safe_prompt?: boolean
   random_seed?: number
+  json_format?: boolean
 }
 
 export type ChatCompletionArgs = {

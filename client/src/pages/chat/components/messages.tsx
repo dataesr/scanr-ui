@@ -6,10 +6,12 @@ export default function Messages({ messages, isFetching }: { messages: ChatMessa
 
   const roleColor = (role: ChatRole) => (role === "user" ? "blue-cumulus" : "yellow-tournesol")
 
-  function Fetching({ isFetching }) {
+  function Fetching() {
     return isFetching ? (
       <Row>
-        <Badge color={roleColor("system")}>...</Badge>
+        <Badge className="fr-mb-1w" color={roleColor("system")}>
+          ...
+        </Badge>
       </Row>
     ) : null
   }
@@ -17,9 +19,13 @@ export default function Messages({ messages, isFetching }: { messages: ChatMessa
   return (
     <Container>
       {messages.map((message, index) => (
-        <Badge color={roleColor(message.role)} key={index}>{`(${message.role}) ${message.content}`}</Badge>
+        <Badge
+          className="fr-mb-1w"
+          color={roleColor(message.role)}
+          key={index}
+        >{`(${message.role}) ${message.content}`}</Badge>
       ))}
-      <Fetching isFetching={isFetching} />
+      <Fetching />
     </Container>
   )
 }

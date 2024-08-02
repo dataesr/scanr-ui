@@ -6,7 +6,7 @@ const postHeaders = { ...headers, "Content-Type": "application/json" }
 
 const models = { small: "mistral-small-latest", large: "mistral-large-latest" }
 
-export default async function chatCompletion(messages: ChatMessages, model: string, options?: ChatOptions): Promise<string> {
+export async function chatCompletion(messages: ChatMessages, model: string, options?: ChatOptions): Promise<string> {
   const chatBody = {
     messages: messages,
     model: models[model],
@@ -16,6 +16,7 @@ export default async function chatCompletion(messages: ChatMessages, model: stri
     ...(options?.max_tokens && { max_tokens: options.max_tokens }),
     ...(options?.stream && { max_tokens: options.stream }),
     ...(options?.random_seed && { max_tokens: options.random_seed }),
+    ...(options?.json_format && { response_format: { type: "json_object" } }),
   }
 
   console.log("chatBody", chatBody)
