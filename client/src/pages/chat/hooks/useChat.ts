@@ -4,9 +4,11 @@ import { useMemo } from "react"
 import chatRAG from "../../../api/chat/rag"
 import chatFunctionCalling from "../../../api/chat/function_calling"
 import chatTrends from "../../../api/chat/trends"
+import chatTrendsKeywords from "../../../api/chat/trends_keywords"
 
 const CHAT_FUNCTIONS = {
   trends: chatTrends,
+  trends_keywords: chatTrendsKeywords,
   rag: chatRAG,
   function_calling: chatFunctionCalling,
 }

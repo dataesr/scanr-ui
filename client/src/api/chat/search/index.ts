@@ -5,7 +5,7 @@ import { FIELDS as PUBLICATIONS_FIELDS, LIGHT_SOURCE as PUBLICATIONS_SOURCE } fr
 import { FIELDS as PROJECT_FIELDS } from "../../projects/_utils/constants"
 
 const MAX_YEAR = new Date().getFullYear()
-const MIN_YEAR = MAX_YEAR - 5
+const MIN_YEAR = MAX_YEAR - 10
 
 export async function searchForRAG({ query, filters, size }: SearchArgs): Promise<Array<Publication>> {
   const body: any = {
@@ -154,6 +154,47 @@ export async function searchProjectsForTrends({ query }: SearchArgs): Promise<an
   const aggregations = data.aggregations
   console.log("projects_data", data)
   console.log("projects_aggregations", aggregations)
+
+  return aggregations
+}
+
+export async function searchPublicationsForKeywords({ query }: SearchArgs): Promise<any> {
+  const body: any = {
+    size: 0,
+    query: {
+      bool: {
+        must: [
+          {
+            query_string: {
+              query: query || "*",
+              fields: PUBLICATIONS_FIELDS,
+            },
+          },
+        ],
+        filter: [{ range: { year: { gte: MIN_YEAR } } }, { term: { "authors.affiliations.detected_countries": "fr" } }],
+      },
+    },
+    aggs: {
+      years: {
+        terms: { field: "year", size: MAX_YEAR - MIN_YEAR },
+        aggs: {
+          domains: {
+            terms: { field: "domains.id_name.keyword", size: 20 },
+          },
+        },
+      },
+    },
+  }
+  if (!query) body.query = { function_score: { query: body.query, random_score: {} } }
+  const response = await fetch(`${publicationsIndex}/_search`, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: postHeaders,
+  })
+  const data = await response.json()
+  const aggregations = data.aggregations
+  console.log("data", data)
+  console.log("aggregations", aggregations)
 
   return aggregations
 }

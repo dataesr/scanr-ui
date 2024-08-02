@@ -18,6 +18,7 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 
 const CHAT_TYPES = [
   { label: "Trends", key: "trends" },
+  { label: "Trends with keywords", key: "trends_keywords" },
   { label: "RAG", key: "rag" },
   { label: "Function Calling", key: "function_calling" },
 ]
