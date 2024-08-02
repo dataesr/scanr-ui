@@ -4,9 +4,11 @@ import { useMemo } from "react"
 import chatRAG from "../../../api/chat/rag"
 
 export default function useChat(messages: ChatMessages) {
+  const lastUserMessage = messages.filter((message) => message.role === "user").slice(-1)[0]
+
   const { data, error, isFetching, refetch } = useQuery({
-    queryKey: ["chat", messages[0]],
-    queryFn: () => chatRAG(messages[0]),
+    queryKey: ["chat", lastUserMessage],
+    queryFn: () => chatRAG(lastUserMessage),
     enabled: messages.length > 0,
   })
 

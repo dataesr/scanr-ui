@@ -6,24 +6,24 @@ const findKeywordsPrompt = (message: ChatMessage): ChatMessage => ({
   role: message.role,
   content: `
   ### Instructions:
-  Generate search keywords to retrieve research papers based on a user query.
-  Output as JSON object without explanation.
+  Generate concise search keywords to retrieve research papers based on a user query.
+  Add synonyms and related fields of study that could help answer the question.
+  Output as JSON object with a 'keywords' list without explanation.
 
   ### User query:
   ${message.content}`,
 })
 
-const ragPrompt = (query: string, content: string): ChatMessage => ({
+const ragPrompt = (query: string, context: string): ChatMessage => ({
   role: "user",
   content: `
-  ### Instructions:
+  Context information is below.
+  ---------------------
+  ${context}
+  ---------------------
   Given the context information and not prior knowledge, answer the query.
-
-  ### Query:
-  ${query} 
-  
-  ### Context:
-  ${content}`,
+  Query: ${query}
+  Answer: `,
 })
 
 async function chatFindKeywords(message: ChatMessage, model: string, options?: ChatOptions): Promise<Array<string>> {
@@ -42,16 +42,14 @@ export default async function chatRAG(message: ChatMessage): Promise<string> {
   const publications = await searchForRAG({
     query: `("${keywords.join('") OR ("')}")`,
     filters: null,
-    size: 10,
+    size: 5,
   })
   const summaries = publications.map((publication) => publication.summary.default)
   const prompt = ragPrompt(message.content, summaries.join("\n"))
   const answer = await chatCompletion([prompt], "cheap")
 
-  console.log("keywords", keywords)
   console.log("publications", publications)
   console.log("summaries", summaries)
-  console.log("prompt", prompt)
 
   return answer
 }
