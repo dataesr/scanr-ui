@@ -22,6 +22,8 @@ export default async function chatFunctionCalling(
     ...(options?.json_format && { response_format: { type: "json_object" } }),
   }
 
+  console.log("api_messages", messages)
+
   const response = await fetch(`${MISTRAL_URL}/chat/completions`, {
     method: "POST",
     headers: MISTRAL_HEADERS,

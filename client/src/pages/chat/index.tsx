@@ -22,9 +22,7 @@ function ChatPage() {
 
   if (error) console.log("chat error", error)
 
-  if (data && messages.length && messages.slice(-1)[0].content != data) {
-    addMessage(data, "assistant")
-  }
+  if (data && messages.length && messages.slice(-1)[0].content != data) addMessage(data, "assistant")
 
   return (
     <>
@@ -43,7 +41,7 @@ function ChatPage() {
                 isLarge
                 buttonLabel={intl.formatMessage({ id: "chat.top.main-search-button" })}
                 placeholder={intl.formatMessage({ id: "chat.top.main-search-bar" })}
-                onSearch={(value) => addMessage(value, "user")}
+                onSearch={(query: string) => addMessage(query, "user")}
               />
             </Col>
           </Row>

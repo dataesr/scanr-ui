@@ -20,9 +20,10 @@ export default async function chatCompletion(messages: ChatMessages, model: stri
     headers: MISTRAL_HEADERS,
     body: JSON.stringify(chatBody),
   })
-  console.log("chatResponse", response)
 
+  console.log("chatResponse", response)
   const completion = await response.json()
+
   const answer: string = completion && completion.choices ? completion.choices[0].message.content : null
 
   return answer
