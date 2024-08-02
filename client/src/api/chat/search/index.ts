@@ -47,6 +47,7 @@ export async function searchForRAG({ query, filters, size }: SearchArgs): Promis
 
 export async function searchPublicationsForTrends({ query }: SearchArgs): Promise<any> {
   const body: any = {
+    size: 0,
     query: {
       bool: {
         must: [
