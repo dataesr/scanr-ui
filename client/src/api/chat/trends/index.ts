@@ -7,13 +7,10 @@ const trendsPrompt = (query: string, context: string): ChatMessage => ({
   role: "user",
   content: `
   You have JSON data representing publications discussing ${query}.
-  It contains the number of publications produced each year and number of publications per authors.
-  Your task is to analyze this data and provide a general analysis of the publication rate trend.
-  
-  Determine whether the publication rate is increasing, decreasing, or stable over time.
-  Identify the year with the highest number of publications (the peak year) and the top authors.
-  Provide insights into any patterns or anomalies observed in the data.
-  
+  For each year the data contains the five most relevant publications abstract.
+  Give a general analysis of the scientific trends emerging from the abstracts.
+  The analysis should not exceed 200 words.
+
   JSON data:
   ${context}
   `,
@@ -31,7 +28,7 @@ export default async function chatTrends(messages: ChatMessages): Promise<string
   console.log("aggregations", aggregations)
   console.log("data", json)
 
-  const prompt = trendsPrompt(query, JSON.stringify(json))
+  const prompt = trendsPrompt(query, JSON.stringify(json.summaries))
   const answer = await chatCompletion([prompt], "cheap")
 
   return answer

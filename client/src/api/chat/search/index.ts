@@ -3,8 +3,8 @@ import { SearchArgs, ElasticResult } from "../../../types/commons"
 import { Publication } from "../../../types/publication"
 import { FIELDS, LIGHT_SOURCE } from "../_utils/constants"
 
-const MIN_YEAR = 2013
 const MAX_YEAR = new Date().getFullYear()
+const MIN_YEAR = MAX_YEAR - 5
 
 export async function searchForRAG({ query, filters, size }: SearchArgs): Promise<Array<Publication>> {
   const body: any = {
@@ -46,7 +46,6 @@ export async function searchForRAG({ query, filters, size }: SearchArgs): Promis
 
 export async function searchForTrends({ query }: SearchArgs): Promise<any> {
   const body: any = {
-    size: 0,
     query: {
       bool: {
         must: [
@@ -56,6 +55,11 @@ export async function searchForTrends({ query }: SearchArgs): Promise<any> {
               fields: FIELDS,
             },
           },
+          {
+            exists: {
+              field: "summary",
+            },
+          },
         ],
         filter: [{ range: { year: { gte: MIN_YEAR } } }],
       },
@@ -63,20 +67,38 @@ export async function searchForTrends({ query }: SearchArgs): Promise<any> {
     aggs: {
       year: {
         terms: { field: "year", size: MAX_YEAR - MIN_YEAR },
+        aggs: {
+          top_publication: {
+            top_hits: {
+              _source: { includes: ["summary.*"] },
+              size: 5,
+            },
+          },
+        },
       },
       authors: {
-        terms: { field: "authors.id_name.keyword" },
+        terms: { field: "authors.id_name.keyword", size: 5 },
+      },
+      affiliations: {
+        terms: { field: "affiliations.id_name.keyword", size: 5 },
+      },
+      productionType: {
+        terms: { field: "productionType.keyword", size: 5 },
+      },
+      isOa: {
+        terms: { field: "isOa" },
       },
     },
   }
   if (!query) body.query = { function_score: { query: body.query, random_score: {} } }
   console.log("trendsBody", body)
-  const res = await fetch(`${publicationsIndex}/_search`, {
+  const response = await fetch(`${publicationsIndex}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
   })
-  const data = await res.json()
+  console.log("trendsResponse", response)
+  const data = await response.json()
   const aggregations = data.aggregations
   console.log("data", data)
   console.log("aggregations", aggregations)
