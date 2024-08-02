@@ -56,7 +56,7 @@ export default function Header() {
 
   return (
     <HeaderWrapper>
-      <Logo splitCharacter='|' text="Ministère|de l'enseignement|supérieur|et de la recherche" />
+      <Logo splitCharacter="|" text="Ministère|de l'enseignement|supérieur|et de la recherche" />
       <Service name="scanR" tagline={intl.formatMessage({ id: "layout.header.tagline" })} />
       <FastAccess>
         <Button className="fr-btn fr-icon-theme-fill" aria-controls="fr-theme-modal" data-fr-opened="false">
@@ -88,33 +88,36 @@ export default function Header() {
         )}
       </Autocomplete> */}
       <Nav>
-        <Link current={pathname === "/"} href='/'>
+        <Link current={pathname === "/"} href="/">
           {intl.formatMessage({ id: "layout.header.nav.home" })}
         </Link>
         <NavItem
-          current={pathname.split('/').includes('search')}
+          current={pathname.split("/").includes("search")}
           title={intl.formatMessage({ id: "layout.header.nav.search" })}
         >
-          <Link current={pathname.split('/').includes('organizations')} href="/search/organizations">
+          <Link current={pathname.split("/").includes("organizations")} href="/search/organizations">
             {intl.formatMessage({ id: "layout.header.nav.search.organizations" })}
           </Link>
-          <Link current={pathname.split('/').includes('authors')} href="/search/authors">
+          <Link current={pathname.split("/").includes("authors")} href="/search/authors">
             {intl.formatMessage({ id: "layout.header.nav.search.authors" })}
           </Link>
-          <Link current={pathname.split('/').includes('projects')} href="/search/projects">
+          <Link current={pathname.split("/").includes("projects")} href="/search/projects">
             {intl.formatMessage({ id: "layout.header.nav.search.projects" })}
           </Link>
-          <Link current={pathname.split('/').includes('publications')} href="/search/publications">
+          <Link current={pathname.split("/").includes("publications")} href="/search/publications">
             {intl.formatMessage({ id: "layout.header.nav.search.publications" })}
           </Link>
-          <Link current={pathname.split('/').includes('patents')} href="/search/patents">
+          <Link current={pathname.split("/").includes("patents")} href="/search/patents">
             {intl.formatMessage({ id: "layout.header.nav.search.patents" })}
           </Link>
         </NavItem>
-        <Link current={pathname.startsWith('/networks')} href="/networks">
+        <Link current={pathname.startsWith("/networks")} href="/networks">
           {intl.formatMessage({ id: "layout.header.nav.networks" })}
         </Link>
+        <Link current={pathname.startsWith("/chat")} href="/chat">
+          {intl.formatMessage({ id: "layout.header.nav.chat" })}
+        </Link>
       </Nav>
-    </HeaderWrapper >
-  );
+    </HeaderWrapper>
+  )
 }
