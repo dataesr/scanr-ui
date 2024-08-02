@@ -45,7 +45,7 @@ export default async function chatRAG(messages: ChatMessages): Promise<string> {
     filters: null,
     size: 5,
   })
-  const summaries = publications.map((publication) => publication.summary.default)
+  const summaries = publications.map((publication) => publication?.summary?.default)
   const prompt = ragPrompt(message.content, summaries.join("\n"))
   const answer = await chatCompletion([prompt], "cheap")
 

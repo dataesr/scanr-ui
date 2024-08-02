@@ -9,7 +9,7 @@ const MIN_YEAR = MAX_YEAR - 5
 
 export async function searchForRAG({ query, filters, size }: SearchArgs): Promise<Array<Publication>> {
   const body: any = {
-    _source: PUBLICATIONS_SOURCE,
+    _source: [...PUBLICATIONS_SOURCE, "summary.default"],
     query: {
       bool: {
         must: [
@@ -28,6 +28,7 @@ export async function searchForRAG({ query, filters, size }: SearchArgs): Promis
       },
     },
   }
+  console.log("body", body)
   if (filters) body.query.bool.filter = filters
   if (size) body.size = size
   if (!query) body.query = { function_score: { query: body.query, random_score: {} } }
