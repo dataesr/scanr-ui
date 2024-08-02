@@ -39,6 +39,8 @@ const languages = [
   // { shortName: 'ES', fullName: 'Español', key: 'es' },
 ];
 
+const ENABLE_DEV = import.meta.env.DEV || import.meta.env.MODE === "staging"
+
 export default function Header() {
   const { locale } = useDSFRConfig();
   const intl = createIntl({ locale, messages: messages[locale] });
@@ -114,9 +116,11 @@ export default function Header() {
         <Link current={pathname.startsWith("/networks")} href="/networks">
           {intl.formatMessage({ id: "layout.header.nav.networks" })}
         </Link>
-        <Link current={pathname.startsWith("/chat")} href="/chat">
-          {intl.formatMessage({ id: "layout.header.nav.chat" })}
-        </Link>
+        {ENABLE_DEV && (
+          <Link current={pathname.startsWith("/chat")} href="/chat">
+            {intl.formatMessage({ id: "layout.header.nav.chat" })}
+          </Link>
+        )}
       </Nav>
     </HeaderWrapper>
   )

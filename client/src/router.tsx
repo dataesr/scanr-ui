@@ -33,6 +33,8 @@ import PersonsDocs from "./pages/docs/objects/persons"
 import Overview from "./pages/docs/objects/overview"
 import NetworksIntegration from "./pages/networks/integration"
 
+const ENABLE_DEV = import.meta.env.DEV || import.meta.env.MODE === "staging"
+
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
 
@@ -91,7 +93,7 @@ export default function Router() {
             <Route path="patents" element={<Search />} />
           </Route>
           <Route path="/networks" element={<Networks />} />
-          <Route path="/chat" element={<Chat />} />
+          {ENABLE_DEV && <Route path="/chat" element={<Chat />} />}
           <Route path="/trouver-des-partenaires-pour-horizon-europe/:id" element={<HEPartners />} />
           <Route path="*" element={<Error404 error={null} />} />
         </Route>

@@ -19,7 +19,7 @@ function ChatPage() {
   const intl = useIntl()
   const { messages, addMessage, clearMessages } = useMessages()
   const { data, error, isFetching } = useChat(messages)
-  
+
   if (error) console.log("chat error", error)
 
   if (data && messages.length && messages.slice(-1)[0].content != data) {
