@@ -1,6 +1,9 @@
 import { FormattedMessage, useIntl, createIntl, RawIntlProvider } from "react-intl"
-import { Container, Breadcrumb, Link, Row, Col, SearchBar } from "@dataesr/dsfr-plus"
+import { Container, Breadcrumb, Link, Row, Col, SearchBar, Button } from "@dataesr/dsfr-plus"
 import { useDSFRConfig } from "@dataesr/dsfr-plus"
+import Messages from "./components/messages"
+import useMessages from "./hooks/useMessages"
+import useChat from "./hooks/useChat"
 
 const modules = import.meta.glob("./locales/*.json", { eager: true, import: "default" })
 
@@ -14,6 +17,13 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 
 function ChatPage() {
   const intl = useIntl()
+  const { messages, addMessage, clearMessages } = useMessages()
+  const { data, error, isFetching } = useChat(messages)
+  console.log(error)
+
+  if (data && messages.length && messages.slice(-1)[0].content != data) {
+    addMessage(data, "system")
+  }
 
   return (
     <>
@@ -31,13 +41,18 @@ function ChatPage() {
                 key={0}
                 isLarge
                 buttonLabel={intl.formatMessage({ id: "chat.top.main-search-button" })}
-                defaultValue={""}
                 placeholder={intl.formatMessage({ id: "chat.top.main-search-bar" })}
-                onSearch={() => {}}
+                onSearch={(value) => addMessage(value, "user")}
               />
             </Col>
           </Row>
         </Container>
+      </Container>
+      <Messages messages={messages} isFetching={isFetching} />
+      <Container className="fr-mt-5w">
+        <Button variant="secondary" onClick={() => clearMessages()}>
+          {intl.formatMessage({ id: "chat.clear-chat-button" })}
+        </Button>
       </Container>
     </>
   )
