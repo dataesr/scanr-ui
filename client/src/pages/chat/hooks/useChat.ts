@@ -1,7 +1,7 @@
 import { ChatMessages } from "../../../types/chat"
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { chatCompletion } from "../../../api/chat"
+import chatCompletion from "../../../api/chat/completion"
 
 export default function useChat(messages: ChatMessages) {
   const { data, error, isFetching } = useQuery({

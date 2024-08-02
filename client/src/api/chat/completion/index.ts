@@ -1,12 +1,9 @@
-import { ChatMessages, ChatOptions } from "../../types/chat"
-
-const { VITE_MISTRAL_URL: MISTRAL_URL, VITE_MISTRAL_KEY: MISTRAL_KEY } = import.meta.env
-const headers = MISTRAL_KEY ? { Authorization: `Bearer ${MISTRAL_KEY}` } : {}
-const postHeaders = { ...headers, "Content-Type": "application/json" }
+import { ChatMessages, ChatOptions } from "../../../types/chat"
+import { MISTRAL_URL, MISTRAL_HEADERS } from "../config"
 
 const models = { small: "mistral-small-latest", large: "mistral-large-latest" }
 
-export async function chatCompletion(messages: ChatMessages, model: string, options?: ChatOptions): Promise<string> {
+export default async function chatCompletion(messages: ChatMessages, model: string, options?: ChatOptions): Promise<string> {
   const chatBody = {
     messages: messages,
     model: models[model],
@@ -14,16 +11,14 @@ export async function chatCompletion(messages: ChatMessages, model: string, opti
     top_p: options?.top_p ?? 1,
     safe_prompt: options?.safe_prompt ?? false,
     ...(options?.max_tokens && { max_tokens: options.max_tokens }),
-    ...(options?.stream && { max_tokens: options.stream }),
-    ...(options?.random_seed && { max_tokens: options.random_seed }),
+    ...(options?.stream && { stream: options.stream }),
+    ...(options?.random_seed && { random_seed: options.random_seed }),
     ...(options?.json_format && { response_format: { type: "json_object" } }),
   }
 
-  console.log("chatBody", chatBody)
-
   const response = await fetch(`${MISTRAL_URL}/chat/completions`, {
     method: "POST",
-    headers: postHeaders,
+    headers: MISTRAL_HEADERS,
     body: JSON.stringify(chatBody),
   })
   const completion = await response.json()
