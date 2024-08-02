@@ -1,4 +1,4 @@
-import { ChatMessage, ChatOptions } from "../../../types/chat"
+import { ChatMessages, ChatMessage, ChatOptions } from "../../../types/chat"
 import chatCompletion from "../completion"
 import { searchForRAG } from "../search"
 
@@ -37,7 +37,8 @@ async function chatFindKeywords(message: ChatMessage, model: string, options?: C
   return keywords
 }
 
-export default async function chatRAG(message: ChatMessage): Promise<string> {
+export default async function chatRAG(messages: ChatMessages): Promise<string> {
+  const message = messages.filter((message) => message.role === "user").slice(-1)[0]
   const keywords = await chatFindKeywords(message, "cheap", { json_format: true })
   const publications = await searchForRAG({
     query: `("${keywords.join('") OR ("')}")`,

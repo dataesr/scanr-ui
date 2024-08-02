@@ -4,6 +4,7 @@ import { useDSFRConfig } from "@dataesr/dsfr-plus"
 import Messages from "./components/messages"
 import useMessages from "./hooks/useMessages"
 import useChat from "./hooks/useChat"
+import { useState } from "react"
 
 const modules = import.meta.glob("./locales/*.json", { eager: true, import: "default" })
 
@@ -15,10 +16,16 @@ const messages = Object.keys(modules).reduce((acc, key) => {
   return acc
 }, {})
 
+const CHAT_TYPES = [
+  { label: "RAG", key: "rag" },
+  { label: "Function Calling", key: "function_calling" },
+]
+
 function ChatPage() {
   const intl = useIntl()
+  const [chatType, setChatType] = useState("rag")
   const { messages, addMessage, clearMessages } = useMessages()
-  const { data, error, isFetching } = useChat(messages)
+  const { data, error, isFetching } = useChat(messages, chatType)
 
   if (error) console.log("chat error", error)
 
@@ -43,6 +50,21 @@ function ChatPage() {
                 placeholder={intl.formatMessage({ id: "chat.top.main-search-bar" })}
                 onSearch={(query: string) => addMessage(query, "user")}
               />
+            </Col>
+            <Col xs="12" sm="4" lg="4">
+              <select
+                className="fr-select"
+                defaultValue={chatType || CHAT_TYPES[0].key}
+                onChange={(matcher) => {
+                  clearMessages(), setChatType(matcher.target.value)
+                }}
+              >
+                {CHAT_TYPES.map((matcher) => (
+                  <option key={matcher.key} value={matcher.key}>
+                    {matcher.label}
+                  </option>
+                ))}
+              </select>
             </Col>
           </Row>
         </Container>

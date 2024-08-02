@@ -1,25 +1,15 @@
-import { ChatMessages, ChatOptions } from "../../../types/chat"
+import { ChatMessages } from "../../../types/chat"
 import chatCompletion from "../completion"
 import { MISTRAL_URL, MISTRAL_HEADERS, MISTRAL_MODELS } from "../config"
 import { TOOLS_MAPPING, TOOLS_CONFIG } from "./tools"
 
-export default async function chatFunctionCalling(
-  messages: ChatMessages,
-  model: string,
-  options?: ChatOptions
-): Promise<string> {
+export default async function chatFunctionCalling(messages: ChatMessages): Promise<string> {
+  const model = "small"
   const chatBody = {
     messages: messages,
     model: MISTRAL_MODELS[model],
     tool_choice: "auto",
     tools: TOOLS_CONFIG,
-    temperature: options?.temperature ?? 0.7,
-    top_p: options?.top_p ?? 1,
-    safe_prompt: options?.safe_prompt ?? false,
-    ...(options?.max_tokens && { max_tokens: options.max_tokens }),
-    ...(options?.stream && { stream: options.stream }),
-    ...(options?.random_seed && { random_seed: options.random_seed }),
-    ...(options?.json_format && { response_format: { type: "json_object" } }),
   }
 
   console.log("api_messages", messages)
