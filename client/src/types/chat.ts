@@ -1,8 +1,9 @@
-export type ChatRole = "user" | "system"
+export type ChatRole = "user" | "assistant" | "tool"
 
 export type ChatMessage = {
   role: ChatRole
   content: string
+  name?: string
 }
 export type ChatMessages = Array<ChatMessage>
 
