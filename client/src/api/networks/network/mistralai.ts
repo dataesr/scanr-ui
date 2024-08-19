@@ -33,7 +33,7 @@ export async function aiLabeledClusters(clusters: NetworkCommunities): Promise<N
 
   const mistralMessages = [domainsToMessage(domains)]
   const mistralOptions = { temperature: 0.3, random_seed: 42, json_format: true }
-  const mistralLabels = await chatCompletion(mistralMessages, "small", mistralOptions).then(
+  const mistralLabels = await chatCompletion(mistralMessages, "nemo", mistralOptions).then(
     (response) => JSON.parse(response),
     (err) => console.error(err)
   )

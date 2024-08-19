@@ -12,7 +12,7 @@ const aggregationsToJSON = (aggs) =>
       }
       return acc
     }, {})
-    return { year: year.key, topics: domains }
+    return { year: year.key, topics: domains, relevant_publications: year.doc_count }
   })
 
 const trendsPrompt = (query: string, context: string): ChatMessage => ({
@@ -36,7 +36,7 @@ export default async function chatTrendsKeywords(messages: ChatMessages): Promis
   const json = aggregationsToJSON(aggs)
 
   const prompt = trendsPrompt(query, JSON.stringify(json))
-  const answer = await chatCompletion([prompt], "cheap", { top_p: 0.1 })
+  const answer = await chatCompletion([prompt], "nemo", { top_p: 0.1 })
 
   return answer
 }

@@ -39,7 +39,7 @@ async function chatFindKeywords(message: ChatMessage, model: string, options?: C
 
 export default async function chatRAG(messages: ChatMessages): Promise<string> {
   const message = messages.filter((message) => message.role === "user").slice(-1)[0]
-  const keywords = await chatFindKeywords(message, "cheap", { json_format: true })
+  const keywords = await chatFindKeywords(message, "tiny", { json_format: true })
   const publications = await searchForRAG({
     query: `("${keywords.join('") OR ("')}")`,
     filters: null,
@@ -47,7 +47,7 @@ export default async function chatRAG(messages: ChatMessages): Promise<string> {
   })
   const summaries = publications.map((publication) => publication?.summary?.default)
   const prompt = ragPrompt(message.content, summaries.join("\n"))
-  const answer = await chatCompletion([prompt], "cheap")
+  const answer = await chatCompletion([prompt], "tiny")
 
   console.log("publications", publications)
   console.log("summaries", summaries)
