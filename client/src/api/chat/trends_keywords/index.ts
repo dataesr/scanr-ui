@@ -36,7 +36,8 @@ export default async function chatTrendsKeywords(messages: ChatMessages): Promis
   const json = aggregationsToJSON(aggs)
 
   const prompt = trendsPrompt(query, JSON.stringify(json))
-  const answer = await chatCompletion([prompt], "nemo", { top_p: 0.1 })
+  const prefix: ChatMessage = { role: "assistant", content: "### Analyse en français: ", prefix: true }
+  const answer = await chatCompletion([prompt, prefix], "nemo", { top_p: 0.1 })
 
-  return answer
+  return answer.slice(prefix.content?.length || 0)
 }

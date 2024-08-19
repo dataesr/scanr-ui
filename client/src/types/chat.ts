@@ -3,6 +3,7 @@ export type ChatRole = "user" | "assistant" | "tool"
 export type ChatMessage = {
   role: ChatRole
   content: string
+  prefix?: boolean
   name?: string
 }
 export type ChatMessages = Array<ChatMessage>

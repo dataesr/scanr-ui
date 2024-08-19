@@ -28,7 +28,7 @@ export default async function chatTrends(messages: ChatMessages): Promise<string
   console.log("json", json)
 
   const prompt = trendsPrompt(query, JSON.stringify(json))
-  const answer = await chatCompletion([prompt], "tiny")
+  const answer = await chatCompletion([prompt], "nemo")
 
   return answer
 }
