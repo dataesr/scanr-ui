@@ -34,6 +34,7 @@ export default async function chatTrendsKeywords(messages: ChatMessages): Promis
 
   const aggs = await searchPublicationsForKeywords({ query: query })
   const json = aggregationsToJSON(aggs)
+  console.log("json", json)
 
   const prompt = trendsPrompt(query, JSON.stringify(json))
   const prefix: ChatMessage = { role: "assistant", content: "### Analyse en français: ", prefix: true }

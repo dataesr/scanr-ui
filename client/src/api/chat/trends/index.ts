@@ -7,7 +7,8 @@ const trendsPrompt = (query: string, context: string): ChatMessage => ({
   role: "user",
   content: `
   You have JSON data representing french publications discussing ${query}.
-  Based on the provided data, answer the question: "Which trends or patterns are emerging ?"
+  Generate a abstractive analysis of the trends or patterns within the french publications based on the data.
+  Provide interpretations or justifications drawing from your own knowledge.
 
   JSON data:
   ${context}
