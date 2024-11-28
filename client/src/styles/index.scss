@@ -145,11 +145,23 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+.home-graph-background-light {
+  background-image: url('/img/network-default-light.png');
+  background-size: 60%;
+  background-position: center right;
+  background-repeat: no-repeat;
+}
 
 .graph-background-dark {
   background-image: url('/img/network-default-dark.png');
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+}
+.home-graph-background-dark {
+  background-image: url('/img/network-default-dark.png');
+  background-size: 60%;
+  background-position: center right;
   background-repeat: no-repeat;
 }
 
@@ -212,11 +224,11 @@
   border-width: 1px;
   padding: 0;
 }
-  
+
 .cluster-table th {
   background-color: #e9edfe;
 }
-  
+
 .cluster-table tbody:nth-child(odd) {
   background-color: #f2f2f2;
 }
