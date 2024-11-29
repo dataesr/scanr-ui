@@ -69,7 +69,7 @@ function ObjectsBanner() {
 									href="/artwork/pictograms/buildings/school.svg#artwork-major"
 								/>
 							</svg>
-							<Title as="h3" className="fr-mb-1w">
+							<Title as="h4" className="fr-mb-1w">
 								{intl.formatMessage({ id: "home.objects.organizations" })}
 							</Title>
 							<hr className="fr-pb-2w" style={{ width: "60px" }} />
@@ -103,7 +103,7 @@ function ObjectsBanner() {
 									href="/artwork/pictograms/digital/avatar.svg#artwork-major"
 								/>
 							</svg>
-							<Title as="h3" className="fr-mb-1w">
+							<Title as="h4" className="fr-mb-1w">
 								{intl.formatMessage({ id: "home.objects.authors" })}
 							</Title>
 							<hr className="fr-pb-2w" style={{ width: "60px" }} />
@@ -137,7 +137,7 @@ function ObjectsBanner() {
 									href="/artwork/pictograms/institutions/money.svg#artwork-major"
 								/>
 							</svg>
-							<Title as="h3" className="fr-mb-1w">
+							<Title as="h4" className="fr-mb-1w">
 								{intl.formatMessage({ id: "home.objects.projects" })}
 							</Title>
 							<hr className="fr-pb-2w" style={{ width: "60px" }} />
@@ -171,7 +171,7 @@ function ObjectsBanner() {
 									href="/artwork/pictograms/leisure/book.svg#artwork-major"
 								/>
 							</svg>
-							<Title as="h3" className="fr-mb-1w">
+							<Title as="h4" className="fr-mb-1w">
 								{intl.formatMessage({ id: "home.objects.publications" })}
 							</Title>
 							<hr className="fr-pb-2w" style={{ width: "60px" }} />
@@ -205,7 +205,7 @@ function ObjectsBanner() {
 									href="/artwork/pictograms/document/contract.svg#artwork-major"
 								/>
 							</svg>
-							<Title as="h3" className="fr-mb-1w">
+							<Title as="h4" className="fr-mb-1w">
 								{intl.formatMessage({ id: "home.objects.patents" })}
 							</Title>
 							<hr className="fr-pb-2w" style={{ width: "60px" }} />
@@ -234,16 +234,20 @@ function NetworksBanner() {
 			}}
 		>
 			<Container
+				fluid
 				className={`home-graph-background-${theme}`}
-				style={{ display: "flex", width: "100%", height: "500px" }}
+				style={{ height: "400px" }}
 			>
-				<Container className="fr-py-8w">
-					<Row>
-						<Col xs="12" md="6">
-							<Title as="h3" look="h5">
-								{intl.formatMessage({ id: "home.networks.title" })}
-							</Title>
-							<ButtonGroup isInlineFrom="lg">
+				<Container
+					fluid
+					style={{ height: "100%", backdropFilter: "blur(1px) contrast(80%)" }}
+				>
+					<Container style={{ height: "100%" }}>
+						<Row style={{ height: "100%" }} verticalAlign="middle">
+							<Col xs="12">
+								<Title as="h4" style={{ maxWidth: "350px" }}>
+									{intl.formatMessage({ id: "home.networks.title" })}
+								</Title>
 								<Button
 									iconPosition="right"
 									icon="arrow-right-line"
@@ -252,9 +256,9 @@ function NetworksBanner() {
 								>
 									{intl.formatMessage({ id: "home.networks.link" })}
 								</Button>
-							</ButtonGroup>
-						</Col>
-					</Row>
+							</Col>
+						</Row>
+					</Container>
 				</Container>
 			</Container>
 		</Container>
@@ -267,7 +271,7 @@ function ServicesBanner() {
 		<Container fluid>
 			<Container className="fr-py-10w">
 				<Row>
-					<Title as="h2">
+					<Title as="h4">
 						{intl.formatMessage({ id: "home.services.title" })}
 					</Title>
 				</Row>
@@ -408,7 +412,7 @@ function OpendataBanner() {
 			<Container className="fr-py-4w">
 				<Row>
 					<Col xs="12" md="8">
-						<Title as="h3">
+						<Title as="h4">
 							{intl.formatMessage({ id: "home.opendata.title" })}
 						</Title>
 						<ButtonGroup isInlineFrom="lg">
