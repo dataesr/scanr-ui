@@ -245,7 +245,7 @@ function NetworksBanner() {
 					<Container style={{ height: "100%" }}>
 						<Row style={{ height: "100%" }} verticalAlign="middle">
 							<Col xs="12">
-								<Title as="h4" style={{ maxWidth: "350px" }}>
+								<Title as="h4" style={{ maxWidth: "400px" }}>
 									{intl.formatMessage({ id: "home.networks.title" })}
 								</Title>
 								<Button
