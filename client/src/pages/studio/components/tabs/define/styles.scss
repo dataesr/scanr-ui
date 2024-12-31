@@ -1,0 +1,38 @@
+ul.style-disc>li {
+  list-style: disc;
+  margin-left: 15px;
+}
+
+ul.style-tiret>li {
+  list-style-type: "-";
+  list-style-position: inside;
+}
+
+.marianne-bold {
+  font-family: 'Marianne Bold', sans-serif;
+  font-weight: 700;
+}
+
+.doiCol {
+  background-color: #d5dbef;
+}
+
+.halStructCol {
+  background-color: #bfeae2;
+}
+
+.halCollCol {
+  background-color: #00ac8c;
+}
+
+.halIdCol {
+  background-color: #e3ebd3;
+}
+
+.nntEtabCol {
+  background-color: #3fc5fc;
+}
+
+.nntIdCol {
+  background-color: #9a9aff;
+}

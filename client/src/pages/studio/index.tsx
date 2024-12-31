@@ -4,7 +4,7 @@ import { messages } from "./config/messages"
 import { StudioContext } from "./context"
 import StudioLayout from "./layout"
 
-export default function Trends() {
+export default function Studio() {
   const { locale } = useDSFRConfig()
   const intl = createIntl({
     locale,

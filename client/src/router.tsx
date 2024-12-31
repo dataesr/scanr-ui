@@ -34,6 +34,8 @@ import NetworksIntegration from "./pages/networks/integration"
 import Trends from "./pages/trends"
 import NetworksGetStarted from "./pages/networks/components/get-started"
 import TrendsIntegration from "./pages/trends/integration"
+import Studio from "./pages/studio"
+import { isInProduction } from "./utils/helpers"
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
@@ -95,6 +97,7 @@ export default function Router() {
           <Route path="/networks" element={<Networks />} />
           <Route path="/networks/get-started" element={<NetworksGetStarted />} />
           <Route path="/trends" element={<Trends />} />
+          {!isInProduction() && <Route path="/studio" element={<Studio />} />}
           <Route path="/trouver-des-partenaires-pour-horizon-europe/:id" element={<HEPartners />} />
           <Route path="*" element={<Error404 error={null} />} />
         </Route>
