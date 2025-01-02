@@ -1,19 +1,17 @@
 import { useState } from "react"
-import { Button, Col, Row, Select, SelectOption, TextInput, Toggle } from "@dataesr/dsfr-plus"
+import { Accordion, Button, Col, Row, Select, SelectOption, TextInput, Toggle } from "@dataesr/dsfr-plus"
+import NetworkSearchBarButton from "../../../../networks/components/search-bar/button"
+import NetworkSelectModelButton from "../../../../networks/components/select-model/button"
+import NetworkFiltersButton from "../../../../networks/components/filters/button"
+import NetworkParametersButton from "../../../../networks/components/parameters/button"
 
 export default function StudioCreate() {
-  const [bsoLocalAffiliation, setBsoLocalAffiliation] = useState("130015506") // University of Lorraine
-  const [displayComment, setDisplayComment] = useState(true)
-  const [displayFooter, setDisplayFooter] = useState(true)
-  const [displayTitle, setDisplayTitle] = useState(false)
-  const [endYear, setEndYear] = useState("2022")
-  const [firstObservationYear, setFirstObservationYear] = useState("2018")
+  const [local, setLocal] = useState("130015506") // University of Lorraine
+  const [page, setPage] = useState("networks")
   const [lang, setLang] = useState("fr")
-  const [lastObservationYear, setLastObservationYear] = useState()
-  const [object, setObject] = useState("publi")
-  const [startYear, setStartYear] = useState("2013")
-  const [tab, setTab] = useState("general")
-  const [useHalId, setUseHalId] = useState(false)
+  const [code, setCode] = useState("")
+
+  const pageUrl = `${window.location.origin}/${page}/integration?local=${local}`
 
   const langs = [
     { label: "Français", value: "fr" },
@@ -23,126 +21,72 @@ export default function StudioCreate() {
   return (
     <section className="studio-section-create">
       <Row gutters>
-        <Col md={6}>
+        <Col lg={8}>
           <TextInput
             hint="Si périmètre ad-hoc, identifiant communiqué par l'équipe BSO ou RoR. Dans tous les cas, identifiant de structure HAL, ou code collection HAL"
             label="Identifiant de l'établissement"
             message="Merci de saisir un identifiant"
-            messageType={bsoLocalAffiliation === "" ? "error" : null}
-            onChange={(e) => setBsoLocalAffiliation(e.target.value)}
+            messageType={local === "" ? "error" : null}
+            onChange={(event) => setLocal(event.target.value)}
             required
-            value={bsoLocalAffiliation}
+            value={local}
           />
-        </Col>
-        <Col md={6}>
-          <Select label="Langue" onSelectionChange={(e) => setLang(String(e))}>
+          <Select label="Langue" selectedKey={lang} onSelectionChange={(key) => setLang(String(key))}>
             {langs.map((lang) => (
               <SelectOption key={lang.value}>{lang.label}</SelectOption>
             ))}
           </Select>
+          <Select label="Integration page" selectedKey={page} onSelectionChange={(key) => setPage(String(key))}>
+            <SelectOption key="networks">Réseaux</SelectOption>
+            <SelectOption key="trends">Tendances</SelectOption>
+          </Select>
+          <Accordion title="Paramétrage">
+            <Row className="fr-mb-4w">
+              <NetworkSearchBarButton />
+              <NetworkSelectModelButton />
+              <NetworkFiltersButton />
+              <NetworkParametersButton />
+            </Row>
+          </Accordion>
+          <Accordion title="Options d'affichage"></Accordion>
         </Col>
       </Row>
       <Row gutters>
-        <Col md={6}>
-          <Select label="Objet de recherche">{}</Select>
-        </Col>
-        <Col md={6}>
-          <Select label="Onglet">{}</Select>
-        </Col>
-      </Row>
-      <Row gutters>
-        <Col md={12}>
-          <Select label="Graphique">{}</Select>
-        </Col>
-      </Row>
-      <Row gutters>
-        <Col md={6}>
-          <Select label="Première année de publication">{}</Select>
-        </Col>
-        <Col md={6}>
-          <Select label="Dernière année de publication">{}</Select>
-        </Col>
-      </Row>
-      <Row gutters>
-        <Col md={6}>
-          <Select label="Première année d'observation">{}</Select>
-        </Col>
-        <Col md={6}>
-          <Select label="Dernière année d'observation">{}</Select>
-        </Col>
-      </Row>
-      <hr />
-      <Row gutters>
-        <Col md={6}>
-          <Toggle
-            checked={displayTitle}
-            label="Afficher le titre du graphique"
-            onChange={() => setDisplayTitle(!displayTitle)}
-          />
-        </Col>
-        <Col md={6}>
-          <Toggle
-            checked={displayComment}
-            label="Afficher le commentaire du graphique"
-            onChange={() => setDisplayComment(!displayComment)}
-          />
-        </Col>
-      </Row>
-      <hr />
-      <Row gutters>
-        <Col md={6}>
-          <Toggle
-            checked={displayFooter}
-            label="Afficher le footer du graphique"
-            onChange={() => setDisplayFooter(!displayFooter)}
-          />
-        </Col>
-        {object === "publi" && (
-          <Col md={6}>
-            <Toggle checked={useHalId} label="Inclure les identifiants de HAL" onChange={() => setUseHalId(!useHalId)} />
-          </Col>
-        )}
-      </Row>
-      <Row gutters>
-        <Col className="studio">{}</Col>
-      </Row>
-      <Row gutters>
-        <Col>
-          <TextInput
-            disabled
-            hint="À copier/coller sur votre page web"
-            label="Code de l'iframe"
-            type="text"
-            value={"test"}
-          />
+        <Col lg={8} className="studio">
+          {" "}
+          <iframe height="600" width="100%" id={"integration_iframe"} src={pageUrl} title={"test"} />
+          <Button
+            onClick={() =>
+              setCode((document.getElementById("integration_iframe") as HTMLIFrameElement).contentWindow.location.href)
+            }
+          >
+            Générer le code de l'iframe
+          </Button>
+          {code && (
+            <TextInput
+              disabled
+              hint="À copier/coller sur votre page web"
+              label="Code de l'iframe"
+              type="text"
+              value={code}
+            />
+          )}
         </Col>
       </Row>
       <Row gutters>
-        <Col md={6}>
+        <Col md={4}>
           {/* <CopyToClipboard text={getIframeText()}> */}
           <Button icon="clipboard-fill" iconPosition="right">
             Copier le code de l'iframe
           </Button>
           {/* </CopyToClipboard> */}
         </Col>
-        <Col md={6}>
+        <Col md={4}>
           {/* <CopyToClipboard text={getGraphUrl()}> */}
           <Button icon="clipboard-fill" iconPosition="right">
             Copier l'url
           </Button>
           {/* </CopyToClipboard> */}
-        </Col>
-      </Row>
-      <Row gutters>
-        <Col md={6}>
-          <Button icon="download-fill" iconPosition="right" onClick={() => {}}>
-            Télécharger la liste des urls des graphiques (.csv)
-          </Button>
-        </Col>
-        <Col md={6}>
-          <Button icon="download-fill" iconPosition="right" onClick={() => {}}>
-            Télécharger la liste des graphiques (.html)
-          </Button>
         </Col>
       </Row>
     </section>
