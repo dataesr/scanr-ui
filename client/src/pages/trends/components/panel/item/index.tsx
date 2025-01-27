@@ -13,13 +13,13 @@ export default function TrendsViewItem({ item }) {
   const isMobile = ["xs", "sm"].includes(screen)
   const viewLabel = trendsViewGetConfig(view).label
 
-  const diffColor = itemGetColor(item, "diff", normalized)
-  const diffLabel =
-    item.diff === Infinity
-      ? Object.keys(item.count).length === 1
-        ? "NEW"
-        : "RESURGENT"
-      : `${Number(item.diff * 100).toFixed(0.1)} %`
+  // const diffColor = itemGetColor(item, "diff", normalized)
+  // const diffLabel =
+  //   item.diff === Infinity
+  //     ? Object.keys(item.count).length === 1
+  //       ? "NEW"
+  //       : "RESURGENT"
+  //     : `${Number(item.diff * 100).toFixed(0.1)} %`
   const slopeColor = itemGetColor(item, normalized ? "norm_slope" : "slope", normalized)
   const trendState = itemGetTrendState(item, normalized)
 
@@ -43,13 +43,13 @@ export default function TrendsViewItem({ item }) {
             </Row>
           </Col>
           {(!isMobile || viewLabel == "count") && (
-            <Col sm="4" md="2" lg="2">
-              <Row horizontalAlign="right">
-                <div>{item?.count?.[trendsYears.max] || 0}</div>
+            <Col sm="4" md="4" lg="4">
+              <Row horizontalAlign="left">
+                <div className="fr-ml-5w">{item?.count?.[trendsYears.max] || 0}</div>
               </Row>
             </Col>
           )}
-          {(!isMobile || viewLabel == "diff") && (
+          {/* {(!isMobile || viewLabel == "diff") && (
             <Col sm="4" md="3" lg="3">
               <Row horizontalAlign="right">
                 <Badge noIcon color={diffColor}>
@@ -57,11 +57,11 @@ export default function TrendsViewItem({ item }) {
                 </Badge>
               </Row>
             </Col>
-          )}
+          )} */}
           {(!isMobile || viewLabel == "trend") && (
-            <Col sm="4" md="3" lg="3">
-              <Row horizontalAlign="right">
-                <Badge noIcon color={slopeColor}>
+            <Col sm="4" md="4" lg="4">
+              <Row horizontalAlign="left">
+                <Badge className="fr-ml-5w" noIcon color={slopeColor}>
                   {trendState}
                 </Badge>
               </Row>

@@ -97,9 +97,11 @@ function TrendsViewItems() {
 
 export default function TrendsView() {
   return (
-    <Container fluid className="fr-card">
-      <TrendsViewHeader />
-      <TrendsViewItems />
+    <Container>
+      <Container fluid className="fr-card">
+        <TrendsViewHeader />
+        <TrendsViewItems />
+      </Container>
     </Container>
   )
 }
