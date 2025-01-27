@@ -30,6 +30,7 @@ export async function getPublicationsTrends({ cursor, model, query, years, filte
           model: { terms: { field: CONFIG[model].field, size: 60000 / years.length } },
         },
       },
+      count: { value_count: { field: "id.keyword" } },
     },
   }
 
@@ -47,6 +48,7 @@ export async function getPublicationsTrends({ cursor, model, query, years, filte
   }
 
   const json = await res.json()
+  const count: number = json?.aggregations?.count?.value || 0
   const aggregation: TrendsAggregation = json?.aggregations?.["years"]?.buckets
 
   if (!aggregation?.length) {
@@ -55,7 +57,7 @@ export async function getPublicationsTrends({ cursor, model, query, years, filte
   }
 
   const trends = publicationsTrends(aggregation, cursor, years, normalized)
-  return trends
+  return { ...trends, count: count }
 }
 
 export async function getCitationsTrends({ cursor, model, query, years, filters, normalized }: TrendsArgs) {
@@ -84,6 +86,7 @@ export async function getCitationsTrends({ cursor, model, query, years, filters,
           ),
         },
       },
+      count: { value_count: { field: "id.keyword" } },
     },
   }
 
@@ -101,6 +104,7 @@ export async function getCitationsTrends({ cursor, model, query, years, filters,
   }
 
   const json = await res.json()
+  const count: number = json?.aggregations?.count?.value || 0
   const aggregation: ElasticBuckets = json?.aggregations?.model?.buckets
 
   if (!aggregation?.length) {
@@ -109,5 +113,5 @@ export async function getCitationsTrends({ cursor, model, query, years, filters,
   }
 
   const trends = citationsTrends(aggregation, cursor, years, normalized)
-  return trends
+  return { ...trends, count: count }
 }

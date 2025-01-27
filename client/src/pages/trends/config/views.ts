@@ -2,8 +2,8 @@ import { TrendsView, TrendsViews } from "../../../types/trends"
 
 export const TRENDS_VIEWS: TrendsViews = [
   { id: "count-top", label: "count", order: "top", nextView: "" },
-  { id: "diff-top", label: "diff", order: "top", nextView: "diff-bot" },
-  { id: "diff-bot", label: "diff", order: "bot", nextView: "diff-top" },
+  // { id: "diff-top", label: "diff", order: "top", nextView: "diff-bot" },
+  // { id: "diff-bot", label: "diff", order: "bot", nextView: "diff-top" },
   { id: "trend-top", label: "trend", order: "top", nextView: "trend-bot" },
   { id: "trend-bot", label: "trend", order: "bot", nextView: "trend-top" },
 ]

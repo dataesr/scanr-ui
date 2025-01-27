@@ -41,6 +41,7 @@
   "trends.views.header.trend": "Tendance ({count} ans)",
   "trends.views.page-next": "Suivante",
   "trends.views.page-previous": "Précédent",
+  "trends.views.info.text": "{topics, plural, =0 {# thématiques} one {# thématique} other {# thématiques}} détectées (parmi {publications, plural, =0 {# publications} one {# publication} other {# publications}})",
   "trends.line-chart.xAxis.accessibility.description": "Années de {min, number} à {max, number}",
   "trends.line-chart.yAxis.accessibility.description": "Nombre de {source}",
   "trends.line-chart.yAxis.title.text": "Nombre de {source}",
