@@ -14,7 +14,7 @@ export default function TrendsViewInfo() {
   return (
     <Container>
       <Text className="fr-mb-1w">
-        {intl.formatMessage({ id: "trends.views.info.text" }, { topics: topicsCount, publications: publicationsCount })}
+        {intl.formatMessage({ id: "trends.ranking.info.text" }, { topics: topicsCount, publications: publicationsCount })}
       </Text>
     </Container>
   )

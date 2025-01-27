@@ -3,20 +3,20 @@ import { useIntl } from "react-intl"
 import { useInView } from "react-intersection-observer"
 import { Button, ButtonGroup, Container } from "@dataesr/dsfr-plus"
 import useTrends from "../../hooks/useTrends"
-import { useTrendsContext } from "../../context"
+import { TrendsRankingContext, useTrendsRankingContext } from "../../context/rankingContext"
 import useOptions from "../../hooks/useOptions"
-import TrendsViewItem from "./item"
-import TrendsViewHeader from "./header"
+import TrendsRankingItem from "./item"
+import TrendsRankingHeader from "./header"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 
 const itemsPerScroll = 10
 const scrollPerPage = 3
 const scrollYTop = 200
 
-function TrendsViewItems() {
+function TrendsRankingItems() {
   const intl = useIntl()
   const [ref, inView] = useInView()
-  const { view } = useTrendsContext()
+  const { sort } = useTrendsRankingContext()
   const { currentPage, handlePageChange } = useOptions()
   const { trends, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage, error } = useTrends()
 
@@ -40,7 +40,9 @@ function TrendsViewItems() {
   return (
     <>
       <div className="fr-accordions-group">
-        {trends.pages.map((page) => page.views?.[view].map((item, index) => <TrendsViewItem key={index} item={item} />))}
+        {trends.pages.map((page) =>
+          page.ranking?.[sort].map((item, index) => <TrendsRankingItem key={index} item={item} />)
+        )}
       </div>
       {isFetchingNextPage && <BaseSkeleton height="300px" />}
       {!isFetchingNextPage && !shouldChangePage && hasNextPage && <div ref={ref} />}
@@ -54,7 +56,7 @@ function TrendsViewItems() {
               onClick={() => navigateToPage(currentPage - 1)}
               disabled={currentPage === 1}
             >
-              {intl.formatMessage({ id: "trends.views.page-previous" })}
+              {intl.formatMessage({ id: "trends.ranking.page-previous" })}
             </Button>
             {currentPage > 1 && (
               <Button variant="tertiary" onClick={() => navigateToPage(1)}>
@@ -86,7 +88,7 @@ function TrendsViewItems() {
               onClick={() => navigateToPage(currentPage + 1)}
               disabled={!hasNextPage}
             >
-              {intl.formatMessage({ id: "trends.views.page-next" })}
+              {intl.formatMessage({ id: "trends.ranking.page-next" })}
             </Button>
           </ButtonGroup>
         </Container>
@@ -95,13 +97,15 @@ function TrendsViewItems() {
   )
 }
 
-export default function TrendsView() {
+export default function TrendsRanking() {
   return (
     <Container>
-      <Container fluid className="fr-card">
-        <TrendsViewHeader />
-        <TrendsViewItems />
-      </Container>
+      <TrendsRankingContext>
+        <Container fluid className="fr-card">
+          <TrendsRankingHeader />
+          <TrendsRankingItems />
+        </Container>
+      </TrendsRankingContext>
     </Container>
   )
 }

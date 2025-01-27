@@ -49,7 +49,7 @@ function computeTrends(data: Array<any>, cursor: number, years: Array<number>, n
     .slice(minItems, maxItems)
 
   const trends = {
-    views: {
+    ranking: {
       "count-top": topCount,
       // "diff-top": topDiff,
       // "diff-bot": botDiff,

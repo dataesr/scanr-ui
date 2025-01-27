@@ -5,6 +5,7 @@ import useUrl from "../../search/hooks/useUrl"
 import { MAX_YEAR, MIN_YEAR } from "../config/years"
 import { rangeArray } from "../../../utils/helpers"
 import useOptions from "./useOptions"
+import { TrendsRanking } from "../../../types/trends"
 
 const API_MAPPING = {
   publications: getPublicationsTrends,
@@ -20,11 +21,11 @@ export default function useTrends() {
     max: Number(currentFilters?.year?.values?.[1]?.value || MAX_YEAR),
   }
 
-  const { data, error, isFetchingNextPage, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery({
+  const { data, error, isFetchingNextPage, isFetching, fetchNextPage, hasNextPage } = useInfiniteQuery<TrendsRanking>({
     queryKey: ["trends", currentSource, currentModel, currentQuery, currentPage, filters, normalized],
     queryFn: ({ pageParam }) =>
       API_MAPPING[currentSource]({
-        cursor: pageParam + (currentPage - 1) * 3,
+        cursor: Number(pageParam) + (currentPage - 1) * 3,
         model: currentModel,
         query: currentQuery,
         years: rangeArray(trendsYears.min, trendsYears.max),

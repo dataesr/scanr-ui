@@ -2,13 +2,13 @@ import { Button, Container } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import ToggleNormalize from "./toggle-normalize"
 import { useIntl } from "react-intl"
-import { useTrendsContext } from "../../context"
 import useTrends from "../../hooks/useTrends"
+import useOptions from "../../hooks/useOptions"
 
 export default function TrendsParametersModal() {
   const intl = useIntl()
   const { isFetching } = useTrends()
-  const { setNormalized } = useTrendsContext()
+  const { setNormalized } = useOptions()
 
   const resetParameters = () => setNormalized(true)
 

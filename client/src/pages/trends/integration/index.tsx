@@ -2,7 +2,6 @@ import { Suspense } from "react"
 import { createIntl, RawIntlProvider } from "react-intl"
 import { messages } from "../config/messages"
 import useIntegration from "../hooks/useIntegration"
-import { TrendsContext } from "../context"
 import TrendsLayout from "../layout"
 
 export default function TrendsIntegration() {
@@ -17,9 +16,7 @@ export default function TrendsIntegration() {
   return (
     <RawIntlProvider value={intl}>
       <Suspense>
-        <TrendsContext>
-          <TrendsLayout />
-        </TrendsContext>
+        <TrendsLayout />
       </Suspense>
     </RawIntlProvider>
   )

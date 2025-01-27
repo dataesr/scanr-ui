@@ -3,21 +3,27 @@ import { useMemo } from "react"
 import { WikipediaResult } from "../../../components/wiki/types"
 import { useDSFRConfig } from "@dataesr/dsfr-plus"
 import { getWikidataPreviews } from "../../../components/wiki/api"
-import { useTrendsContext } from "../context"
+import { useTrendsRankingContext } from "../context/rankingContext"
 import useTrends from "./useTrends"
+import useOptions from "./useOptions"
 
 export default function useWikidata() {
   const { locale } = useDSFRConfig()
-  const { view } = useTrendsContext()
+  const { sort } = useTrendsRankingContext()
   const { trends } = useTrends()
-  const codes = trends?.pages?.flatMap((page) => page?.views?.[view].map((item) => ({ code: item.id })))
+  const { currentModel } = useOptions()
+
+  const codes =
+    currentModel === "entity-fishing"
+      ? trends?.pages?.flatMap((page) => page?.ranking?.[sort].map((item) => ({ code: item.id })))
+      : null
 
   const {
     data: wikis,
     isFetching,
     error,
   } = useQuery<WikipediaResult[]>({
-    queryKey: ["wikidatas", codes.map((c) => c.code), locale],
+    queryKey: ["wikidatas", codes?.map((c) => c.code), locale],
     queryFn: () => getWikidataPreviews(codes, locale),
     enabled: !!codes?.length,
   })

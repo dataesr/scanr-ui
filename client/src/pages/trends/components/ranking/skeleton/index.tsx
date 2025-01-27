@@ -1,11 +1,11 @@
 import { Container } from "@dataesr/dsfr-plus"
-import TrendsViewHeader from "../header"
+import TrendsRankingHeader from "../header"
 import BaseSkeleton from "../../../../../components/skeleton/base-skeleton"
 
-export default function TrendsViewSkeleton() {
+export default function TrendsRankingSkeleton() {
   return (
     <Container fluid>
-      <TrendsViewHeader />
+      <TrendsRankingHeader />
       <hr />
       <BaseSkeleton height="500px" />
     </Container>

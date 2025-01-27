@@ -1,13 +1,20 @@
 import { postHeaders, publicationsIndex } from "../../config/api"
 import { ElasticAggregation, ElasticBucket, ElasticBuckets } from "../../types/commons"
-import { TrendsArgs } from "../../types/trends"
+import { TrendsArgs, TrendsRanking } from "../../types/trends"
 import { FIELDS } from "../publications/_utils/constants"
 import { CONFIG } from "./config"
 import { citationsTrends, publicationsTrends } from "./trends"
 
 type TrendsAggregation = Array<ElasticBucket & { model: ElasticAggregation }>
 
-export async function getPublicationsTrends({ cursor, model, query, years, filters, normalized }: TrendsArgs) {
+export async function getPublicationsTrends({
+  cursor,
+  model,
+  query,
+  years,
+  filters,
+  normalized,
+}: TrendsArgs): Promise<TrendsRanking> {
   const body: any = {
     size: 0,
     query: {
@@ -60,7 +67,14 @@ export async function getPublicationsTrends({ cursor, model, query, years, filte
   return { ...trends, count: count }
 }
 
-export async function getCitationsTrends({ cursor, model, query, years, filters, normalized }: TrendsArgs) {
+export async function getCitationsTrends({
+  cursor,
+  model,
+  query,
+  years,
+  filters,
+  normalized,
+}: TrendsArgs): Promise<TrendsRanking> {
   const body: any = {
     size: 0,
     query: {

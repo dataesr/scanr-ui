@@ -1,9 +1,28 @@
-export type TrendsViews = Array<TrendsView>
-export type TrendsView = {
+export type TrendsRanking = {
+  ranking: Record<string, TrendsRankingItems>
+  nextCursor: number
+  total: number
+  count: number
+}
+
+export type TrendsRankingItems = Array<TrendsRankingItem>
+export type TrendsRankingItem = {
+  id: string
+  label: string
+  count: Record<string, number>
+  slope: number
+  norm_slope: number
+  intercept: number
+  r2: number
+  sum: number
+}
+
+export type TrendsRankingSorts = Array<TrendsRankingSort>
+export type TrendsRankingSort = {
   id: string
   label: string
   order: string
-  nextView?: string
+  nextSort?: string
 }
 
 export type TrendsFilters = Array<TrendsFilter>
