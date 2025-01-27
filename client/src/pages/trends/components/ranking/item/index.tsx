@@ -5,7 +5,7 @@ import useOptions from "../../../hooks/useOptions"
 import useScreenSize from "../../../../../hooks/useScreenSize"
 import { itemGetColor, itemGetTrendState, itemGetTrendVariation } from "../_utils"
 import { trendsRankingSortFromId } from "../../../config/rankingSorts"
-import TrendsFocus from "../focus"
+import TrendsRankingFocus from "../focus"
 
 export default function TrendsRankingItem({ item }) {
   const { sort, focus, setFocus } = useTrendsRankingContext()
@@ -59,7 +59,7 @@ export default function TrendsRankingItem({ item }) {
         </Row>
       </button>
       <div key={sort} className="fr-collapse" id={focusKey}>
-        {isFocused && <TrendsFocus item={item} />}
+        {isFocused && <TrendsRankingFocus item={item} />}
       </div>
     </Container>
   )
