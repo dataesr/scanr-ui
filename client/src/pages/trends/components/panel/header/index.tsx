@@ -71,7 +71,7 @@ export default function TrendsViewHeader() {
 
   return (
     <Row verticalAlign="middle" horizontalAlign="center">
-      <Col xs="8" sm="8" md="4" lg="4">
+      <Col xs="6" sm="6" md="4" lg="4">
         <Text style={{ justifySelf: "center" }} className="fr-mb-0">
           {intl.formatMessage({ id: `trends.views.header.domains` })}
         </Text>
@@ -90,7 +90,7 @@ export default function TrendsViewHeader() {
         </>
       )}
       {isMobile && (
-        <Col xs="4" sm="4">
+        <Col xs="6" sm="6">
           <Row horizontalAlign="right">
             <TrendsViewMobileButton />
           </Row>

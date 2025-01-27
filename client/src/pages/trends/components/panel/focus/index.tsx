@@ -7,7 +7,7 @@ export default function TrendsFocus({ item }) {
   const { source } = useTrendsContext()
 
   return (
-    <Container fluid className="fr-mt-3w">
+    <Container>
       <Wikidata item={item} />
       <LineChart data={item} source={source} />
     </Container>
