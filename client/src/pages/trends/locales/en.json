@@ -37,7 +37,7 @@
   "trends.select-source.citations.description": "Number of citations",
   "trends.ranking.header.domains": "Themes",
   "trends.ranking.header.count": "Volume ({max})",
-  "trends.ranking.header.diff": "Variation (1 year)",
+  "trends.ranking.header.variation": "Variation",
   "trends.ranking.header.trend": "Trend ({count} years)",
   "trends.ranking.page-next": "Next",
   "trends.ranking.page-previous": "Back",

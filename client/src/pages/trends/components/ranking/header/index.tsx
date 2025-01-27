@@ -73,19 +73,16 @@ export default function TrendsRankingHeader() {
 
   return (
     <Row verticalAlign="middle" horizontalAlign="center">
-      <Col xs="6" sm="6" md="4" lg="4">
+      <Col xs="6" sm="6" md="5" lg="5">
         <Text style={{ justifySelf: "center" }} className="fr-mb-0">
           {intl.formatMessage({ id: `trends.ranking.header.domains` })}
         </Text>
       </Col>
       {!isMobile && (
         <>
-          <Col md="4" lg="4">
+          <Col md="3" lg="3">
             <TrendsRankingHeaderButton label="count" />
           </Col>
-          {/* <Col md="3" lg="3">
-            <TrendsViewButton label="diff" />
-          </Col> */}
           <Col md="4" lg="4">
             <TrendsRankingHeaderButton label="trend" />
           </Col>

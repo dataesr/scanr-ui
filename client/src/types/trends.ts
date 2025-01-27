@@ -15,6 +15,7 @@ export type TrendsRankingItem = {
   intercept: number
   r2: number
   sum: number
+  variation: number
 }
 
 export type TrendsRankingSorts = Array<TrendsRankingSort>

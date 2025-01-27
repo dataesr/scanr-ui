@@ -9,6 +9,7 @@ type TrendsAggregation = Array<ElasticBucket & { [x: string]: ElasticAggregation
 
 function computeTrends(data: Array<any>, cursor: number, years: Array<number>, normalized: boolean) {
   const maxYear = years[years.length - 1]
+  const minYear = years[0]
   const minItems = (cursor || 0) * PAGE_ITEMS
   const maxItems = ((cursor || 0) + 1) * PAGE_ITEMS
 
@@ -22,7 +23,7 @@ function computeTrends(data: Array<any>, cursor: number, years: Array<number>, n
     item.norm_slope = slope / item.sum
     item.intercept = intercept
     item.r2 = r2
-    item.diff = variation(item.count, maxYear)
+    item.variation = variation(item.count, item.sum, minYear, maxYear)
   })
 
   // Sort items by volume max year
@@ -30,15 +31,6 @@ function computeTrends(data: Array<any>, cursor: number, years: Array<number>, n
 
   // Compute top items
   const topCount = sortedItems.slice(minItems, maxItems)
-  // const topDiff = sortedItems
-  //   .slice()
-  //   .sort((a, b) => b.diff - a.diff)
-  //   .slice(0, MAX_ITEMS)
-  // const botDiff = sortedItems
-  //   .slice()
-  //   .sort((a, b) => (b?.count?.[min_year - 1] || 0) - (a?.count?.[maxYear - 1] || 0))
-  //   .sort((a, b) => a.diff - b.diff)
-  //   .slice(0, MAX_ITEMS)
   const topSlope = sortedItems
     .slice()
     .sort((a, b) => (normalized ? b.norm_slope - a.norm_slope : b.slope - a.slope))

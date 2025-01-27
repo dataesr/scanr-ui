@@ -2,8 +2,6 @@ import { TrendsRankingSort, TrendsRankingSorts } from "../../../types/trends"
 
 export const TRENDS_RANKING_SORTS_MAPPING: TrendsRankingSorts = [
   { id: "count-top", label: "count", order: "top", nextSort: "" },
-  // { id: "diff-top", label: "diff", order: "top", nextView: "diff-bot" },
-  // { id: "diff-bot", label: "diff", order: "bot", nextView: "diff-top" },
   { id: "trend-top", label: "trend", order: "top", nextSort: "trend-bot" },
   { id: "trend-bot", label: "trend", order: "bot", nextSort: "trend-top" },
 ]
