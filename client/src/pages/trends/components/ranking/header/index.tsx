@@ -5,6 +5,7 @@ import { trendsRankingSortFromId, trendsRankingSortFromLabel } from "../../../co
 import useScreenSize from "../../../../../hooks/useScreenSize"
 import useTrends from "../../../hooks/useTrends"
 import useOptions from "../../../hooks/useOptions"
+import { useState } from "react"
 
 function TrendsRankingHeaderMobileButton() {
   const intl = useIntl()
@@ -69,14 +70,42 @@ function TrendsRankingHeaderButton({ label }) {
 export default function TrendsRankingHeader() {
   const intl = useIntl()
   const { screen } = useScreenSize()
+  const { setStartWith } = useTrendsRankingContext()
+  const [search, setSearch] = useState(false)
   const isMobile = ["xs", "sm"].includes(screen)
 
   return (
     <Row verticalAlign="middle" horizontalAlign="center">
       <Col xs="6" sm="6" md="5" lg="5">
-        <Text style={{ justifySelf: "center" }} className="fr-mb-0">
-          {intl.formatMessage({ id: `trends.ranking.header.domains` })}
-        </Text>
+        <Row verticalAlign="middle">
+          <Button
+            title={"Search topics"}
+            className="fr-ml-1w"
+            size="md"
+            icon="search-line"
+            iconPosition="left"
+            variant={"text"}
+            onClick={() => {
+              if (search) setStartWith("")
+              setSearch(!search)
+            }}
+          />
+          {search ? (
+            <>
+              <div className="fr-input-group">
+                <input
+                  className="fr-input"
+                  placeholder={"Search topics"}
+                  onChange={(event) => setStartWith(event.target.value.toLowerCase())}
+                />
+              </div>
+            </>
+          ) : (
+            <Text className="fr-btn fr-btn--tertiary-no-outline fr-mb-0" style={{ justifySelf: "center" }}>
+              {intl.formatMessage({ id: `trends.ranking.header.domains` })}
+            </Text>
+          )}
+        </Row>
       </Col>
       {!isMobile && (
         <>

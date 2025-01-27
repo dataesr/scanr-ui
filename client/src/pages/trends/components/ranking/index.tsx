@@ -16,7 +16,7 @@ const scrollYTop = 200
 function TrendsRankingItems() {
   const intl = useIntl()
   const [ref, inView] = useInView()
-  const { sort } = useTrendsRankingContext()
+  const { sort, startsWith } = useTrendsRankingContext()
   const { currentPage, handlePageChange } = useOptions()
   const { trends, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage, error } = useTrends()
 
@@ -41,7 +41,9 @@ function TrendsRankingItems() {
     <>
       <div className="fr-accordions-group">
         {trends.pages.map((page) =>
-          page.ranking?.[sort].map((item, index) => <TrendsRankingItem key={index} item={item} />)
+          page.ranking?.[sort]
+            .filter((item) => item.label.toLowerCase().includes(startsWith))
+            ?.map((item, index) => <TrendsRankingItem key={index} item={item} />)
         )}
       </div>
       {isFetchingNextPage && <BaseSkeleton height="300px" />}

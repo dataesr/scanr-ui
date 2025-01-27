@@ -10,6 +10,6 @@ export function useTrendsRankingContext() {
 export function TrendsRankingContext({ children }) {
   const [sort, setSort] = useState<string>(TRENDS_RANKING_SORTS_MAPPING[0].id)
   const [focus, setFocus] = useState<string>("")
-
-  return <Context.Provider value={{ sort, setSort, focus, setFocus }}>{children}</Context.Provider>
+  const [startsWith, setStartWith] = useState<string>("")
+  return <Context.Provider value={{ sort, setSort, focus, setFocus, startsWith, setStartWith }}>{children}</Context.Provider>
 }

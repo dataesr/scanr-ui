@@ -10,7 +10,7 @@ import TrendsRankingFocus from "../focus"
 export default function TrendsRankingItem({ item }) {
   const { sort, focus, setFocus } = useTrendsRankingContext()
   const { trendsYears } = useTrends()
-  const { normalized } = useOptions()
+  const { currentModel, normalized } = useOptions()
   const { screen } = useScreenSize()
 
   const isMobile = ["xs", "sm"].includes(screen)
@@ -21,7 +21,7 @@ export default function TrendsRankingItem({ item }) {
   const trendScore = itemGetTrendVariation(item)
 
   const isFocused = Boolean(focus === item.id)
-  const focusKey = `focus-${sort}-${item.id}`
+  const focusKey = `focus-${currentModel}-${sort}-${item.id}`
 
   isFocused && console.log("item", item)
 
