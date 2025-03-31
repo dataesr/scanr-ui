@@ -26,7 +26,7 @@ export default function TrendsTableItem({ index, item }: TrendsTableItemProps) {
 
   return (
     <>
-      <tr onClick={() => setFocus(focus === index ? null : index)} key={index}>
+      <tr className={isFocused ? "open" : ""} onClick={() => setFocus(focus === index ? null : index)} key={index}>
         <td>{index}</td>
         <td className="label">
           {url ? (
@@ -59,7 +59,7 @@ export default function TrendsTableItem({ index, item }: TrendsTableItemProps) {
         {currentModel !== "entity-fishing" && <td></td>}
       </tr>
       {isFocused && (
-        <tr>
+        <tr className="no-hover">
           <td colSpan={7}>
             <LineChart data={item} source={"publications"} />
           </td>
