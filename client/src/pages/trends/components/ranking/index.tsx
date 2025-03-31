@@ -1,16 +1,17 @@
 import { Container } from "@dataesr/dsfr-plus"
-import useTrends from "../../hooks/useTrends"
 import { useTrendsContext } from "../../context"
-import TrendsRankingItem from "./item"
-import TrendsRankingHeader from "./header"
-import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
-import { TrendsRankingFooter } from "./footer"
+import useTrends from "../../hooks/useTrends"
+import "./styles.scss"
+import TrendsTableItem from "./item"
+import TrendsTableHeader from "./header"
+import TrendsTableFooter from "./footer"
+import TrendsTableSkeleton from "./skeleton"
 
-function TrendsRankingItems() {
+export default function TrendsTable() {
   const { sort, includes } = useTrendsContext()
   const { trends, isFetching, error } = useTrends()
 
-  if (!trends && isFetching) return <BaseSkeleton height="500px" />
+  if (!trends && isFetching) return <TrendsTableSkeleton />
   if (!trends?.ranking || error) return <div>no data</div>
 
   const items = includes
@@ -18,24 +19,17 @@ function TrendsRankingItems() {
     : trends.ranking[sort]
 
   return (
-    <Container fluid>
-      <div className="fr-accordions-group">
-        {items.map((item) => (
-          <TrendsRankingItem key={item.id} item={item} />
-        ))}
-      </div>
-      {isFetching && <BaseSkeleton height="500px" />}
-    </Container>
-  )
-}
-
-export default function TrendsRanking() {
-  return (
     <Container>
-      <Container fluid className="fr-card">
-        <TrendsRankingHeader />
-        <TrendsRankingItems />
-        <TrendsRankingFooter />
+      <Container className="fr-card">
+        <table>
+          <TrendsTableHeader />
+          <tbody>
+            {items.map((item, index) => (
+              <TrendsTableItem key={index} index={index + 1} item={item} />
+            ))}
+          </tbody>
+        </table>
+        <TrendsTableFooter />
       </Container>
     </Container>
   )

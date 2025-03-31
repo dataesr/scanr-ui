@@ -3,7 +3,7 @@ import { useIntl } from "react-intl"
 import useOptions from "../../../hooks/useOptions"
 import useTrends from "../../../hooks/useTrends"
 
-export function TrendsRankingFooter() {
+export default function TrendsTableFooter() {
   const intl = useIntl()
   const { currentPage, handlePageChange } = useOptions()
   const { trends, isFetching } = useTrends()

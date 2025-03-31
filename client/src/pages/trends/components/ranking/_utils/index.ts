@@ -39,3 +39,10 @@ export function itemGetTrendVariation(item: TrendsRankingItem) {
   const prefix = variation >= 0 ? "+" : "-"
   return `(${prefix}${Math.abs(variation * 100).toFixed(0)}%)`
 }
+
+export function formatItemVariation(variation: number): string {
+  if (variation === Infinity) return "breakout"
+  if (variation === -Infinity) return "exctint"
+
+  return `${(variation * 100).toFixed(0)}%`
+}
