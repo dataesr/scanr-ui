@@ -11,6 +11,7 @@ export default function OrganizationHeader({ data }: { data: Organization }) {
   const { locale } = useDSFRConfig();
   const intl = useIntl();
   const shortLevel = data.level?.match(/\((.*?)\)/)?.[1] || data.level;
+  const hasAcronym = getLangFieldValue(locale)(data.acronym);
 
   return (
     <section>
@@ -34,6 +35,8 @@ export default function OrganizationHeader({ data }: { data: Organization }) {
             )}
           </BadgeGroup>
           <Title className="fr-mb-0" as="h1" look="h5">
+            {hasAcronym}
+            {hasAcronym && " – "}
             {getLangFieldValue(locale)(data.label)}
           </Title>
           {data?.endDate && (

@@ -1,16 +1,18 @@
 import { Fragment } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Text, Link, BadgeGroup, Badge } from "@dataesr/dsfr-plus";
+import { Text, Link, BadgeGroup, Badge, useDSFRConfig } from "@dataesr/dsfr-plus";
 import { encode } from "../../../../utils/string";
 import { ItemProps } from "../../types";
 import { getOrganizationById } from "../../../../api/organizations/[id]";
 import { LightOrganization } from "../../../../types/organization";
+import getLangFieldValue from "../../../../utils/lang";
 // import CopyBadge from "../../../../components/copy/copy-badge";
 
 export default function OrganizationItem({
   data: organization,
   highlight,
 }: ItemProps<LightOrganization>) {
+  const { locale } = useDSFRConfig();
   const queryClient = useQueryClient();
 
   function prefetch(id: string) {
@@ -19,6 +21,9 @@ export default function OrganizationItem({
       queryFn: () => getOrganizationById(encode(id)),
     });
   }
+
+  const hasAcronym = getLangFieldValue(locale)(organization.acronym);
+
 
   return (
     <Fragment key={organization.id}>
@@ -41,6 +46,8 @@ export default function OrganizationItem({
             href={`/organizations/${encode(organization.id)}`}
             className="fr-link"
           >
+            {hasAcronym}
+            {hasAcronym && " – "}
             {highlight?.["label.default"] ? (
               <span
                 dangerouslySetInnerHTML={{
