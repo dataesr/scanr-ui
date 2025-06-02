@@ -31,14 +31,9 @@ export default function ThesisHeader({ data }) {
           <Badge color="purple-glycine" noIcon>
             {publicationTypeMapping[data.type]}
           </Badge>
-          <Badge
-            color={data.isOa ? "green-emeraude" : "pink-macaron"}
-            icon={data.isOa ? "lock-unlock-line" : "lock-line"}
-          >
-            {intl.formatMessage({
-              id: `publications.header.oa.${data.isOa ? "true" : "false"}`,
-            })}
-          </Badge>
+          {(data?.isOa === true) && <Badge color="green-emeraude" icon="lock-unlock-line">
+            {intl.formatMessage({ id: "publications.header.oa.true" })}
+          </Badge>}
         </BadgeGroup>
         <Title className="fr-mb-1v" as="h1" look="h5">
           {getLangFieldValue(locale)(data.title)}

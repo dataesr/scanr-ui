@@ -3,6 +3,7 @@ import { publicationTypeMapping, encode } from "../../../../../utils/string";
 import { useIntl } from "react-intl";
 import Truncate from "../../../../../components/truncate";
 import getLangFieldValue from "../../../../../utils/lang";
+import { Fragment } from "react/jsx-runtime";
 
 export default function PublicationsHeader({ data, authors, affiliations }) {
   const intl = useIntl();
@@ -13,28 +14,28 @@ export default function PublicationsHeader({ data, authors, affiliations }) {
       <div>
         <BadgeGroup>
           {publicationTypeMapping[data.type] && <Badge color="purple-glycine" noIcon>{publicationTypeMapping[data.type]}</Badge>}
-          <Badge color={data.isOa ? 'green-emeraude' : 'pink-macaron'} icon={data.isOa ? 'lock-unlock-line' : 'lock-line'}>
-            {intl.formatMessage({ id: `publications.header.oa.${data.isOa ? "true" : "false"}` })}
-          </Badge>
+          {(data?.isOa === true) && <Badge color="green-emeraude" icon="lock-unlock-line">
+            {intl.formatMessage({ id: "publications.header.oa.true" })}
+          </Badge>}
         </BadgeGroup>
         <Title className="fr-mb-1v" as="h1" look="h5">{data.title.default}</Title>
         <Text bold size="sm" className="fr-mb-1v">
           {authors.map((author, i) => (
-            <>
+            <Fragment key={i}>
               {(i > 0) ? ', ' : ''}
               {(author?.person) ? <Link href={`/authors/${encode(author.person)}`}>{author.fullName}</Link> : author.fullName}
               {affiliations
                 ?.filter((affiliation) => affiliation.authors.includes(author.fullName))
-                .map((affiliation, i) => (
-                  <>
+                .map((affiliation, j) => (
+                  <Fragment key={j}>
                     <sup>
-                      {(i > 0) ? ', ' : ''}
+                      {(j > 0) ? ', ' : ''}
                       {affiliation.index + 1}
                     </sup>
-                  </>
+                  </Fragment>
                 )
                 )}
-            </>
+            </Fragment>
           ))}
         </Text>
         <Text bold size="md" className="fr-card__detail">
