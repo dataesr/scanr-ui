@@ -5,6 +5,7 @@ import { getWikidataPreviews } from "./api";
 import { WikipediaResult } from "./types";
 import { createIntl } from 'react-intl';
 import BaseSkeleton from "../skeleton/base-skeleton";
+import { Fragment } from "react/jsx-runtime";
 
 const modules = import.meta.glob('./locales/*.json', { eager: true, import: 'default' })
 const messages = Object.keys(modules).reduce((acc, key) => {
@@ -35,8 +36,8 @@ export default function Wiki({ wikis }) {
   );
   if (isLoading) return (
     <Row className="fr-badge-group">
-      {wikis?.map(() => (
-        <BaseSkeleton className="fr-badge" height="1.5rem" width="70px" />
+      {wikis?.map((w) => (
+        <BaseSkeleton key={w.code} className="fr-badge" height="1.5rem" width="70px" />
       ))}
     </Row>
   );
@@ -44,7 +45,7 @@ export default function Wiki({ wikis }) {
   return (
     <div className="fr-badge-group">
       {data?.map((w) => (
-        <>
+        <Fragment key={w.code}>
           <Badge className="pointer" color={"purple-glycine"} aria-describedby={w.code} key={w.code} size="sm">{w?.label?.default}</Badge>
           <span className="fr-tooltip fr-placement" id={w.code} role="tooltip" aria-hidden="true">
             <div className="fr-p-2w">
@@ -70,7 +71,7 @@ export default function Wiki({ wikis }) {
               </Link>
             </div>
           </span>
-        </>
+        </Fragment>
       ))}
     </div>
 

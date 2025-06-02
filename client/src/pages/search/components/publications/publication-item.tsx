@@ -146,15 +146,9 @@ export default function PublicationItem({
             {publicationTypeMapping[publication.type] ||
               intl.formatMessage({ id: "search.publications.other" })}
           </Badge>
-          <Badge
-            size="sm"
-            color={publication.isOa ? "green-emeraude" : "pink-macaron"}
-            icon={publication.isOa ? "lock-unlock-fill" : "lock-fill"}
-          >
-            {publication.isOa
-              ? intl.formatMessage({ id: "search.publications.openAccess" })
-              : intl.formatMessage({ id: "search.publications.closedAccess" })}
-          </Badge>
+          {(publication?.isOa === true) && <Badge size="sm" color="green-emeraude" icon="lock-unlock-line">
+            {intl.formatMessage({ id: "search.publications.openAccess" })}
+          </Badge>}
         </BadgeGroup>
         <span onMouseEnter={() => prefetch(publication.id)}>
           <Link
