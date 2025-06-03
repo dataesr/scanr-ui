@@ -35,6 +35,7 @@ import Trends from "./pages/trends"
 import NetworksGetStarted from "./pages/networks/components/get-started"
 import TrendsIntegration from "./pages/trends/integration"
 import Studio from "./pages/studio"
+import PublicationsAnalyticsTool from "./pages/search/publications";
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
@@ -92,7 +93,9 @@ export default function Router() {
             <Route path="projects" element={<Search />} />
             <Route path="publications" element={<Search />} />
             <Route path="patents" element={<Search />} />
+
           </Route>
+          <Route path="publication-analytics-tool" element={<PublicationsAnalyticsTool />} />
           <Route path="/networks" element={<Networks />} />
           <Route path="/networks/get-started" element={<NetworksGetStarted />} />
           <Route path="/trends" element={<Trends />} />

@@ -97,3 +97,13 @@ export type PublicationAggregations = {
   byFunder: Aggregation[];
   byReview: Aggregation[];
 };
+
+export type PublicationAggregationsForAnalyticTool = {
+  byYear: Aggregation[];
+  byType: Aggregation[];
+  byAuthors: Aggregation[];
+  byAuthorsFullNames: Aggregation[];
+  byIsOa: Aggregation[];
+  byFunder: Aggregation[];
+  byReview: Aggregation[];
+};
