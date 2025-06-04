@@ -45,9 +45,12 @@ export default function PublicationsAnalytics() {
           <CurrentFilters />
         </Container>
       </Container>
-      <Container className="fr-mt-3w">
+      {currentQuery && <Container className="fr-mt-3w">
         <Analytics/>
-      </Container>
+      </Container>}
+      {!currentQuery && <Container className="fr-my-15w">
+        <i>Ajouter des termes de recherche pour obtenir des résultats.</i>
+      </Container>}
 
       {/* <Container className="fr-mt-3w">
         <Row>
