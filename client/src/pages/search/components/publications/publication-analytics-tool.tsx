@@ -15,50 +15,61 @@ export default function PublicationAnalyticsTool() {
   if (isError) return null;
   if (isLoading || !searchData?.length) return <AnalyticsSkeleton />
 
-  const { byYear, byAuthors, byReview, byAuthorsFullNames } = data as PublicationAggregationsForAnalyticTool
+  const { byYear, byAuthors, byReview, byAuthorsFullNames, byLabs, byCountries } = data as PublicationAggregationsForAnalyticTool
 
   const yearOptions = getYearChartOptions({ data: byYear, colors: ['var(--artwork-minor-purple-glycine)'] });
   const authorsOptions = getBarChartOptions({ data: byAuthors.slice(0, 30), colors: ['var(--publications-analytics)'] });
-  const authorsFulNamesOptions = getBarChartOptions({ data: byAuthorsFullNames.slice(0, 30), colors: ['var(--publications-analytics)'] });
+  const authorsFullNamesOptions = getBarChartOptions({ data: byAuthorsFullNames.slice(0, 30), colors: ['var(--publications-analytics)'] });
   const reviewOptions = getBarChartOptions({ data: byReview.slice(0, 20), colors: ['var(--publications-analytics)'] });
+  const labsOptions = getBarChartOptions({ data: byLabs.slice(0, 20), colors: ['var(--organizations-analytics)'] });
+  const countriesOptions = getBarChartOptions({ data: byCountries.slice(0, 20), colors: ['var(--organizations-analytics)'] });
+
 
   // const _100TopAuthors = Math.max(...byAuthors.map((el) => el.count | 0));
 
   return (
-    <Row>
-      <Col xs="12">
+    <Row gutters>
+      <Col xs="6">
         <AnalyticsGraph
-          title={intl.formatMessage({ id: "search.analytics.publications.by-year.title" })}
-          description={intl.formatMessage({ id: "search.analytics.publications.by-year.description" })}
-          options={yearOptions}
+        title={intl.formatMessage({ id: "search.analytics.publications.by-authors.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-authors.description" })}
+        options={authorsOptions}
         />
       </Col>
-      <Col xs="12">
-        <Row gutters>
-        <Col xs="6">
-          <AnalyticsGraph
-            title={intl.formatMessage({ id: "search.analytics.publications.by-authors.title" })}
-            description={intl.formatMessage({ id: "search.analytics.publications.by-authors.description" })}
-            options={authorsOptions}
-          />
-        </Col>
-        <Col xs="6">
-          <AnalyticsGraph
-            title={intl.formatMessage({ id: "search.analytics.publications.by-authors.title" })}
-            description={intl.formatMessage({ id: "search.analytics.publications.by-authors.description" })}
-            options={authorsFulNamesOptions}
-          />
-        </Col>
-        </Row>
+      <Col xs="6">
+        <AnalyticsGraph
+        title={intl.formatMessage({ id: "search.analytics.publications.by-authors.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-authors.description" })}
+        options={authorsFullNamesOptions}
+        />
       </Col>
-      <Col xs="12">
-        <Col xs="12">
-          <AnalyticsGraph
-            title={intl.formatMessage({ id: "search.analytics.publications.by-reviews.title" })}
-            description={intl.formatMessage({ id: "search.analytics.publications.by-reviews.description" })}
-            options={reviewOptions}
-          />
-        </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title={intl.formatMessage({ id: "search.analytics.publications.by-year.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-year.description" })}
+        options={yearOptions}
+        />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title={intl.formatMessage({ id: "search.analytics.publications.by-authors.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-authors.description" })}
+        options={countriesOptions}
+        />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title={intl.formatMessage({ id: "search.analytics.publications.by-reviews.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-reviews.description" })}
+        options={reviewOptions}
+        />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title={intl.formatMessage({ id: "search.analytics.publications.by-labs.title" })}
+        description={intl.formatMessage({ id: "search.analytics.publications.by-labs.description" })}
+        options={labsOptions}
+        />
       </Col>
     </Row>
   )

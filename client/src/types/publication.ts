@@ -103,6 +103,8 @@ export type PublicationAggregationsForAnalyticTool = {
   byType: Aggregation[];
   byAuthors: Aggregation[];
   byAuthorsFullNames: Aggregation[];
+  byCountries: Aggregation[];
+  byLabs: Aggregation[];
   byIsOa: Aggregation[];
   byFunder: Aggregation[];
   byReview: Aggregation[];

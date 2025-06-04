@@ -33,7 +33,7 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthorsFullNames: {
         terms: {
           field: "authors.fullName.keyword",
-          size: 100,
+          size: 1000,
         }
       },
       byPublicationType: {
@@ -44,9 +44,34 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthors: {
         terms: {
           field: "authors.id_name.keyword",
+          size: 1000,
+        },
+      },
+      byLabs: {
+        terms: {
+          field: "affiliations.id_name.keyword",
+          size: 1000,
+        },
+      },
+      byCountries: {
+        terms: {
+          field: "affiliations.country.keyword",
           size: 100,
         },
       },
+      // byAuthorsByLabs: {
+      //   terms: {
+      //     field: "authors.affiliations.rnsr.keyword",
+      //     size: 100,
+      //   },
+      //   aggs: {
+      //     byAuthors: {
+      //       value_count: {
+      //         field: "authors.id_name.keyword",
+      //       },
+      //     },
+      //   },
+      // },
       byFunder: {
         terms: {
           field: "projects.type.keyword",
@@ -68,6 +93,9 @@ export async function aggregatePublicationsForAnalyticTool(
     { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const result = await res.json()
   const { aggregations: data} = result;
+
+  console.log(data.byAuthorsByLabs)
+
   const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
   const byYear = data?.byYear?.buckets?.map((element) => {
     return {
@@ -85,7 +113,13 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
-
+  const byCountries = data?.byCountries?.buckets?.filter((element) => element.key !== 'France').map((element) => {
+    return {
+      value: element.key,
+      label: element.key,
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
   const byFunder = data?.byFunder?.buckets?.map((element) => {
     return {
       value: element.key,
@@ -107,6 +141,13 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
+  const byLabs = data?.byLabs?.buckets?.filter((element) => element.key.split('###')?.[0].match(/^[1-9]{9}[A-Z]{1}$/)).map((element) => {
+    return {
+      value: element.key.split('###')?.[0],
+      label: element.key.split('###')?.[1]?.split('_')?.[1]?.split('|||')?.[0],
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
   const byReview = data?.byReview?.buckets?.map((element) => {
     return {
       value: element.key,
@@ -123,5 +164,5 @@ export async function aggregatePublicationsForAnalyticTool(
     }
   }
   ).filter(el => el) || [];
-  return { byYear, byType, byAuthors, byFunder, byIsOa, byReview, byAuthorsFullNames }
+  return { byYear, byType, byAuthors, byFunder, byIsOa, byReview, byAuthorsFullNames, byLabs, byCountries }
 }
