@@ -1,5 +1,6 @@
 export const FIELDS = [
   "id.keyword^10",
+  "title_abs_text^3",
   "inpadocFamily.keyword^10",
   "patents.id.keyword^10",
   "patents.publicationNumber.keyword^10",

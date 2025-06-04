@@ -1,6 +1,7 @@
 export const FIELDS = [
   "id^3",
   "label.*^3",
+  "title_abs_text^3",
   "acronym.*^3",
   "description.*^2",
   "domains.label.*",
