@@ -20,6 +20,8 @@ const API_MAPPING = {
   organizations: searchOrganizations,
   patents: searchPatents,
   he: searchOrganizationsForHe,
+  publicationsanalytictool: searchPublications,
+
 };
 
 export default function useSearchData() {
