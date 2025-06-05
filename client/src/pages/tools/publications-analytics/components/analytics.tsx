@@ -101,18 +101,6 @@ export default function Analytics() {
       </Col>
       <Col xs="12">
         <hr />
-        <Title as="h2" look="h4">Pays</Title>
-        <hr />
-      </Col>
-      <Col xs="6">
-        <AnalyticsGraph
-        title="Pays"
-        description="Représentation des pays dans les résultats de recherche"
-        options={countriesOptions}
-        />
-      </Col>
-      <Col xs="12">
-        <hr />
         <Title as="h2" look="h4">Laboratoires</Title>
         <hr />
       </Col>
@@ -128,6 +116,18 @@ export default function Analytics() {
       </Col>
       <Col xs="12">
         <Network model="structures" />
+      </Col>
+      <Col xs="12">
+        <hr />
+        <Title as="h2" look="h4">Pays</Title>
+        <hr />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title="Pays"
+        description="Représentation des pays dans les résultats de recherche"
+        options={countriesOptions}
+        />
       </Col>
       <Col xs="12">
         <hr />
