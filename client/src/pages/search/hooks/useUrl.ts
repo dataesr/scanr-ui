@@ -86,10 +86,6 @@ const getAPI = (pathname: string) => {
     pathname.split("/")?.[1] === "trouver-des-partenaires-pour-horizon-europe"
   )
     return "he";
-  if (
-    pathname.split("/")?.[1] === "publication-analytics-tool"
-  )
-    return "publicationsanalytictool";
   if (pathname.split("/")?.[1] === "networks") return "networks";
   if (pathname.split("/")?.[1] === "studio") return "networks";
   if (pathname.split("/")?.[1] === "trends") return "trends";

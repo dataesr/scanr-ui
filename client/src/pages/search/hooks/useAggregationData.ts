@@ -15,7 +15,6 @@ import useUrl from "./useUrl";
 import { aggregatePatents } from "../../../api/patents/aggregate";
 import { PatentAggregations } from "../../../types/patent";
 import { useSearchParams } from "react-router-dom"
-import { aggregatePublicationsForAnalyticTool } from "../../../api/publications/aggregate/analytic-tool";
 
 const API_MAPPING = {
   publications: aggregatePublications,
@@ -23,7 +22,6 @@ const API_MAPPING = {
   projects: aggregateProjects,
   organizations: aggregateOrganizations,
   he: aggregateOrganizationsForHe,
-  publicationsanalytictool: aggregatePublicationsForAnalyticTool,
   patents: aggregatePatents,
   trends: aggregatePublications,
 }
