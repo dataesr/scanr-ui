@@ -77,7 +77,7 @@ async function getStructurePublicationsById(id: string): Promise<any> {
       },
       bySupportEntity: {
         terms: {
-          field: "structured_acknowledgments.support.entity.keyword",
+          field: "structured_acknowledgments.private_support.entity.keyword",
           size: 50,
         }
       },
