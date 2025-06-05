@@ -107,5 +107,13 @@ export type PublicationAggregationsForAnalyticTool = {
   byLabs: Aggregation[];
   byIsOa: Aggregation[];
   byFunder: Aggregation[];
+  byPrivateSupport: Aggregation[];
   byReview: Aggregation[];
+  publicationsCount: number;
+  byLabsMap: {
+    lat: number;
+    lon: number;
+    name: string;
+    z: number;
+  }[];
 };

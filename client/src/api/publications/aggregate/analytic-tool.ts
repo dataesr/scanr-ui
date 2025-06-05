@@ -24,6 +24,9 @@ export async function aggregatePublicationsForAnalyticTool(
       }
     },
     aggs: {
+      publicationsCount: {
+        value_count: { field: "id.keyword" },
+      },
       byYear: {
         terms: {
           field: "year",
@@ -72,6 +75,11 @@ export async function aggregatePublicationsForAnalyticTool(
       //     },
       //   },
       // },
+      byIsOa: {
+        terms: {
+          field: "isOa",
+        }
+      },
       byFunder: {
         terms: {
           field: "projects.type.keyword",
@@ -80,6 +88,12 @@ export async function aggregatePublicationsForAnalyticTool(
       byReview: {
         terms: {
           field: "source.title.keyword",
+          size: 100,
+        }
+      },
+      byPrivateSupport: {
+        terms: {
+          field: "structured_acknowledgments.private_support.keyword",
           size: 100,
         }
       }
@@ -110,6 +124,13 @@ export async function aggregatePublicationsForAnalyticTool(
     return {
       value: element.key,
       label: publicationTypeMapping[element.key],
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
+  const byPrivateSupport = data?.byPrivateSupport?.buckets?.map((element) => {
+    return {
+      value: element.key,
+      label: element.key,
       count: element.doc_count,
     }
   }).filter(el => el) || [];
@@ -148,6 +169,19 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
+  const byLabsMap = data?.byLabs?.buckets
+    ?.filter((element) => element.key.split('###')?.[0].match(/^[1-9]{9}[A-Z]{1}$/))
+    ?.filter((element) => element.key.split('###')?.[2])
+    .map((element) => {
+      return {
+        lat: Number(element.key.split('###')?.[2].split('|')?.[0]),
+        lon: Number(element.key.split('###')?.[2].split('|')?.[1]),
+        name: element.key.split('###')?.[1]?.split('_')?.[1]?.split('|||')?.[0],
+        z: element.doc_count,
+      }
+    })
+    .filter(el => el) || [];
+  console.log(byLabsMap)
   const byReview = data?.byReview?.buckets?.map((element) => {
     return {
       value: element.key,
@@ -155,14 +189,26 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
-  const _100IsOa = data?.byIsOa?.buckets && Math.max(...data.byIsOa.buckets.map((el) => el.doc_count));
   const byIsOa = data?.byIsOa?.buckets?.map((element) => {
     return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count * 100 / _100IsOa,
+      value: element.key === 1 ? 'Accès ouvert' : 'Accès restreint',
+      label: element.key === 1 ? 'Accès ouvert' : 'Accès restreint',
+      count: element.doc_count,
     }
-  }
-  ).filter(el => el) || [];
-  return { byYear, byType, byAuthors, byFunder, byIsOa, byReview, byAuthorsFullNames, byLabs, byCountries }
+  }).filter(el => el) || [];
+  const publicationsCount = data.publicationsCount?.value;
+  return {
+    byYear,
+    byType,
+    byAuthors,
+    byFunder,
+    byIsOa,
+    byReview,
+    byAuthorsFullNames,
+    byLabs,
+    byCountries,
+    publicationsCount,
+    byPrivateSupport,
+    byLabsMap,
+  };
 }

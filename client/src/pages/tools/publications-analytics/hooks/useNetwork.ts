@@ -6,16 +6,17 @@ import { NetworkParameters } from "../../../../types/network"
 
 const currentSource = "publications"
 
-const parameters: NetworkParameters = {
-  maxNodes: 100,
+const PARAMS: NetworkParameters = {
+  maxNodes: 150,
   maxComponents: 5,
   clusters: false,
   filterNode: "",
-  sample: true,
+  sample: false,
 }
 
 export default function useNetworks(currentModel: "authors" | "structures") {
   const { currentQuery, filters } = useUrl();
+  const parameters = currentModel === "authors" ? {...PARAMS, clusters: true} : PARAMS
 
 
   const { data, error, isFetching } = useQuery({
