@@ -64,7 +64,7 @@ export default function BubbleMap({ data }: { data: BubbleMapProps }) {
           animation: false,
           layoutAlgorithm: {
             type: 'grid',
-            gridSize: 20
+            gridSize: 30,
           },
         },
       }
