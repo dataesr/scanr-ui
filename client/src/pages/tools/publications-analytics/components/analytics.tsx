@@ -16,9 +16,14 @@ export default function Analytics() {
   if (isError) return "Une erreur est survenue";
   if (isLoading) return <AnalyticsSkeleton />
 
-  const { publications, patents } = data as AnalyticsData;
+  const { publications, patents, projects } = data as AnalyticsData;
 
-
+  const {
+    projectsCount,
+    byYear: projectsByYear,
+    byInstitution: projectsByInstitutions,
+    byType: projectsByType,
+  } = projects;
   const {
     byYear,
     byAuthors,
@@ -35,7 +40,7 @@ export default function Analytics() {
     byAuthorsByLabsChart,
   } = publications
 
-  const { byInventors, byApplicants, patentsCount } = patents
+  const { byInventors, byApplicants, patentsCount, byYear: patentsByYear } = patents
 
   const yearOptions = getYearChartOptions({ data: byYear, colors: ['var(--artwork-minor-purple-glycine)'] });
   const authorsOptions = getBarChartOptions({ data: byAuthors.slice(0, 20), colors: ['var(--publications-analytics)'] });
@@ -56,6 +61,12 @@ export default function Analytics() {
 
   const patentInventorsOptions = getBarChartOptions({ data: byInventors.slice(0, 15), colors: ['var(--patents-analytics)'] });
   const patentApplicantsOptions = getBarChartOptions({ data: byApplicants.slice(0, 15), colors: ['var(--patents-analytics)'] });
+  const patentYearsOptions = getYearChartOptions({ data: patentsByYear, colors: ['var(--patents-analytics)'] });
+
+  const projectsYearOptions = getYearChartOptions({ data: projectsByYear, colors: ['var(--projects-analytics)'] });
+  const projectsInstitutionsOptions = getBarChartOptions({ data: projectsByInstitutions.slice(0, 15), colors: ['var(--projects-analytics)'] });
+  const projectsTypeOptions = getBarChartOptions({ data: projectsByType.slice(0, 15), colors: ['var(--projects-analytics)'] });
+
   return (
     <Row gutters>
       <Col xs="12">
@@ -176,18 +187,49 @@ export default function Analytics() {
         <Title as="h2" look="h4">{`${patentsCount} brevets`}</Title>
         <hr />
       </Col>
-      <Col xs="6">
+      <Col xs="4">
+        <AnalyticsGraph
+        title="Brevets par années"
+        options={patentYearsOptions}
+        />
+      </Col>
+      <Col xs="4">
         <AnalyticsGraph
         title="Inventeurs"
         description="Top 10 des inventeurs"
         options={patentInventorsOptions}
         />
       </Col>
-      <Col xs="6">
+      <Col xs="4">
         <AnalyticsGraph
         title="Déposants"
         description="Top 10 des déposants"
         options={patentApplicantsOptions}
+        />
+      </Col>
+      <Col xs="12">
+        <hr />
+        <Title as="h2" look="h4">{`${projectsCount} projets`}</Title>
+        <hr />
+      </Col>
+      <Col xs="4">
+        <AnalyticsGraph
+        title="Par années"
+        options={projectsYearOptions}
+        />
+      </Col>
+      <Col xs="4">
+        <AnalyticsGraph
+        title="Types"
+        description="Top 10 des types"
+        options={projectsTypeOptions}
+        />
+      </Col>
+      <Col xs="4">
+        <AnalyticsGraph
+        title="Participants"
+        description="Top 10 des participants"
+        options={projectsInstitutionsOptions}
         />
       </Col>
     </Row>

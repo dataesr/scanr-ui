@@ -115,7 +115,7 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthorsFullNames: {
         terms: {
           field: "authors.fullName.keyword",
-          size: 15,
+          size: 1000,
           min_doc_count: 5,
           order: {
             _count: "desc"
@@ -130,7 +130,7 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthors: {
         terms: {
           field: "authors.id_name.keyword",
-          size: 15,
+          size: 1000,
           min_doc_count: 5,
           order: {
             _count: "desc"
@@ -198,7 +198,6 @@ export async function aggregatePublicationsForAnalyticTool(
   const result = await res.json()
   const { aggregations: data} = result;
 
-  console.log("ROW", data.byAuthorsByLabs)
 
   const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
   const byYear = data?.byYear?.buckets?.map((element) => {
@@ -263,7 +262,6 @@ export async function aggregatePublicationsForAnalyticTool(
       }
     })
     .filter(el => el) || [];
-  // console.log('IRIG', byLabs)
   const byLabsMap = data?.byLabs?.buckets
     ?.filter((element) => element.key.split('###')?.[0].match(/^[0-9]{9}[A-Z]{1}$/))
     ?.filter((element) => element.key.split('###')?.[2])

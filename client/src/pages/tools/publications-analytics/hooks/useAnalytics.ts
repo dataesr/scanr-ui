@@ -5,17 +5,21 @@ import useUrl from "./useUrl";
 import { aggregatePublicationsForAnalyticTool } from "../../../../api/publications/aggregate/analytic-tool";
 import { aggregatePatentsForAnalyticTool } from "../../../../api/patents/aggregate/analytic-tool";
 import { PatentsAggregationsForAnalyticTool } from "../../../../types/patent";
+import { ProjectAggregationsForAnalyticsTool } from "../../../../types/project";
+import { aggregateProjectsForAnalyticsTool } from "../../../../api/projects/aggregate/anaytic-tool";
 
 export type AnalyticsData = {
   publications: PublicationAggregationsForAnalyticTool;
   patents: PatentsAggregationsForAnalyticTool;
+  projects: ProjectAggregationsForAnalyticsTool;
 };
 
 async function fetchAnalytics({ query, filters }) {
   const publicationsQuery = aggregatePublicationsForAnalyticTool({ query, filters });
-  const patentsQuery = aggregatePatentsForAnalyticTool({ query, filters });
-  const [publications, patents] = await Promise.all([publicationsQuery, patentsQuery]);
-  return { publications, patents };
+  const patentsQuery = aggregatePatentsForAnalyticTool({ query });
+  const projectsQuery = aggregateProjectsForAnalyticsTool({ query });
+  const [publications, patents, projects] = await Promise.all([publicationsQuery, patentsQuery, projectsQuery]);
+  return { publications, patents, projects };
 }
 
 
