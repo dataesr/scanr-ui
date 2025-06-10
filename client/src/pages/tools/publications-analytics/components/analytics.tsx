@@ -130,14 +130,12 @@ export default function Analytics() {
         description="Top 10 des laboratoires les plus représentés"
         options={labsOptions}
         />
+        <BubbleMap data={byLabsMap} />
       </Col>
       <Col xs="6">
         <StackedBar
         data={byAuthorsByLabsChart}
         />
-      </Col>
-      <Col xs="6">
-        <BubbleMap data={byLabsMap} />
       </Col>
       <Col xs="12">
         <Network model="structures" />

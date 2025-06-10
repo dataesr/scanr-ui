@@ -10,6 +10,7 @@ export default function StackedBar({ data }: { data: PublicationAggregationsForA
   const options: HighchartsInstance.Options = {
     chart: {
       type: 'bar',
+      height: '1000px',
 
     },
     title: {
@@ -48,7 +49,6 @@ export default function StackedBar({ data }: { data: PublicationAggregationsForA
       </div>
 
       <HighchartsReact
-        height={600}
         options={options}
         highcharts={Highcharts}
       />

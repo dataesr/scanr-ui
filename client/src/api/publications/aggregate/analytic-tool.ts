@@ -21,6 +21,7 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
   // const labsData = new Map<string, Map<string, number>>();
   const allAuthors = new Map<string, string[]>();
   const categories = new Set<string>();
+  const categoriesCounts = new Map<string, number>();
 
   buckets.forEach(bucket => {
     const parts = bucket.key.split('###');
@@ -28,11 +29,19 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
     const authorName = parts[1];
     const labs = bucket.byLabs.buckets
       ?.filter(lab => lab.key.startsWith(idref))
-      ?.map(lab => lab.key.split('###')[3]);
+      ?.map(lab => lab.key.split('###')[3])
+    const labsWithCount = bucket.byLabs.buckets
+      ?.filter(lab => lab.key.startsWith(idref))
+      ?.map(lab => [lab.key.split('###')[3], lab.doc_count])
 
     allAuthors.set(authorName, labs);
     labs?.forEach(lab => categories.add(lab));
+    labsWithCount?.forEach(([lab, count]) => {
+      categoriesCounts.set(lab, categoriesCounts.get(lab) + count || count);
+    });
   });
+
+  console.log(categoriesCounts.get('IRIG'))
 
   const categoryTotals = new Map<string, number>();
   [...categories].forEach(lab => {
@@ -48,7 +57,9 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
     return totalB - totalA;
   });
 
-  const counts = sortedCategories.filter(lab => categoryTotals.get(lab) > 3).map((lab) => {
+  const counts = sortedCategories
+    .filter((lab) => categoriesCounts.get(lab) > 5)
+    .filter(lab => categoryTotals.get(lab) > 3).map((lab) => {
     const singleCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length === 1)
     const severalCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length > 1)
     return [singleCount.length, severalCount.length];
@@ -131,9 +142,6 @@ export async function aggregatePublicationsForAnalyticTool(
           field: "affiliations.id_name.keyword",
           size: 500,
           min_doc_count: 5,
-          order: {
-            _count: "desc"
-          }
         },
       },
       byCountries: {
@@ -152,7 +160,7 @@ export async function aggregatePublicationsForAnalyticTool(
           byLabs: {
             terms: {
               field: "authors.affiliations.id_name_author_labo.keyword",
-              size: 1000,
+              size: 100,
             },
           },
         },
@@ -244,15 +252,20 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
-  const byLabs = data?.byLabs?.buckets?.filter((element) => element.key.split('###')?.[0].match(/^[1-9]{9}[A-Z]{1}$/)).map((element) => {
-    return {
-      value: element.key.split('###')?.[0],
-      label: element.key.split('###')?.[1]?.split('_')?.[1]?.split('|||')?.[0],
-      count: element.doc_count,
-    }
-  }).filter(el => el) || [];
+
+  const byLabs = data?.byLabs?.buckets
+    ?.filter((element) => element.key.split('###')?.[0].match(/^[0-9]{9}[A-Z]{1}$/))
+    .map((element) => {
+      return {
+        value: element.key.split('###')?.[0],
+        label: element.key.split('###')?.[1]?.split('_')?.[1]?.split('|||')?.[0],
+        count: element.doc_count,
+      }
+    })
+    .filter(el => el) || [];
+  // console.log('IRIG', byLabs)
   const byLabsMap = data?.byLabs?.buckets
-    ?.filter((element) => element.key.split('###')?.[0].match(/^[1-9]{9}[A-Z]{1}$/))
+    ?.filter((element) => element.key.split('###')?.[0].match(/^[0-9]{9}[A-Z]{1}$/))
     ?.filter((element) => element.key.split('###')?.[2])
     .map((element) => {
       return {
