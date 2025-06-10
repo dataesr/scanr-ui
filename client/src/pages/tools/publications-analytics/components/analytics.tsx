@@ -9,6 +9,7 @@ import Network from "./network";
 import getDonutOptions from "../../../../components/analytics-graph/graph-options/donut";
 import BubbleMap from "./charts/bubble-map";
 import ResultExports from "./export";
+import StackedBar from "./charts/stacked-bar";
 
 export default function Analytics() {
   const { data, isLoading, isError } = useAnalytics();
@@ -16,7 +17,21 @@ export default function Analytics() {
   if (isLoading) return <AnalyticsSkeleton />
 
 
-  const { byYear, byAuthors, byReview, byAuthorsFullNames, byFunder, byLabs, byCountries, publicationsCount, byType, byIsOa, byPrivateSupport, byLabsMap } = data as PublicationAggregationsForAnalyticTool
+  const {
+    byYear,
+    byAuthors,
+    byReview,
+    byAuthorsFullNames,
+    byFunder,
+    byLabs,
+    byCountries,
+    publicationsCount,
+    byType,
+    byIsOa,
+    byPrivateSupport,
+    byLabsMap,
+    byAuthorsByLabsChart,
+  } = data as PublicationAggregationsForAnalyticTool
 
   const yearOptions = getYearChartOptions({ data: byYear, colors: ['var(--artwork-minor-purple-glycine)'] });
   const authorsOptions = getBarChartOptions({ data: byAuthors.slice(0, 20), colors: ['var(--publications-analytics)'] });
@@ -109,6 +124,11 @@ export default function Analytics() {
         title="Laboratoires"
         description="Top 10 des laboratoires les plus représentés"
         options={labsOptions}
+        />
+      </Col>
+      <Col xs="6">
+        <StackedBar
+        data={byAuthorsByLabsChart}
         />
       </Col>
       <Col xs="6">

@@ -116,4 +116,12 @@ export type PublicationAggregationsForAnalyticTool = {
     name: string;
     z: number;
   }[];
+  byAuthorsByLabsChart: {
+    categories: string[];
+    series: {
+      name: string;
+      data: number[];
+      stack: string;
+    }[];
+  };
 };

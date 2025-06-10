@@ -5,6 +5,74 @@ import { publicationTypeMapping } from "../../../utils/string";
 import { fillWithMissingYears } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
+interface StackedChartSeries {
+  name: string;
+  data: number[];
+  stack: string;
+}
+
+interface StackedChartData {
+  categories: string[];
+  series: StackedChartSeries[];
+}
+
+function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
+  // Parse and group the data
+  // const labsData = new Map<string, Map<string, number>>();
+  const allAuthors = new Map<string, string[]>();
+  const categories = new Set<string>();
+
+  buckets.forEach(bucket => {
+    const parts = bucket.key.split('###');
+    const idref = parts[0];
+    const authorName = parts[1];
+    const labs = bucket.byLabs.buckets
+      ?.filter(lab => lab.key.startsWith(idref))
+      ?.map(lab => lab.key.split('###')[3]);
+
+    allAuthors.set(authorName, labs);
+    labs?.forEach(lab => categories.add(lab));
+  });
+
+  const categoryTotals = new Map<string, number>();
+  [...categories].forEach(lab => {
+    const singleCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length === 1).length;
+    const severalCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length > 1).length;
+    const totalCount = singleCount + severalCount;
+    categoryTotals.set(lab, totalCount);
+  });
+
+  const sortedCategories = [...categories].sort((a, b) => {
+    const totalA = categoryTotals.get(a) || 0;
+    const totalB = categoryTotals.get(b) || 0;
+    return totalB - totalA;
+  });
+
+  const counts = sortedCategories.filter(lab => categoryTotals.get(lab) > 3).map((lab) => {
+    const singleCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length === 1)
+    const severalCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length > 1)
+    return [singleCount.length, severalCount.length];
+  })
+
+  const series: StackedChartSeries[] = [
+    {
+      name: 'Auteurs avec affilation unique',
+      data: counts.map(count => count[0]) as number[],
+      stack: 'Total'
+    },
+    {
+      name: 'Auteurs avec plusieurs affiliations',
+      data: counts.map(count => count[1]) as number[],
+      stack: 'Total'
+    }
+  ]
+
+  return {
+    categories: sortedCategories,
+    series,
+  };
+}
+
 
 export async function aggregatePublicationsForAnalyticTool(
   { query, filters = [] }: AggregationArgs
@@ -36,7 +104,11 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthorsFullNames: {
         terms: {
           field: "authors.fullName.keyword",
-          size: 1000,
+          size: 15,
+          min_doc_count: 5,
+          order: {
+            _count: "desc"
+          }
         }
       },
       byPublicationType: {
@@ -47,13 +119,21 @@ export async function aggregatePublicationsForAnalyticTool(
       byAuthors: {
         terms: {
           field: "authors.id_name.keyword",
-          size: 1000,
+          size: 15,
+          min_doc_count: 5,
+          order: {
+            _count: "desc"
+          }
         },
       },
       byLabs: {
         terms: {
           field: "affiliations.id_name.keyword",
-          size: 1000,
+          size: 500,
+          min_doc_count: 5,
+          order: {
+            _count: "desc"
+          }
         },
       },
       byCountries: {
@@ -62,19 +142,21 @@ export async function aggregatePublicationsForAnalyticTool(
           size: 100,
         },
       },
-      // byAuthorsByLabs: {
-      //   terms: {
-      //     field: "authors.affiliations.rnsr.keyword",
-      //     size: 100,
-      //   },
-      //   aggs: {
-      //     byAuthors: {
-      //       value_count: {
-      //         field: "authors.id_name.keyword",
-      //       },
-      //     },
-      //   },
-      // },
+      byAuthorsByLabs: {
+        terms: {
+          field: "authors.id_name.keyword",
+          size: 5000,
+          min_doc_count: 5,
+        },
+        aggs: {
+          byLabs: {
+            terms: {
+              field: "authors.affiliations.id_name_author_labo.keyword",
+              size: 1000,
+            },
+          },
+        },
+      },
       byIsOa: {
         terms: {
           field: "isOa",
@@ -108,7 +190,7 @@ export async function aggregatePublicationsForAnalyticTool(
   const result = await res.json()
   const { aggregations: data} = result;
 
-  console.log(data.byAuthorsByLabs)
+  console.log("ROW", data.byAuthorsByLabs)
 
   const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
   const byYear = data?.byYear?.buckets?.map((element) => {
@@ -181,7 +263,6 @@ export async function aggregatePublicationsForAnalyticTool(
       }
     })
     .filter(el => el) || [];
-  console.log(byLabsMap)
   const byReview = data?.byReview?.buckets?.map((element) => {
     return {
       value: element.key,
@@ -196,6 +277,9 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
+  const byAuthorsByLabsChart = processAuthorsByLabsForStackedChart(
+    data?.byAuthorsByLabs?.buckets || []
+  );
   const publicationsCount = data.publicationsCount?.value;
   return {
     byYear,
@@ -210,5 +294,6 @@ export async function aggregatePublicationsForAnalyticTool(
     publicationsCount,
     byPrivateSupport,
     byLabsMap,
+    byAuthorsByLabsChart,
   };
 }

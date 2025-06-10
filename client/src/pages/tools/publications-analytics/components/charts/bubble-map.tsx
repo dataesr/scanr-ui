@@ -37,6 +37,7 @@ export default function BubbleMap({ data }: { data: BubbleMapProps }) {
     },
     mapNavigation: {
       enabled: true,
+      mouseWheelSensitivity:1.9,
     },
     mapView: {
       projection: {
