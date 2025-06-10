@@ -1,7 +1,6 @@
 import { projectsIndex, postHeaders } from "../../../config/api";
 import { AggregationArgs } from "../../../types/commons";
 import { ProjectAggregationsForAnalyticsTool } from "../../../types/project";
-import { toAggregationModel } from "../../utils/helpers";
 import { fillWithMissingYears } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
