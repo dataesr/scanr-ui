@@ -1,5 +1,4 @@
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton";
-import { PublicationAggregationsForAnalyticTool } from "../../../../types/publication";
 import getYearChartOptions from "../../../../components/analytics-graph/graph-options/years";
 import { Row, Col, Title } from "@dataesr/dsfr-plus";
 import AnalyticsGraph from "../../../../components/analytics-graph";
@@ -10,11 +9,14 @@ import getDonutOptions from "../../../../components/analytics-graph/graph-option
 import BubbleMap from "./charts/bubble-map";
 import ResultExports from "./export";
 import StackedBar from "./charts/stacked-bar";
+import { type AnalyticsData } from "../hooks/useAnalytics";
 
 export default function Analytics() {
   const { data, isLoading, isError } = useAnalytics();
   if (isError) return "Une erreur est survenue";
   if (isLoading) return <AnalyticsSkeleton />
+
+  const { publications, patents } = data as AnalyticsData;
 
 
   const {
@@ -31,7 +33,9 @@ export default function Analytics() {
     byPrivateSupport,
     byLabsMap,
     byAuthorsByLabsChart,
-  } = data as PublicationAggregationsForAnalyticTool
+  } = publications
+
+  const { byInventors, byApplicants, patentsCount } = patents
 
   const yearOptions = getYearChartOptions({ data: byYear, colors: ['var(--artwork-minor-purple-glycine)'] });
   const authorsOptions = getBarChartOptions({ data: byAuthors.slice(0, 20), colors: ['var(--publications-analytics)'] });
@@ -50,7 +54,8 @@ export default function Analytics() {
 
   const authorsFullNamesWithMoreThan5Publications = byAuthorsFullNames.filter((author) => author.count > 5)?.length;
 
-
+  const patentInventorsOptions = getBarChartOptions({ data: byInventors.slice(0, 15), colors: ['var(--patents-analytics)'] });
+  const patentApplicantsOptions = getBarChartOptions({ data: byApplicants.slice(0, 15), colors: ['var(--patents-analytics)'] });
   return (
     <Row gutters>
       <Col xs="12">
@@ -166,6 +171,25 @@ export default function Analytics() {
         title="Financements privés"
         description="Top 10 des types de financement"
         options={privateSupportOptions}
+        />
+      </Col>
+      <Col xs="12">
+        <hr />
+        <Title as="h2" look="h4">{`${patentsCount} brevets`}</Title>
+        <hr />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title="Inventeurs"
+        description="Top 10 des inventeurs"
+        options={patentInventorsOptions}
+        />
+      </Col>
+      <Col xs="6">
+        <AnalyticsGraph
+        title="Déposants"
+        description="Top 10 des déposants"
+        options={patentApplicantsOptions}
         />
       </Col>
     </Row>

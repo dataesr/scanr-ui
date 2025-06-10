@@ -16,14 +16,15 @@ export default function StackedBar({ data }: { data: PublicationAggregationsForA
       text: null
     },
     xAxis: {
-      categories: data.categories
+      categories: data.categories,
+      type: 'category',
+      tickLength: 0,
     },
     yAxis: {
-      title: null
+      visible: false,
+      tickLength: 0,
     },
-    legend: {
-      enabled:false
-    },
+
     plotOptions: {
       bar: {
         stacking: 'normal',
