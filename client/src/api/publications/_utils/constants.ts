@@ -2,6 +2,7 @@ export const FIELDS = [
   "id^10",
   "externalIds.id^3",
   "title.*^3",
+  "title_abs_text^3",
   "summary.*^2",
   "domains.label.*^2",
   "domains.code^2",

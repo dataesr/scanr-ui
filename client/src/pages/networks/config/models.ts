@@ -4,7 +4,6 @@ const NETWORK_MODELS_MAPPING = {
       label: "domains",
       icon: "book-2-line",
     },
-    ,
     {
       label: "authors",
       icon: "user-line",

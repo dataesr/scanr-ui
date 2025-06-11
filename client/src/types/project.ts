@@ -115,3 +115,10 @@ export type ProjectAggregations = {
   byType: Aggregation[],
   byYear: Aggregation[],
 }
+
+export type ProjectAggregationsForAnalyticsTool = {
+  byType: Aggregation[],
+  byYear: Aggregation[],
+  byInstitution: Aggregation[],
+  projectsCount: number
+}

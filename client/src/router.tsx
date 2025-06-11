@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom"
+import { Navigate, Route, Routes, useLocation } from "react-router-dom"
 
 import Layout from "./layout"
 import Home from "./pages/home"
@@ -35,6 +35,7 @@ import Trends from "./pages/trends"
 import NetworksGetStarted from "./pages/networks/components/get-started"
 import TrendsIntegration from "./pages/trends/integration"
 import Studio from "./pages/studio"
+import PublicationsAnalytics from "./pages/tools/publications-analytics";
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
@@ -92,6 +93,11 @@ export default function Router() {
             <Route path="projects" element={<Search />} />
             <Route path="publications" element={<Search />} />
             <Route path="patents" element={<Search />} />
+
+          </Route>
+          <Route path="/tools">
+            <Route path="" element={<Navigate to="/tools/publications-analytics" replace />} />
+            <Route path="publications-analytics" element={<PublicationsAnalytics />} />
           </Route>
           <Route path="/networks" element={<Networks />} />
           <Route path="/networks/get-started" element={<NetworksGetStarted />} />

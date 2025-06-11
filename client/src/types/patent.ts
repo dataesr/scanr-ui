@@ -86,6 +86,13 @@ export type PatentAggregations = {
   byYear: Aggregation[];
 };
 
+export type PatentsAggregationsForAnalyticTool = {
+  byApplicants: Aggregation[];
+  byInventors: Aggregation[];
+  patentsCount: number;
+  byYear: Aggregation[];
+};
+
 export type ExportPatent = {
   patents: Patent[];
   domains: { label: LangField; code: string; type: string; count: number }[];

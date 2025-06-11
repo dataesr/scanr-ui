@@ -39,6 +39,7 @@ export default function useAggregateData(type: "analytics" | "filters") {
   const networkSource = searchParam.get("source") || "publications"
 
   const queryFn = api === "networks" ? API_MAPPING[networkSource] : API_MAPPING[api]
+
   const _filters = type === "analytics" ? filters : []
 
   const { data, isLoading, isError } = useQuery<AggregationsModel, unknown, AggregationsModel>({
