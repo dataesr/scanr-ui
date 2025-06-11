@@ -182,14 +182,14 @@ export default function Analytics() {
       </Col>
       <Col xs="6">
         <AnalyticsGraph
-        title="Financements privés"
-        description="Top 10 des financements privés détectés dans les publications"
+        title="Financements privés [ Bêta - publications de 2023 ]"
+        description="Top 10 des financements privés détectés dans les paragraphes de remerciements"
         options={privateSupportOptions}
         />
       </Col>
       <Col xs="12">
         <hr />
-        <Title as="h2" look="h4">{`${patentsCount} brevets`}</Title>
+        <Title as="h2" look="h4">{`${patentsCount} familles de brevet`}</Title>
         <div className="fr-notice fr-notice--info fr-mb-3w">
             <div className="fr-container">
                 <div className="fr-notice__body">
@@ -203,8 +203,8 @@ export default function Analytics() {
       </Col>
       <Col xs="4">
         <AnalyticsGraph
-        title="Brevets par années"
-        description="Nombre de brevets par années pour l'equation de recherche"
+        title="Familles de brevet par années"
+        description="Nombre de familles de brevet par années pour l'equation de recherche"
         options={patentYearsOptions}
         />
       </Col>
@@ -224,7 +224,7 @@ export default function Analytics() {
       </Col>
       <Col xs="12">
         <hr />
-        <Title as="h2" look="h4">{`${projectsCount} projets`}</Title>
+        <Title as="h2" look="h4">{`${projectsCount} projets financés`}</Title>
         <div className="fr-notice fr-notice--info fr-mb-3w">
             <div className="fr-container">
                 <div className="fr-notice__body">
