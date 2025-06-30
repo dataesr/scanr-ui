@@ -8,7 +8,7 @@ export default function useOptions() {
   const { setFocus } = useTrendsContext()
   const currentModel = searchParams.get("model") || "entity-fishing"
   const currentSource = searchParams.get("source") || "publications"
-  const currentSort = searchParams.get("sort") || "volume-asc"
+  const currentSort = searchParams.get("sort") || "count-desc"
   const normalized = getBooleanParam(searchParams.get("normalized"), false)
   const currentPage = Number(searchParams.get("page")) || 1
 
