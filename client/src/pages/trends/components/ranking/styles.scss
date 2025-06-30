@@ -20,12 +20,15 @@ th {
   color: var(--text-default-grey);
   cursor: default;
 
-  &.sort-button {
+  &.action {
     cursor: pointer;
     &:hover {
       background-color: var(--active);
     }
   }
+    &.open {
+      background-color: var(--active);
+    }
 }
 
 // td {
