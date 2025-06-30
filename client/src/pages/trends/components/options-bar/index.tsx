@@ -5,6 +5,7 @@ import TrendsSelectSourceButton from "../select-source/button"
 import TrendsFiltersButton from "../filters/button"
 import TrendsParametersButton from "../parameters/button"
 import useIntegration from "../../hooks/useIntegration"
+import TrendsSelectSortButton from "../select-sort/button"
 
 export default function TrendsOptionsBar() {
   const { integrationOptions } = useIntegration()
@@ -20,6 +21,7 @@ export default function TrendsOptionsBar() {
           <TrendsSelectSourceButton />
         </Container>
         <Container fluid style={{ display: "flex", flexWrap: "wrap" }}>
+          <TrendsSelectSortButton />
           <TrendsFiltersButton />
           <TrendsParametersButton />
         </Container>

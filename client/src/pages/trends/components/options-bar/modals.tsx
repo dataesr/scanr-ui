@@ -4,6 +4,7 @@ import TrendsSearchBarModal from "../search-bar/modal"
 import TrendsSelectSourceModal from "../select-source/modal"
 import TrendsSelectModelModal from "../select-model/modal"
 import TrendsFiltersModal from "../filters/modal"
+import TrendsSelectSortModal from "../select-sort/modal"
 
 export default function TrendsOptionsModals() {
   return (
@@ -11,6 +12,7 @@ export default function TrendsOptionsModals() {
       <TrendsSearchBarModal />
       <TrendsSelectModelModal />
       <TrendsSelectSourceModal />
+      <TrendsSelectSortModal />
       <TrendsFiltersModal />
       <TrendsParametersModal />
     </Container>
