@@ -18,8 +18,6 @@ export default function TrendsSelectSortModal() {
           onSelectionChange={(value) => {
             const selected = Object.values(value)[0]
             selected && handleSortChange(selected)
-            // @ts-expect-error dsfr does not have types
-            window.dsfr(document.getElementById(id)).modal.conceal()
           }}
         >
           {TRENDS_SORT_CONFIG.map((sort) => (
