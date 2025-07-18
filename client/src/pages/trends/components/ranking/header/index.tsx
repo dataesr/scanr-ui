@@ -1,51 +1,42 @@
+import cn from "classnames"
 import { useIntl } from "react-intl"
 import useTrends from "../../../hooks/useTrends"
-import { useTrendsContext } from "../../../context"
 import useOptions from "../../../hooks/useOptions"
-import { trendsRankingSortFromId, trendsRankingSortFromLabel } from "../../../config/sorting"
-
-function SortIcon({ sort, currentSort, sortIcon }: { sort: string; currentSort: string; sortIcon: string }) {
-  if (sort !== currentSort) return null
-  return <span className={`fr-icon-${sortIcon}`} aria-hidden="true" />
-}
+import { useTrendsContext } from "../../../context"
+import { useState } from "react"
+import { TextInput } from "@dataesr/dsfr-plus"
 
 export default function TrendsTableHeader() {
   const intl = useIntl()
+  const [openSearch, setOpenSearch] = useState(false)
+  const { includes, setIncludes } = useTrendsContext()
   const { trendsYears } = useTrends()
-  const { sort, setSort, setFocus } = useTrendsContext()
-  const { currentModel, handlePageChange } = useOptions()
-  const currentSort = trendsRankingSortFromId(sort)
+  const { currentModel } = useOptions()
 
-  const handleSortChange = (sortLabel: string) => {
-    const headerSort = trendsRankingSortFromLabel(sortLabel)
-    // set next sort
-    sortLabel === currentSort.label ? currentSort?.nextSort && setSort(currentSort.nextSort) : setSort(headerSort.id) // change sorting
-    handlePageChange(1) // reset page
-    setFocus("") // reset focus
+  const handleOpenSearchChange = () => {
+    if (openSearch === true) setIncludes("") // reset includes if closing
+    setOpenSearch(!openSearch)
   }
-
-  const sortIcon = currentSort.order === "top" ? "arrow-up-line" : "arrow-down-line"
 
   return (
     <thead>
       <tr>
-        <th>Rank</th>
-        <th onClick={() => console.log("domains")}>{intl.formatMessage({ id: `trends.ranking.header.domains` })}</th>
-        <th className="sort-button" onClick={() => handleSortChange("count")}>
-          {intl.formatMessage({ id: `trends.ranking.header.count` }, { max: trendsYears.max })}
-          <SortIcon sort="count" currentSort={currentSort.label} sortIcon={sortIcon} />
+        <th className={cn("action", openSearch ? "open" : "")} onClick={handleOpenSearchChange}>
+          {<span className="fr-icon-search-line" />}
         </th>
-        <th
-          className="sort-button"
-          onClick={() => handleSortChange("variation")}
-          title={`The variation between the volume in ${trendsYears.max} and the previous years average volume`}
-        >
-          Growth
-          <SortIcon sort="variation" currentSort={currentSort.label} sortIcon={sortIcon} />
+        <th>
+          {openSearch ? (
+            <TextInput value={includes} placeholder="Search topics" onChange={(event) => setIncludes(event.target.value)} />
+          ) : (
+            intl.formatMessage({ id: `trends.ranking.header.domains` })
+          )}
         </th>
-        <th className="sort-button" onClick={() => handleSortChange("trend")}>
+        <th>{intl.formatMessage({ id: `trends.ranking.header.count` }, { max: trendsYears.max })}</th>
+        <th title={`The variation between the volume in ${trendsYears.max} and the previous years average volume`}>
+          {intl.formatMessage({ id: `trends.ranking.header.variation` })}
+        </th>
+        <th>
           {intl.formatMessage({ id: `trends.ranking.header.trend` }, { count: trendsYears.max - trendsYears.min + 1 })}
-          <SortIcon sort="trend" currentSort={currentSort.label} sortIcon={sortIcon} />
         </th>
         {currentModel === "entity-fishing" && <th>Description</th>}
         {currentModel !== "entity-fishing" && currentModel !== "open-alex-domains" && <th>Category</th>}

@@ -15,7 +15,7 @@ type TrendsTableItemProps = {
 export default function TrendsTableItem({ index, item }: TrendsTableItemProps) {
   const { trendsYears } = useTrends()
   const { focus, setFocus } = useTrendsContext()
-  const { currentModel } = useOptions()
+  const { currentModel, currentPage } = useOptions()
   const { wikis } = useWikidata()
   const wiki = wikis?.find((w) => w.code === item.id)
   const url = wiki?.url
@@ -27,7 +27,7 @@ export default function TrendsTableItem({ index, item }: TrendsTableItemProps) {
   return (
     <>
       <tr className={isFocused ? "open" : ""} onClick={() => setFocus(focus === index ? null : index)} key={index}>
-        <td>{index}</td>
+        <td>{(currentPage - 1) * 25 + index}</td>
         <td className="label">
           {url ? (
             <Link href={url} target="_blank">

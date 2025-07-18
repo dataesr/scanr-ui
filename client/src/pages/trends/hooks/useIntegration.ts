@@ -23,6 +23,7 @@ export default function useIntegration() {
             showSearchBar: getBooleanParam(searchParams.get("showSearch")),
             showSelectModel: getBooleanParam(searchParams.get("showSelectModel")),
             showSelectSource: getBooleanParam(searchParams.get("showSelectSource")),
+            showSelectSort: getBooleanParam(searchParams.get("showSelectSort")),
             showFilters: getBooleanParam(searchParams.get("showFilters")),
             showParameters: getBooleanParam(searchParams.get("showParameters")),
             showExports: getBooleanParam(searchParams.get("showExports")),

@@ -17,8 +17,6 @@ export default function TrendsSelectModelModal() {
           onSelectionChange={(value) => {
             const selected = Object.values(value)[0]
             selected && handleModelChange(selected)
-            // @ts-expect-error dsfr does not have types
-            window.dsfr(document.getElementById(id)).modal.conceal()
           }}
         >
           <ListboxItem

@@ -71,7 +71,7 @@ export default function Analytics() {
     <Row gutters>
       <Col xs="12">
         <div className="fr-mb-3w" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Title as="h2" look="h4" className="fr-mb-0">{`${publicationsCount} publications`}</Title>
+        <Title as="h2" look="h4" className="fr-mb-0">{`${publicationsCount} publications françaises`}</Title>
         <ResultExports />
         </div>
         <hr />
@@ -99,8 +99,8 @@ export default function Analytics() {
       </Col>
       <Col xs="4">
         <AnalyticsGraph
-        title="Pays"
-        description="Top 15 des pays représentés dans les publications"
+        title="Collaboration internationale de la France"
+        description="Top 15 des pays qui collaborent avec la France"
         options={countriesOptions}
         />
       </Col>
@@ -119,15 +119,15 @@ export default function Analytics() {
       </Col>
       <Col xs="6">
         <AnalyticsGraph
-        title="Auteurs identifiés avec idRef"
-        description={`${authorsWithMoreThan5Publications} auteurs ont plus de 5 publications`}
+        title="Auteurs identifiés (avec idRef)"
+        description={`${authorsWithMoreThan5Publications} auteurs ont plus de 5 publications - après alignement sur le référentiel auteur idref`}
         options={authorsOptions}
         />
       </Col>
       <Col xs="6">
         <AnalyticsGraph
         title="Auteurs par nom complet dans la publication"
-        description={`${authorsFullNamesWithMoreThan5Publications} auteurs ont plus de 5 publications`}
+        description={`${authorsFullNamesWithMoreThan5Publications} auteurs ont plus de 5 publications - sans alignement, uniquement à partir du nom/prénom`}
         options={authorsFullNamesOptions}
         />
       </Col>

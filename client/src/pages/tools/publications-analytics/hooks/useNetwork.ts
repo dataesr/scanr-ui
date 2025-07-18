@@ -34,9 +34,6 @@ export default function useNetworks(currentModel: "authors" | "structures") {
       }),
   })
 
-  console.log(currentModel, data)
-
-
   const values = useMemo(() => {
     return {
       currentQuery,

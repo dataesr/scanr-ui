@@ -29,10 +29,10 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
     const authorName = parts[1];
     const labs = bucket.byLabs.buckets
       ?.filter(lab => lab.key.startsWith(idref))
-      ?.map(lab => lab.key.split('###')[3])
+      ?.map(lab => lab.key.split('###')[3]?.split('_')?.[1]?.split('|||')?.[0])
     const labsWithCount = bucket.byLabs.buckets
       ?.filter(lab => lab.key.startsWith(idref))
-      ?.map(lab => [lab.key.split('###')[3], lab.doc_count])
+      ?.map(lab => [lab.key.split('###')[3]?.split('_')?.[1]?.split('|||')?.[0], lab.doc_count])
 
     allAuthors.set(authorName, labs);
     labs?.forEach(lab => categories.add(lab));
@@ -40,8 +40,6 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
       categoriesCounts.set(lab, categoriesCounts.get(lab) + count || count);
     });
   });
-
-  console.log(categoriesCounts.get('IRIG'))
 
   const categoryTotals = new Map<string, number>();
   [...categories].forEach(lab => {
@@ -264,11 +262,11 @@ export async function aggregatePublicationsForAnalyticTool(
     .filter(el => el) || [];
   const byLabsMap = data?.byLabs?.buckets
     ?.filter((element) => element.key.split('###')?.[0].match(/^[0-9]{9}[A-Z]{1}$/))
-    ?.filter((element) => element.key.split('###')?.[2])
+    ?.filter((element) => element.key.split('###')?.[3])
     .map((element) => {
       return {
-        lat: Number(element.key.split('###')?.[2].split('|')?.[0]),
-        lon: Number(element.key.split('###')?.[2].split('|')?.[1]),
+        lat: Number(element.key.split('###')?.[3].split('|')?.[0]),
+        lon: Number(element.key.split('###')?.[3].split('|')?.[1]),
         name: element.key.split('###')?.[1]?.split('_')?.[1]?.split('|||')?.[0],
         z: element.doc_count,
       }

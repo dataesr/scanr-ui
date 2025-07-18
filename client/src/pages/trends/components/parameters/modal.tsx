@@ -2,15 +2,13 @@ import { Button, Container } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import ToggleNormalize from "./toggle-normalize"
 import { useIntl } from "react-intl"
-import useTrends from "../../hooks/useTrends"
 import useOptions from "../../hooks/useOptions"
 
 export default function TrendsParametersModal() {
   const intl = useIntl()
-  const { isFetching } = useTrends()
   const { setNormalized } = useOptions()
 
-  const resetParameters = () => setNormalized(true)
+  const resetParameters = () => setNormalized(false)
 
   const id = "trends-options-parameters-modal"
 
@@ -25,16 +23,7 @@ export default function TrendsParametersModal() {
             {intl.formatMessage({ id: "trends.parameters.modal.reset" })}
           </Button>
         </div>
-        <Button
-          disabled={isFetching}
-          onClick={() => {
-            const element = document.getElementById(id)
-            // @ts-expect-error dsfr does not have types
-            window.dsfr(element).modal.conceal()
-          }}
-        >
-          {intl.formatMessage({ id: "trends.parameters.modal.display" })}
-        </Button>
+        <Button aria-controls={id}>{intl.formatMessage({ id: "trends.parameters.modal.display" })}</Button>
       </div>
     </Modal>
   )

@@ -50,21 +50,31 @@ function computeTrends(
   const filteredItems = sortedItems.filter(({ label }: { label: string }) => label.toLowerCase().includes(includes))
 
   // Compute top items
-  const topCount = filteredItems.slice(minItems, maxItems)
-  const topSlope = filteredItems
+  const countDesc = filteredItems.slice(minItems, maxItems)
+  const trendDesc = filteredItems
     .slice()
     .sort((a, b) => (normalized ? b.norm_slope - a.norm_slope : b.slope - a.slope))
     .slice(minItems, maxItems)
-  const botSlope = filteredItems
+  const trendAsc = filteredItems
     .slice()
     .sort((a, b) => (normalized ? a.norm_slope - b.norm_slope : a.slope - b.slope))
+    .slice(minItems, maxItems)
+  const variationDesc = filteredItems
+    .slice()
+    .sort((a, b) => b.variation - a.variation)
+    .slice(minItems, maxItems)
+  const variationAsc = filteredItems
+    .slice()
+    .sort((a, b) => a.variation - b.variation)
     .slice(minItems, maxItems)
 
   const trends = {
     ranking: {
-      "count-top": topCount,
-      "trend-top": topSlope,
-      "trend-bot": botSlope,
+      "count-desc": countDesc,
+      "variation-desc": variationDesc,
+      "variation-asc": variationAsc,
+      "trend-desc": trendDesc,
+      "trend-asc": trendAsc,
     },
     searchTotal: sortedItems.length,
     searchPages: Math.ceil(sortedItems.length / ITEMS_PER_PAGE),

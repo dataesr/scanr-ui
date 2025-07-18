@@ -9,6 +9,7 @@ export const DEFAULT_INTEGRATION: TrendsIntegrationOptions = {
   showSearchBar: true,
   showSelectModel: true,
   showSelectSource: true,
+  showSelectSort: true,
   showFilters: true,
   showParameters: true,
   showExports: true,

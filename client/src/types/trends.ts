@@ -51,6 +51,7 @@ export type TrendsIntegrationOptions = {
   showSearchBar: boolean
   showSelectModel: boolean
   showSelectSource: boolean
+  showSelectSort: boolean
   showFilters: boolean
   showParameters: boolean
   showExports: boolean
