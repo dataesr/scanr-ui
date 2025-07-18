@@ -81,7 +81,9 @@ export default function Router() {
           <Route path="/authors/:id" element={<Author />} />
           <Route path="/person/:id" element={<Author />} />
           <Route path="/organizations/:id" element={<Organization />} />
-          <Route path="/entite/:id" element={<Organization />} />
+					<Route path="/structures/:id" element={<Organization />} />
+					<Route path="/structure/:id" element={<Organization />} />
+					<Route path="/entite/:id" element={<Organization />} />
           <Route path="/projects/:id" element={<Project />} />
           <Route path="/project/:id" element={<Project />} />
           <Route path="/patents/:id" element={<Patents />} />
