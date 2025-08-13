@@ -5,6 +5,7 @@ import TrendsOptionsModals from "../components/options-bar/modals"
 import TrendsInfo from "../components/info"
 import useIntegration from "../hooks/useIntegration"
 import TrendsTable from "../components/ranking"
+import TrendsCards from "../components/cards"
 
 export default function TrendsLayout() {
   const { integrationOptions } = useIntegration()
@@ -17,6 +18,7 @@ export default function TrendsLayout() {
       <TrendsOptionsBar />
       <TrendsOptionsModals />
       <TrendsInfo />
+      <TrendsCards />
       <TrendsTable />
     </Container>
   )

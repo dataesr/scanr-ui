@@ -28,15 +28,6 @@ export function itemGetTrendState(item: TrendsRankingItem, normalized: boolean) 
   return "trends.stable"
 }
 
-export function itemGetTrendVariation(item: TrendsRankingItem) {
-  const variation = item.variation
-
-  if (variation === Infinity) return "Breakout"
-  if (variation === -Infinity) return "Exctint"
-
-  const prefix = variation >= 0 ? "+" : "-"
-  return `(${prefix}${Math.abs(variation * 100).toFixed(0)}%)`
-}
 
 export function itemGetCategoryColor(openAlexField: string) {
   switch (openAlexField) {
