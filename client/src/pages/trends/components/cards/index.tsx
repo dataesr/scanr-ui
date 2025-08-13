@@ -3,6 +3,8 @@ import useTrends from "../../hooks/useTrends"
 import { formatItemVariation } from "../ranking/_utils"
 import LineChartMini from "../line-chart/mini"
 import { useIntl } from "react-intl"
+import { useState } from "react"
+import LineChart from "../line-chart"
 
 const cardGetSortData = {
   "count-desc": {
@@ -45,6 +47,8 @@ type TrendsCardProps = {
 function TrendsCard({ data, sort }: TrendsCardProps) {
   const intl = useIntl()
   const { trendsYears } = useTrends()
+  const [focus, setFocus] = useState<number>(null)
+
   const _data = data?.[sort]?.slice(0, 10)
   console.log("_data", sort, _data)
 
@@ -55,16 +59,31 @@ function TrendsCard({ data, sort }: TrendsCardProps) {
         <table>
           <thead>
             <tr>
+              <th></th>
               <th>{"Topics"}</th>
               {cardGetSortData[sort].header(intl, trendsYears)}
             </tr>
           </thead>
           <tbody>
-            {_data.map((d) => (
-              <tr>
-                <th>{d.label}</th>
-                <th>{cardGetSortData[sort].value(d)}</th>
-              </tr>
+            {_data.map((item, index) => (
+              <>
+                <tr
+                  className={focus === index ? "open" : ""}
+                  onClick={() => setFocus(focus === index ? null : index)}
+                  key={index}
+                >
+                  <td>{index + 1}</td>
+                  <td className="label">{item.label}</td>
+                  <td className="count">{cardGetSortData[sort].value(item)}</td>
+                </tr>
+                {focus === index && (
+                  <tr className="no-hover">
+                    <td colSpan={3}>
+                      <LineChart data={item} source={"publications"} />
+                    </td>
+                  </tr>
+                )}
+              </>
             ))}
           </tbody>
         </table>
@@ -93,7 +112,7 @@ export default function TrendsCards() {
       </Row>
       <Row>
         <Col>
-          <TrendsCard data={data} sort={"count-desc"} />
+          <TrendsCard data={data} sort={"sum-desc"} />
         </Col>
         <Col>
           <TrendsCard data={data} sort={"trend-desc"} />

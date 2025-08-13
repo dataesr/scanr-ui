@@ -67,6 +67,14 @@ function computeTrends(
     .slice()
     .sort((a, b) => a.variation - b.variation)
     .slice(minItems, maxItems)
+  const sumDesc = filteredItems
+    .slice()
+    .sort((a, b) => b.sum - a.sum)
+    .slice(minItems, maxItems)
+  const sumAsc = filteredItems
+    .slice()
+    .sort((a, b) => a.sum - b.sum)
+    .slice(minItems, maxItems)
 
   const trends = {
     ranking: {
@@ -75,6 +83,8 @@ function computeTrends(
       "variation-asc": variationAsc,
       "trend-desc": trendDesc,
       "trend-asc": trendAsc,
+      "sum-desc": sumDesc,
+      "sum-asc": sumAsc,
     },
     searchTotal: sortedItems.length,
     searchPages: Math.ceil(sortedItems.length / ITEMS_PER_PAGE),
