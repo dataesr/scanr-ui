@@ -14,7 +14,9 @@ const cardGetSortData = {
     value: (item) => item.count?.[String(Math.max(...Object.keys(item.count).map(Number)))],
   },
   "sum-desc": {
-    header: (intl, trendsYears) => <th>SUM</th>,
+    header: (intl, trendsYears) => (
+      <th>{intl.formatMessage({ id: `trends.ranking.header.sum` }, { min: trendsYears.min, max: trendsYears.max })}</th>
+    ),
     value: (item) => item.sum,
   },
   "variation-desc": {
@@ -34,7 +36,7 @@ const cardGetSortData = {
   },
   "trend-desc": {
     header: (intl, trendsYears) => (
-      <th>{intl.formatMessage({ id: `trends.ranking.header.trend` }, { count: trendsYears.max - trendsYears.min + 1 })}</th>
+      <th>{intl.formatMessage({ id: `trends.ranking.header.trend` }, { min: trendsYears.min, max: trendsYears.max })}</th>
     ),
     value: (item) => <LineChartMini data={item} />,
   },

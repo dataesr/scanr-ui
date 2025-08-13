@@ -35,9 +35,7 @@ export default function TrendsTableHeader() {
         <th title={`The variation between the volume in ${trendsYears.max} and the previous years average volume`}>
           {intl.formatMessage({ id: `trends.ranking.header.variation` })}
         </th>
-        <th>
-          {intl.formatMessage({ id: `trends.ranking.header.trend` }, { count: trendsYears.max - trendsYears.min + 1 })}
-        </th>
+        <th>{intl.formatMessage({ id: `trends.ranking.header.trend` }, { min: trendsYears.min, max: trendsYears.max })}</th>
         {currentModel === "entity-fishing" && <th>Description</th>}
         {currentModel !== "entity-fishing" && currentModel !== "open-alex-domains" && <th>Category</th>}
       </tr>
