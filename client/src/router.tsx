@@ -36,6 +36,7 @@ import NetworksGetStarted from "./pages/networks/components/get-started"
 import TrendsIntegration from "./pages/trends/integration"
 import Studio from "./pages/studio"
 import PublicationsAnalytics from "./pages/tools/publications-analytics";
+import Analytics from "./pages/analytics";
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
@@ -101,6 +102,7 @@ export default function Router() {
             <Route path="" element={<Navigate to="/tools/publications-analytics" replace />} />
             <Route path="publications-analytics" element={<PublicationsAnalytics />} />
           </Route>
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/networks" element={<Networks />} />
           <Route path="/networks/get-started" element={<NetworksGetStarted />} />
           <Route path="/trends" element={<Trends />} />
