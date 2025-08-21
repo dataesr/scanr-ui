@@ -4,6 +4,8 @@ import getBarChartOptions from "../../../components/analytics-graph/graph-option
 import getYearChartOptions from "../../../components/analytics-graph/graph-options/years";
 import AnalyticsSkeleton from "../../../components/skeleton/analytics-skeleton";
 import useOpenalexAnalyticsData from "./hooks/useOpenalexAnalyticsData.ts";
+import CurrentFilters from "./components/current-filters.tsx";
+import Filters from "./components/filters/index.tsx";
 
 
 export default function OpenalexAnalytics() {
@@ -20,7 +22,7 @@ export default function OpenalexAnalytics() {
 		authorshipsAuthors,
 		authorshipsAuthorsInstitutions,
 		primaryTopic,
-		keywords,
+		// keywords,
 		primaryLocationUrl,
 		grantsFunder,
 		authorshipsAuthorsInstitutionsContinents,
@@ -64,10 +66,10 @@ export default function OpenalexAnalytics() {
 		colors: ["var(--organizations-analytics)"],
 	});
 
-	const openAlexKeywordsOptions = getBarChartOptions({
-		data: keywords.slice(0, 20),
-		colors: ["var(--background-contrast-success-active)"],
-	});
+	// const openAlexKeywordsOptions = getBarChartOptions({
+	// 	data: keywords.slice(0, 20),
+	// 	colors: ["var(--background-contrast-success-active)"],
+	// });
 
 	const openAlexPrimaryTopicOptions = getBarChartOptions({
 		data: primaryTopic.slice(0, 20),
@@ -88,6 +90,8 @@ export default function OpenalexAnalytics() {
 					<Title as="h2" look="h4">
 						A l'international
 					</Title>
+					<CurrentFilters />
+					<Filters />
 					<hr />
 				</Col>
 				<Col xs="6">
@@ -133,11 +137,11 @@ export default function OpenalexAnalytics() {
 					/>
 				</Col>
 				<Col xs="6">
-					<AnalyticsGraph
+					{/*<AnalyticsGraph
 						title="Keywords"
 						description="Top 20 des mots-clés"
 						options={openAlexKeywordsOptions}
-					/>
+					/>*/}
 				</Col>
 				<Col xs="6">
 					<AnalyticsGraph

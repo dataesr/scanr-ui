@@ -13,7 +13,7 @@ export default function useOpenalexAnalyticsData() {
 		any
 	>({
 		queryKey: ["analytics-openalex-data", currentQuery, filters],
-		queryFn: () => fetchOpenAlexAggregations({ query: currentQuery }),
+		queryFn: () => fetchOpenAlexAggregations({ query: currentQuery, filters }),
 	});
 
 	const values = useMemo(() => {

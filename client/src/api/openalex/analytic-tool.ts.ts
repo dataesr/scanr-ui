@@ -1,3 +1,5 @@
+import { AggregationArgs } from "../../types/commons";
+
 const getUrl = (query: string, groupBy: string) =>
 	`https://api.openalex.org/works?page=1&mailto=bso@recherche.gouv.fr&filter=title_and_abstract.search:${query}&group_by=${groupBy}`;
 
@@ -9,23 +11,26 @@ const groupBys = [
 	// "authorships.author.id###authorships.countries:countries/fr",
 	"authorships.institutions.lineage",
 	"primary_topic.id",
-	"keywords.id",
+	// "keywords.id",
 	"primary_location.source.id",
 	"grants.funder",
 	"authorships.institutions.continent",
 ];
 
-export async function fetchOpenAlexAggregations({
-	query,
-}: {
-	query: string;
-}): Promise<any> {
+export async function fetchOpenAlexAggregations({ query, filters = [] }: AggregationArgs): Promise<any> {
+  console.log(filters)
 	const urls = groupBys.map((groupBy) => {
 	// if (groupBy.split("###").length > 1) {
  //    return getUrl(`${query},${groupBy.split("###")[1]}`, groupBy.split("###")[0]);
 	// }
+	if (filters) {
+		const [yearMin, yearMax] = [filters?.[0]?.range?.year?.gte, filters?.[0]?.range?.year?.lte]
+		if (!yearMin || !yearMax) return getUrl(query, groupBy);
+		return getUrl(`${query},publication_year:${yearMin}-${yearMax}`, groupBy);
+	}
 	return getUrl(query, groupBy);
 	});
+
 	const responses = await Promise.all(urls.map((url) => fetch(url)));
 	const results = await Promise.all(responses.map((res) => res.json()));
 	const [
@@ -36,7 +41,7 @@ export async function fetchOpenAlexAggregations({
 		// authorshipsFrenchAuthors,
 		authorshipsAuthorsInstitutions,
 		primaryTopic,
-		keywords,
+		// keywords,
 		primaryLocationUrl,
 		grantsFunder,
 		authorshipsAuthorsInstitutionsContinents,
@@ -64,7 +69,7 @@ export async function fetchOpenAlexAggregations({
 		// authorshipsFrenchAuthors,
 		authorshipsAuthorsInstitutions,
 		primaryTopic,
-		keywords,
+		// keywords,
 		primaryLocationUrl,
 		grantsFunder,
 		authorshipsAuthorsInstitutionsContinents,

@@ -206,6 +206,7 @@ export async function aggregatePublicationsForAnalyticTool(
       normalizedCount: element.doc_count * 100 / _100Year,
     }
   }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
+  console.log("PUBLICATIONS", byYear)
   const byType = data?.byPublicationType?.buckets?.map((element) => {
     if (!publicationTypeMapping[element?.key]) return null;
     return {
