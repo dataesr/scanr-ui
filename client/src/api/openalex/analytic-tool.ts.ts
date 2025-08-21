@@ -24,6 +24,7 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
  //    return getUrl(`${query},${groupBy.split("###")[1]}`, groupBy.split("###")[0]);
 	// }
 	if (filters) {
+    /* @ts-expect-error unknown */
 		const [yearMin, yearMax] = [filters?.[0]?.range?.year?.gte, filters?.[0]?.range?.year?.lte]
 		if (!yearMin || !yearMax) return getUrl(query, groupBy);
 		return getUrl(`${query},publication_year:${yearMin}-${yearMax}`, groupBy);
