@@ -83,6 +83,7 @@ export default function useUrl() {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentQuery = searchParams.get("q") || "";
   const currentTab = searchParams.get("tab") || "1";
+  const currentMinAuthors = parseInt(searchParams.get("min-authors"), 10) || 5;
   const currentFilters = parseSearchFiltersFromURL(searchParams.get("filters"));
   const filters = filtersToElasticQuery(currentFilters);
 
@@ -211,6 +212,14 @@ export default function useUrl() {
     [searchParams, setSearchParams]
   );
 
+  const setMinAuthors = useCallback(
+    (min) => {
+      searchParams.set("min-authors", min)
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
+  );
+
   const values = useMemo(() => {
     return {
       handleTabChange,
@@ -225,6 +234,8 @@ export default function useUrl() {
       handleDeleteFilter,
       handleRangeFilterChange,
       handleBoolFilterChange,
+      setMinAuthors,
+      currentMinAuthors
     };
   }, [
     handleTabChange,
@@ -239,6 +250,8 @@ export default function useUrl() {
     handleDeleteFilter,
     handleRangeFilterChange,
     handleBoolFilterChange,
+    setMinAuthors,
+    currentMinAuthors
   ]);
 
   return values;

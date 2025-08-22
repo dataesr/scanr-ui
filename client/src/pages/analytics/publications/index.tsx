@@ -1,4 +1,4 @@
-import { Col, Row, Title } from "@dataesr/dsfr-plus";
+import { Col, Row, Text, Title } from "@dataesr/dsfr-plus";
 import AnalyticsGraph from "../../../components/analytics-graph";
 import getBarChartOptions from "../../../components/analytics-graph/graph-options/bar";
 import getDonutOptions from "../../../components/analytics-graph/graph-options/donut";
@@ -12,8 +12,10 @@ import Network from "./components/network";
 import CurrentFilters from "./components/current-filters.tsx";
 import Filters from "./components/filters/index.tsx";
 import usePublicationsAnalyticsData from "./hooks/usePublicationsAnalyticsData.ts";
+import useUrl from "../hooks/useUrl.ts";
 
 export default function PublicationsAnalytics() {
+  const { currentMinAuthors, currentQuery } = useUrl();
 	const { data, isLoading, isError } = usePublicationsAnalyticsData();
 	if (isError) return "Une erreur est survenue";
 	if (isLoading) return <AnalyticsSkeleton />;
@@ -96,18 +98,24 @@ export default function PublicationsAnalytics() {
 			<Row gutters>
 				<Col xs="12">
 					<div
-						className="fr-mb-3w"
+						className="fr-mb-1w"
 						style={{
 							display: "flex",
 							justifyContent: "space-between",
-							alignItems: "center",
+							alignItems: "flex-start",
+							gap: "1rem",
 						}}
 					>
 						<Title
 							as="h2"
 							look="h4"
 							className="fr-mb-0"
-						>{`${publicationsCount} publications françaises`}</Title>
+						>
+							{`${publicationsCount} publications françaises`}
+						<Text size="xs" className="fr-text--regular fr-text-mention--grey">
+							pour la recherche {currentQuery}
+						</Text>
+						</Title>
 						<ResultExports />
 					</div>
 					<CurrentFilters />
@@ -160,14 +168,14 @@ export default function PublicationsAnalytics() {
 				<Col xs="6">
 					<AnalyticsGraph
 						title="Auteurs identifiés (avec idRef)"
-						description={`${authorsWithMoreThan5Publications} auteurs ont plus de 5 publications - après alignement sur le référentiel auteur idref`}
+						description={`${authorsWithMoreThan5Publications} auteurs ont plus de ${currentMinAuthors} publications - après alignement sur le référentiel auteur idref`}
 						options={authorsOptions}
 					/>
 				</Col>
 				<Col xs="6">
 					<AnalyticsGraph
 						title="Auteurs par nom complet dans la publication"
-						description={`${authorsFullNamesWithMoreThan5Publications} auteurs ont plus de 5 publications - sans alignement, uniquement à partir du nom/prénom`}
+						description={`${authorsFullNamesWithMoreThan5Publications} auteurs ont plus de ${currentMinAuthors} publications - sans alignement, uniquement à partir du nom/prénom`}
 						options={authorsFullNamesOptions}
 					/>
 				</Col>

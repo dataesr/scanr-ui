@@ -4,6 +4,7 @@ import PublicationFunderFilter from "./funders";
 import PublicationTypeFilter from "./types";
 import PublicationYearFilter from "./years";
 import useFilters from "../../hooks/useFilters";
+import MinAuthorsParam from "./authors";
 
 export default function PublicationsFilters() {
   const { isLoading } = useFilters()
@@ -15,6 +16,8 @@ export default function PublicationsFilters() {
           <PublicationYearFilter />
           <hr className="fr-mt-3w" />
           <PublicationTypeFilter />
+          <hr className="fr-mt-3w" />
+          <MinAuthorsParam />
           <hr className="fr-mt-3w" />
           <PublicationFunderFilter />
           <hr className="fr-mt-3w" />

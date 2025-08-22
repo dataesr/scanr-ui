@@ -5,15 +5,15 @@ import type { PublicationAggregationsForAnalyticTool } from "../../../../types/p
 import useUrl from "../../hooks/useUrl";
 
 export default function usePublicationsAnalyticsData() {
-	const { currentQuery, filters } = useUrl();
+	const { currentQuery, filters, currentMinAuthors } = useUrl();
 
 	const { data, isLoading, isError } = useQuery<
 		PublicationAggregationsForAnalyticTool,
 		unknown,
 		PublicationAggregationsForAnalyticTool
 	>({
-		queryKey: ["analytics-publications-data", currentQuery, filters],
-		queryFn: () => aggregatePublicationsForAnalyticTool({ query: currentQuery, filters }),
+		queryKey: ["analytics-publications-data", currentQuery, filters, currentMinAuthors],
+		queryFn: () => aggregatePublicationsForAnalyticTool({ query: currentQuery, filters, minAuthorsPublications: currentMinAuthors }),
 	});
 
 	const values = useMemo(() => {

@@ -1,4 +1,4 @@
-import { Col, Row, Title } from "@dataesr/dsfr-plus";
+import { Col, Row, Text, Title } from "@dataesr/dsfr-plus";
 import AnalyticsGraph from "../../../components/analytics-graph";
 import getBarChartOptions from "../../../components/analytics-graph/graph-options/bar";
 import getYearChartOptions from "../../../components/analytics-graph/graph-options/years";
@@ -6,9 +6,11 @@ import AnalyticsSkeleton from "../../../components/skeleton/analytics-skeleton";
 import useOpenalexAnalyticsData from "./hooks/useOpenalexAnalyticsData.ts";
 import CurrentFilters from "./components/current-filters.tsx";
 import Filters from "./components/filters/index.tsx";
+import useUrl from "../hooks/useUrl.ts";
 
 
 export default function OpenalexAnalytics() {
+  const { currentQuery } = useUrl();
 	const { data, isLoading, isError } = useOpenalexAnalyticsData();
 	if (isError) return "Une erreur est survenue";
 	if (isLoading) return <AnalyticsSkeleton />;
@@ -16,6 +18,7 @@ export default function OpenalexAnalytics() {
 
 
 	const {
+		total,
 		publicationYear,
 		publicationType,
 		authorshipsCountries,
@@ -86,9 +89,11 @@ export default function OpenalexAnalytics() {
 		<>
 			<Row gutters>
 				<Col xs="12">
-					<hr />
 					<Title as="h2" look="h4">
-						A l'international
+						A l'international: {total} publications
+						<Text size="xs" className="fr-text--regular fr-text-mention--grey">
+							pour la recherche {currentQuery}
+						</Text>
 					</Title>
 					<CurrentFilters />
 					<Filters />

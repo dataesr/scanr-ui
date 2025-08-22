@@ -15,7 +15,7 @@ export type AnalyticsData = {
 };
 
 async function fetchAnalytics({ query, filters }) {
-  const publicationsQuery = aggregatePublicationsForAnalyticTool({ query, filters });
+  const publicationsQuery = aggregatePublicationsForAnalyticTool({ query, filters, minAuthorsPublications: 5 });
   const patentsQuery = aggregatePatentsForAnalyticTool({ query });
   const projectsQuery = aggregateProjectsForAnalyticsTool({ query });
   const [publications, patents, projects] = await Promise.all([publicationsQuery, patentsQuery, projectsQuery]);

@@ -84,7 +84,7 @@ function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
 
 
 export async function aggregatePublicationsForAnalyticTool(
-  { query, filters = [] }: AggregationArgs
+  { query, filters = [], minAuthorsPublications = 5 }: AggregationArgs & { minAuthorsPublications: number }
   ): Promise<PublicationAggregationsForAnalyticTool> {
   const body: any = {
     size: 0,
@@ -114,7 +114,7 @@ export async function aggregatePublicationsForAnalyticTool(
         terms: {
           field: "authors.fullName.keyword",
           size: 1000,
-          min_doc_count: 5,
+          min_doc_count: minAuthorsPublications,
           order: {
             _count: "desc"
           }
@@ -129,7 +129,7 @@ export async function aggregatePublicationsForAnalyticTool(
         terms: {
           field: "authors.id_name.keyword",
           size: 1000,
-          min_doc_count: 5,
+          min_doc_count: minAuthorsPublications,
           order: {
             _count: "desc"
           }
@@ -139,7 +139,7 @@ export async function aggregatePublicationsForAnalyticTool(
         terms: {
           field: "affiliations.id_name.keyword",
           size: 500,
-          min_doc_count: 5,
+          min_doc_count: minAuthorsPublications,
         },
       },
       byCountries: {
@@ -152,7 +152,7 @@ export async function aggregatePublicationsForAnalyticTool(
         terms: {
           field: "authors.id_name.keyword",
           size: 5000,
-          min_doc_count: 5,
+          min_doc_count: minAuthorsPublications,
         },
         aggs: {
           byLabs: {

@@ -62,7 +62,9 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
 	// 	}
  //    return item;
 	// });
+	const total = results?.[0]?.meta?.count;
 	return {
+		total,
 		publicationYear,
 		publicationType,
 		authorshipsCountries,
