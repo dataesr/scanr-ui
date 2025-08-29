@@ -4,6 +4,8 @@ import getBarChartOptions from "../../../../components/analytics-graph/graph-opt
 import getYearChartOptions from "../../../../components/analytics-graph/graph-options/years";
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton";
 import usePatentsAnalyticsData from "../hooks/usePatentsAnalyticsData";
+import CpcChart from "../../../../components/patent-chart/cpc";
+
 
 
 export default function PatentsAnalyticsContent() {
@@ -15,7 +17,8 @@ export default function PatentsAnalyticsContent() {
 		byInventors,
 		byApplicants,
 		patentsCount,
-		byYear: patentsByYear,
+		byYear,
+		byCpc,
 	} = data;
 
 	const patentInventorsOptions = getBarChartOptions({
@@ -27,7 +30,7 @@ export default function PatentsAnalyticsContent() {
 		colors: ["var(--organizations-analytics)"],
 	});
 	const patentYearsOptions = getYearChartOptions({
-		data: patentsByYear,
+		data: byYear,
 		colors: ["var(--patents-analytics)"],
 	});
 
@@ -61,6 +64,21 @@ export default function PatentsAnalyticsContent() {
 						description="Top 15 des déposants"
 						options={patentApplicantsOptions}
 					/>
+				</Col>
+				<Col xs="12">
+            <div className="fr-pb-3w">
+              <div style={{ display: 'flex', alignItems: 'start' }}>
+                <div style={{ flexGrow: 1 }}>
+                  <Title as="h2" className="fr-text--md fr-text--bold fr-m-0">
+                    Répartition par classification CPC
+                  </Title>
+                  <p className="fr-text--xs fr-text-mention--grey">Domaines technologiques identifiés dans les familles de brevets</p>
+                </div>
+              </div>
+              <div style={{ height: "600px"}}>
+                <CpcChart data={byCpc} />
+              </div>
+            </div>
 				</Col>
 			</Row>
 		</>
