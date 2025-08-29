@@ -51,7 +51,7 @@ export default function OpenalexAnalyticsContent() {
 		if (country.label === "France") return { ...country, label: "🇫🇷 France" };
 		return country;
 		}).slice(0, 20),
-		colors: ["var(--authors-analytics)"],
+		colors: ["var(--publications-analytics)"],
 	});
 
 	const openAlexAuthorsOptions = getBarChartOptions({
