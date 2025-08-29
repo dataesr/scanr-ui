@@ -45,7 +45,7 @@ export default function OpenalexAnalyticsHeader() {
             </Text>
 					</Title>
 					<Button className="no-text-wrap" size="sm" target="_blank" rel="noopener noreferrer" variant="text" as="a" href={buildSearchUrl()}>
-            Explorer la liste
+            Explorer la liste sur Openalex
 					</Button>
 				</div>
 					<CurrentFilters FilterModal={Filters} />
