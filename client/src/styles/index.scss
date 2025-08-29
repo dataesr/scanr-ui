@@ -236,7 +236,7 @@
     .fr-nav__item {
       margin-left: 0 !important;
       .fr-nav__link {
-        --hover: rgb(241, 241, 241);
+        --hover: var(--nav-hover-color);
       }
     }
   }

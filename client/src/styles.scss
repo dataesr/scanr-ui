@@ -4,6 +4,8 @@
   --organizations-analytics: var(--background-contrast-yellow-tournesol);
   --authors-analytics: var(--background-contrast-orange-terre-battue);
   --patents-analytics: var(--background-contrast-purple-glycine);
+  --nav-hover-color: rgb(241, 241, 241);
+
 }
 
 :root[data-fr-theme="dark"] {
@@ -12,6 +14,7 @@
   --organizations-analytics: var(--artwork-minor-yellow-tournesol);
   --authors-analytics: var(--artwork-minor-orange-terre-battue);
   --patents-analytics: var(--artwork-minor-purple-glycine);
+  --nav-hover-color: rgb(65, 65, 65);
 }
 
 .fr-tag.filter-tag-button {
