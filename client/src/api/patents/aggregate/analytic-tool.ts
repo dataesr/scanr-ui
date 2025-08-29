@@ -6,7 +6,7 @@ import { FIELDS } from "../_utils/constants";
 
 
 export async function aggregatePatentsForAnalyticTool(
-  { query }: AggregationArgs
+  { query, filters = [] }: AggregationArgs
   ): Promise<PatentsAggregationsForAnalyticTool> {
   const body: any = {
     size: 0,
@@ -51,7 +51,24 @@ export async function aggregatePatentsForAnalyticTool(
           }
         }
       },
+      byCpc: {
+        terms: {
+          field: "cpc.classe.code.keyword",
+          size: 10000,
+        },
+        aggs: {
+          bySectionLabel: {
+            terms: {
+              field: "cpc.section.label.keyword",
+              size: 1,
+            },
+          },
+        },
+      },
     }
+  }
+  if (filters.length > 0) {
+    body.query.bool.filter = filters
   }
   const res = await fetch(
     `${patentsIndex}/_search`,

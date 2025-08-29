@@ -15,17 +15,23 @@ export type AnalyticsData = {
 };
 
 async function fetchAnalytics({ query, filters }) {
-  const publicationsQuery = aggregatePublicationsForAnalyticTool({ query, filters, minAuthorsPublications: 5 });
+  const publicationsQuery = aggregatePublicationsForAnalyticTool({
+    query, filters, minAuthorsPublications: 5 });
+
   const patentsQuery = aggregatePatentsForAnalyticTool({ query });
+
   const projectsQuery = aggregateProjectsForAnalyticsTool({ query });
-  const [publications, patents, projects] = await Promise.all([publicationsQuery, patentsQuery, projectsQuery]);
+
+  const [publications, patents, projects] = await Promise
+    .all([publicationsQuery, patentsQuery, projectsQuery]);
+
   return { publications, patents, projects };
 }
 
 
 
 export default function useAnalytics() {
-  const { currentQuery, filters } = useUrl()
+  const { currentQuery, filters } = useUrl();
 
   const { data, isLoading, isError } = useQuery<AnalyticsData, unknown, AnalyticsData>({
     queryKey: ["publications-analytics-analytics", currentQuery, filters],

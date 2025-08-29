@@ -1,14 +1,15 @@
 import {
   Row,
   Col,
-  Title,
   Button,
   Tag,
+  Text,
 } from "@dataesr/dsfr-plus";
-import useUrl from "../../hooks/useUrl";
-import useFilters from "../hooks/useFilters";
+import useUrl from "../hooks/useUrl";
+import { useId } from "react";
 
-export default function CurrentFilters() {
+export default function CurrentFilters({ FilterModal }: { FilterModal: React.ComponentType<{ id: string }> }) {
+  const id = useId();
   const {
     currentFilters,
     handleFilterChange,
@@ -16,24 +17,23 @@ export default function CurrentFilters() {
     clearFilters,
     handleRangeFilterChange,
   } = useUrl();
-  const { isLoading, isError } = useFilters();
   return (
     <Row className="fr-mb-1w">
+      <FilterModal id={id} />
       <Col xs="12">
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ flexGrow: 1 }}>
-            <Title as="h1" className="fr-text--lg fr-text--bold fr-m-0">
-              Filtres
-            </Title>
+            <Text bold className="fr-m-0">
+              Filtres spécifiques au corpus
+            </Text>
           </div>
           <div>
             <Button
               icon="add-circle-line"
               iconPosition="left"
               as="button"
-              aria-controls="tools-analytics-openalex-filters"
+              aria-controls={id}
               data-fr-opened="false"
-              disabled={isLoading || isError}
               variant="text"
               size="sm"
             >
@@ -46,7 +46,7 @@ export default function CurrentFilters() {
                 icon="delete-bin-line"
                 iconPosition="right"
                 onClick={clearFilters}
-                disabled={isLoading || isError}
+                disabled={!!currentFilters?.length}
                 variant="text"
                 size="sm"
                 color="pink-macaron"

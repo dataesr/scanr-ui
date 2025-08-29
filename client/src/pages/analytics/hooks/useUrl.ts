@@ -84,23 +84,23 @@ export default function useUrl() {
   const currentQuery = searchParams.get("q") || "";
   const currentTab = searchParams.get("tab") || "1";
   const currentMinAuthors = parseInt(searchParams.get("min-authors"), 10) || 5;
-  const currentFilters = parseSearchFiltersFromURL(searchParams.get("filters"));
+  const currentFilters = parseSearchFiltersFromURL(searchParams.get(`filters${currentTab}`));
   const filters = filtersToElasticQuery(currentFilters);
 
   const clearFilters = useCallback(() => {
-    searchParams.delete("filters");
+    searchParams.delete(`filters${currentTab}`);
     setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
+  }, [searchParams, setSearchParams, currentTab]);
 
   const handleDeleteFilter = useCallback(
     ({ field }: { field: string }) => {
       const { [field]: currentField, ...nextFilters } = currentFilters;
       if (!currentField) return;
       if (!Object.keys(nextFilters).length) return clearFilters();
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
       return setSearchParams(searchParams);
     },
-    [clearFilters, currentFilters, searchParams, setSearchParams]
+    [clearFilters, currentFilters, searchParams, setSearchParams, currentTab]
   );
 
   const handleRangeFilterChange = useCallback(
@@ -114,10 +114,10 @@ export default function useUrl() {
           type: "range" as const,
         },
       };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
       return setSearchParams(searchParams);
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, currentTab]
   );
 
   const handleBoolFilterChange = useCallback(
@@ -141,10 +141,10 @@ export default function useUrl() {
           type: "bool" as const,
         },
       };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
       return setSearchParams(searchParams);
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, currentTab]
   );
 
   const handleFilterChange = useCallback(
@@ -161,7 +161,7 @@ export default function useUrl() {
             operator: "or",
           },
         };
-        searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+        searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
         setSearchParams(searchParams);
         return;
       }
@@ -178,10 +178,10 @@ export default function useUrl() {
         [field]: { ...filter, values: nextFilterValues },
       };
 
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
       setSearchParams(searchParams);
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, currentTab]
   );
 
   const setOperator = useCallback(
@@ -189,23 +189,26 @@ export default function useUrl() {
       const prev = { ...currentFilters };
       const filter = prev?.[field] || {};
       const nextFilters = { ...prev, [field]: { ...filter, operator } };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      searchParams.set(`filters${currentTab}`, stringifySearchFiltersForURL(nextFilters));
       setSearchParams(searchParams);
     },
-    [currentFilters, searchParams, setSearchParams]
+    [currentFilters, searchParams, setSearchParams, currentTab]
   );
 
   const handleQueryChange = useCallback(
-    (query) => {
-      searchParams.delete("filters")
-      searchParams.set("q", query)
+    (q: string) => {
+      searchParams.delete(`filters1`)
+      searchParams.delete(`filters2`)
+      searchParams.delete(`filters3`)
+      searchParams.delete(`filters4`)
+
+      searchParams.set("q", q)
       setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
   );
   const handleTabChange = useCallback(
     (tab) => {
-      searchParams.delete("filters")
       searchParams.set("tab", tab)
       setSearchParams(searchParams)
     },
@@ -235,7 +238,7 @@ export default function useUrl() {
       handleRangeFilterChange,
       handleBoolFilterChange,
       setMinAuthors,
-      currentMinAuthors
+      currentMinAuthors,
     };
   }, [
     handleTabChange,
@@ -251,7 +254,7 @@ export default function useUrl() {
     handleRangeFilterChange,
     handleBoolFilterChange,
     setMinAuthors,
-    currentMinAuthors
+    currentMinAuthors,
   ]);
 
   return values;

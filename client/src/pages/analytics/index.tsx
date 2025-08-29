@@ -4,109 +4,91 @@ import {
 	Container,
 	Link,
 	Row,
-	SearchBar,
-    Text,
+  Text,
+  Title,
 } from "@dataesr/dsfr-plus";
 import PublicationsAnalytics from "./publications";
 import OpenalexAnalytics from "./openalex";
 import PatentsAnalytics from "./patents";
 import ProjectsAnalytics from "./projects";
 import useUrl from "./hooks/useUrl.ts";
+import { useState } from "react";
 
 export default function Analytics() {
 	const { currentQuery, handleQueryChange, currentTab, handleTabChange } = useUrl();
+	const [q, setQ] = useState(currentQuery);
+
+	const placeholder=`Exemple: \n(spintronic OR MRAM OR skyrmion OR "spin wave" OR magnon OR "spin orbit torque" OR SOT OR "spin Hall effect" OR DMI OR "domain wall") AND (memory OR logic OR computing OR neuromorphic OR device OR material OR circuit OR cell)`
 
 
 
 	return (
 		<>
-			<Container fluid>
+			<Container fluid className="bg-alt-grey fr-pb-0">
 				<Container>
 					<Breadcrumb className="fr-pt-4w fr-mt-0 fr-mb-2w">
 						<Link href="/">Accueil</Link>
-						<Link current>Analyses</Link>
+						<Link current>Analyses graphiques</Link>
 					</Breadcrumb>
 					<Row gutters className="">
-						<Col xs="12" sm="9" lg="9">
-						<SearchBar
-								label="Commencez par entrer votre équation de recherche"
-								key={currentQuery}
-								isLarge
-								buttonLabel="Recherche"
-								defaultValue={currentQuery || ""}
-								placeholder="Entrez votre équation de recherche"
-								onSearch={(value) => handleQueryChange(value)}
-							/>
-						<Text className="fr-mt-1w" size="xs">
+					<Col xs="12">
+					<Title look="h3" className="fr-mb-0">Analyses graphiques</Title>
+					</Col>
+						<Col xs="12" lg="10">
+						<div className="fr-search-bar fr-search-bar--lg fr-mt-1w" id="search-lg" role="search">
+						<label className="fr-label" htmlFor="search-input-lg">Entrez votre équation de recherche :</label>
+              <textarea value={q} onChange={(e) => setQ(e.target.value)} style={{ maxHeight: "12rem"}} className="fr-input" aria-describedby="search-input-lg-messages" placeholder={placeholder} id="search-input-lg" rows={4} />
+              <button title="Rechercher" type="button" className="fr-btn" onClick={() => handleQueryChange(q)}>Rechercher</button>
+            </div>
+						<Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
               Vous pouvez utiliser les opérateurs AND, OR, NOT, et parenthèses pour créer des équations de recherche complexes.
 						</Text>
 						</Col>
 					</Row>
-
-					<fieldset className="fr-segmented fr-segmented--sm fr-mb-3w">
-              <legend className="fr-segmented__legend">
-                Sélection du corpus à analyser:
-              </legend>
-              <div className="fr-segmented__elements">
-                  <div className="fr-segmented__element">
-                      <input
-                        onChange={(e) => e.target.checked && handleTabChange('1')}
-                        value="1"
-                        checked={currentTab === '1'}
-                        type="radio"
-                        id="segmented-1"
-                        name="segmented"
-                      />
-                      <label className="fr-label" htmlFor="segmented-1">
-                        Publications françaises
-                      </label>
-                  </div>
-                  <div className="fr-segmented__element">
-                      <input
-                        onChange={(e) => e.target.checked && handleTabChange('2')}
-                        value="2"
-                        checked={currentTab === '2'}
-                        type="radio"
-                        id="segmented-2"
-                        name="segmented"
-                      />
-                      <label className="fr-label" htmlFor="segmented-2">
-                        Publications internationales
-                      </label>
-                  </div>
-                  <div className="fr-segmented__element">
-                      <input
-                        onChange={(e) => e.target.checked && handleTabChange('3')}
-                        value="3"
-                        checked={currentTab === '3'}
-                        type="radio"
-                        id="segmented-3"
-                        name="segmented"
-                      />
-                      <label className="fr-label" htmlFor="segmented-3">
-                        Brevets français
-                      </label>
-                  </div>
-                  <div className="fr-segmented__element">
-                      <input
-                        onChange={(e) => e.target.checked && handleTabChange('4')}
-                        value="4"
-                        checked={currentTab === '4'}
-                        type="radio"
-                        id="segmented-4"
-                        name="segmented"
-                      />
-                      <label className="fr-label" htmlFor="segmented-4">
-                        Financements français et européens
-                      </label>
-                  </div>
-              </div>
-          </fieldset>
+					<nav className="fr-nav xfr-nav--horizontal" aria-label="Menu">
+        <ul className="fr-nav__list">
+          <li className="fr-nav__item">
+            <button
+              aria-current={currentTab === '1'}
+              className="fr-nav__link"
+              onClick={() => handleTabChange("1")}
+            >
+              Publications françaises
+            </button>
+          </li>
+          <li className="fr-nav__item">
+            <button
+              onClick={() => handleTabChange("2")}
+              aria-current={currentTab === '2'}
+              className="fr-nav__link"
+            >
+              Publications internationales
+            </button>
+          </li>
+          <li className="fr-nav__item">
+            <button
+              onClick={() => handleTabChange("3")}
+              aria-current={currentTab === '3'}
+              className="fr-nav__link"
+            >
+              Brevets français
+            </button>
+          </li>
+          <li className="fr-nav__item">
+            <button
+              onClick={() => handleTabChange("4")}
+              aria-current={currentTab === '4'}
+              className="fr-nav__link"
+            >
+              Financements français et européens
+            </button>
+          </li>
+        </ul>
+      </nav>
 				</Container>
-			<hr />
 			</Container>
 			{currentQuery && (
-				<Container className="fr-mt-3w">
+				<Container className="fr-mt-5w">
 					{ !['1', '2', '3', '4'].includes(currentTab) && <>Select a tab</> }
 					{ currentTab === '1' && <PublicationsAnalytics /> }
 					{currentTab === '2' && <OpenalexAnalytics />}

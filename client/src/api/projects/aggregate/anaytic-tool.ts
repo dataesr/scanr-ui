@@ -5,7 +5,7 @@ import { fillWithMissingYears } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
 export async function aggregateProjectsForAnalyticsTool(
-  { query }: AggregationArgs
+  { query, filters = [] }: AggregationArgs
   ): Promise<ProjectAggregationsForAnalyticsTool> {
   const body: any = {
     size: 0,
@@ -42,8 +42,23 @@ export async function aggregateProjectsForAnalyticsTool(
           field: "participants.structure.id_name.keyword",
           size: 500,
         }
-      }
+      },
+      byKeywordsFr: {
+        terms: {
+          field: "keywords.fr.keyword",
+          size: 50,
+        },
+      },
+      byKeywordsEn: {
+        terms: {
+          field: "keywords.en.keyword",
+          size: 50,
+        },
+      },
     }
+  }
+  if (filters.length > 0) {
+    body.query.bool.filter = filters
   }
   const res = await fetch(
     `${projectsIndex}/_search`,
@@ -78,6 +93,15 @@ export async function aggregateProjectsForAnalyticsTool(
     }
   }).filter(el => el) || [];
   const projectsCount = data?.projectsCount?.value || 0;
-  return { byInstitution, byYear, byType, projectsCount};
+  const keywordsBuckets = [...data?.byKeywordsFr?.buckets || [], ...data?.byKeywordsEn?.buckets || []];
+
+  const byKeywords = keywordsBuckets.map((element) => {
+    return {
+      value: element.key,
+      label: element.key,
+      count: element.doc_count,
+    }
+  }).filter(el => el).sort((a, b) => a.count - b.count).slice(0, 30) || [];
+  return { byInstitution, byYear, byType, byKeywords, projectsCount};
 
 }

@@ -1,35 +1,39 @@
 import { AggregationArgs } from "../../types/commons";
 
-const getUrl = (query: string, groupBy: string) =>
-	`https://api.openalex.org/works?page=1&mailto=bso@recherche.gouv.fr&filter=title_and_abstract.search:${query}&group_by=${groupBy}`;
+import { getOpenalexUrl } from "./config";
 
 const groupBys = [
 	"publication_year",
 	"type",
 	"authorships.countries",
 	"authorships.author.id",
-	// "authorships.author.id###authorships.countries:countries/fr",
 	"authorships.institutions.lineage",
 	"primary_topic.id",
 	// "keywords.id",
 	"primary_location.source.id",
 	"grants.funder",
-	"authorships.institutions.continent",
+	// "authorships.institutions.continent",
 ];
 
 export async function fetchOpenAlexAggregations({ query, filters = [] }: AggregationArgs): Promise<any> {
-  console.log(filters)
+  console.log("fetchOpenAlexAggregations", query, filters)
 	const urls = groupBys.map((groupBy) => {
-	// if (groupBy.split("###").length > 1) {
- //    return getUrl(`${query},${groupBy.split("###")[1]}`, groupBy.split("###")[0]);
-	// }
-	if (filters) {
+	if (filters.length) {
     /* @ts-expect-error unknown */
-		const [yearMin, yearMax] = [filters?.[0]?.range?.year?.gte, filters?.[0]?.range?.year?.lte]
-		if (!yearMin || !yearMax) return getUrl(query, groupBy);
-		return getUrl(`${query},publication_year:${yearMin}-${yearMax}`, groupBy);
+    const yearRange: any = filters.find((el: any) => el?.range?.year)?.range?.year
+		const [yearMin, yearMax] = [yearRange?.gte, yearRange?.lte]
+		const types = filters
+      ?.find((el) => el?.terms?.["type.keyword"])
+			?.terms["type.keyword"]
+			?.map((type: string) => `types/${type}`);
+
+		const typesFilter = types?.length > 0 ? `type:${types.join("|")}` : "";
+		const yearsFilter = (yearMin && yearMax) ? `publication_year:${parseInt(yearMin)}-${parseInt(yearMax)}` : "";
+		const finalQuery= [query, typesFilter, yearsFilter].filter(Boolean).join(",")
+		console.log("finalQuery", finalQuery)
+		return getOpenalexUrl(finalQuery, groupBy);
 	}
-	return getUrl(query, groupBy);
+	return getOpenalexUrl(query, groupBy);
 	});
 
 	const responses = await Promise.all(urls.map((url) => fetch(url)));
@@ -39,13 +43,12 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
 		publicationType,
 		authorshipsCountries,
 		authorshipsAllAuthors,
-		// authorshipsFrenchAuthors,
 		authorshipsAuthorsInstitutions,
 		primaryTopic,
 		// keywords,
 		primaryLocationUrl,
 		grantsFunder,
-		authorshipsAuthorsInstitutionsContinents,
+		// authorshipsAuthorsInstitutionsContinents,
 	] = results.map((result) => {
 		const agg = result.group_by;
 
@@ -75,6 +78,6 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
 		// keywords,
 		primaryLocationUrl,
 		grantsFunder,
-		authorshipsAuthorsInstitutionsContinents,
+		// authorshipsAuthorsInstitutionsContinents,
 	};
 }

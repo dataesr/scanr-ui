@@ -1,42 +1,36 @@
 import { Text } from "@dataesr/dsfr-plus";
-import { PublicationAggregations } from "../../../../../types/publication";
-import useFilters from "../../hooks/useFilters";
+import { ProjectAggregations } from "../../../../../types/project";
 import { RangeSlider } from "../../../../../components/year-range-sliders";
 import useUrl from "../../../hooks/useUrl";
+import useFilters from "../../hooks/useFilters";
 
-export default function PublicationYearFilter() {
-  const { handleRangeFilterChange, currentFilters } = useUrl();
-  const { data = { byYear: [] } } = useFilters()
-  const { byYear = [] } = data as PublicationAggregations
+export default function ProjectYearFilter() {
+  const { handleRangeFilterChange } = useUrl();
+  const { data = { byYear: [] } } = useFilters();
+  const { byYear = [] } = data as ProjectAggregations
 
   if (!byYear.length) return null;
-  const min = currentFilters?.year?.values?.[0]?.value || byYear[0].value;
-  const max = currentFilters?.year?.values?.[1]?.value || byYear[byYear.length - 1].value;
 
   const defaultValues = [byYear[0].value, byYear[byYear.length - 1].value]
 
   return (
     <>
       <Text bold size="md" className="fr-mb-1v">
-        Filtrer par années
+        Filtrer par année de financement
       </Text>
-      <Text className="fr-card__detail fr-mb-2w" size="sm">
-        `entre ${min} et ${max}`
-      </Text>
-
       <RangeSlider
-        aria-label="Années de publication"
+        aria-label="Années de financement"
         minValue={defaultValues[0]}
         maxValue={defaultValues[1]}
         step={1}
         height="100px"
         data={byYear.map((year) => year.count)}
-        color="purple-glycine"
+        color="green-emeraude"
         defaultValue={defaultValues}
         onChangeEnd={(value) => handleRangeFilterChange({ field: 'year', value: value })}
         tooltipLabel={(value, year) => (
           <>
-            Publications en {year} :
+            Financement en {year}
             <br />
             {value}
           </>

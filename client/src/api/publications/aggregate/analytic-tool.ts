@@ -3,7 +3,6 @@ import { AggregationArgs } from "../../../types/commons";
 import { PublicationAggregationsForAnalyticTool } from "../../../types/publication";
 import { publicationTypeMapping } from "../../../utils/string";
 import { fillWithMissingYears } from "../../utils/years";
-import { FIELDS } from "../_utils/constants";
 
 interface StackedChartSeries {
   name: string;
@@ -94,7 +93,7 @@ export async function aggregatePublicationsForAnalyticTool(
           {
             query_string: {
               query: query || '*',
-              fields: FIELDS,
+              fields: ["title_abs_text"],
             },
           }
         ]
