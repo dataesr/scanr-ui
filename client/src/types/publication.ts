@@ -120,7 +120,10 @@ export type PublicationAggregationsForAnalyticTool = {
     categories: string[];
     series: {
       name: string;
-      data: number[];
+      data: {
+        name: string;
+        y: number;
+      }[];
       stack: string;
     }[];
   };

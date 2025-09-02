@@ -4,9 +4,29 @@ import { PublicationAggregationsForAnalyticTool } from "../../../types/publicati
 import { publicationTypeMapping } from "../../../utils/string";
 import { fillWithMissingYears } from "../../utils/years";
 
+interface AuthorData {
+  idref: string;
+  name: string;
+  labs: string[];
+  labCounts: Map<string, number>;
+}
+
+interface LabMetrics {
+  singleAffiliationCount: number;
+  multipleAffiliationCount: number;
+  totalCount: number;
+  singleAffiliationAuthors: string[];
+  multipleAffiliationAuthors: string[];
+}
+
+interface ChartDataPoint {
+  name: string;
+  y: number;
+}
+
 interface StackedChartSeries {
   name: string;
-  data: number[];
+  data: ChartDataPoint[];
   stack: string;
 }
 
@@ -15,69 +35,124 @@ interface StackedChartData {
   series: StackedChartSeries[];
 }
 
-function processAuthorsByLabsForStackedChart(buckets: any): StackedChartData {
-  // Parse and group the data
-  // const labsData = new Map<string, Map<string, number>>();
-  const allAuthors = new Map<string, string[]>();
-  const categories = new Set<string>();
-  const categoriesCounts = new Map<string, number>();
+const getLabLabel = (lab: string): string | undefined =>
+  lab.split('###')[3]?.split('_')?.[1]?.split('|||')?.[0];
 
-  buckets.forEach(bucket => {
-    const parts = bucket.key.split('###');
-    const idref = parts[0];
-    const authorName = parts[1];
-    const labs = bucket.byLabs.buckets
-      ?.filter(lab => lab.key.startsWith(idref))
-      ?.map(lab => lab.key.split('###')[3]?.split('_')?.[1]?.split('|||')?.[0])
-    const labsWithCount = bucket.byLabs.buckets
-      ?.filter(lab => lab.key.startsWith(idref))
-      ?.map(lab => [lab.key.split('###')[3]?.split('_')?.[1]?.split('|||')?.[0], lab.doc_count])
+function parseAuthorData(buckets: any[]): AuthorData[] {
+  return buckets.map(bucket => {
+    const [idref, authorName] = bucket.key.split('###');
 
-    allAuthors.set(authorName, labs);
-    labs?.forEach(lab => categories.add(lab));
-    labsWithCount?.forEach(([lab, count]) => {
-      categoriesCounts.set(lab, categoriesCounts.get(lab) + count || count);
+    const labsData = bucket.byLabs.buckets
+      ?.filter((lab: any) => lab.key.startsWith(idref))
+      ?.map((lab: any) => ({
+        label: getLabLabel(lab.key),
+        count: lab.doc_count
+      }))
+      ?.filter((lab: any) => lab.label) || [];
+
+    const labs = labsData.map((lab) => lab.label);
+    const labCounts: Map<string, number> = new Map(labsData.map((lab: { label: string, count: number }) => [lab.label, lab.count]));
+
+    return {
+      idref,
+      name: authorName,
+      labs,
+      labCounts
+    };
+  });
+}
+
+function calculateLabMetrics(authorsData: AuthorData[]): Map<string, LabMetrics> {
+  const labMetrics = new Map<string, LabMetrics>();
+
+  // Initialize all labs
+  authorsData.forEach(author => {
+    author.labs.forEach(lab => {
+      if (!labMetrics.has(lab)) {
+        labMetrics.set(lab, {
+          singleAffiliationCount: 0,
+          multipleAffiliationCount: 0,
+          totalCount: 0,
+          singleAffiliationAuthors: [],
+          multipleAffiliationAuthors: []
+        });
+      }
     });
   });
 
-  const categoryTotals = new Map<string, number>();
-  [...categories].forEach(lab => {
-    const singleCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length === 1).length;
-    const severalCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length > 1).length;
-    const totalCount = singleCount + severalCount;
-    categoryTotals.set(lab, totalCount);
+  // Calculate metrics for each lab
+  authorsData.forEach(author => {
+    const hasMultipleAffiliations = author.labs.length > 1;
+
+    author.labs.forEach(lab => {
+      const metrics = labMetrics.get(lab)!;
+      metrics.totalCount++;
+
+      if (hasMultipleAffiliations) {
+        metrics.multipleAffiliationCount++;
+        metrics.multipleAffiliationAuthors.push(author.name);
+      } else {
+        metrics.singleAffiliationCount++;
+        metrics.singleAffiliationAuthors.push(author.name);
+      }
+    });
   });
 
-  const sortedCategories = [...categories].sort((a, b) => {
-    const totalA = categoryTotals.get(a) || 0;
-    const totalB = categoryTotals.get(b) || 0;
-    return totalB - totalA;
-  });
+  return labMetrics;
+}
 
-  const counts = sortedCategories
-    .filter((lab) => categoriesCounts.get(lab) > 5)
-    .filter(lab => categoryTotals.get(lab) > 3).map((lab) => {
-    const singleCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length === 1)
-    const severalCount = [...allAuthors].filter(([, authorLabs]) => authorLabs.includes(lab) && authorLabs.length > 1)
-    return [singleCount.length, severalCount.length];
-  })
+function sortLabsByTotalCount(labMetrics: Map<string, LabMetrics>): string[] {
+  return Array.from(labMetrics.entries())
+    .sort(([, a], [, b]) => b.totalCount - a.totalCount)
+    .map(([lab]) => lab);
+}
 
-  const series: StackedChartSeries[] = [
+function createChartSeries(
+  sortedLabs: string[],
+  labMetrics: Map<string, LabMetrics>
+): StackedChartSeries[] {
+  return [
     {
-      name: 'Auteurs avec affilation unique',
-      data: counts.map(count => count[0]) as number[],
+      name: 'Auteurs avec affiliation unique',
+      data: sortedLabs.map(lab => {
+        const metrics = labMetrics.get(lab)!;
+        return {
+          name: metrics.singleAffiliationAuthors.join(", "),
+          y: metrics.singleAffiliationCount
+        };
+      }),
       stack: 'Total'
     },
     {
       name: 'Auteurs avec plusieurs affiliations',
-      data: counts.map(count => count[1]) as number[],
+      data: sortedLabs.map(lab => {
+        const metrics = labMetrics.get(lab)!;
+        return {
+          name: metrics.multipleAffiliationAuthors.join(", "),
+          y: metrics.multipleAffiliationCount
+        };
+      }),
       stack: 'Total'
     }
-  ]
+  ];
+}
+
+function processAuthorsByLabsForStackedChart(buckets: any[]): StackedChartData {
+  // Parse the raw bucket data into structured author data
+  const authorsData = parseAuthorData(buckets);
+
+  // Calculate metrics for each lab
+  const labMetrics = calculateLabMetrics(authorsData);
+
+  // Sort labs by total count (descending)
+  const sortedCategories = sortLabsByTotalCount(labMetrics);
+
+  // Create series data for the chart
+  const series = createChartSeries(sortedCategories, labMetrics);
 
   return {
     categories: sortedCategories,
-    series,
+    series
   };
 }
 
@@ -124,16 +199,6 @@ export async function aggregatePublicationsForAnalyticTool(
           field: "type.keyword",
         }
       },
-      byAuthors: {
-        terms: {
-          field: "authors.id_name.keyword",
-          size: 1000,
-          min_doc_count: minAuthorsPublications,
-          order: {
-            _count: "desc"
-          }
-        },
-      },
       byLabs: {
         terms: {
           field: "affiliations.id_name.keyword",
@@ -152,12 +217,14 @@ export async function aggregatePublicationsForAnalyticTool(
           field: "authors.id_name.keyword",
           size: 5000,
           min_doc_count: minAuthorsPublications,
+          order: {
+            _count: "desc"
+          }
         },
         aggs: {
           byLabs: {
             terms: {
               field: "authors.affiliations.id_name_author_labo.keyword",
-              size: 100,
             },
           },
         },
@@ -205,7 +272,6 @@ export async function aggregatePublicationsForAnalyticTool(
       normalizedCount: element.doc_count * 100 / _100Year,
     }
   }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
-  console.log("PUBLICATIONS", byYear)
   const byType = data?.byPublicationType?.buckets?.map((element) => {
     if (!publicationTypeMapping[element?.key]) return null;
     return {
@@ -235,7 +301,7 @@ export async function aggregatePublicationsForAnalyticTool(
       count: element.doc_count,
     }
   }).filter(el => el) || [];
-  const byAuthors = data?.byAuthors?.buckets?.map((element) => {
+  const byAuthors = data?.byAuthorsByLabs?.buckets?.map((element) => {
     return {
       value: element.key.split('###')?.[0],
       label: element.key.split('###')?.[1],

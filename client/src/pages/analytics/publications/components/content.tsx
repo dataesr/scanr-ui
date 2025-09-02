@@ -37,11 +37,11 @@ export default function PublicationsAnalyticsContent() {
 		colors: ["var(--artwork-minor-purple-glycine)"],
 	});
 	const authorsOptions = getBarChartOptions({
-		data: byAuthors.slice(0, 20),
+		data: byAuthors.slice(0, 40),
 		colors: ["var(--authors-analytics)"],
 	});
 	const authorsFullNamesOptions = getBarChartOptions({
-		data: byAuthorsFullNames.slice(0, 20),
+		data: byAuthorsFullNames.slice(0, 40),
 		colors: ["var(--authors-analytics)"],
 	});
 	const reviewOptions = getBarChartOptions({

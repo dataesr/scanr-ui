@@ -18,7 +18,7 @@ export default function Analytics() {
 	const { currentQuery, handleQueryChange, currentTab, handleTabChange } = useUrl();
 	const [q, setQ] = useState(currentQuery);
 
-	const placeholder=`Exemple: \n(spintronic OR MRAM OR skyrmion OR "spin wave" OR magnon OR "spin orbit torque" OR SOT OR "spin Hall effect" OR DMI OR "domain wall") AND (memory OR logic OR computing OR neuromorphic OR device OR material OR circuit OR cell)`
+	const placeholder=`Exemple: \nfire AND mediterranean AND (forest OR vegetation)`
 
 
 
@@ -32,7 +32,7 @@ export default function Analytics() {
 					</Breadcrumb>
 					<Row gutters className="">
 					<Col xs="12">
-					<Title look="h3" className="fr-mb-0">Analyses graphiques</Title>
+					<Title look="h3" className="fr-mb-0">Analyse thématique</Title>
 					</Col>
 						<Col xs="12" lg="10">
 						<div className="fr-search-bar fr-search-bar--lg fr-mt-1w" id="search-lg" role="search">

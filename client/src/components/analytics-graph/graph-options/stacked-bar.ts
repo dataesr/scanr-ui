@@ -8,7 +8,10 @@ type StackedBarChartOptionsProps = Omit<GetGraphOptionsProps, "data"> & {
     categories: string[];
     series: {
       name: string;
-      data: number[];
+      data: Array<{
+        name: string;
+        y: number;
+      }>;
       stack: string;
     }[];
   };
@@ -51,6 +54,29 @@ export default function getStackedBarChartOptions({ data, colors = [], height = 
       },
       tickLength: 0,
     },
+    tooltip: {
+      shared: true,
+      useHTML: true,
+      formatter: function() {
+        const categoryIndex = this.points[0].point.index;
+        let tooltipContent = `<b style="font-size: 12px">${this.points[0].point.category}</b><br/>`;
+        const total = this.points.reduce((acc, point) => acc + point.y, 0);
+        tooltipContent += `<br/><b>Nombre d'auteurs: ${total}</b><br/>`;
+        this.points.forEach((point) => {
+          const seriesIndex = point.series.index;
+          const seriesData = data.series[seriesIndex].data[categoryIndex];
+          const authors = typeof seriesData === 'object' ? seriesData?.name : '';
+          if (point.y > 0) {
+            tooltipContent += `<br/><b>${point.series.name}: ${point.y}</b><br/>`;
+            if (authors) {
+              tooltipContent += `${authors}<br/>`;
+            }
+          }
+        });
+
+        return tooltipContent;
+      }
+    },
     plotOptions: {
       bar: {
         stacking: 'normal',
@@ -58,17 +84,25 @@ export default function getStackedBarChartOptions({ data, colors = [], height = 
     },
     colors: colors?.length ? colors : defaultColors,
     series: data.series.map((series, i) => ({
-      ...series,
-      data: series.data.slice(0, slice),
+      name: series.name,
+      data: series.data.slice(0, slice).map(point => ({
+        y: point.y,
+        name: point.name,
+        category: data.categories[series.data.indexOf(point)]
+      })),
       pointPadding: 0.2,
       groupPadding: 0,
       type: 'bar',
-      dataLabels: (i === data.series.length - 1) && {
-				align: 'left',
-				inside: true,
+      dataLabels: {
+        align: 'left',
+        inside: true,
         enabled: true,
-        format: '{point.category}'
-      },
+        formatter: function() {
+          if (i !== 0) {
+            return this.point.category;
+          }
+        }
+      }
     }))
   };
 }
