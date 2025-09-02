@@ -120,8 +120,8 @@ export default function OpenalexAnalyticsContent() {
 				</Col>
 				<Col xs="6">
 					<AnalyticsGraph
-						title="Institutions"
-						description="Top 20 des institutions"
+						title="Affiliations"
+						description="Top 20 des affiliations"
 						options={openAlexAuthorsInstitutionsOptions}
 					/>
 				</Col>
