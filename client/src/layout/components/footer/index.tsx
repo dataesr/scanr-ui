@@ -3,7 +3,6 @@ import {
   Col,
   Container,
   Link,
-  Logo,
   Row,
   Title,
   useDSFRConfig,
@@ -251,13 +250,7 @@ export default function MainFooter() {
             </Row>
           </Container>
         </FooterTop>
-        <FooterBody
-          description={intl.formatMessage({ id: "layout.footer.tagline" })}
-        >
-          <Logo
-            splitCharacter="|"
-            text="Ministère|chargé|de l'enseignement|supérieur|et de la recherche"
-          />
+        <FooterBody description={intl.formatMessage({ id: "layout.footer.tagline" })}>
           <Link
             className="fr-footer__content-link"
             target="_blank"

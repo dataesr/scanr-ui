@@ -11,5 +11,6 @@
   "layout.header.nav.analyze": "Analyser",
   "layout.header.nav.analyze.networks": "Communautés",
   "layout.header.nav.analyze.trends": "Tendances",
-  "layout.header.nav.analyze.studio": "Déclinaisons locales"
+  "layout.header.nav.analyze.studio": "Déclinaisons locales",
+  "layout.header.nav.analyze.analytics": "Analyse thématique"
 }
