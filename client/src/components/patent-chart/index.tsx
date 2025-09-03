@@ -79,6 +79,11 @@ const CpcChart: React.FC<CpcChartProps> = ({ data }) => {
     },
     title: {
       text: intl.formatMessage({ id: "organizations.patents.chart.title" }),
+      align: "left",
+      x: -10,
+      style: {
+        fontSize: ".875rem",
+      },
     },
     tooltip: {
       formatter: function () {
