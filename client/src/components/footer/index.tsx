@@ -93,10 +93,10 @@ export function FooterBody({
           >
             <use
               className="fr-text-black-white--grey"
-              href="logos/sies_logo_signature.svg#sies-logo-text"
+              href="/logos/sies_logo_signature.svg#sies-logo-text"
             />
             <use
-              href="logos/sies_logo_signature.svg#sies-logo-artwork"
+              href="/logos/sies_logo_signature.svg#sies-logo-artwork"
             />
           </svg>
         </a>
