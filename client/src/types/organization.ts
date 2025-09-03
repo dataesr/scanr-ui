@@ -30,6 +30,7 @@ export type OrganizationPatentsData = {
   level: any;
   kind: any;
   byYear: Aggregation[];
+  byCpc: Aggregation[];
   patentsCount: number;
 };
 

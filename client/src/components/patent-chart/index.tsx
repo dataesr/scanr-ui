@@ -3,15 +3,12 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HighchartsMore from "highcharts/highcharts-more";
 import { useIntl } from "react-intl";
+import { Aggregation } from "../../types/commons";
 
 HighchartsMore(Highcharts);
 
 type CpcChartProps = {
-  data: {
-    label: string;
-    doc_count: number;
-    code: string;
-  }[];
+  data: Aggregation[];
 };
 
 const sectionLabels: Record<string, string> = {
@@ -40,11 +37,11 @@ const CpcChart: React.FC<CpcChartProps> = ({ data }) => {
     "#AEA397",
   ];
   const groupedData = data.reduce((acc, item) => {
-    const firstLetter = item.code.charAt(0).toUpperCase();
+    const firstLetter = item.value.charAt(0).toUpperCase();
     if (!acc[firstLetter]) acc[firstLetter] = [];
     acc[firstLetter].push({
-      name: item.code,
-      value: item.doc_count,
+      name: item.value,
+      value: item.count,
       label: item.label,
     });
     return acc;
@@ -54,9 +51,9 @@ const CpcChart: React.FC<CpcChartProps> = ({ data }) => {
     ([letter, items], index) => {
       const totalCount = items.reduce((sum, item) => sum + item.value, 0);
       return {
-        name:
-          intl.formatMessage({ id: sectionLabels[letter] }) ||
-          `Section ${letter}`,
+        name: sectionLabels[letter]
+          ? intl.formatMessage({ id: sectionLabels[letter] })
+          : `Section ${letter}`,
         color: colorPalette[index % colorPalette.length],
         data: items.map((item) => ({
           name: item.name,
@@ -105,18 +102,19 @@ const CpcChart: React.FC<CpcChartProps> = ({ data }) => {
         );
         const totalFamiliesText = intl.formatMessage(
           {
-            id: "organizations.patents.chart.families",
-            defaultMessage: "{count} famille{plural}",
+            id: "organizations.patents.chart.totalFamilies",
+            defaultMessage:
+              "{count, plural, one {# famille} other {# familles}}",
           },
           {
             count: totalCount,
-            plural: totalCount > 1 ? "s" : "",
           }
         );
 
-        if (!pointName && !pointLabel) {
-          return `<b>${sectionName}</b>: ${totalFamiliesText}`;
-        }
+        if (!pointName && !pointLabel)
+          if (!pointName && !pointLabel) {
+            return `<b>${sectionName}</b>: ${totalFamiliesText}`;
+          }
 
         return `${pointName} ${
           pointLabel ? `- ${pointLabel}` : ""
@@ -126,11 +124,12 @@ const CpcChart: React.FC<CpcChartProps> = ({ data }) => {
 
     plotOptions: {
       packedbubble: {
-        minSize: "45%",
-        maxSize: "120%",
+        minSize: "30%",
+        maxSize: "100%",
         zMin: zMin,
         zMax: zMax,
         layoutAlgorithm: {
+          enableSimulation: false,
           gravitationalConstant: 0.05,
           splitSeries: true,
           seriesInteraction: false,
