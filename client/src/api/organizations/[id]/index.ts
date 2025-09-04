@@ -208,7 +208,7 @@ async function getStructurePublicationsById(id: string): Promise<any> {
     }
   }).filter(el => el) || [];
 
-  return { publicationsCount, byYear, byType, bySource, byAuthors, byWiki, byOpenAlexFields, byInfrastructureName, byGrantsFunder, bySupportEntity } || {}
+  return { publicationsCount, byYear, byType, bySource, byAuthors, byWiki, byOpenAlexFields, byInfrastructureName, byGrantsFunder, bySupportEntity } 
 }
 
 async function getStructureProjectsById(id: string): Promise<any> {
@@ -290,7 +290,21 @@ async function getStructurePatentsById(id: string): Promise<any> {
           size: 25,
 
         }
-      }
+      },
+      byCpc: {
+          terms: {
+            field: "cpc.classe.code.keyword",
+            size: 10000,
+          },
+          aggs: {
+            bySectionLabel: {
+              terms: {
+                field: "cpc.section.label.keyword",
+                size: 1,
+              },
+            },
+        },
+      },
     }
   }
   const res = await fetch(
@@ -309,5 +323,15 @@ async function getStructurePatentsById(id: string): Promise<any> {
       normalizedCount: element.doc_count * 100 / _100Year,
     }
   }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
-  return { byYear, patentsCount }
+  const byCpc =
+    data?.byCpc?.buckets
+      ?.map((element) => {
+        return {
+          value: element.key.split("###")?.[0],
+          label: element.key.split("###")?.[1],
+          count: element.doc_count,
+        };
+      })
+      .filter((el) => el) || [];
+  return { byYear, byCpc, patentsCount }
 }

@@ -11,5 +11,6 @@
   "layout.header.nav.analyze": "Analyze",
   "layout.header.nav.analyze.networks": "Communities",
   "layout.header.nav.analyze.trends": "Trends",
-  "layout.header.nav.analyze.studio": "Local versions"
+  "layout.header.nav.analyze.studio": "Local versions",
+  "layout.header.nav.analyze.analytics": "Thematic analysis"
 }

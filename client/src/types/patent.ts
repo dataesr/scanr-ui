@@ -91,6 +91,7 @@ export type PatentsAggregationsForAnalyticTool = {
   byInventors: Aggregation[];
   patentsCount: number;
   byYear: Aggregation[];
+  byCpc: Aggregation[];
 };
 
 export type ExportPatent = {

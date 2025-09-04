@@ -6,7 +6,7 @@ import { FIELDS } from "../_utils/constants";
 
 
 export async function aggregatePatentsForAnalyticTool(
-  { query }: AggregationArgs
+  { query, filters = [] }: AggregationArgs
   ): Promise<PatentsAggregationsForAnalyticTool> {
   const body: any = {
     size: 0,
@@ -51,13 +51,25 @@ export async function aggregatePatentsForAnalyticTool(
           }
         }
       },
+      byCpc: {
+        terms: {
+          field: "cpc.classe.id_name.keyword",
+          size: 10000,
+        },
+      },
     }
+  }
+  if (filters.length > 0) {
+    body.query.bool.filter = filters
   }
   const res = await fetch(
     `${patentsIndex}/_search`,
     { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const result = await res.json()
   const { aggregations: data} = result;
+
+  console.log(data?.byCpc?.buckets)
+
 
   const _100Year =
     data?.byYear?.buckets &&
@@ -90,9 +102,17 @@ export async function aggregatePatentsForAnalyticTool(
     }
   }).filter(el => el) || [];
   const patentsCount = data.patentsCount?.value;
+  const byCpc = data?.byCpc?.buckets?.map((element) => {
+    return {
+      value: element.key.split("###")?.[0],
+      label: element.key.split("###")?.[1],
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
   return {
     byInventors,
     byApplicants,
+    byCpc,
     patentsCount,
     byYear,
   };

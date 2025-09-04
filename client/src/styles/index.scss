@@ -41,6 +41,11 @@
   background-color: var(--background-alt-blue-cumulus) !important;
 }
 
+.bg-alt-grey {
+  background-color: var(--background-alt-grey) !important;
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
 .bg-organizations {
   background-color: var(--background-alt-yellow-tournesol) !important;
 }
@@ -217,11 +222,26 @@
   border-width: 1px;
   padding: 0;
 }
-  
+
 .cluster-table th {
   background-color: #e9edfe;
 }
-  
+
 .cluster-table tbody:nth-child(odd) {
   background-color: #f2f2f2;
+}
+
+.xfr-nav--horizontal {
+  .fr-nav__list {
+    .fr-nav__item {
+      margin-left: 0 !important;
+      .fr-nav__link {
+        --hover: var(--nav-hover-color);
+      }
+    }
+  }
+}
+
+.no-text-wrap {
+  white-space: nowrap;
 }

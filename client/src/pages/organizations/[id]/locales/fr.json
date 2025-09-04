@@ -56,6 +56,7 @@
   "organizations.sectionLabels.other": "Technologies émergentes ou celles qui couvrent plusieurs sections",
   "organizations.patents.search": "Voir la liste des brevets",
   "organizations.patents.chart.families": "{value} {value, plural, one {famille de brevets} other {familles de brevets}}",
+  "organizations.patents.chart.totalFamilies": "{count, plural, one {# famille} other {# familles}}",
   "organizations.patents.chart.title": "Domaines technogiques identifiés dans les familles de brevets de la structure (par section et classe)",
   "organizations.patents.nav.year": "Répartition par année",
   "organizations.patents.year-bars.name": "Familles de brevets",

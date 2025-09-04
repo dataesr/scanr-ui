@@ -3,8 +3,6 @@ import { Button, Row, Col, Text } from "@dataesr/dsfr-plus";
 import useScreenSize from "../../../../../hooks/useScreenSize";
 import YearBars from "../../../../../components/year-bars";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getCpcAggregation } from "../../../../../api/patents/[id]";
 import { OrganizationPatentsData } from "../../../../../types/organization";
 import CpcWordCloud from "../../../../../components/patent-chart";
 
@@ -26,24 +24,6 @@ export default function OrganizationPatents({
   const searchFilters = {
     "applicants.ids.id": { values: [{ value, label }], type: "terms" },
   };
-
-  const patentId = searchFilters["applicants.ids.id"].values[0].value;
-  const { data: patentsData = [] } = useQuery({
-    queryKey: ["patent", patentId],
-    queryFn: () => getCpcAggregation(patentId),
-    throwOnError: true,
-  });
-
-  const prepareCpcGraphData = (patentsData) => {
-    return patentsData.map((item) => ({
-      code: item.code,
-      doc_count: item.doc_count,
-      label: item.label,
-    }));
-  };
-
-  const graphData = prepareCpcGraphData(patentsData);
-
   const patentsFilterUrl = `/search/patents?filters=${encodeURIComponent(
     JSON.stringify(searchFilters)
   )}`;
@@ -161,8 +141,8 @@ export default function OrganizationPatents({
             />
           )}
           <>
-            {projectGraph === "cpc" && patentsData && (
-              <CpcWordCloud data={graphData} />
+            {projectGraph === "cpc" && patents.byCpc && (
+              <CpcWordCloud data={patents.byCpc} />
             )}
           </>
         </Col>

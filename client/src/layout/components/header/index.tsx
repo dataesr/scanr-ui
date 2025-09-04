@@ -15,6 +15,7 @@ import {
   // useAutocompleteList,
   // useDSFRConfig,
 } from '@dataesr/dsfr-plus';
+
 import { createIntl } from 'react-intl';
 import SwitchLanguage from '../../../components/switch-language';
 import { isInProduction } from "../../../utils/helpers"
@@ -121,6 +122,11 @@ export default function Header() {
           {!isInProduction() && (
             <Link current={pathname.split("/").includes("trends")} href="/trends">
               {intl.formatMessage({ id: "layout.header.nav.analyze.trends" })}
+            </Link>
+          )}
+          {!isInProduction() && (
+            <Link current={pathname.split("/").includes("analytics")} href="/analytics">
+              {intl.formatMessage({ id: "layout.header.nav.analyze.analytics" })}
             </Link>
           )}
           <Link current={pathname.split("/").includes("studio")} href="/studio">

@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Link, Logo } from "@dataesr/dsfr-plus";
+import { Container, Link } from "@dataesr/dsfr-plus";
 import { IntlProvider } from "react-intl";
 
 const modules = import.meta.glob("./locales/*.json", {
@@ -70,15 +70,37 @@ export function FooterBody({
   const links = React.Children.toArray(children).filter(
     (child) => React.isValidElement(child) && child.type === Link
   );
-  const logo = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && child.type === Logo
-  )?.[0];
 
   return (
     <div className="fr-container fr-footer__body">
-      {logo ? (
-        <div className="fr-footer__brand fr-enlarge-link">{logo}</div>
-      ) : null}
+      <div className="fr-footer__brand fr-enlarge-link">
+        <p className="fr-logo">
+          Ministère
+          <br />
+          chargé
+          <br />
+          de l'enseignement
+          <br />
+          supérieur
+          <br />
+          et de la recherche
+        </p>
+        <a title="Retour à l'accueil du site" href="/" className="fr-footer__brand-link">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 1167.77 752.85"
+            width="100%"
+          >
+            <use
+              className="fr-text-black-white--grey"
+              href="/logos/sies_logo_signature.svg#sies-logo-text"
+            />
+            <use
+              href="/logos/sies_logo_signature.svg#sies-logo-artwork"
+            />
+          </svg>
+        </a>
+      </div>
       <div className="fr-footer__content">
         {description ? (
           <p className="fr-footer__content-desc">{description}</p>
