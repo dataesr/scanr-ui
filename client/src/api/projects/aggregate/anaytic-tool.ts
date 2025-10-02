@@ -1,7 +1,7 @@
 import { projectsIndex, postHeaders } from "../../../config/api";
 import { AggregationArgs } from "../../../types/commons";
 import { ProjectAggregationsForAnalyticsTool } from "../../../types/project";
-import { fillWithMissingYears } from "../../utils/years";
+import { processYearAggregations } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
 export async function aggregateProjectsForAnalyticsTool(
@@ -76,15 +76,7 @@ export async function aggregateProjectsForAnalyticsTool(
     })
     .filter(el => el) || [];
 
-  const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear = data?.byYear?.buckets?.map((element) => {
-    return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count,
-      normalizedCount: element.doc_count * 100 / _100Year,
-    }
-  }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(data?.byYear?.buckets);
   const byType = data?.byType?.buckets?.map((element) => {
     return {
       value: element.key,

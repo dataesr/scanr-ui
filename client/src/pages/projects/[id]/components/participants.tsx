@@ -3,7 +3,7 @@ import { Link, Text, Title, useDSFRConfig } from "@dataesr/dsfr-plus";
 import LinkCard from "../../../../components/link-card";
 import getLangFieldValue from "../../../../utils/lang";
 import { useIntl } from 'react-intl';
-import { Participant } from '../../../../types/project';
+import type { Participant } from '../../../../types/project';
 
 
 type Data = Participant & {

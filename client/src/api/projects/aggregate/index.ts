@@ -43,9 +43,9 @@ export async function aggregateProjects(
     `${projectsIndex}/_search`,
     { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const result = await res.json()
-  const { aggregations} = result;
+  const { aggregations } = result;
   const data = Object.entries(aggregations)
     .reduce((acc, [key, aggreg]: [string, any]) => ({...acc, [key]: toAggregationModel(aggreg.buckets, (key === 'byYear'))}) , {});
   return data as ProjectAggregations;
-  
+
 }

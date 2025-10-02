@@ -2,7 +2,7 @@ import { organizationsIndex, patentsIndex, postHeaders, projectsIndex, publicati
 import { Organization } from "../../../types/organization"
 import { publicationTypeMapping } from "../../../utils/string"
 import { getStructureNetworkById } from "../../networks/search/organization"
-import { fillWithMissingYears } from "../../utils/years"
+import { processYearAggregations } from "../../utils/years"
 
 export async function getOrganizationById(id: string): Promise<Organization> {
   const body: any = {
@@ -103,7 +103,6 @@ async function getStructurePublicationsById(id: string): Promise<any> {
   const res = await fetch(`${publicationsIndex}/_search`, { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const data = await res.json()
   const aggregations = data?.aggregations || {}
-  console.log("WIKIS", aggregations?.byWiki?.buckets)
   const publicationsCount = data?.hits?.total?.value || 0
   const byWiki = aggregations?.byWiki?.buckets
     ?.map((element) => ({
@@ -134,15 +133,7 @@ async function getStructurePublicationsById(id: string): Promise<any> {
         }
       ];
     }, []) || [];
-  const _100Year = aggregations?.byYear?.buckets && Math.max(...aggregations.byYear.buckets.map((el) => el.doc_count));
-  const byYear = aggregations?.byYear?.buckets?.map((element) => {
-    return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count,
-      normalizedCount: element.doc_count * 100 / _100Year,
-    }
-  }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(aggregations?.byYear?.buckets);
   const byType = aggregations?.byPublicationType?.buckets?.map((element) => {
     if (!publicationTypeMapping[element?.key]) return null;
     return {
@@ -208,7 +199,7 @@ async function getStructurePublicationsById(id: string): Promise<any> {
     }
   }).filter(el => el) || [];
 
-  return { publicationsCount, byYear, byType, bySource, byAuthors, byWiki, byOpenAlexFields, byInfrastructureName, byGrantsFunder, bySupportEntity } 
+  return { publicationsCount, byYear, byType, bySource, byAuthors, byWiki, byOpenAlexFields, byInfrastructureName, byGrantsFunder, bySupportEntity }
 }
 
 async function getStructureProjectsById(id: string): Promise<any> {
@@ -249,15 +240,7 @@ async function getStructureProjectsById(id: string): Promise<any> {
 
   const { aggregations: data} = result;
   const projectsCount = result?.hits?.total?.value || 0
-  const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear = data?.byYear?.buckets?.map((element) => {
-    return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count,
-      normalizedCount: element.doc_count * 100 / _100Year,
-    }
-  }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(data?.byYear?.buckets);
   const _100Type = data?.byType?.buckets && Math.max(...data.byType.buckets.map((el) => el.doc_count));
   const byType = data?.byType?.buckets?.map((element) => {
     return {
@@ -314,15 +297,7 @@ async function getStructurePatentsById(id: string): Promise<any> {
 
   const { aggregations: data} = result;
   const patentsCount = result?.hits?.total?.value || 0
-  const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear = data?.byYear?.buckets?.map((element) => {
-    return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count,
-      normalizedCount: element.doc_count * 100 / _100Year,
-    }
-  }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(data?.byYear?.buckets);
   const byCpc =
     data?.byCpc?.buckets
       ?.map((element) => {

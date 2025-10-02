@@ -17,7 +17,6 @@ export default function ThesisHeader({ data }) {
   const { locale } = useDSFRConfig();
   const summary = getLangFieldValue(locale)(data?.summary);
   const hasDate = data.publicationDate;
-  const isOngoing = data?.id?.startsWith("nnts");
   const author = data.authors?.filter(
     (author) => author.role === "author"
   )?.[0] ?? {};
@@ -38,7 +37,7 @@ export default function ThesisHeader({ data }) {
         <Title className="fr-mb-1v" as="h1" look="h5">
           {getLangFieldValue(locale)(data.title)}
         </Title>
-        {isOngoing ? <Text className="fr-text-mention--grey" size="sm">En cours</Text> : <Text className="fr-text-mention--grey" size="sm">
+        <Text className="fr-text-mention--grey" size="sm">
           <em>
             {author.fullName &&
               intl.formatMessage({ id: "publications.header.thesis.by" })}
@@ -78,7 +77,7 @@ export default function ThesisHeader({ data }) {
               </>
             ))}
           </em>
-        </Text>}
+        </Text>
       </div>
       {summary && (
         <Row>

@@ -1,39 +1,14 @@
-import { Aggregation } from "../../types/commons";
+import { Aggregation, ElasticBuckets } from "../../types/commons";
 
-export const fillWithMissingYears = (acc, cur) => {
-  if (acc.length === 0) return [cur];
-  const last = acc[acc.length - 1];
-  const missingYearsCount = cur.value - last.value - 1;
-  if (!missingYearsCount) {
-    return [...acc, cur];
-  }
-  const filler = Array.from({ length: missingYearsCount }, (_, i) => ({
-    value: last.value + i + 1,
-    label: last.value + i + 1,
-    count: 0,
-    normalizedCount: 0,
-  }));
-  return [
-    ...acc,
-    ...filler,
-    cur
-  ];
-}
-
-interface YearData {
-	value: number;
-	label: string;
-	count: number;
-	normalizedCount?: number;
-}
-
-export const createCompleteYearSeries = (yearData: Aggregation[]): Aggregation[] => {
+export const createCompleteYearSeries = (yearData: any[]): Aggregation[] => {
   if (yearData.length === 0) return [];
 
-  const yearDataConverted = yearData.map(item => ({ ...item, value: parseInt(item.value, 10) }));
+  const yearDataConverted = yearData
+    .map(item => ({ ...item, value: parseInt(item.value, 10) }))
+    .filter(item => item.value <= new Date().getFullYear());
 
 	const sorted = [...yearDataConverted].sort((a, b) => a.value - b.value);
-	const result: YearData[] = [];
+	const result: Aggregation[] = [];
 
 	for (let i = 0; i < sorted.length; i++) {
 		if (i === 0) {
@@ -48,7 +23,7 @@ export const createCompleteYearSeries = (yearData: Aggregation[]): Aggregation[]
 		for (let year = previous.value + 1; year < current.value; year++) {
 			result.push({
 				value: year,
-				label: year.toString(),
+				label: year,
 				count: 0,
 				normalizedCount: 0,
 			});
@@ -57,12 +32,11 @@ export const createCompleteYearSeries = (yearData: Aggregation[]): Aggregation[]
 		result.push(current);
 	}
 
-  const returnedArray = result.map(item => ({ ...item, value: item.value.toString() })) as Aggregation[];
-  return returnedArray;
+  return result;
 };
 
 
-export const processYearAggregations = (buckets): Aggregation[] => {
+export const processYearAggregations = (buckets: ElasticBuckets): Aggregation[] => {
 	if (!buckets?.length) return [];
 
 	// Calculate normalization factor

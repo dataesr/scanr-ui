@@ -1,13 +1,11 @@
-import { fillWithMissingYears } from "./years";
+import { ElasticBuckets } from "../../types/commons";
+import { processYearAggregations } from "./years";
 
-export function toAggregationModel(data, isYears = false) {
-  const result = data.map((element) => ({
+export function toAggregationModel(data: ElasticBuckets, isYears: boolean = false) {
+  if (isYears) return processYearAggregations(data);
+  return data.map((element) => ({
     value: element.key,
     label: element.key,
     count: element.doc_count,
   })) || [];
-  if (isYears) {
-    return result.sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []);
-  }
-  return result;
 }
