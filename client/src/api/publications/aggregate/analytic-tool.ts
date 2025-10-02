@@ -2,7 +2,7 @@ import { publicationsIndex, postHeaders } from "../../../config/api";
 import { AggregationArgs } from "../../../types/commons";
 import { PublicationAggregationsForAnalyticTool } from "../../../types/publication";
 import { publicationTypeMapping } from "../../../utils/string";
-import { fillWithMissingYears } from "../../utils/years";
+import { processYearAggregations } from "../../utils/years";
 
 interface AuthorData {
   idref: string;
@@ -262,16 +262,8 @@ export async function aggregatePublicationsForAnalyticTool(
   const result = await res.json()
   const { aggregations: data} = result;
 
+  const byYear = processYearAggregations(data?.byYear?.buckets);
 
-  const _100Year = data?.byYear?.buckets && Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear = data?.byYear?.buckets?.map((element) => {
-    return {
-      value: element.key,
-      label: element.key,
-      count: element.doc_count,
-      normalizedCount: element.doc_count * 100 / _100Year,
-    }
-  }).sort((a, b) => a.label - b.label).reduce(fillWithMissingYears, []) || [];
   const byType = data?.byPublicationType?.buckets?.map((element) => {
     if (!publicationTypeMapping[element?.key]) return null;
     return {

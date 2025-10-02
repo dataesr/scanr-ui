@@ -67,6 +67,10 @@ export type Aggregation = {
   normalizedCount?: number;
 };
 
+export type ObjectAggregations<T extends string> = {
+  [key in T]: Aggregation[]
+}
+
 export type Address = {
   main: boolean;
   city?: string;

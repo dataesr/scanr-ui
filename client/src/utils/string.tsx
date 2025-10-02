@@ -37,7 +37,7 @@ export const publicationTypeMapping = {
   thesis: "these",
   these: "these",
   video: "autre",
-  "ongoing-thesis": "thèse en cours"
+  "ongoing_thesis": "thèse en cours"
 };
 export function toString(date, time = false, isCompact = false) {
   const dateOptions = {

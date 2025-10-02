@@ -23,8 +23,8 @@ const getIndexURL = (baseURL: string, path: string) => {
   if (isInDev() || isInStaging()) return `${base}-staging`;
   return base;
 };
-// Indices
 
+// Indices
 export const publicationsIndex = getIndexURL(API_URL, "scanr-publications");
 export const authorsIndex = getIndexURL(API_URL, "scanr-persons");
 export const organizationsIndex = getIndexURL(API_URL, "scanr-organizations");
