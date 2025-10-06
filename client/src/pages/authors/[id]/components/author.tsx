@@ -183,7 +183,13 @@ export default function AuthorPage({ data }: { data: Author }) {
                 icon="user-line"
                 show
               >
-                <MoreLikeThis id={data._id} api="authors" />
+                <MoreLikeThis
+                  id={data._id}
+                  api="authors"
+                  filters={[
+                    {bool: {must_not: {terms: {"id.keyword": coAuthors.map((author) => author.value)}}}}
+                  ]}
+                />
               </PageSection>
               <PageSection
                 title="Data JSON"
