@@ -264,7 +264,11 @@ export default function OrganizationPresentation({ data }: { data: Organization 
                   icon="building-line"
                   show
                 >
-                  <MoreLikeThis id={data._id} api="organizations" />
+                  <MoreLikeThis
+                    id={data._id}
+                    api="organizations"
+                    filters={ [{ term: { "level.keyword": data.level } }] }
+                  />
                 </PageSection>
                 <PageSection title="Data JSON" description="" show={import.meta.env.DEV}>
                   <div>
