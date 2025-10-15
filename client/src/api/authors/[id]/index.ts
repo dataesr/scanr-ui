@@ -8,6 +8,8 @@ import { processYearAggregations } from "../../utils/years";
 import { AUTHOR_SOURCE, PUBLICATION_LIGHT_SOURCE } from "../_utils/constants";
 import { getCoAuthors, getReviewsBySource, getWikiDomains } from "../_utils/transformers";
 
+
+
 async function getAuthorsPublicationsById(
 	id: string,
 ): Promise<AuthorsPublications> {

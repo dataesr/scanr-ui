@@ -39,25 +39,3 @@ export const publicationTypeMapping = {
   video: "autre",
   "ongoing_thesis": "thèse en cours"
 };
-export function toString(date, time = false, isCompact = false) {
-  const dateOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const timeOptions = {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-  };
-  let options = dateOptions;
-  if (time) options = { ...options, ...timeOptions };
-  if (isCompact) options.month = "numeric";
-  if (date?.length === 4) {
-    options.month = undefined;
-    options.day = undefined;
-  } else if (date?.length === 7) {
-    options.day = undefined;
-  }
-  return new Date(date).toLocaleDateString("fr-FR");
-}

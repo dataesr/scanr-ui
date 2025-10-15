@@ -8,6 +8,8 @@
     "authors.section.activity": "Research activity",
     "authors.section.activity.thesis": "{count, plural, one {Thesis} other {# Theses}} by the author",
     "authors.section.activity.thesis-participations": "Participation{count, plural, one { in a} other {s in}} thesis jury{count, plural, one {} other { (#)}}",
+    "authors.section.activity.thesis-directions": "Thesis direction{count, plural, one {} other {s}}",
+    "authors.section.activity.thesis-ongoing-directions": "Ongoing thesis direction{count, plural, one {} other {s}}",
     "authors.section.activity.publications": "{count, plural, one {# publication} other {Latest publications (#)}}",
     "authors.section.activity.open-modal-button": "See full list",
     "authors.signals.publications": "Link publications",

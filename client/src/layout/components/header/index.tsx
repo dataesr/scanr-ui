@@ -63,7 +63,7 @@ export default function Header() {
 		<HeaderWrapper>
 			<Logo
 				splitCharacter="|"
-				text="Ministère|chargé|de l'enseignement|supérieur|et de la recherche"
+				text="Ministère|de l'enseignement|supérieur,|de la recherche|et de l'espace"
 			/>
 			<Service
 				name="scanR"
