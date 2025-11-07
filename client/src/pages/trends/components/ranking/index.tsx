@@ -14,7 +14,7 @@ export default function TrendsTable() {
   const { trends, isFetching, error } = useTrends()
 
   if (!trends && isFetching) return <TrendsTableSkeleton />
-  if (!trends?.ranking || error) return <div>no data</div>
+  if (!trends?.ranking || error) return <Container>no data</Container>
 
   const items = includes
     ? trends.ranking[currentSort].filter((item) => item.label.toLowerCase().includes(includes))
