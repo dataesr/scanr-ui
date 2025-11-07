@@ -86,7 +86,7 @@ export default function PublicationOrganizationsFilter() {
           <AutocompleteItem
             startContent={<span className="fr-mr-3v fr-icon--md fr-icon-user-line" />}
             endContent={<span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>}
-            description={item.address?.find((a) => a.main).city}
+            description={item.address?.find((a) => a.main)?.city}
             key={`${item.id}###${getLangFieldValue(locale)(item.label)}`}
           >
             {getLangFieldValue(locale)(item.label)}
