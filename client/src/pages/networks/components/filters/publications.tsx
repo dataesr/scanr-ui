@@ -10,6 +10,7 @@ import PublicationAccessFilter from "../../../search/components/publications/fil
 import PublicationFunderFilter from "../../../search/components/publications/filters/funders"
 import PublicationTagsFilter from "../../../search/components/publications/filters/tags"
 import useUrl from "../../../search/hooks/useUrl"
+import NetworksCoElementsFilters from "./networks"
 
 export default function NetworkFiltersPublicationsModal() {
   const intl = useIntl()
@@ -35,6 +36,8 @@ export default function NetworkFiltersPublicationsModal() {
           <PublicationFunderFilter />
           <hr className="fr-mt-3w" />
           <PublicationTagsFilter />
+          <hr className="fr-mt-3w" />
+          <NetworksCoElementsFilters />
           <hr className="fr-mt-3w" />
         </Container>
         <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", alignItems: "center" }}>
