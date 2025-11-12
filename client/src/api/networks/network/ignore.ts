@@ -9,6 +9,7 @@ export const ignoreIds = {
     "Q142", // française
     "Q1000371", // personnalisation
   ],
+  structures: ["200117996L"], // a2f fix: LAE-Colmar – Laboratoire agronomie et environnement - antenne colmar  TODO: fix in data
 }
 
 export const institutionsAcronyms = {
