@@ -101,7 +101,7 @@ export function mergeNodesFromLabel(graph: Graph, model: string) {
     const dupes = nodes.slice(1)
     // console.log("master", master, "dupes", dupes)
 
-    dupes.forEach((dupe) => {
+    dupes.forEach((dupe: string) => {
       // merge nodes attributes
       const dupeAttr = graph.getNodeAttributes(dupe)
 
@@ -109,8 +109,7 @@ export function mergeNodesFromLabel(graph: Graph, model: string) {
       let masterLinkWeight = 0
       try {
         masterLinkWeight = graph.getUndirectedEdgeAttribute(master, dupe, "weight")
-      } finally {
-      }
+      } catch (_) {}
 
       graph.updateNode(master, (attr) => ({
         label: attr.label,
@@ -137,6 +136,5 @@ export function mergeNodesFromLabel(graph: Graph, model: string) {
       graph.dropNode(dupe)
     })
   })
-
   return graph
 }
