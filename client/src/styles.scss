@@ -4,6 +4,8 @@
   --organizations-analytics: var(--background-contrast-yellow-tournesol);
   --authors-analytics: var(--background-contrast-orange-terre-battue);
   --patents-analytics: var(--background-contrast-purple-glycine);
+  --nav-hover-color: rgb(241, 241, 241);
+
 }
 
 :root[data-fr-theme="dark"] {
@@ -12,6 +14,7 @@
   --organizations-analytics: var(--artwork-minor-yellow-tournesol);
   --authors-analytics: var(--artwork-minor-orange-terre-battue);
   --patents-analytics: var(--artwork-minor-purple-glycine);
+  --nav-hover-color: rgb(65, 65, 65);
 }
 
 .fr-tag.filter-tag-button {
@@ -136,19 +139,21 @@
 }
 
 
-$icons: 
-("intersect", "/icons/intersect.svg") 
-("union", "/icons/union.svg") 
+$icons:
+("intersect", "/icons/intersect.svg")
+("union", "/icons/union.svg")
 ("corner-down-right", "/icons/corner-down-right.svg")
 ('file-copy', '/icons/file-copy.svg')
 ('sort-desc', '/icons/sort-desc.svg')
 ("check-double", "/icons/check-double.svg")
-("hal", "/icons/hal.svg") 
-('wikipedia', '/icons/wikipedia.svg') 
-('shapes-line', '/icons/shapes-line.svg') 
-("mistral-ai", "/icons/mistral-ai.svg") 
-("network-line", "/icons/network-line.svg") 
-("network-fill", "/icons/network-fill.svg");
+("hal", "/icons/hal.svg")
+('wikipedia', '/icons/wikipedia.svg')
+('shapes-line', '/icons/shapes-line.svg')
+("mistral-ai", "/icons/mistral-ai.svg")
+("network-line", "/icons/network-line.svg")
+("network-fill", "/icons/network-fill.svg")
+("ai", "/icons/ai.svg")
+("ai-generate-2", "/icons/ai-generate-2.svg");
 
 @each $name, $mask in $icons {
 
@@ -213,4 +218,8 @@ $icons:
     margin-left: .25rem;
     margin-right: -.25rem;
   }
+}
+
+.fr-text-black-white--grey {
+  fill: var(--text-black-white-grey);
 }

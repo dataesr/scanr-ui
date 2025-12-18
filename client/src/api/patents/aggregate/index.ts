@@ -1,7 +1,7 @@
 import { postHeaders, patentsIndex } from "../../../config/api";
 import { AggregationArgs } from "../../../types/commons";
 import { PatentAggregations } from "../../../types/patent";
-import { fillWithMissingYears } from "../../utils/years";
+import { processYearAggregations } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
 export async function aggregatePatents({
@@ -41,22 +41,7 @@ export async function aggregatePatents({
   });
   const result = await res.json();
 
-  const { aggregations: data } = result;
-  const _100Year =
-    data?.byYear?.buckets &&
-    Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear =
-    data?.byYear?.buckets
-      ?.map((element) => {
-        return {
-          value: element.key,
-          label: element.key,
-          count: element.doc_count,
-          normalizedCount: (element.doc_count * 100) / _100Year,
-        };
-      })
-      .sort((a, b) => a.label - b.label)
-      .reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(result?.aggregations?.byYear?.buckets);
 
   return { byYear };
 }

@@ -54,7 +54,7 @@ export default function Production() {
         </Breadcrumb>
         {isLoading || !data ? (
           <PageSkeleton />
-        ) : data?.type === "thesis" ? (
+        ) : (data?.type === "thesis" || data?.type === "ongoing_thesis") ? (
           <These data={data} />
         ) : (
           <Publication data={data} />

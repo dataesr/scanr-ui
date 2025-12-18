@@ -1,12 +1,13 @@
 import { projectsIndex, postHeaders } from "../../../config/api";
 import { LIGHT_SOURCE } from "../_utils/constants";
 
-export async function getMoreProjectsLikeThis(id: string) {
+export async function getMoreProjectsLikeThis(id: string, filters?: any[]) {
   const body = JSON.stringify({
     _source: LIGHT_SOURCE,
     size: 3,
     query: {
       bool: {
+        ...(filters?.length && {filter: filters}),
         must: [{
           more_like_this: {
             fields: ["label.*", "publications.title.*", "description.*"],

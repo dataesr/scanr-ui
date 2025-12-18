@@ -49,13 +49,13 @@ const API_MAPPER = {
 type API = keyof typeof API_MAPPER;
 
 
-export default function MoreLikeThis({ id, api }: { id: string, api: API }) {
+export default function MoreLikeThis({ id, api, filters = [] }: { id: string, api: API, filters?: any[] }) {
   const { locale } = useDSFRConfig();
   const intl = createIntl({ locale, messages: messages[locale] })
   const Component = API_MAPPER[api].item;
   const { data: moreLikeThis, isLoading, isError } = useQuery({
-    queryKey: ["moreLike", api, id],
-    queryFn: () => API_MAPPER[api].fn(id),
+    queryKey: ["moreLike", api, id, filters],
+    queryFn: () => API_MAPPER[api].fn(id, filters),
   });
 
   if (isError) return (

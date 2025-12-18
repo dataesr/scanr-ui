@@ -25,6 +25,7 @@ export const CONFIG = {
       source_fields: [...publicationsSourceFields, "authors.person"],
       aggregation: "authors.person.keyword",
       co_aggregation: "co_authors.keyword",
+      count: "authorsCount",
       url_page: "/authors",
       url_search: "/search/publications",
       terminology: {

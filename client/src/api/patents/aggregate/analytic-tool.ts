@@ -1,12 +1,12 @@
 import { patentsIndex, postHeaders } from "../../../config/api";
 import { AggregationArgs } from "../../../types/commons";
 import { PatentsAggregationsForAnalyticTool } from "../../../types/patent";
-import { fillWithMissingYears } from "../../utils/years";
+import { processYearAggregations } from "../../utils/years";
 import { FIELDS } from "../_utils/constants";
 
 
 export async function aggregatePatentsForAnalyticTool(
-  { query }: AggregationArgs
+  { query, filters = [] }: AggregationArgs
   ): Promise<PatentsAggregationsForAnalyticTool> {
   const body: any = {
     size: 0,
@@ -51,7 +51,16 @@ export async function aggregatePatentsForAnalyticTool(
           }
         }
       },
+      byCpc: {
+        terms: {
+          field: "cpc.classe.id_name.keyword",
+          size: 10000,
+        },
+      },
     }
+  }
+  if (filters.length > 0) {
+    body.query.bool.filter = filters
   }
   const res = await fetch(
     `${patentsIndex}/_search`,
@@ -59,21 +68,7 @@ export async function aggregatePatentsForAnalyticTool(
   const result = await res.json()
   const { aggregations: data} = result;
 
-  const _100Year =
-    data?.byYear?.buckets &&
-    Math.max(...data.byYear.buckets.map((el) => el.doc_count));
-  const byYear =
-    data?.byYear?.buckets
-      ?.map((element) => {
-        return {
-          value: element.key,
-          label: element.key,
-          count: element.doc_count,
-          normalizedCount: (element.doc_count * 100) / _100Year,
-        };
-      })
-      .sort((a, b) => a.label - b.label)
-      .reduce(fillWithMissingYears, []) || [];
+  const byYear = processYearAggregations(data?.byYear?.buckets);
 
   const byApplicants = data?.byApplicants?.buckets?.map((element) => {
     return {
@@ -90,9 +85,17 @@ export async function aggregatePatentsForAnalyticTool(
     }
   }).filter(el => el) || [];
   const patentsCount = data.patentsCount?.value;
+  const byCpc = data?.byCpc?.buckets?.map((element) => {
+    return {
+      value: element.key.split("###")?.[0],
+      label: element.key.split("###")?.[1],
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
   return {
     byInventors,
     byApplicants,
+    byCpc,
     patentsCount,
     byYear,
   };

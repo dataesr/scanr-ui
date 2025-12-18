@@ -17,3 +17,29 @@ export const LIGHT_SOURCE = [
   "id", "fullName", "domains", "orcid", "id_hal",
   "idref", "recent_affiliations", "topDomains",
 ]
+
+export const PUBLICATION_LIGHT_SOURCE = [
+  "title.*",
+  "authors.fullName",
+  "authors.person",
+  "authors.role",
+  "source.*",
+  "isOa",
+  'type',
+  'id',
+  'year',
+]
+
+export const AUTHOR_SOURCE = [
+	"_id",
+	"id",
+	"idref",
+	"orcid",
+	"fullName",
+	"firstName",
+	"lastName",
+	"externalIds",
+	"awards",
+	"recentAffiliations",
+	"domains",
+];

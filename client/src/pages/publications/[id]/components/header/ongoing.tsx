@@ -27,7 +27,7 @@ export default function OngoingThesisHeader({ data }) {
       <div>
         <BadgeGroup>
           <Badge color="purple-glycine" noIcon>
-            {publicationTypeMapping["ongoing-thesis"]}
+            {publicationTypeMapping[data.type]}
           </Badge>
         </BadgeGroup>
         <Title className="fr-mb-1v" as="h1" look="h5">

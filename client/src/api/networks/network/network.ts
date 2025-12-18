@@ -8,7 +8,7 @@ import { NetworkFilters, NetworkData, NetworkParameters } from "../../../types/n
 import communitiesCreate from "./communities"
 import { configGetItemPage, configGetItemSearch } from "./config"
 import { ElasticAggregation, ElasticBucket } from "../../../types/commons"
-import { ignoreIds, institutionsAcronyms, institutionsReplaceLabel } from "./ignore"
+import { ignoreIds, institutionsAcronyms, institutionsReplaceLabel, mergeNodesFromLabel } from "./ignore"
 
 type NetworkBucket = ElasticBucket & { max_year: ElasticAggregation }
 
@@ -23,6 +23,7 @@ const nodeGetLabel = (id: string, lang: string) => {
   const label = labels.find((label) => label.startsWith(prefix)) ?? labels[0]
   return label.charAt(2) === "_" ? label.slice(3).trim() : label.trim()
 }
+const edgeGetKey = (id1: string, id2: string) => (id1 < id2 ? `${id1}-link-${id2}` : `${id2}-link-${id1}`)
 
 export default async function networkCreate(
   source: string,
@@ -51,6 +52,16 @@ export default async function networkCreate(
     // Remove ignored ids
     if (ignoreIds?.[model]?.includes(nodeGetId(nodes[0])) || ignoreIds?.[model]?.includes(nodeGetId(nodes[1]))) return
 
+    // Remove ids starting with number for domains
+    // if (model === "domains") {
+    //   const firstCharLeft = nodeGetId(nodes[0]).charAt(0)
+    //   const firstCharRight = nodeGetId(nodes[1]).charAt(0)
+    //   if (!isNaN(+firstCharLeft) || !isNaN(+firstCharRight)) {
+    //     console.log("skip entry", key)
+    //     return
+    //   }
+    // }
+
     // Add nodes and compute weight
     nodes.forEach((id: string) =>
       graph.updateNode(nodeGetId(id), (attr) => ({
@@ -62,11 +73,15 @@ export default async function networkCreate(
     )
 
     // Add edges and compute weight
-    graph.updateUndirectedEdgeWithKey(key, nodeGetId(nodes[0]), nodeGetId(nodes[1]), (attr) => ({
+    const edgeKey = edgeGetKey(nodeGetId(nodes[0]), nodeGetId(nodes[1]))
+    graph.updateUndirectedEdgeWithKey(edgeKey, nodeGetId(nodes[0]), nodeGetId(nodes[1]), (attr) => ({
       weight: (attr?.weight ?? 0) + count,
-      label: `${attr?.weight || 1} links`,
+      label: `${(attr?.weight ?? 0) + count} links`,
     }))
   })
+
+  // Merge nodes with same labels
+  graph = mergeNodesFromLabel(graph, model)
 
   // Filter nodes
   if (filterNode) {
@@ -81,6 +96,7 @@ export default async function networkCreate(
     numberOfComponents -= 1
     graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
   }
+
   // Keep only largests nodes
   if (graph.order > maxNodes) {
     betweenessCentrality.assign(graph)
