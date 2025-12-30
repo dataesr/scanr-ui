@@ -55,7 +55,7 @@ const frenchFirstSorter = (a) => {
 };
 
 const getParticipants = (type, participants) => {
-  if (type !== "H2020") return participants;
+  if (type !== "H2020") return participants || [];
   return participants
     .filter((part) => part.label?.default?.slice(-1) === "0")
     .sort(frenchFirstSorter);
@@ -213,14 +213,14 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                   {getLangFieldValue(locale)(data.action?.label)}
                 </ProjectProgram>
                 <ProjectProgram
-                  show={!!data.call?.label}
+                  show={!!data.call?.label && !!data.call?.id}
                   title={intl.formatMessage({
                     id: "projects.section.programs.call",
                   })}
                 >
-                  {data.call.id}
+                  {data.call?.id}
                   {" – "}
-                  {data.call.label}
+                  {data.call?.label}
                 </ProjectProgram>
                 <ProjectProgram
                   show={
