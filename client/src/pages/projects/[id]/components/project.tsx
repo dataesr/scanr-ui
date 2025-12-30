@@ -213,7 +213,7 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                   {getLangFieldValue(locale)(data.action?.label)}
                 </ProjectProgram>
                 <ProjectProgram
-                  show={!!data.call.label}
+                  show={!!data.call?.label}
                   title={intl.formatMessage({
                     id: "projects.section.programs.call",
                   })}
