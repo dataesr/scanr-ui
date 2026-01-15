@@ -6,11 +6,12 @@ import NetworksOptionsBar from "../components/options-bar";
 import NetworksOptionsModals from "../components/options-bar/modals";
 import NetworkNotice from "../components/notice";
 import NetworkPanel from "../components/panel";
+import NetworksOptionsFooter from "../components/options-bar/footer"
 
 export default function NetworksLayout() {
-  const { integrationOptions } = useIntegration();
+  const { integrationOptions } = useIntegration()
 
-  if (integrationOptions.showGraphOnly === true) return <NetworkCard />;
+  if (integrationOptions.showGraphOnly === true) return <NetworkCard />
 
   return (
     <Container fluid>
@@ -20,7 +21,8 @@ export default function NetworksLayout() {
       <Container>
         <NetworkNotice />
         <NetworkPanel />
+        <NetworksOptionsFooter />
       </Container>
     </Container>
-  );
+  )
 }

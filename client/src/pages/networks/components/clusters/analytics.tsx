@@ -26,7 +26,7 @@ export default function NetworkAnalytics() {
       </Container>
     )
 
-  const chartData = clusters.slice(0, 10)
+  const chartData = clusters.slice(0, 10).map((cluster) => ({ ...cluster, ...cluster.metadata }))
   const sizeChartOptions = getHorizontalBarChartOptions({ data: chartData, x: "label", y: "size" })
   const documentsChartOptions = getHorizontalBarChartOptions({
     data: chartData,

@@ -18,7 +18,7 @@ import {
   institutionsReplaceLabel,
   mergeNodesFromLabel,
 } from "./ignore";
-import assignMetrics from "./metrics";
+import { assignNodeMetrics, assignClustersMetrics } from "./metrics";
 
 type NetworkBucket = ElasticBucket & { max_year: ElasticAggregation };
 
@@ -126,9 +126,6 @@ export default async function networkCreate(
     graph = subgraph(graph, sortedNodes.slice(0, maxNodes));
   }
 
-  // Assign metrics
-  assignMetrics(graph);
-
   // Replace institutions labels
   if (["institutions", "structures", "organizations"].includes(model)) {
     graph.updateEachNodeAttributes((node, attr) => ({
@@ -145,6 +142,10 @@ export default async function networkCreate(
 
   // Add communities
   const communities = await communitiesCreate(graph, clusters);
+
+  // Assign metrics
+  assignNodeMetrics(graph);
+  assignClustersMetrics(graph, communities);
 
   // Create network
   const network: NetworkData = {

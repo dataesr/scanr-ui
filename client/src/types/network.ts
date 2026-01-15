@@ -47,15 +47,21 @@ export type NetworkCommunity = {
     page?: string
   }>
   maxYear?: number
-  documentsByYear?: Record<string, number>
-  documentsCount?: number
-  documents?: Array<Record<string, string | number>>
-  citationsByYear?: Record<string, number>
-  citationsCount?: number
-  citationsRecent?: number
-  citationsScore?: number
-  domains?: Record<string, number>
-  oaPercent?: number
+  metadata?: {
+    documentsByYear?: Record<string, number>
+    documentsCount?: number
+    documents?: Array<Record<string, string | number>>
+    citationsByYear?: Record<string, number>
+    citationsCount?: number
+    citationsRecent?: number
+    citationsScore?: number
+    domains?: Record<string, number>
+    oaPercent?: number
+  }
+  metrics?: {
+    density: number
+    centrality: number
+  }
 }
 export type NetworkConfig = {
   terminology?: Record<string, unknown>

@@ -4,26 +4,15 @@
   height: calc(100vh - 200px);
   min-height: 600px;
   gap: 0;
-}
-
-.panel-graph-wrapper {
-  transition: flex 0.3s ease;
-  overflow: hidden;
-
-  &--full {
-    flex: 1 1 100%;
-  }
-
-  &--split {
-    flex: 1 1 60%;
-  }
+  border: 1px solid var(--border-default-grey);
 }
 
 .panel-toggle-button {
   width: 24px;
   height: 100%;
-  border: none;
-  background: var(--border-default-grey);
+  border-left: 1px solid var(--border-default-grey);
+  border-right: 1px solid var(--border-default-grey);
+  background: var(--background-default-grey-hover);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -35,7 +24,7 @@
   gap: 8px;
 
   &:hover {
-    background: var(--border-active-blue-france);
+    background: var(--border-default-grey) !important;
   }
 
   &__icon {
@@ -56,6 +45,18 @@
   }
 }
 
+.panel-graph-wrapper {
+  transition: flex 0.3s ease;
+  overflow: hidden;
+
+  &--full {
+    flex: 1 1 100%;
+  }
+
+  &--split {
+    flex: 1 1 60%;
+  }
+}
 .panel-clusters-wrapper {
   transition: all 0.3s ease;
   overflow: hidden;

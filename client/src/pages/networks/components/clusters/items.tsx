@@ -36,13 +36,9 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
   const [showNodesModal, setShowNodesModal] = useState(false);
   const [showDocumentsModal, setShowDocumentsModal] = useState(false);
   const { setFocusItem } = useNetworkContext();
+  const metadata = community.metadata
 
-  const oaColor = (percent: number) =>
-    percent >= 40.0
-      ? percent >= 70.0
-        ? "success"
-        : "yellow-moutarde"
-      : "warning";
+  const oaColor = (percent: number) => (percent >= 40.0 ? (percent >= 70.0 ? "success" : "yellow-moutarde") : "warning")
 
   return (
     <Container fluid className="cluster-item">
@@ -51,7 +47,7 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
           <BadgeGroup>
             <Badge
               onClick={() => {
-                setShowNodesModal(true);
+                setShowNodesModal(true)
               }}
               style={{ cursor: "pointer" }}
               size="sm"
@@ -63,20 +59,20 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
             </Badge>
             <Badge
               onClick={() => {
-                setShowDocumentsModal(true);
+                setShowDocumentsModal(true)
               }}
               style={{ cursor: "pointer" }}
               size="sm"
               color="pink-macaron"
             >
-              {`${community.documentsCount} ${intl.formatMessage({
+              {`${metadata?.documentsCount} ${intl.formatMessage({
                 id: "networks.section.clusters.badge-publications",
               })}`}
             </Badge>
-            <Badge noIcon size="sm" color={oaColor(community.oaPercent)}>
+            <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
               {`${intl.formatMessage({
                 id: "networks.section.clusters.open-access",
-              })}: ${community.oaPercent.toFixed(1)}%`}
+              })}: ${metadata?.oaPercent.toFixed(1)}%`}
             </Badge>
             <Badge size="sm" color="yellow-tournesol">
               {`${intl.formatMessage({
@@ -86,16 +82,11 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
             {currentSource === "publications" && (
               <Badge size="sm" color="blue-cumulus">{`${intl.formatMessage(
                 { id: "networks.section.clusters.citations" },
-                { count: community.citationsRecent }
+                { count: metadata?.citationsRecent }
               )} (${currentYear - 1}-${currentYear})`}</Badge>
             )}
             {currentSource === "publications" && (
-              <Badge
-                size="sm"
-                color="blue-ecume"
-              >{`Citation score: ${community.citationsScore.toFixed(
-                1
-              )}`}</Badge>
+              <Badge size="sm" color="blue-ecume">{`Citation score: ${metadata?.citationsScore.toFixed(1)}`}</Badge>
             )}
           </BadgeGroup>
         </Col>
@@ -110,11 +101,7 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
         >
           {"█"}{" "}
         </div>
-        <Button
-          variant="text"
-          className="fr-link"
-          onClick={() => setFocusItem(community.nodes[0].label)}
-        >
+        <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
           {community.label}
         </Button>
       </Row>
@@ -128,17 +115,14 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
         <i>{community.size > 10 ? ", ..." : "."}</i>
       </Text>
       <Text bold size="sm" className="fr-mb-0">
-        {community?.domains
-          ? Object.entries(community.domains)
+        {metadata?.domains
+          ? Object.entries(metadata.domains)
               .sort((a, b) => b[1] - a[1])
               .slice(0, 10)
               .map(([domain], k) => (
                 <Fragment key={k}>
                   {k > 0 ? ", " : ""}
-                  <Link
-                    key={k}
-                    href={`/search/publications?q="${encode(domain)}"`}
-                  >
+                  <Link key={k} href={`/search/publications?q="${encode(domain)}"`}>
                     #{domain}
                   </Link>
                 </Fragment>
@@ -146,9 +130,7 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
           : null}
       </Text>
       <Modal isOpen={showNodesModal} hide={() => setShowNodesModal(false)}>
-        <ModalTitle>
-          {intl.formatMessage({ id: `networks.model.${currentModel}` })}
-        </ModalTitle>
+        <ModalTitle>{intl.formatMessage({ id: `networks.model.${currentModel}` })}</ModalTitle>
         <ModalContent>
           {community?.nodes?.map((node) => (
             <li key={node.id}>
@@ -163,26 +145,19 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
           ))}
         </ModalContent>
       </Modal>
-      <Modal
-        isOpen={showDocumentsModal}
-        hide={() => setShowDocumentsModal(false)}
-      >
+      <Modal isOpen={showDocumentsModal} hide={() => setShowDocumentsModal(false)}>
         <ModalTitle>
           {intl.formatMessage({
             id: "networks.section.clusters.badge-publications",
           })}
         </ModalTitle>
         <ModalContent>
-          {community?.documents?.map((publication) => (
+          {metadata?.documents?.map((publication) => (
             <li key={publication.id} className="fr-mt-1w">
               <Link
                 key={publication.id}
                 target="_blank"
-                href={
-                  window.location.origin +
-                  "/publications/" +
-                  encode(publication.id as string)
-                }
+                href={window.location.origin + "/publications/" + encode(publication.id as string)}
               >
                 {publication.title}
               </Link>
@@ -191,7 +166,7 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
         </ModalContent>
       </Modal>
     </Container>
-  );
+  )
 }
 
 export default function NetworkClustersItems() {
