@@ -12,7 +12,7 @@ export default function ClustersButton() {
   const { parameters, handleParameterChange } = useOptions()
   const { search } = useSearchData()
 
-  if (integrationOptions.showClustersButton === false) return null
+  if (integrationOptions.showClustersAnalytics === false) return null
 
   return (
     <ButtonGroup size={["xs", "sm"].includes(screen) ? "sm" : "md"}>

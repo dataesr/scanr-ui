@@ -7,7 +7,6 @@ export default function NetworkCard() {
 
   return (
     <Container
-      className="fr-card fr-mb-2w"
       style={{ display: "flex", alignItems: "center", justifyContent: "center", height: integrationOptions.graphHeight }}
     >
       <NetworkGraph />

@@ -93,9 +93,9 @@ export function mergeNodesFromLabel(graph: Graph, model: string) {
 
   // console.log("labels", labels)
 
-  labels.forEach((nodes, label) => {
+  labels.forEach((nodes, _) => {
     if (nodes.length <= 1) return
-    console.log(label, nodes.length)
+    // console.log(label, nodes.length)
 
     const master = nodes[0]
     const dupes = nodes.slice(1)

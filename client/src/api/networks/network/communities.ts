@@ -4,13 +4,14 @@ import seedrandom from "seedrandom"
 import { arrayPush, labelClean } from "../_utils/functions"
 import { networkSearchHits, networkSearchAggs } from "../search/search"
 import { ElasticHits, NetworkCommunities, NetworkFilters } from "../../../types/network"
-import { mistralLabeledClusters } from "./mistralai"
+import { mistralAssignClustersLabels } from "./mistralai"
 import { COLORS } from "../_utils/constants"
 import { GetColorName } from "hex-color-to-color-name"
 import { configGetItemPage } from "./config"
 import { CONFIG } from "./config"
 import { nodeGetId } from "./network"
 import { ElasticAggregations } from "../../../types/commons"
+import { assignClustersMetrics } from "./metrics"
 
 const CURRENT_YEAR = new Date().getFullYear()
 const RECENT_YEARS = [CURRENT_YEAR - 1, CURRENT_YEAR]
@@ -116,28 +117,20 @@ const communityGetNodesInfos = (hits: ElasticHits, source: string, model: string
     return acc
   }, {})
 
-export default async function communitiesCreate(graph: Graph, computeClusters: boolean): Promise<NetworkCommunities> {
-  const source: string = graph.getAttribute("source")
+async function communitiesAssignMetadata(graph: Graph, communities: NetworkCommunities) {
   const query: string = graph.getAttribute("query")
+  const source: string = graph.getAttribute("source")
   const model: string = graph.getAttribute("model")
   const filters: NetworkFilters = graph.getAttribute("filters")
 
-  // Assign communities
-  const randomSeed = query + model + JSON.stringify(filters)
-  louvain.assign(graph, { rng: seedrandom(randomSeed) })
-
-  if (!computeClusters) return []
-
-  // Find number of communities
-  const count = graph.reduceNodes((acc, _, attr) => Math.max(acc, attr.community), 0) + 1
-  if (count < 1) return []
-
-  // Create communities array
-  const communities = Promise.all(
-    Array.from({ length: count }, async (_, index) => {
+  // Assign metadata to communities and await all promises
+  await Promise.all(
+    communities.map(async (community, index) => {
       // Get elastic data
-      const hits = await networkSearchHits({ source, model, query, filters, links: communityGetLinks(graph, index) })
-      const aggs = await networkSearchAggs({ source, model, query, filters, links: communityGetLinks(graph, index) })
+      const [hits, aggs] = await Promise.all([
+        networkSearchHits({ source, model, query, filters, links: communityGetLinks(graph, index) }),
+        networkSearchAggs({ source, model, query, filters, links: communityGetLinks(graph, index) }),
+      ])
 
       // Add info to nodes
       if (hits) {
@@ -157,14 +150,7 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
         })
       }
 
-      // Add info to communities
-      const community = {
-        cluster: index + 1,
-        label: COLORS?.[index] ? GetColorName(COLORS[index]) : `Unnamed ${index + 1}`,
-        color: COLORS?.[index] ?? "#e2e2e2",
-        size: communityGetSize(graph, index),
-        nodes: communityGetNodes(graph, index),
-        maxYear: communityGetMaxYear(graph, index),
+      community.metadata = {
         ...(aggs && {
           documentsByYear: communityGetDocumentsByYear(aggs),
           documentsCount: communityGetDocumentsCount(aggs),
@@ -180,14 +166,47 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
           documentsCount: hits.length,
         }),
       }
-      return community
     })
-  ).then((c) => c.sort((a, b) => b.size - a.size))
+  )
+}
 
-  // Add labels with IA
-  const labeledCommunities = await mistralLabeledClusters(await communities)
+export default async function communitiesCreate(graph: Graph, computeClusters: boolean): Promise<NetworkCommunities> {
+  const query: string = graph.getAttribute("query")
+  const model: string = graph.getAttribute("model")
+  const filters: NetworkFilters = graph.getAttribute("filters")
 
-  if (labeledCommunities) return labeledCommunities
+  // Assign communities
+  const randomSeed = query + model + JSON.stringify(filters)
+  louvain.assign(graph, { rng: seedrandom(randomSeed) })
+
+  // Find number of communities
+  const count = graph.reduceNodes((acc, _, attr) => Math.max(acc, attr.community), 0) + 1
+
+  if (count < 1) return []
+
+  // Create communities array
+  const communities = Array.from({ length: count }, (_, index) => {
+    const community = {
+      cluster: index + 1,
+      label: COLORS?.[index] ? GetColorName(COLORS[index]) : `Unnamed ${index + 1}`,
+      color: COLORS?.[index] ?? "#e2e2e2",
+      size: communityGetSize(graph, index),
+      nodes: communityGetNodes(graph, index),
+      maxYear: communityGetMaxYear(graph, index),
+    }
+    return community
+  })
+  communities.sort((a, b) => b.size - a.size)
+
+  // Assign metrics
+  assignClustersMetrics(graph, communities)
+
+  if (computeClusters) {
+    // Assign metadata
+    await communitiesAssignMetadata(graph, communities)
+    // Assign IA labels
+    await mistralAssignClustersLabels(communities)
+  }
 
   return communities
 }
