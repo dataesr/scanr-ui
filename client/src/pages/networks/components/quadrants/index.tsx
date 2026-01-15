@@ -70,8 +70,9 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 
 function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }) {
   if (!clusters) return null
-  const data = clusters?.map(({ label, metrics }) => ({
+  const data = clusters?.map(({ label, color, metrics }) => ({
     label,
+    color,
     ...metrics,
   }))
   const quadrantOptions = getQuadrantChartsOptions({

@@ -92,8 +92,7 @@ export default function getQuadrantChartsOptions({
         },
       },
     },
-    // colors: _data.map((d) => d.color),
     legend: { enabled: false },
-    series: [{ data: _data, colorByPoint: true }],
+    series: [{ data: _data }],
   }
 }
