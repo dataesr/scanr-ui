@@ -20,6 +20,7 @@ export type NetworkItem = {
   cluster: number
   weights: Record<string, number>
   scores: Record<string, number>
+  metrics?: Record<string, number>
   page?: string
   search?: string
   documentsCount?: number
