@@ -40,7 +40,7 @@ export default function NetworkCentralityCadran() {
     });
 
   return (
-    <Container fluid className="fr-ml-2w" style={{ height: height }}>
+    <Container fluid style={{ height: height }}>
       <Select
         buttonLabel="Centrality"
         onSelectionChange={(value) => setSelectedCentrality(String(value))}

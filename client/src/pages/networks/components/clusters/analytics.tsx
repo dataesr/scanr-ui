@@ -52,24 +52,36 @@ export default function NetworkAnalytics() {
   })
 
   const AnalyticsGraphs = () => (
-    <Row className="fr-mt-8w">
+    <Row>
       <Col xs="12">
         <AnalyticsGraph
           title={intl.formatMessage(
             { id: "networks.analytics.clusters.size.title" },
-            { tab: intl.formatMessage({ id: `networks.model.of.${currentModel}` }) }
+            {
+              tab: intl.formatMessage({
+                id: `networks.model.of.${currentModel}`,
+              }),
+            }
           )}
           description={intl.formatMessage(
             { id: "networks.analytics.clusters.size.description" },
-            { tab: intl.formatMessage({ id: `networks.model.of.${currentModel}` }) }
+            {
+              tab: intl.formatMessage({
+                id: `networks.model.of.${currentModel}`,
+              }),
+            }
           )}
           options={sizeChartOptions}
         />
       </Col>
       <Col xs="12">
         <AnalyticsGraph
-          title={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-count.title` })}
-          description={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-count.description` })}
+          title={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-count.title`,
+          })}
+          description={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-count.description`,
+          })}
           options={documentsChartOptions}
         />
       </Col>
@@ -82,22 +94,30 @@ export default function NetworkAnalytics() {
       </Col> */}
       <Col xs="12">
         <AnalyticsGraph
-          title={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-years.title` })}
-          description={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-years.description` })}
+          title={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-years.title`,
+          })}
+          description={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-years.description`,
+          })}
           options={yearsChartOptions}
         />
       </Col>
       {currentSource === "publications" && (
         <Col xs="12">
           <AnalyticsGraph
-            title={intl.formatMessage({ id: "networks.analytics.clusters.citations.title" })}
-            description={intl.formatMessage({ id: "networks.analytics.clusters.citations.description" })}
+            title={intl.formatMessage({
+              id: "networks.analytics.clusters.citations.title",
+            })}
+            description={intl.formatMessage({
+              id: "networks.analytics.clusters.citations.description",
+            })}
             options={citationsChartOptions}
           />
         </Col>
       )}
     </Row>
-  )
+  );
 
   if (["xs", "sm"].includes(screen)) {
     return (
