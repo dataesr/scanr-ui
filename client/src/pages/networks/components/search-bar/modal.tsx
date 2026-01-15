@@ -40,7 +40,7 @@ export default function NetworkSearchBarModal() {
         />
       </Container>
       {expansions?.length && (
-        <Container fluid className="fr-mb-4w">
+        <Container fluid className="fr-pb-6w">
           <Text size="sm" className="fr-mb-1w">
             {intl.formatMessage({ id: "networks.get-started.search-bar.suggestions" })}
           </Text>
@@ -63,7 +63,16 @@ export default function NetworkSearchBarModal() {
         </Container>
       )}
       <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", justifyContent: "right" }}>
-        <Button aria-controls={id}>{intl.formatMessage({ id: "networks.search-bar.modal.display" })}</Button>
+        <Button
+          aria-controls={id}
+          onClick={() => {
+            if (query != currentQuery) handleQueryChange(networkQuery(query))
+          }}
+        >
+          {query === currentQuery
+            ? intl.formatMessage({ id: "networks.search-bar.modal.display" })
+            : intl.formatMessage({ id: "networks.search-bar.modal.apply" })}
+        </Button>
       </div>
     </Modal>
   )

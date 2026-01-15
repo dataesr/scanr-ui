@@ -8,7 +8,7 @@
 }
 
 .panel-toggle-button {
-  width: 24px;
+  width: 28px;
   height: 100%;
   border-left: 1px solid var(--border-default-grey);
   border-right: 1px solid var(--border-default-grey);
@@ -29,7 +29,7 @@
 
   &__icon {
     font-size: 18px;
-    color: var(--text-default-grey);
+    color: var(--text-active-blue-france);
     transition: transform 0.2s ease;
   }
 
@@ -38,7 +38,7 @@
     text-orientation: mixed;
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-default-grey);
+    color: var(--text-active-blue-france);
     letter-spacing: 1px;
     text-transform: uppercase;
     user-select: none;
@@ -56,6 +56,13 @@
   &--split {
     flex: 1 1 60%;
   }
+
+  &--closed {
+    flex: 0 0 0%;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
 }
 .panel-clusters-wrapper {
   transition: all 0.3s ease;
@@ -68,9 +75,16 @@
     overflow: hidden;
   }
 
-  &--open {
+  &--split {
     flex: 0 0 40%;
     width: 40%;
+    opacity: 1;
+    overflow: hidden;
+  }
+
+  &--full {
+    flex: 0 0 100%;
+    width: 100%;
     opacity: 1;
     overflow: hidden;
   }

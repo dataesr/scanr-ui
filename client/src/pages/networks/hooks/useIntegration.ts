@@ -26,7 +26,6 @@ export default function useIntegration() {
             showFilters: getBooleanParam(searchParams.get("showFilters")),
             showParameters: getBooleanParam(searchParams.get("showParameters")),
             showExports: getBooleanParam(searchParams.get("showExports")),
-            showClustersButton: getBooleanParam(searchParams.get("showClustersButton")),
             showClustersAnalytics: getBooleanParam(searchParams.get("showClustersAnalytics")),
             graphHeight: searchParams.get("graphHeight") || DEFAULT_INTEGRATION.graphHeight,
           }

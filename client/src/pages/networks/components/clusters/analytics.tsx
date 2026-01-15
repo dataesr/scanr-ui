@@ -8,6 +8,7 @@ import getYearsChartOptions from "../charts/years"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import useIntegration from "../../hooks/useIntegration"
 import useOptions from "../../hooks/useOptions"
+import ClustersButton from "./button"
 
 export default function NetworkAnalytics() {
   const intl = useIntl()
@@ -17,7 +18,8 @@ export default function NetworkAnalytics() {
   const { search } = useSearchData()
   const clusters = search.data?.network?.clusters
 
-  if (Boolean(search.error) || !parameters.clusters || integrationOptions.showClustersAnalytics === false) return null
+  if (Boolean(search.error) || !parameters.clusters || integrationOptions.showClustersAnalytics === false)
+    return <ClustersButton />
 
   if (parameters.clusters && search.isFetching)
     return (

@@ -75,6 +75,11 @@ export default function getQuadrantChartsOptions({
         },
       ],
     },
+    tooltip: {
+      useHTML: true,
+      pointFormat: `<strong>{point.name}</strong><br/><span>${x}: {point.x}</span><br/><span>${y}: {point.y}</span>`,
+      followPointer: true,
+    },
     plotOptions: {
       bubble: {
         minSize: 20,

@@ -6,6 +6,7 @@
     "networks.search-bar.label-graph": "Start exploring research and innovation networks",
     "networks.search-bar.placeholder": "\"one health\" OR \"santé mondiale\"",
     "networks.search-bar.modal.display": "Display Network",
+    "networks.search-bar.modal.apply": "Apply Search",
     "networks.select-model.label": "Network",
     "networks.select-model.modal.display": "Display Network",
     "networks.select-source.label": "Source",

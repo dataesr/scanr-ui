@@ -21,6 +21,7 @@ import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import Separator from "../../../../components/separator"
 import { encode } from "../../../../utils/string"
 import { useNetworkContext } from "../../context"
+import ClustersButton from "./button"
 
 const SEE_MORE_AFTER = 10
 
@@ -179,7 +180,7 @@ export default function NetworkClustersItems() {
   const communities = network?.clusters;
   const sectionTitle = `networks.section.clusters.${currentModel}`;
 
-  if (!parameters.clusters) return null;
+  if (!parameters.clusters) return <ClustersButton />
 
   if (search.isFetching)
     return (

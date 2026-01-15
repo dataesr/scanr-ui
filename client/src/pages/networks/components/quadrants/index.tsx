@@ -8,6 +8,7 @@ import { NetworkCommunities, NetworkItems } from "../../../../types/network"
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
   const [selectedDensity, setSelectedDensity] = useState("localDensity")
+  if (!nodes) return null
   const data = nodes.map(({ label, metrics }) => ({
     label,
     ...metrics,
@@ -68,6 +69,7 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 }
 
 function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }) {
+  if (!clusters) return null
   const data = clusters?.map(({ label, metrics }) => ({
     label,
     ...metrics,
@@ -94,7 +96,7 @@ export default function NetworkQuadrants() {
   const { search } = useSearchData()
 
   return (
-    <Container fluid>
+    <Container fluid style={{ width: "100%" }}>
       <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
       <NetworkNodesQuadrants nodes={search?.data?.network?.items} />
     </Container>

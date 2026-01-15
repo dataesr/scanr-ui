@@ -14,10 +14,9 @@ export const DEFAULT_INTEGRATION: NetworksIntegrationOptions = {
   showFilters: true,
   showParameters: true,
   showExports: true,
-  showClustersButton: true,
   showClustersAnalytics: true,
   graphHeight: "640px",
-};
+}
 
 const url = "https://raw.githubusercontent.com/dataesr/bso-ui/main/src/config/locals.json"
 

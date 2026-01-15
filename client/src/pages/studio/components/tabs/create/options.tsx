@@ -81,7 +81,7 @@ export default function StudioCreateOptions({ tool, setOption }: StudioCreateOpt
               />
             </Container>
             {Object.entries(integrationOptions)
-              .filter(([key]) => ["showClustersButton", "showClustersAnalytics"].includes(key))
+              .filter(([key]) => ["showClustersAnalytics"].includes(key))
               .map(([key, value]) => (
                 <Container fluid key={key} style={{ width: "300px" }}>
                   <Toggle

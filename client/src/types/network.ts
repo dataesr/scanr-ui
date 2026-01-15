@@ -157,7 +157,6 @@ export type NetworksIntegrationOptions = {
   showFilters?: boolean
   showParameters?: boolean
   showExports?: boolean
-  showClustersButton?: boolean
   showClustersAnalytics?: boolean
   graphHeight?: string
 }
