@@ -77,9 +77,7 @@ export default function ProjectParticipants({
 											{intl.formatMessage(
 												{ id: "projects.section.participants.financed" },
 												{
-													funding: Number(
-														part.funding.split(",")[0],
-													).toLocaleString(),
+													funding: part.funding.toLocaleString(),
 												},
 											)}
 										</i>

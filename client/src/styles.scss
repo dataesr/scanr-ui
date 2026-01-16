@@ -151,7 +151,9 @@ $icons:
 ('shapes-line', '/icons/shapes-line.svg')
 ("mistral-ai", "/icons/mistral-ai.svg")
 ("network-line", "/icons/network-line.svg")
-("network-fill", "/icons/network-fill.svg");
+("network-fill", "/icons/network-fill.svg")
+("ai", "/icons/ai.svg")
+("ai-generate-2", "/icons/ai-generate-2.svg");
 
 @each $name, $mask in $icons {
 

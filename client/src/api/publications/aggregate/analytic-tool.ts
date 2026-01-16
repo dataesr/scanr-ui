@@ -247,7 +247,7 @@ export async function aggregatePublicationsForAnalyticTool(
       },
       byPrivateSupport: {
         terms: {
-          field: "structured_acknowledgments.private_support.entity.keyword",
+          field: "structured_acknowledgments.private_companies.entity.keyword",
           size: 100,
         }
       }

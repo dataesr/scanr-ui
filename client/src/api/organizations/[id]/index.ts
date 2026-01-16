@@ -11,38 +11,38 @@ export async function getOrganizationById(id: string): Promise<Organization> {
     },
     query: {
       bool: {
-        filter: [{ term: { "id.keyword": id } }],
+        filter: [{ term: { "externalIds.id.keyword": id } }],
       },
     },
   }
-  const structureQuery = fetch(`${organizationsIndex}/_search`, {
+  const structureQuery = await fetch(`${organizationsIndex}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
   }).then((r) => r.json())
-  const publicationsQuery = getStructurePublicationsById(id)
-  const projectsQuery = getStructureProjectsById(id)
-  const patentsQuery = getStructurePatentsById(id)
-  const networkQuery = getStructureNetworkById(id, "publications", "domains")
-  const [structure, publications, projects, patents, network] = await Promise.all([
-    structureQuery,
+  const structureData = structureQuery?.hits?.hits?.[0]?._source
+  if (!structureData) throw new Error("404")
+  const { _id } = structureQuery?.hits?.hits?.[0] || {}
+  const externalIdsList = structureData.externalIds?.map((ext: any) => ext.id) || []
+  const publicationsQuery = getStructurePublicationsById(externalIdsList)
+  const projectsQuery = getStructureProjectsById(externalIdsList)
+  const patentsQuery = getStructurePatentsById(externalIdsList)
+  const networkQuery = getStructureNetworkById(externalIdsList, "publications", "domains")
+  const [publications, projects, patents, network] = await Promise.all([
     publicationsQuery,
     projectsQuery,
     patentsQuery,
     networkQuery,
   ])
 
-  const structureData = structure?.hits?.hits?.[0]?._source
-  if (!structureData) throw new Error("404")
-  const { _id } = structure?.hits?.hits?.[0] || {}
 
   return { ...structureData, _id, publications, projects, patents, network }
 }
 
-async function getStructurePublicationsById(id: string): Promise<any> {
+async function getStructurePublicationsById(ids: any): Promise<any> {
   const body = {
     _source: ["title.*", "authors.fullName", "authors.person", "authors.role", "source.*", "isOa", 'type', 'id', 'year'],
-    query: { bool: { filter: [{ term: { "affiliations.id.keyword": id } }] } },
+    query: { bool: { filter: [{ terms: { "affiliations.id.keyword": ids } }] } },
     sort: [{ year: { order: "desc" } }],
     aggs: {
       byWiki: {
@@ -65,19 +65,19 @@ async function getStructurePublicationsById(id: string): Promise<any> {
       },
       byGrantsFunder: {
         terms: {
-          field: "structured_acknowledgments.grants.funder.keyword",
+          field: "structured_acknowledgments.funders.entity.keyword",
           size: 50,
         }
       },
       byInfrastructureName: {
         terms: {
-          field: "structured_acknowledgments.infrastructure.name.keyword",
+          field: "structured_acknowledgments.infrastructures.entity.keyword",
           size: 50,
         }
       },
       bySupportEntity: {
         terms: {
-          field: "structured_acknowledgments.private_support.entity.keyword",
+          field: "structured_acknowledgments.private_companies.entity.keyword",
           size: 50,
         }
       },
@@ -202,10 +202,16 @@ async function getStructurePublicationsById(id: string): Promise<any> {
   return { publicationsCount, byYear, byType, bySource, byAuthors, byWiki, byOpenAlexFields, byInfrastructureName, byGrantsFunder, bySupportEntity }
 }
 
-async function getStructureProjectsById(id: string): Promise<any> {
+async function getStructureProjectsById(ids: any): Promise<any> {
   const body: any = {
     size: 0,
-    query: { bool: { filter: [{ term: { "participants.structure.id.keyword": id } }] } },
+    query: { bool: {
+      should: [
+        { terms: { "participants.structure.id.keyword": ids } },
+        { terms: { "participants.structure.institutions.structure.keyword": ids } },
+      ],
+      minimum_should_match: 1,
+    } },
     aggs: {
       byType: {
         terms: {
@@ -262,10 +268,10 @@ async function getStructureProjectsById(id: string): Promise<any> {
   return { byYear, byType, byKeywords, projectsCount }
 }
 
-async function getStructurePatentsById(id: string): Promise<any> {
+async function getStructurePatentsById(ids: any): Promise<any> {
   const body: any = {
     size: 0,
-    query: { bool: { filter: [{ term: { "applicants.ids.id.keyword": id } }] } },
+    query: { bool: { filter: [{ terms: { "applicants.ids.id.keyword": ids } }] } },
     aggs: {
       byYear: {
         terms: {

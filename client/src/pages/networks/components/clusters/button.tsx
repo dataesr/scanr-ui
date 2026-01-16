@@ -18,11 +18,12 @@ export default function ClustersButton() {
     <ButtonGroup size={["xs", "sm"].includes(screen) ? "sm" : "md"}>
       <Button
         title={intl.formatMessage({ id: "networks.clusters.button.description" })}
-        iconPosition="right"
-        icon={parameters.clusters ? "arrow-up-line" : "arrow-down-line"}
+        variant={parameters.clusters ? "secondary" : "primary"}
         onClick={() => handleParameterChange("clusters", !parameters.clusters)}
         disabled={search.isFetching || Boolean(search.error)}
       >
+        <span className="fr-icon-ai-generate-2 fr-btn--icon-left" style={{ cursor: "help" }} />
+        <span>
         {screen === "xs"
           ? intl.formatMessage({
               id: parameters.clusters ? "networks.clusters.button.rm.short" : "networks.clusters.button.add.short",
@@ -30,6 +31,7 @@ export default function ClustersButton() {
           : intl.formatMessage({
               id: parameters.clusters ? "networks.clusters.button.rm" : "networks.clusters.button.add",
             })}
+        </span>
       </Button>
     </ButtonGroup>
   )

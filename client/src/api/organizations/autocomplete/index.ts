@@ -15,8 +15,11 @@ export async function autocompleteOrganizations({ query }: SearchArgs): Promise<
           { term: { status: "active" } },
         ],
         must: {
-          match: {
-            autocompleted: query
+          match_phrase_prefix: {
+            autocompletedText: {
+              query,
+              max_expansions: 10
+            }
           }
         }
       },
@@ -26,7 +29,7 @@ export async function autocompleteOrganizations({ query }: SearchArgs): Promise<
     `${organizationsIndex}/_search`,
     { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const data = await res.json()
-  const orgs: ElasticResult<LightOrganization>[] = data?.hits?.hits || []  
-  
+  const orgs: ElasticResult<LightOrganization>[] = data?.hits?.hits || []
+
   return { data: orgs }
 }

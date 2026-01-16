@@ -1,8 +1,8 @@
 import { Network } from "../../../types/network"
 import { networkSearch } from "./search"
 
-export async function getStructureNetworkById(id: string, source: string, model: string): Promise<Network> {
-  const organizationFilter = { terms: { "affiliations.id.keyword": [id] } }
+export async function getStructureNetworkById(ids: any , source: string, model: string): Promise<Network> {
+  const organizationFilter = { terms: { "affiliations.id.keyword": ids } }
   const data = networkSearch({
     source: source,
     model: model,
