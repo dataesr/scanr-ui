@@ -53,15 +53,17 @@ export async function searchProjects({
     },
   };
   const structureFilter = filters?.find((f) => f?.terms?.["participants.structure.id.keyword"])?.terms?.["participants.structure.id.keyword"];
-  body.query.bool.filter.bool.should = [
-    {
-      terms: { "participants.structure.institutions.structure.keyword": structureFilter },
-    },
-    {
-      terms: { "participants.structure.id.keyword": structureFilter },
-    },
-  ];
-  body.query.bool.filter.bool.minimum_should_match = 1;
+  if (structureFilter) {
+    body.query.bool.filter.bool.should = [
+      {
+        terms: { "participants.structure.institutions.structure.keyword": structureFilter },
+      },
+      {
+        terms: { "participants.structure.id.keyword": structureFilter },
+      },
+    ];
+    body.query.bool.filter.bool.minimum_should_match = 1;
+  }
   if (size) body.size = size;
   if (cursor) body.search_after = cursor;
   if (!query)
