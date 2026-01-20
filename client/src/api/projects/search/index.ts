@@ -47,23 +47,7 @@ export async function searchProjects({
       },
     },
   };
-  if (filters) body.query.bool.filter = {
-    bool: {
-      must: filters.filter((f) => !f?.terms?.["participants.structure.id.keyword"]),
-    },
-  };
-  const structureFilter = filters?.find((f) => f?.terms?.["participants.structure.id.keyword"])?.terms?.["participants.structure.id.keyword"];
-  if (structureFilter) {
-    body.query.bool.filter.bool.should = [
-      {
-        terms: { "participants.structure.institutions.structure.keyword": structureFilter },
-      },
-      {
-        terms: { "participants.structure.id.keyword": structureFilter },
-      },
-    ];
-    body.query.bool.filter.bool.minimum_should_match = 1;
-  }
+  if (filters) body.query.bool.filter = [...filters];
   if (size) body.size = size;
   if (cursor) body.search_after = cursor;
   if (!query)

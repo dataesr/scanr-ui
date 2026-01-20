@@ -29,7 +29,7 @@ export default function ProjectOrganizationsFilter() {
     },
   });
 
-  const filter = currentFilters?.["participants.structure.id"];
+  const filter = currentFilters?.["participants_id_search"];
   const operator = filter?.operator || "or";
 
   return (
@@ -45,7 +45,7 @@ export default function ProjectOrganizationsFilter() {
         </div>
         <OperatorButton
           operator={operator}
-          setOperator={(key) => setOperator("participants.structure.id", key === "and" ? "and" : "or")}
+          setOperator={(key) => setOperator("participants_id_search", key === "and" ? "and" : "or")}
         />
       </div>
       {filter ? (
@@ -61,7 +61,7 @@ export default function ProjectOrganizationsFilter() {
             color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              handleFilterChange({ field: "participants.structure.id", value })
+              handleFilterChange({ field: "participants_id_search", value })
             }}
           >
             {label || value}
@@ -80,7 +80,7 @@ export default function ProjectOrganizationsFilter() {
           if (!item) return
           const [value, label] = item.toString().split("###")
           handleFilterChange({
-            field: "participants.structure.id",
+            field: "participants_id_search",
             value,
             label,
           })
