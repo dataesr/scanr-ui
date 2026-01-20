@@ -67,17 +67,19 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
               color="pink-macaron"
             >
               {`${metadata?.documentsCount} ${intl.formatMessage({
-                id: "networks.section.clusters.badge-publications",
+                id: `networks.source.${currentSource}`,
               })}`}
             </Badge>
-            <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
-              {`${intl.formatMessage({
-                id: "networks.section.clusters.open-access",
-              })}: ${metadata?.oaPercent.toFixed(1)}%`}
-            </Badge>
+            {metadata?.oaPercent && (
+              <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
+                {`${intl.formatMessage({
+                  id: "networks.section.clusters.open-access",
+                })}: ${metadata?.oaPercent.toFixed(1)}%`}
+              </Badge>
+            )}
             <Badge size="sm" color="yellow-tournesol">
               {`${intl.formatMessage({
-                id: "networks.section.clusters.last-activity",
+                id: `networks.section.clusters.last-activity.${currentSource}`,
               })}: ${community?.maxYear || "N/A"}`}
             </Badge>
             {currentSource === "publications" && (
@@ -123,7 +125,7 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
               .map(([domain], k) => (
                 <Fragment key={k}>
                   {k > 0 ? ", " : ""}
-                  <Link key={k} href={`/search/publications?q="${encode(domain)}"`}>
+                  <Link key={k} href={`/search/${currentSource}?q="${encode(domain)}"`}>
                     #{domain}
                   </Link>
                 </Fragment>
@@ -149,18 +151,18 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
       <Modal isOpen={showDocumentsModal} hide={() => setShowDocumentsModal(false)}>
         <ModalTitle>
           {intl.formatMessage({
-            id: "networks.section.clusters.badge-publications",
+            id: `networks.source.${currentSource}`,
           })}
         </ModalTitle>
         <ModalContent>
-          {metadata?.documents?.map((publication) => (
-            <li key={publication.id} className="fr-mt-1w">
+          {metadata?.documents?.map((document) => (
+            <li key={document.id} className="fr-mt-1w">
               <Link
-                key={publication.id}
+                key={document.id}
                 target="_blank"
-                href={window.location.origin + "/publications/" + encode(publication.id as string)}
+                href={window.location.origin + `/${currentSource}/` + encode(document.id as string)}
               >
-                {publication.title}
+                {document?.title || document.id}
               </Link>
             </li>
           ))}

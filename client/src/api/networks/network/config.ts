@@ -251,7 +251,7 @@ export const CONFIG = {
     institutions: {
       index: projectsIndex,
       field: "participants.structure.id",
-      topics: "domains.keyword",
+      topics: "project_domains.label.default.keyword",
       search_fields: projectsFields,
       source_fields: [...projectsSourceFields, "participants.structure.id"],
       aggregation: "participants.structure.id.keyword",
@@ -272,7 +272,7 @@ export const CONFIG = {
     structures: {
       index: projectsIndex,
       field: "participants.structure.id",
-      topics: "domains.keyword",
+      topics: "project_domains.label.default.keyword",
       search_fields: projectsFields,
       source_fields: [...projectsSourceFields, "participants.structure.id"],
       aggregation: "participants.structure.id.keyword",
