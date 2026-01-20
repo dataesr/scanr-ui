@@ -290,6 +290,27 @@ export const CONFIG = {
         total_link_strength: "co-projects links",
       },
     },
+    domains: {
+      index: projectsIndex,
+      field: "project_domains.code",
+      topics: "project_domains.label.default.keyword",
+      search_fields: projectsFields,
+      source_fields: [...projectsSourceFields, "project_domains.code"],
+      aggregation: "project_domains.code.keyword",
+      co_aggregation: "co_domains.keyword",
+      url_page: "https://www.wikidata.org/wiki",
+      url_search: "/search/projects",
+      terminology: {
+        item: "topic",
+        items: "topics",
+        link: "co-topic link",
+        links: "co-topic links",
+        cluster: "community",
+        clusters: "communities",
+        link_strength: "co-projects",
+        total_link_strength: "co-projects links",
+      },
+    },
   },
 }
 
