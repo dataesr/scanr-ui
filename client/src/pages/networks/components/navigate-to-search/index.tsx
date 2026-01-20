@@ -22,7 +22,7 @@ export default function NavigateToSearch() {
     <ButtonGroup size={["xs", "sm"].includes(screen) ? "sm" : "md"} className="fr-mb-3w fr-mr-1w">
       <Button
         size="md"
-        variant="primary"
+        variant="tertiary"
         icon={NETWORK_SOURCES.find(({ label }) => label === currentSource).icon}
         iconPosition="left"
         onClick={navigateToNetwork}

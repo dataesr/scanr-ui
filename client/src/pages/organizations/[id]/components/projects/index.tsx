@@ -16,7 +16,7 @@ type OrganizationProjectsProps = {
 export default function OrganizationProjects({ data: projects, value, label }: OrganizationProjectsProps) {
   const { screen } = useScreenSize();
   const intl = useIntl();
-  const searchFilters = { 'participants.structure.id': { values: [{ value: value, label }], type: 'terms' } }
+  const searchFilters = { 'participants_id_search': { values: [{ value: value, label }], type: 'terms' } }
   const projectsFilterUrl = `/search/projects?filters=${encodeURIComponent(JSON.stringify(searchFilters))}`;
   const [projectGraph, setProjectGraph] = useState("type");
 

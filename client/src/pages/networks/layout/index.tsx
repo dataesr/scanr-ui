@@ -1,11 +1,12 @@
-import { Container } from "@dataesr/dsfr-plus"
-import NetworksHeader from "../components/header"
-import NetworkCard from "../components/graph/card"
-import NetworkClusters from "../components/clusters"
-import useIntegration from "../hooks/useIntegration"
-import NetworksOptionsBar from "../components/options-bar"
-import NetworksOptionsModals from "../components/options-bar/modals"
-import NetworkNotice from "../components/notice"
+import { Container } from "@dataesr/dsfr-plus";
+import NetworksHeader from "../components/header";
+import NetworkCard from "../components/graph/card";
+import useIntegration from "../hooks/useIntegration";
+import NetworksOptionsBar from "../components/options-bar";
+import NetworksOptionsModals from "../components/options-bar/modals";
+import NetworkNotice from "../components/notice";
+import NetworkPanel from "../components/panel";
+import NetworksOptionsFooter from "../components/options-bar/footer"
 
 export default function NetworksLayout() {
   const { integrationOptions } = useIntegration()
@@ -19,8 +20,8 @@ export default function NetworksLayout() {
       <NetworksOptionsModals />
       <Container>
         <NetworkNotice />
-        <NetworkCard />
-        <NetworkClusters />
+        <NetworkPanel />
+        <NetworksOptionsFooter />
       </Container>
     </Container>
   )

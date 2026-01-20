@@ -8,6 +8,7 @@ import getYearsChartOptions from "../charts/years"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import useIntegration from "../../hooks/useIntegration"
 import useOptions from "../../hooks/useOptions"
+import ClustersButton from "./button"
 
 export default function NetworkAnalytics() {
   const intl = useIntl()
@@ -17,7 +18,8 @@ export default function NetworkAnalytics() {
   const { search } = useSearchData()
   const clusters = search.data?.network?.clusters
 
-  if (Boolean(search.error) || !parameters.clusters || integrationOptions.showClustersAnalytics === false) return null
+  if (Boolean(search.error) || !parameters.clusters || integrationOptions.showClustersAnalytics === false)
+    return <ClustersButton />
 
   if (parameters.clusters && search.isFetching)
     return (
@@ -26,7 +28,7 @@ export default function NetworkAnalytics() {
       </Container>
     )
 
-  const chartData = clusters.slice(0, 10)
+  const chartData = clusters.slice(0, 10).map((cluster) => ({ ...cluster, ...cluster.metadata }))
   const sizeChartOptions = getHorizontalBarChartOptions({ data: chartData, x: "label", y: "size" })
   const documentsChartOptions = getHorizontalBarChartOptions({
     data: chartData,
@@ -52,24 +54,36 @@ export default function NetworkAnalytics() {
   })
 
   const AnalyticsGraphs = () => (
-    <Row className="fr-mt-8w">
+    <Row>
       <Col xs="12">
         <AnalyticsGraph
           title={intl.formatMessage(
             { id: "networks.analytics.clusters.size.title" },
-            { tab: intl.formatMessage({ id: `networks.model.of.${currentModel}` }) }
+            {
+              tab: intl.formatMessage({
+                id: `networks.model.of.${currentModel}`,
+              }),
+            }
           )}
           description={intl.formatMessage(
             { id: "networks.analytics.clusters.size.description" },
-            { tab: intl.formatMessage({ id: `networks.model.of.${currentModel}` }) }
+            {
+              tab: intl.formatMessage({
+                id: `networks.model.of.${currentModel}`,
+              }),
+            }
           )}
           options={sizeChartOptions}
         />
       </Col>
       <Col xs="12">
         <AnalyticsGraph
-          title={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-count.title` })}
-          description={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-count.description` })}
+          title={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-count.title`,
+          })}
+          description={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-count.description`,
+          })}
           options={documentsChartOptions}
         />
       </Col>
@@ -82,22 +96,30 @@ export default function NetworkAnalytics() {
       </Col> */}
       <Col xs="12">
         <AnalyticsGraph
-          title={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-years.title` })}
-          description={intl.formatMessage({ id: `networks.analytics.clusters.${currentSource}-years.description` })}
+          title={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-years.title`,
+          })}
+          description={intl.formatMessage({
+            id: `networks.analytics.clusters.${currentSource}-years.description`,
+          })}
           options={yearsChartOptions}
         />
       </Col>
       {currentSource === "publications" && (
         <Col xs="12">
           <AnalyticsGraph
-            title={intl.formatMessage({ id: "networks.analytics.clusters.citations.title" })}
-            description={intl.formatMessage({ id: "networks.analytics.clusters.citations.description" })}
+            title={intl.formatMessage({
+              id: "networks.analytics.clusters.citations.title",
+            })}
+            description={intl.formatMessage({
+              id: "networks.analytics.clusters.citations.description",
+            })}
             options={citationsChartOptions}
           />
         </Col>
       )}
     </Row>
-  )
+  );
 
   if (["xs", "sm"].includes(screen)) {
     return (

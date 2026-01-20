@@ -60,11 +60,11 @@ async function mistralLabelsFromDomains(domains: string): Promise<string> {
   return answer
 }
 
-export async function mistralLabeledClusters(clusters: NetworkCommunities): Promise<NetworkCommunities> {
+export async function mistralAssignClustersLabels(clusters: NetworkCommunities) {
   const prefix = "list"
   const domains = clusters?.reduce((acc, cluster, index) => {
-    if (cluster?.domains) {
-      const topDomains = Object.entries(cluster.domains)
+    if (cluster?.metadata?.domains) {
+      const topDomains = Object.entries(cluster.metadata.domains)
         .sort((a: [string, number], b: [string, number]) => b[1] - a[1])
         .slice(0, 10)
         .map(([domain, count]) => `${domain} (${count})`)
@@ -81,17 +81,13 @@ export async function mistralLabeledClusters(clusters: NetworkCommunities): Prom
     (response) => JSON.parse(response),
     (err) => console.error(err)
   )
-  if (!mistralLabels || mistralLabels.constructor != Object) {
-    return clusters
+
+  if (mistralLabels && mistralLabels.constructor == Object) {
+    const cleanLabels = cleanMistralLabels(mistralLabels)
+    clusters.forEach((cluster, index) => {
+      cluster.label = cleanLabels[index] ? cleanLabels[index] : cluster.label + " (Unlabelled)"
+    })
   }
-
-  const cleanLabels = cleanMistralLabels(mistralLabels)
-
-  cleanLabels.forEach((label, index) => {
-    clusters[index].label = label ? label : clusters[index].label + " (Unlabelled)"
-  })
-
-  return clusters
 }
 
 

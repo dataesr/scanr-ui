@@ -47,7 +47,7 @@ export async function searchProjects({
       },
     },
   };
-  if (filters) body.query.bool.filter = filters;
+  if (filters) body.query.bool.filter = [...filters];
   if (size) body.size = size;
   if (cursor) body.search_after = cursor;
   if (!query)

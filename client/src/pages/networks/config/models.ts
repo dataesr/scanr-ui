@@ -49,6 +49,10 @@ const NETWORK_MODELS_MAPPING = {
   ],
   projects: [
     {
+      label: "domains",
+      icon: "book-2-line",
+    },
+    {
       label: "institutions",
       icon: "building-line",
     },
