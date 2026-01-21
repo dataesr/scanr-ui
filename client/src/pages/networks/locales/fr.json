@@ -91,7 +91,7 @@
     "networks.clusters.button.description": "Par la méthode de Louvain. Les labels des communautés sont ensuite calculés par IA générative à partir du corpus de documents de la communauté.",
     "networks.clusters.tabs.items": "Communautés",
     "networks.clusters.tabs.analytics": "Graphiques",
-    "networks.clusters.tabs.quadrants": "Quadrant",
+    "networks.clusters.tabs.quadrants": "Quadrants",
     "networks.panel.button": "Informations des communautés",
     "networks.search.error204.title": "Pas de résultat",
     "networks.search.error204.text": "Cette recherche ne retourne aucune donnée.",
