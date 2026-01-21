@@ -6,6 +6,7 @@ import NetworkClusters from "../clusters"
 import NetworkGraph from "../graph"
 import { useIntl } from "react-intl"
 import useIntegration from "../../hooks/useIntegration"
+import useScreenSize from "../../../../hooks/useScreenSize"
 
 function PanelButton({ isOpen, onChange }: { isOpen: boolean; onChange: () => void }) {
   const intl = useIntl()
@@ -25,6 +26,19 @@ function PanelButton({ isOpen, onChange }: { isOpen: boolean; onChange: () => vo
 export default function NetworkPanel() {
   const [openAnalytics, setOpenAnalytics] = useState(false)
   const { integrationOptions } = useIntegration()
+  const { screen } = useScreenSize()
+
+  console.log("screen", screen)
+  if (["xs", "sm", "mg"].includes(screen)) {
+    return (
+      <Container fluid className="fr-card">
+        <Container fluid style={{ height: "calc(100vh - 200px)", borderBottom: "1px solid var(--border-default-grey)" }}>
+          <NetworkGraph />
+        </Container>
+        {integrationOptions.showClustersAnalytics && <NetworkClusters />}
+      </Container>
+    )
+  }
 
   return (
     <Container fluid className="panel-container">
