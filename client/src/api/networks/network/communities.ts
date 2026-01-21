@@ -125,7 +125,8 @@ async function communitiesAssignMetadata(graph: Graph, communities: NetworkCommu
 
   // Assign metadata to communities and await all promises
   await Promise.all(
-    communities.map(async (community, index) => {
+    communities.map(async (community) => {
+      const index = community.cluster - 1 // louvain assign 0-based index while vosviewer communities are 1-based
       // Get elastic data
       const [hits, aggs] = await Promise.all([
         networkSearchHits({ source, model, query, filters, links: communityGetLinks(graph, index) }),
