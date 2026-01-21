@@ -1,18 +1,6 @@
-import { Fragment, useState } from "react"
+import { useState } from "react"
 import { useIntl } from "react-intl"
-import {
-  Container,
-  Row,
-  Button,
-  Badge,
-  BadgeGroup,
-  Link,
-  Text,
-  Col,
-  Modal,
-  ModalContent,
-  ModalTitle,
-} from "@dataesr/dsfr-plus"
+import { Container, Row, Button, Link, Text, Modal, ModalContent, ModalTitle, ButtonGroup, Tag } from "@dataesr/dsfr-plus"
 import { NetworkCommunity, NetworkData } from "../../../../types/network"
 import useSearchData from "../../hooks/useSearchData"
 import useOptions from "../../hooks/useOptions"
@@ -21,6 +9,7 @@ import Separator from "../../../../components/separator"
 import { encode } from "../../../../utils/string"
 import { useNetworkContext } from "../../context"
 import ClustersButton from "./button"
+import "./styles.scss"
 
 const SEE_MORE_AFTER = 10
 
@@ -38,92 +27,111 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
   const { setFocusItem } = useNetworkContext()
   const metadata = community.metadata
 
-  const oaColor = (percent: number) => (percent >= 40.0 ? (percent >= 70.0 ? "success" : "yellow-moutarde") : "warning")
+  const oaColor = (percent: number) =>
+    percent >= 50.0 ? (percent >= 70.0 ? "success-425-625" : "yellow-tournesol-main-731") : "warning-425-625"
 
   return (
-    <Container fluid className="cluster-item">
-      <Row>
-        <Col>
-          <BadgeGroup>
-            <Badge
-              onClick={() => {
-                setShowNodesModal(true)
-              }}
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="purple-glycine"
-            >
-              {`${community.size} ${intl.formatMessage({
-                id: `networks.model.${currentModel}`,
-              })}`}
-            </Badge>
-            {metadata?.documentsCount && (
-              <Badge
-                onClick={() => {
-                  setShowDocumentsModal(true)
-                }}
-                style={{ cursor: "pointer" }}
-                size="sm"
-                color="pink-macaron"
-              >
-                {`${metadata?.documentsCount} ${intl.formatMessage({
-                  id: `networks.source.${currentSource}`,
-                })}`}
-              </Badge>
-            )}
-            {metadata?.oaPercent && (
-              <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
-                {`${intl.formatMessage({
-                  id: "networks.section.clusters.open-access",
-                })}: ${metadata?.oaPercent.toFixed(1)}%`}
-              </Badge>
-            )}
-            {metadata?.documentsMaxYear && (
-              <Badge size="sm" color="yellow-tournesol">
-                {`${intl.formatMessage({
-                  id: `networks.section.clusters.last-activity.${currentSource}`,
-                })}: ${metadata.documentsMaxYear || "N/A"}`}
-              </Badge>
-            )}
-            {metadata?.citationsRecent && (
-              <Badge size="sm" color="blue-cumulus">{`${intl.formatMessage(
-                { id: "networks.section.clusters.citations" },
-                { count: metadata.citationsRecent }
-              )} (${currentYear - 1}-${currentYear})`}</Badge>
-            )}
-            {metadata?.citationsScore && (
-              <Badge size="sm" color="blue-ecume">{`Citation score: ${metadata.citationsScore.toFixed(1)}`}</Badge>
-            )}
-          </BadgeGroup>
-        </Col>
-      </Row>
+    <Container fluid>
       <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
         {community.label}
       </Button>
-      <Text size="sm" className="fr-mb-0">
-        <i>
-          {community.nodes
-            .slice(0, 10)
-            .map((n) => n.label)
-            ?.join(", ")}
-        </i>
-        <i>{community.size > 10 ? ", ..." : "."}</i>
-      </Text>
-      <Text bold size="sm" className="fr-mb-0">
-        {metadata?.domains
-          ? Object.entries(metadata.domains)
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 10)
-              .map(([domain], k) => (
-                <Fragment key={k}>
-                  {k > 0 ? ", " : ""}
-                  <Link key={k} href={`/search/${currentSource}?q="${encode(domain)}"`}>
-                    #{domain}
-                  </Link>
-                </Fragment>
-              ))
-          : null}
-      </Text>
+      <Separator />
+      <Container fluid>
+        <ButtonGroup size="sm" isInlineFrom="xs">
+          <Button
+            className="fr-mb-0"
+            variant="text"
+            style={{ color: "var(--text-default-grey)" }}
+            icon="arrow-down-s-line"
+            iconPosition="right"
+            onClick={() => {
+              setShowNodesModal(true)
+            }}
+          >{`${community.size} ${intl.formatMessage({
+            id: `networks.model.${currentModel}`,
+          })}`}</Button>
+          {metadata?.documentsCount && (
+            <Button
+              className="fr-mb-0"
+              variant="text"
+              icon="arrow-down-s-line"
+              iconPosition="right"
+              onClick={() => {
+                setShowDocumentsModal(true)
+              }}
+              style={{ color: "var(--text-default-grey)" }}
+            >
+              {`${metadata?.documentsCount} ${intl.formatMessage({
+                id: `networks.source.${currentSource}`,
+              })}`}
+            </Button>
+          )}
+        </ButtonGroup>
+      </Container>
+      <Separator className="fr-mb-1w" />
+      <Row className="cluster-metrics fr-mt-1w">
+        {metadata?.citationsRecent && (
+          <div title="Number of citations over the last two years">
+            <i className="fr-icon-quote-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+            <Text as="span" size="sm">
+              {`${intl.formatMessage({ id: "networks.section.clusters.citations" }, { count: metadata.citationsRecent })} (${
+                currentYear - 1
+              }-${currentYear})`}
+            </Text>
+          </div>
+        )}
+        {metadata?.citationsScore && (
+          <div
+            title="Number of recent citations (over the last two years) divided by the number of total publications in the cluster.
+This score is intended to help detect hotspots in the communities."
+          >
+            <i className="fr-icon-star-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+            <Text as="span" size="sm">
+              {`Citations score: ${metadata.citationsScore.toFixed(1)}`}
+            </Text>
+          </div>
+        )}
+        {metadata?.oaPercent && (
+          <div title="Percentage of open access documents">
+            <i className="fr-icon-lock-unlock-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+            <Text style={{ color: `var(--${oaColor(metadata.oaPercent)})` }} as="span" size="sm">
+              {`${metadata.oaPercent.toFixed(0)}%`}
+            </Text>
+            <Text className="fr-ml-1v" as="span" size="sm">
+              {intl.formatMessage({ id: "networks.section.clusters.open-access" })}
+            </Text>
+          </div>
+        )}
+        {metadata?.documentsMaxYear && (
+          <div title="Most recent document">
+            <i className="fr-icon-calendar-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+            <Text as="span" size="sm">
+              {`${intl.formatMessage({ id: `networks.section.clusters.last-activity.${currentSource}` })}: ${
+                metadata.documentsMaxYear
+              }`}
+            </Text>
+          </div>
+        )}
+      </Row>
+      <Separator className="fr-my-1w" />
+      {metadata?.domains && (
+        <Container fluid>
+          {Object.entries(metadata.domains)
+            .sort((a, b) => b[1] - a[1])
+            .map(([domain], k) => (
+              <Tag
+                className="cluster-tag fr-mb-1w fr-mr-1v"
+                size="sm"
+                as="a"
+                href={`/search/${currentSource}?q="${encode(domain)}"`}
+                key={k}
+                target="_blank"
+              >
+                {domain}
+              </Tag>
+            ))}
+        </Container>
+      )}
       <Modal isOpen={showNodesModal} hide={() => setShowNodesModal(false)}>
         <ModalTitle>{intl.formatMessage({ id: `networks.model.${currentModel}` })}</ModalTitle>
         <ModalContent>
@@ -187,7 +195,14 @@ export default function NetworkClustersItems() {
       <>
         {!parameters.clusters && <ClustersButton />}
         {communities?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)?.map((community, index) => (
-          <div className="fr-card fr-p-1w fr-mb-2w" style={{ borderTop: `6px solid ${community.color}` }}>
+          <div
+            className="fr-card fr-p-1w fr-mb-2w"
+            style={{
+              borderLeft: `6px solid ${community.color}`,
+              borderRadius: "5px",
+              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
+            }}
+          >
             <ClusterItem key={index} currentModel={currentModel} community={community} />
           </div>
         ))}
