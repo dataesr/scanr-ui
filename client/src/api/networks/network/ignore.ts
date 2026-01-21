@@ -115,7 +115,6 @@ export function mergeNodesFromLabel(graph: Graph, model: string) {
         label: attr.label,
         weight: attr.weight + dupeAttr.weight - masterLinkWeight,
         links: [...attr.links, ...dupeAttr.links],
-        ...(attr?.maxYear || (dupeAttr?.maxYear && { maxYear: Math.max(attr?.maxYear || 0, dupeAttr?.maxYear || 0) })),
       }))
 
       // merge edges

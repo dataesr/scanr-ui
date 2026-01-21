@@ -65,7 +65,6 @@ export async function networkSearch({
   const modelAggregation = {
     [model]: {
       terms: { field: CONFIG[source][model].co_aggregation, size: DEFAULT_SIZE },
-      aggs: { max_year: { max: { field: "year" } } },
     },
   }
   // if filters: use standard sampler (top MAX_SIZE documents that match the query)
@@ -113,7 +112,12 @@ export async function networkSearch({
     throw new Error(`Elasticsearch error: no co-${model} aggregation found for query ${query}`)
   }
 
-  const network = await networkCreate(source, query, model, filters, aggregation, parameters, lang, integration)
+  const network = await networkCreate(source, query, model, filters, aggregation, parameters, lang, integration).catch(
+    (error) => {
+      console.error(error)
+      return null
+    }
+  )
   const config = configCreate(source, model)
   const info = infoCreate(source, query, model)
 
@@ -196,6 +200,7 @@ export async function networkSearchAggs({
       documentsByYear: {
         terms: { field: "year", include: DEFAULT_YEARS, size: DEFAULT_YEARS.length },
       },
+      documentsMaxYear: { max: { field: "year" } },
       ...DEFAULT_YEARS.reduce(
         (acc, year) => (acc = { ...acc, [`citationsIn${year}`]: { sum: { field: `cited_by_counts_by_year.${year}` } } }),
         {}

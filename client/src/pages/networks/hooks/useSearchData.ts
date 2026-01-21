@@ -27,6 +27,7 @@ export default function useSearchData(forceClusters?: boolean) {
         integration: integrationId,
         filters,
       }),
+    placeholderData: (previousData) => previousData,
   })
 
   const values = useMemo(() => {

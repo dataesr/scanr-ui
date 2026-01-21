@@ -1,19 +1,6 @@
-import { Fragment, useState } from "react"
+import { useState } from "react"
 import { useIntl } from "react-intl"
-import {
-  Container,
-  Row,
-  Button,
-  Badge,
-  BadgeGroup,
-  Link,
-  Text,
-  Col,
-  Modal,
-  ModalContent,
-  ModalTitle,
-} from "@dataesr/dsfr-plus"
-import { PageSection } from "../../../../components/page-content"
+import { Container, Row, Button, Link, Text, Modal, ModalContent, ModalTitle, ButtonGroup, Tag } from "@dataesr/dsfr-plus"
 import { NetworkCommunity, NetworkData } from "../../../../types/network"
 import useSearchData from "../../hooks/useSearchData"
 import useOptions from "../../hooks/useOptions"
@@ -22,116 +9,136 @@ import Separator from "../../../../components/separator"
 import { encode } from "../../../../utils/string"
 import { useNetworkContext } from "../../context"
 import ClustersButton from "./button"
+import "./styles.scss"
 
 const SEE_MORE_AFTER = 10
 
-type ClusterItemArgs = {
+interface ClusterItemArgs {
   currentModel: string
   community: NetworkCommunity
+  isFetching: boolean
 }
 
-function ClusterItem({ currentModel, community }: ClusterItemArgs) {
-  const intl = useIntl();
-  const currentYear = new Date().getFullYear();
-  const { currentSource } = useOptions();
-  const [showNodesModal, setShowNodesModal] = useState(false);
-  const [showDocumentsModal, setShowDocumentsModal] = useState(false);
-  const { setFocusItem } = useNetworkContext();
+function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
+  const intl = useIntl()
+  const currentYear = new Date().getFullYear()
+  const { currentSource } = useOptions()
+  const [showNodesModal, setShowNodesModal] = useState(false)
+  const [showDocumentsModal, setShowDocumentsModal] = useState(false)
+  const { setFocusItem } = useNetworkContext()
   const metadata = community.metadata
 
-  const oaColor = (percent: number) => (percent >= 40.0 ? (percent >= 70.0 ? "success" : "yellow-moutarde") : "warning")
+  const oaColor = (percent: number) =>
+    percent >= 50.0 ? (percent >= 70.0 ? "success-425-625" : "yellow-tournesol-main-731") : "warning-425-625"
 
   return (
-    <Container fluid className="cluster-item">
-      <Row>
-        <Col>
-          <BadgeGroup>
-            <Badge
-              onClick={() => {
-                setShowNodesModal(true)
-              }}
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="purple-glycine"
-            >
-              {`${community.size} ${intl.formatMessage({
-                id: `networks.model.${currentModel}`,
-              })}`}
-            </Badge>
-            <Badge
+    <Container fluid>
+      <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
+        {community.label}
+      </Button>
+      <Separator />
+      <Container fluid>
+        <ButtonGroup size="sm" isInlineFrom="xs">
+          <Button
+            className="fr-mb-0"
+            variant="text"
+            style={{ color: "var(--text-default-grey)" }}
+            icon="arrow-down-s-line"
+            iconPosition="right"
+            onClick={() => {
+              setShowNodesModal(true)
+            }}
+          >{`${community.size} ${intl.formatMessage({
+            id: `networks.model.${currentModel}`,
+          })}`}</Button>
+          {metadata?.documentsCount && (
+            <Button
+              className="fr-mb-0"
+              variant="text"
+              icon="arrow-down-s-line"
+              iconPosition="right"
               onClick={() => {
                 setShowDocumentsModal(true)
               }}
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="pink-macaron"
+              style={{ color: "var(--text-default-grey)" }}
             >
               {`${metadata?.documentsCount} ${intl.formatMessage({
                 id: `networks.source.${currentSource}`,
               })}`}
-            </Badge>
+            </Button>
+          )}
+        </ButtonGroup>
+      </Container>
+      {!!metadata ? (
+        <Container fluid>
+          <Separator className="fr-mb-1w" />
+          <Row className="cluster-metrics fr-mt-1w">
+            {metadata?.citationsRecent && (
+              <div title="Number of citations over the last two years">
+                <i className="fr-icon-quote-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+                <Text as="span" size="sm">
+                  {`${intl.formatMessage(
+                    { id: "networks.section.clusters.citations" },
+                    { count: metadata.citationsRecent }
+                  )} (${currentYear - 1}-${currentYear})`}
+                </Text>
+              </div>
+            )}
+            {metadata?.citationsScore && (
+              <div
+                title="Number of recent citations (over the last two years) divided by the number of total publications in the cluster.&#10;This score is intended to help detect hotspots in the communities."
+              >
+                <i className="fr-icon-star-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+                <Text as="span" size="sm">
+                  {`Citations score: ${metadata.citationsScore.toFixed(1)}`}
+                </Text>
+              </div>
+            )}
             {metadata?.oaPercent && (
-              <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
-                {`${intl.formatMessage({
-                  id: "networks.section.clusters.open-access",
-                })}: ${metadata?.oaPercent.toFixed(1)}%`}
-              </Badge>
+              <div title="Percentage of open access documents">
+                <i className="fr-icon-lock-unlock-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+                <Text style={{ color: `var(--${oaColor(metadata.oaPercent)})` }} as="span" size="sm">
+                  {`${metadata.oaPercent.toFixed(0)}%`}
+                </Text>
+                <Text className="fr-ml-1v" as="span" size="sm">
+                  {intl.formatMessage({ id: "networks.section.clusters.open-access" })}
+                </Text>
+              </div>
             )}
-            <Badge size="sm" color="yellow-tournesol">
-              {`${intl.formatMessage({
-                id: `networks.section.clusters.last-activity.${currentSource}`,
-              })}: ${community?.maxYear || "N/A"}`}
-            </Badge>
-            {currentSource === "publications" && (
-              <Badge size="sm" color="blue-cumulus">{`${intl.formatMessage(
-                { id: "networks.section.clusters.citations" },
-                { count: metadata?.citationsRecent }
-              )} (${currentYear - 1}-${currentYear})`}</Badge>
+            {metadata?.documentsMaxYear && (
+              <div title="Most recent document">
+                <i className="fr-icon-calendar-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
+                <Text as="span" size="sm">
+                  {`${intl.formatMessage({ id: `networks.section.clusters.last-activity.${currentSource}` })}: ${
+                    metadata.documentsMaxYear
+                  }`}
+                </Text>
+              </div>
             )}
-            {currentSource === "publications" && (
-              <Badge size="sm" color="blue-ecume">{`Citation score: ${metadata?.citationsScore.toFixed(1)}`}</Badge>
-            )}
-          </BadgeGroup>
-        </Col>
-      </Row>
-      <Row>
-        <div
-          style={{
-            alignContent: "center",
-            paddingRight: "0.5rem",
-            color: `${community.color}`,
-          }}
-        >
-          {"█"}{" "}
-        </div>
-        <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
-          {community.label}
-        </Button>
-      </Row>
-      <Text size="sm" className="fr-mb-0">
-        <i>
-          {community.nodes
-            .slice(0, 10)
-            .map((n) => n.label)
-            ?.join(", ")}
-        </i>
-        <i>{community.size > 10 ? ", ..." : "."}</i>
-      </Text>
-      <Text bold size="sm" className="fr-mb-0">
-        {metadata?.domains
-          ? Object.entries(metadata.domains)
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 10)
-              .map(([domain], k) => (
-                <Fragment key={k}>
-                  {k > 0 ? ", " : ""}
-                  <Link key={k} href={`/search/${currentSource}?q="${encode(domain)}"`}>
-                    #{domain}
-                  </Link>
-                </Fragment>
-              ))
-          : null}
-      </Text>
+          </Row>
+          <Separator className="fr-my-1w" />
+          {metadata?.domains && (
+            <Container fluid>
+              {Object.entries(metadata.domains)
+                .sort((a, b) => b[1] - a[1])
+                .map(([domain], k) => (
+                  <Tag
+                    className="cluster-tag fr-mb-1w fr-mr-1v"
+                    size="sm"
+                    as="a"
+                    href={`/search/${currentSource}?q="${encode(domain)}"`}
+                    key={k}
+                    target="_blank"
+                  >
+                    {domain}
+                  </Tag>
+                ))}
+            </Container>
+          )}
+        </Container>
+      ) : isFetching ? (
+        <BaseSkeleton width="100%" height="10rem" className="fr-my-1v" />
+      ) : null}
       <Modal isOpen={showNodesModal} hide={() => setShowNodesModal(false)}>
         <ModalTitle>{intl.formatMessage({ id: `networks.model.${currentModel}` })}</ModalTitle>
         <ModalContent>
@@ -173,67 +180,61 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
 }
 
 export default function NetworkClustersItems() {
-  const intl = useIntl();
-  const { currentModel, parameters } = useOptions();
-  const { search } = useSearchData();
-  const [seeMore, setSeeMore] = useState(false);
+  const intl = useIntl()
+  const { currentModel, parameters } = useOptions()
+  const { search } = useSearchData()
+  const [seeMore, setSeeMore] = useState(false)
 
-  const network = search?.data?.network as NetworkData;
-  const communities = network?.clusters;
-  const sectionTitle = `networks.section.clusters.${currentModel}`;
+  const network = search?.data?.network as NetworkData
+  const communities = network?.clusters
 
-  if (!parameters.clusters) return <ClustersButton />
-
-  if (search.isFetching)
+  if (!search?.data && search?.isFetching)
     return (
       <Container fluid className="fr-mt-2w">
         <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
       </Container>
-    );
+    )
 
   return (
     <Container fluid>
-      <PageSection
-        size="lead"
-        show={true}
-        title={intl.formatMessage(
-          { id: sectionTitle },
-          { count: communities?.length }
-        )}
-        icon="shapes-line"
-      >
-        <>
-          <div className="cluster-list">
-            {communities
-              ?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)
-              ?.map((community, index) => (
-                <ClusterItem
-                  key={index}
-                  currentModel={currentModel}
-                  community={community}
-                />
-              ))}
+      <>
+        {!parameters.clusters && <ClustersButton />}
+        {communities?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)?.map((community, index) => (
+          <div
+            className="fr-card fr-p-1w fr-mb-2w"
+            style={{
+              borderLeft: `6px solid ${community.color}`,
+              borderRadius: "5px",
+              boxShadow: "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px",
+            }}
+          >
+            <ClusterItem
+              key={index}
+              currentModel={currentModel}
+              community={community}
+              isFetching={Boolean(parameters.clusters && search.isFetching)}
+            />
           </div>
-          {communities?.length > SEE_MORE_AFTER ? (
-            <Separator className="fr-my-2w">
-              <Button
-                icon={seeMore ? "arrow-up-s-line" : "arrow-down-s-line"}
-                variant="text"
-                onClick={() => setSeeMore((prev: boolean) => !prev)}
-              >
-                {seeMore
-                  ? intl.formatMessage({
-                      id: "networks.section.clusters.see-less",
-                    })
-                  : intl.formatMessage(
-                      { id: "networks.section.clusters.see-more" },
-                      { count: communities?.length - SEE_MORE_AFTER }
-                    )}
-              </Button>
-            </Separator>
-          ) : null}
-        </>
-      </PageSection>
+        ))}
+        {communities?.length > SEE_MORE_AFTER ? (
+          <Separator className="fr-my-2w">
+            <Button
+              icon={seeMore ? "arrow-up-s-line" : "arrow-down-s-line"}
+              variant="text"
+              onClick={() => setSeeMore((prev: boolean) => !prev)}
+            >
+              {seeMore
+                ? intl.formatMessage({
+                    id: "networks.section.clusters.see-less",
+                  })
+                : intl.formatMessage(
+                    { id: "networks.section.clusters.see-more" },
+                    { count: communities?.length - SEE_MORE_AFTER }
+                  )}
+            </Button>
+          </Separator>
+        ) : null}
+      </>
     </Container>
-  );
+  )
 }
