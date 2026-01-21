@@ -57,18 +57,20 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
                 id: `networks.model.${currentModel}`,
               })}`}
             </Badge>
-            <Badge
-              onClick={() => {
-                setShowDocumentsModal(true)
-              }}
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="pink-macaron"
-            >
-              {`${metadata?.documentsCount} ${intl.formatMessage({
-                id: `networks.source.${currentSource}`,
-              })}`}
-            </Badge>
+            {metadata?.documentsCount && (
+              <Badge
+                onClick={() => {
+                  setShowDocumentsModal(true)
+                }}
+                style={{ cursor: "pointer" }}
+                size="sm"
+                color="pink-macaron"
+              >
+                {`${metadata?.documentsCount} ${intl.formatMessage({
+                  id: `networks.source.${currentSource}`,
+                })}`}
+              </Badge>
+            )}
             {metadata?.oaPercent && (
               <Badge noIcon size="sm" color={oaColor(metadata?.oaPercent)}>
                 {`${intl.formatMessage({
@@ -76,19 +78,21 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
                 })}: ${metadata?.oaPercent.toFixed(1)}%`}
               </Badge>
             )}
-            <Badge size="sm" color="yellow-tournesol">
-              {`${intl.formatMessage({
-                id: `networks.section.clusters.last-activity.${currentSource}`,
-              })}: ${community?.maxYear || "N/A"}`}
-            </Badge>
-            {currentSource === "publications" && (
+            {metadata?.documentsMaxYear && (
+              <Badge size="sm" color="yellow-tournesol">
+                {`${intl.formatMessage({
+                  id: `networks.section.clusters.last-activity.${currentSource}`,
+                })}: ${metadata.documentsMaxYear || "N/A"}`}
+              </Badge>
+            )}
+            {metadata?.citationsRecent && (
               <Badge size="sm" color="blue-cumulus">{`${intl.formatMessage(
                 { id: "networks.section.clusters.citations" },
-                { count: metadata?.citationsRecent }
+                { count: metadata.citationsRecent }
               )} (${currentYear - 1}-${currentYear})`}</Badge>
             )}
-            {currentSource === "publications" && (
-              <Badge size="sm" color="blue-ecume">{`Citation score: ${metadata?.citationsScore.toFixed(1)}`}</Badge>
+            {metadata?.citationsScore && (
+              <Badge size="sm" color="blue-ecume">{`Citation score: ${metadata.citationsScore.toFixed(1)}`}</Badge>
             )}
           </BadgeGroup>
         </Col>
@@ -169,7 +173,7 @@ export default function NetworkClustersItems() {
   const network = search?.data?.network as NetworkData
   const communities = network?.clusters
 
-  if (!parameters.clusters) return <ClustersButton />
+  // if (!parameters.clusters) return <ClustersButton />
 
   if (search.isFetching)
     return (
@@ -181,6 +185,7 @@ export default function NetworkClustersItems() {
   return (
     <Container fluid>
       <>
+        {!parameters.clusters && <ClustersButton />}
         {communities?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)?.map((community, index) => (
           <div className="fr-card fr-p-1w fr-mb-2w" style={{ borderTop: `6px solid ${community.color}` }}>
             <ClusterItem key={index} currentModel={currentModel} community={community} />

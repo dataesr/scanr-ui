@@ -38,11 +38,6 @@ const communityGetIds = (graph: Graph, community: number): Array<string> =>
 const communityGetSize = (graph: Graph, community: number): number =>
   graph.filterNodes((_, attr) => attr?.community === community).length
 
-const communityGetMaxYear = (graph: Graph, community: number): number => {
-  const maxYear = Math.max(...communityGetAttribute(graph, community, "maxYear").map(Number))
-  return Number.isFinite(maxYear) ? maxYear : undefined
-}
-
 const communityGetNodes = (graph: Graph, community: number): Array<{ id: string; weight: number; label: string }> => {
   const ids = communityGetIds(graph, community)
   const nodes = ids.map((id) => ({
@@ -58,6 +53,8 @@ const communityGetDocumentsCount = (aggs: ElasticAggregations): number => aggs?.
 
 const communityGetDocumentsByYear = (aggs: ElasticAggregations): Record<string, number> =>
   aggs?.documentsByYear?.buckets.reduce((acc, bucket) => ({ ...acc, [bucket.key]: bucket.doc_count }), {})
+
+const communityGetDocumentsMaxYear = (aggs: ElasticAggregations): number => aggs?.documentsMaxYear?.value || 0
 
 const communityGetCitationsByYear = (aggs: ElasticAggregations): Record<string, number> =>
   Object.entries(aggs)
@@ -104,6 +101,7 @@ const communityGetNodesInfos = (hits: ElasticHits, source: string, model: string
       acc[id] = {
         ...acc?.[id],
         documentsCount: acc?.[id]?.documentsCount ? acc[id].documentsCount + 1 : 1,
+        documentsMaxYear: acc?.[id]?.documentsMaxYear ? Math.max(acc[id].documentsMaxYear, hit.year) : hit.year,
         citationsByYear: {
           ...citationsByYear,
           ...(acc?.[id]?.citationsByYear &&
@@ -139,12 +137,14 @@ async function communitiesAssignMetadata(graph: Graph, communities: NetworkCommu
         communityGetIds(graph, index).forEach((key) => {
           if (!Object.keys(nodesInfos).includes(key)) return
           const nodeInfos = nodesInfos[key]
-          const nodeCitationsByYear = nodeInfos?.citationsByYear
           const nodeDocumentsCount = nodeInfos.documentsCount
+          const nodeDocumentsMaxYear = nodeInfos.documentsMaxYear
+          const nodeCitationsByYear = nodeInfos?.citationsByYear
           const nodeCitationsCount = nodeGetCitationsCount(nodeCitationsByYear)
           const nodeCitationsRecent = nodeGetCitationsRecent(nodeCitationsByYear)
           const nodeCitationsScore = nodeCitationsRecent / (nodeDocumentsCount || 1) || 0
           graph.setNodeAttribute(key, "documentsCount", nodeDocumentsCount)
+          graph.setNodeAttribute(key, "documentsMaxYear", nodeDocumentsMaxYear)
           graph.setNodeAttribute(key, "citationsCount", nodeCitationsCount)
           graph.setNodeAttribute(key, "citationsRecent", nodeCitationsRecent)
           graph.setNodeAttribute(key, "citationsScore", nodeCitationsScore)
@@ -153,8 +153,9 @@ async function communitiesAssignMetadata(graph: Graph, communities: NetworkCommu
 
       community.metadata = {
         ...(aggs && {
-          documentsByYear: communityGetDocumentsByYear(aggs),
           documentsCount: communityGetDocumentsCount(aggs),
+          documentsByYear: communityGetDocumentsByYear(aggs),
+          documentsMaxYear: communityGetDocumentsMaxYear(aggs),
           citationsByYear: communityGetCitationsByYear(aggs),
           citationsCount: communityGetCitationsCount(aggs),
           citationsRecent: communityGetCitationsRecent(aggs),
@@ -193,7 +194,6 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
       color: COLORS?.[index] ?? "#e2e2e2",
       size: communityGetSize(graph, index),
       nodes: communityGetNodes(graph, index),
-      maxYear: communityGetMaxYear(graph, index),
     }
     return community
   })

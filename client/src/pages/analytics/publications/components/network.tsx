@@ -48,7 +48,7 @@ function ClusterItem({ community }: ClusterItemArgs) {
               {`Accès ouvert: ${community.metadata.oaPercent.toFixed(1)}%`}
             </Badge>
             <Badge size="sm" color="yellow-tournesol">
-              {`Dernière publication: ${community?.maxYear || "N/A"}`}
+              {`Dernière publication: ${community.metadata.documentsMaxYear || "N/A"}`}
             </Badge>
             {currentSource === "publications" && (
               <Badge size="sm" color="blue-cumulus">{`Citations: ${community.metadata.citationsRecent} (${
