@@ -13,7 +13,6 @@ import {
   ModalContent,
   ModalTitle,
 } from "@dataesr/dsfr-plus"
-import { PageSection } from "../../../../components/page-content"
 import { NetworkCommunity, NetworkData } from "../../../../types/network"
 import useSearchData from "../../hooks/useSearchData"
 import useOptions from "../../hooks/useOptions"
@@ -31,12 +30,12 @@ type ClusterItemArgs = {
 }
 
 function ClusterItem({ currentModel, community }: ClusterItemArgs) {
-  const intl = useIntl();
-  const currentYear = new Date().getFullYear();
-  const { currentSource } = useOptions();
-  const [showNodesModal, setShowNodesModal] = useState(false);
-  const [showDocumentsModal, setShowDocumentsModal] = useState(false);
-  const { setFocusItem } = useNetworkContext();
+  const intl = useIntl()
+  const currentYear = new Date().getFullYear()
+  const { currentSource } = useOptions()
+  const [showNodesModal, setShowNodesModal] = useState(false)
+  const [showDocumentsModal, setShowDocumentsModal] = useState(false)
+  const { setFocusItem } = useNetworkContext()
   const metadata = community.metadata
 
   const oaColor = (percent: number) => (percent >= 40.0 ? (percent >= 70.0 ? "success" : "yellow-moutarde") : "warning")
@@ -94,20 +93,9 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
           </BadgeGroup>
         </Col>
       </Row>
-      <Row>
-        <div
-          style={{
-            alignContent: "center",
-            paddingRight: "0.5rem",
-            color: `${community.color}`,
-          }}
-        >
-          {"█"}{" "}
-        </div>
-        <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
-          {community.label}
-        </Button>
-      </Row>
+      <Button variant="text" className="fr-link" onClick={() => setFocusItem(community.nodes[0].label)}>
+        {community.label}
+      </Button>
       <Text size="sm" className="fr-mb-0">
         <i>
           {community.nodes
@@ -173,14 +161,13 @@ function ClusterItem({ currentModel, community }: ClusterItemArgs) {
 }
 
 export default function NetworkClustersItems() {
-  const intl = useIntl();
-  const { currentModel, parameters } = useOptions();
-  const { search } = useSearchData();
-  const [seeMore, setSeeMore] = useState(false);
+  const intl = useIntl()
+  const { currentModel, parameters } = useOptions()
+  const { search } = useSearchData()
+  const [seeMore, setSeeMore] = useState(false)
 
-  const network = search?.data?.network as NetworkData;
-  const communities = network?.clusters;
-  const sectionTitle = `networks.section.clusters.${currentModel}`;
+  const network = search?.data?.network as NetworkData
+  const communities = network?.clusters
 
   if (!parameters.clusters) return <ClustersButton />
 
@@ -189,51 +176,35 @@ export default function NetworkClustersItems() {
       <Container fluid className="fr-mt-2w">
         <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
       </Container>
-    );
+    )
 
   return (
     <Container fluid>
-      <PageSection
-        size="lead"
-        show={true}
-        title={intl.formatMessage(
-          { id: sectionTitle },
-          { count: communities?.length }
-        )}
-        icon="shapes-line"
-      >
-        <>
-          <div className="cluster-list">
-            {communities
-              ?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)
-              ?.map((community, index) => (
-                <ClusterItem
-                  key={index}
-                  currentModel={currentModel}
-                  community={community}
-                />
-              ))}
+      <>
+        {communities?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)?.map((community, index) => (
+          <div className="fr-card fr-p-1w fr-mb-2w" style={{ borderTop: `6px solid ${community.color}` }}>
+            <ClusterItem key={index} currentModel={currentModel} community={community} />
           </div>
-          {communities?.length > SEE_MORE_AFTER ? (
-            <Separator className="fr-my-2w">
-              <Button
-                icon={seeMore ? "arrow-up-s-line" : "arrow-down-s-line"}
-                variant="text"
-                onClick={() => setSeeMore((prev: boolean) => !prev)}
-              >
-                {seeMore
-                  ? intl.formatMessage({
-                      id: "networks.section.clusters.see-less",
-                    })
-                  : intl.formatMessage(
-                      { id: "networks.section.clusters.see-more" },
-                      { count: communities?.length - SEE_MORE_AFTER }
-                    )}
-              </Button>
-            </Separator>
-          ) : null}
-        </>
-      </PageSection>
+        ))}
+        {communities?.length > SEE_MORE_AFTER ? (
+          <Separator className="fr-my-2w">
+            <Button
+              icon={seeMore ? "arrow-up-s-line" : "arrow-down-s-line"}
+              variant="text"
+              onClick={() => setSeeMore((prev: boolean) => !prev)}
+            >
+              {seeMore
+                ? intl.formatMessage({
+                    id: "networks.section.clusters.see-less",
+                  })
+                : intl.formatMessage(
+                    { id: "networks.section.clusters.see-more" },
+                    { count: communities?.length - SEE_MORE_AFTER }
+                  )}
+            </Button>
+          </Separator>
+        ) : null}
+      </>
     </Container>
-  );
+  )
 }

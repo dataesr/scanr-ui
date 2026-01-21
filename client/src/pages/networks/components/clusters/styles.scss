@@ -47,8 +47,9 @@
   &__content {
     flex: 1;
     margin-top: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     overflow-y: auto;
-    animation: fadeIn 0.3s ease;
   }
 }
 
