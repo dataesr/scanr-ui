@@ -41,7 +41,7 @@ export default function useOptions() {
   const handleParameterChange = useCallback(
     (parameter: string, value: NetworkParameter) => {
       searchParams.set(parameter, String(value))
-      searchParams.delete("clusters")
+      if (parameter !== "clusters") searchParams.delete("clusters")
       setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
