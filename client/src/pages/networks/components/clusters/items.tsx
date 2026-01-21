@@ -188,7 +188,7 @@ export default function NetworkClustersItems() {
   const network = search?.data?.network as NetworkData
   const communities = network?.clusters
 
-  if (!parameters.clusters && search.isFetching)
+  if (!search?.data && search?.isFetching)
     return (
       <Container fluid className="fr-mt-2w">
         <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />

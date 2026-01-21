@@ -4,6 +4,9 @@ import useSearchData from "../../hooks/useSearchData"
 import AnalyticsGraph from "../../../../components/analytics-graph"
 import { Container, Select, SelectOption, Text } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
+import { isInProduction } from "../../../../utils/helpers"
+import useOptions from "../../hooks/useOptions"
+import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
@@ -69,6 +72,8 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 }
 
 function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }) {
+  const { currentModel } = useOptions()
+
   if (!clusters) return null
   const data = clusters?.map(({ label, color, metrics }) => ({
     label,
@@ -81,14 +86,18 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
     x: "centrality",
     title_yaxis: "Density",
     title_xaxis: "Centrality",
+    themesName: currentModel.toLowerCase(),
     useColorFromData: true,
   })
 
   return (
     <Container fluid>
-      <Text size="lead">Clusters quadrants</Text>
       {data && (
-        <AnalyticsGraph title="Clusters importance" description="Clusters degree vs centrality" options={quadrantOptions} />
+        <AnalyticsGraph
+          title="Communities quadrants"
+          description="Quadrants of the communities strategic diagram"
+          options={quadrantOptions}
+        />
       )}
     </Container>
   )
@@ -96,10 +105,12 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
 export default function NetworkQuadrants() {
   const { search } = useSearchData()
 
+  if (!search?.data && search?.isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
+
   return (
     <Container fluid style={{ width: "100%" }}>
       <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
-      <NetworkNodesQuadrants nodes={search?.data?.network?.items} />
+      {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
     </Container>
   )
 }

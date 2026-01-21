@@ -1,10 +1,14 @@
 import Highcharts from "highcharts";
-import exportingModule from "highcharts/modules/exporting";
-import exportingDataModule from "highcharts/modules/export-data";
+import moreModule from "highcharts/highcharts-more"
+import annotationsModule from "highcharts/modules/annotations"
+import exportingModule from "highcharts/modules/exporting"
+import exportingDataModule from "highcharts/modules/export-data"
 
-if (typeof Highcharts === 'object') {
-  exportingModule(Highcharts);
-  exportingDataModule(Highcharts);
+if (typeof Highcharts === "object") {
+  moreModule(Highcharts)
+  annotationsModule(Highcharts)
+  exportingModule(Highcharts)
+  exportingDataModule(Highcharts)
 }
 
 Highcharts.setOptions({
