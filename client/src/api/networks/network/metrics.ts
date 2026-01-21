@@ -50,14 +50,19 @@ function computeClusteringCoefficient(graph: Graph, node: string): number {
 }
 
 export function assignNodeMetrics(graph: Graph) {
-  // Assign centrality metrics to node attributes
+  // Assign centrality metrics to nodes
   betweennessCentrality.assign(graph, {
     getEdgeWeight: null,
     normalized: true,
   })
   degreeCentrality.assign(graph)
   closenessCentrality.assign(graph)
-  eigenvectorCentrality.assign(graph)
+  try {
+    // Sometimes it doesnt convert
+    eigenvectorCentrality.assign(graph)
+  } catch (error) {
+    console.error(error)
+  }
   pagerank.assign(graph)
 
   // Compute and assign all metrics to nodes
@@ -77,7 +82,7 @@ export function assignNodeMetrics(graph: Graph) {
         betweennessCentrality: attr.betweennessCentrality,
         degreeCentrality: attr.degreeCentrality,
         closenessCentrality: attr.closenessCentrality,
-        eigenvectorCentrality: attr.eigenvectorCentrality,
+        eigenvectorCentrality: attr?.eigenvectorCentrality,
         pagerank: attr.pagerank,
         // Density metrics
         localDensity,

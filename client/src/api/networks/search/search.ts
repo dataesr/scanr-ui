@@ -112,7 +112,12 @@ export async function networkSearch({
     throw new Error(`Elasticsearch error: no co-${model} aggregation found for query ${query}`)
   }
 
-  const network = await networkCreate(source, query, model, filters, aggregation, parameters, lang, integration)
+  const network = await networkCreate(source, query, model, filters, aggregation, parameters, lang, integration).catch(
+    (error) => {
+      console.error(error)
+      return null
+    }
+  )
   const config = configCreate(source, model)
   const info = infoCreate(source, query, model)
 
