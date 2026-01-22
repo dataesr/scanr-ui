@@ -6,7 +6,7 @@ import { networkSearchHits, networkSearchAggs } from "../search/search"
 import { ElasticHits, NetworkCommunities, NetworkFilters } from "../../../types/network"
 import { mistralAssignClustersLabels } from "./mistralai"
 import { COLORS } from "../_utils/constants"
-import { GetColorName } from "hex-color-to-color-name"
+// import { GetColorName } from "hex-color-to-color-name"
 import { configGetItemPage } from "./config"
 import { CONFIG } from "./config"
 import { nodeGetId } from "./network"
@@ -188,12 +188,14 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
 
   // Create communities array
   const communities = Array.from({ length: count }, (_, index) => {
+    const communityNodes = communityGetNodes(graph, index)
     const community = {
       cluster: index + 1,
-      label: COLORS?.[index] ? GetColorName(COLORS[index]) : `Unnamed ${index + 1}`,
+      // label: COLORS?.[index] ? GetColorName(COLORS[index]) : `Unnamed ${index + 1}`,
+      label: `${communityNodes[0].label} (+${communityNodes.length - 1})`,
       color: COLORS?.[index] ?? "#e2e2e2",
       size: communityGetSize(graph, index),
-      nodes: communityGetNodes(graph, index),
+      nodes: communityNodes,
     }
     return community
   })
