@@ -781,6 +781,45 @@ export const questions = [
     },
   },
   {
+    key: "q63",
+    groupkey: "networks",
+    icon: "fas fa-question-circle",
+    label: {
+      fr: "Qu'est-ce qu'un diagramme stratégique (quadrant de Callon) ?",
+      en: "What is a strategic diagram (Callon quadrant)?",
+    },
+    definition: {
+      fr: "Le diagramme stratégique, également connu sous le nom de quadrant de Callon, est un outil d'analyse bibliométrique permettant de positionner les communautés d'un réseau selon deux axes : la <b>centralité</b> (axe horizontal) et la <b>densité</b> (axe vertical).<br></br> Ce diagramme divise l'espace en quatre quadrants permettant d'identifier le rôle stratégique de chaque communauté dans le réseau : les thèmes moteurs, les thèmes de niche, les thèmes basiques et transversaux, et les thèmes émergents ou en déclin.<br></br> Cette visualisation aide à comprendre la structure thématique d'un domaine de recherche et son évolution.",
+      en: "The strategic diagram, also known as the Callon quadrant, is a bibliometric analysis tool used to position network communities along two axes: <b>centrality</b> (horizontal axis) and <b>density</b> (vertical axis).<br></br> This diagram divides the space into four quadrants to identify the strategic role of each community in the network: motor themes, niche themes, basic and transversal themes, and emerging or declining themes.<br></br> This visualization helps understand the thematic structure of a research field and its evolution.",
+    },
+  },
+  {
+    key: "q64",
+    groupkey: "networks",
+    icon: "fas fa-question-circle",
+    label: {
+      fr: "Comment sont calculées la densité et la centralité des communautés ?",
+      en: "How are community density and centrality calculated?",
+    },
+    definition: {
+      fr: "Pour chaque communauté, nous calculons deux métriques clés :<br></br><ul><li><b>Densité</b> : mesure la cohésion interne d'une communauté. Elle correspond à la somme des poids des liens internes entre les nœuds de la communauté. Une densité élevée indique que les membres de la communauté sont fortement interconnectés entre eux.</li><li><b>Centralité</b> : mesure l'importance d'une communauté dans le réseau global. Elle correspond à la somme des poids des liens externes qui connectent la communauté aux autres nœuds du réseau. Une centralité élevée indique que la communauté occupe une position centrale et est bien connectée au reste du réseau.</li></ul><br></br>Ces métriques sont normalisées (mise à l'échelle min-max) pour permettre une comparaison équitable entre communautés de tailles différentes.",
+      en: "For each community, we calculate two key metrics:<br></br><ul><li><b>Density</b>: measures the internal cohesion of a community. It corresponds to the sum of weights of internal edges between nodes within the community. A high density indicates that community members are strongly interconnected with each other.</li><li><b>Centrality</b>: measures the importance of a community in the overall network. It corresponds to the sum of weights of external edges connecting the community to other nodes in the network. A high centrality indicates that the community occupies a central position and is well connected to the rest of the network.</li></ul><br></br>These metrics are normalized (min-max scaling) to allow a fair comparison between communities of different sizes.",
+    },
+  },
+  {
+    key: "q65",
+    groupkey: "networks",
+    icon: "fas fa-question-circle",
+    label: {
+      fr: "Comment interpréter les quatre quadrants du diagramme stratégique ?",
+      en: "How to interpret the four quadrants of the strategic diagram?",
+    },
+    definition: {
+      fr: "Le diagramme stratégique est centré sur les médianes de centralité et de densité, ce qui divise naturellement l'espace en quatre quadrants :<br></br><ul><li><h3>Thèmes moteurs (en haut à droite)</h3>Haute centralité, haute densité. Ces thèmes sont à la fois bien développés en interne et centraux dans le réseau. Ils représentent les axes de recherche principaux et structurants du domaine.</li><li><h3>Thèmes de niche ou isolés (en haut à gauche)</h3>Basse centralité, haute densité. Ces thèmes sont très développés en interne mais peu connectés au reste du réseau. Ils peuvent représenter des domaines spécialisés ou des thématiques périphériques bien établies.</li><li><h3>Thèmes émergents ou en déclin (en bas à gauche)</h3>Basse centralité, basse densité. Ces thèmes sont peu développés et peu connectés. Ils peuvent correspondre à des sujets émergents en cours de structuration ou à des thématiques en déclin.</li><li><h3>Thèmes basiques et transversaux (en bas à droite)</h3>Haute centralité, basse densité. Ces thèmes sont centraux dans le réseau mais moins développés en interne. Ils constituent souvent des fondements méthodologiques ou des thèmes transversaux qui irriguent plusieurs domaines.</li></ul>",
+      en: "The strategic diagram is centered on the medians of centrality and density, which naturally divides the space into four quadrants:<br></br><ul><li><h3>Motor themes (top right)</h3>High centrality, high density. These themes are both well-developed internally and central in the network. They represent the main and structuring research axes of the field.</li><li><h3>Niche or isolated themes (top left)</h3>Low centrality, high density. These themes are highly developed internally but poorly connected to the rest of the network. They may represent specialized domains or well-established peripheral topics.</li><li><h3>Emerging or declining themes (bottom left)</h3>Low centrality, low density. These themes are underdeveloped and poorly connected. They may correspond to emerging subjects in the process of structuring or to declining themes.</li><li><h3>Basic and transversal themes (bottom right)</h3>High centrality, low density. These themes are central in the network but less developed internally. They often constitute methodological foundations or cross-cutting themes that permeate several domains.</li></ul>",
+    },
+  },
+  {
     key: "q62",
     groupkey: "organizations",
     icon: "fas fa-question-circle",

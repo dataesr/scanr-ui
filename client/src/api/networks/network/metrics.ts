@@ -50,14 +50,19 @@ function computeClusteringCoefficient(graph: Graph, node: string): number {
 }
 
 export function assignNodeMetrics(graph: Graph) {
-  // Assign centrality metrics to node attributes
+  // Assign centrality metrics to nodes
   betweennessCentrality.assign(graph, {
     getEdgeWeight: null,
     normalized: true,
   })
   degreeCentrality.assign(graph)
   closenessCentrality.assign(graph)
-  eigenvectorCentrality.assign(graph)
+  try {
+    // Sometimes it doesnt convert
+    eigenvectorCentrality.assign(graph)
+  } catch (error) {
+    console.error(error)
+  }
   pagerank.assign(graph)
 
   // Compute and assign all metrics to nodes
@@ -77,7 +82,7 @@ export function assignNodeMetrics(graph: Graph) {
         betweennessCentrality: attr.betweennessCentrality,
         degreeCentrality: attr.degreeCentrality,
         closenessCentrality: attr.closenessCentrality,
-        eigenvectorCentrality: attr.eigenvectorCentrality,
+        eigenvectorCentrality: attr?.eigenvectorCentrality,
         pagerank: attr.pagerank,
         // Density metrics
         localDensity,
@@ -87,19 +92,19 @@ export function assignNodeMetrics(graph: Graph) {
   })
 }
 
-export function assignClustersMetrics(graph: Graph, communities: Array<any>) {
+export function assignClustersMetrics(graph: Graph, communities: Array<any>, normalize: boolean = false) {
   communities.forEach((community) => {
-    const nodes = community.nodes.map(({ id }) => id)
+    const nodes = new Set(community.nodes.map(({ id }) => id))
     let density = 0
     let centrality = 0
 
     nodes.forEach((node) => {
       graph.forEachEdge(node, (_, attr, source, target) => {
         const weight = attr.weight || 1
-        const isInternal = nodes.includes(source) && nodes.includes(target)
+        const isInternal = nodes.has(source) && nodes.has(target)
 
         if (isInternal) {
-          // Internal edge: contributes to density (divide by 2 as we iterate nodes)
+          // Internal edge: contributes to density (divide by 2 as we count each edge twice)
           density += weight / 2
         } else {
           // External edge: contributes to centrality
@@ -108,9 +113,26 @@ export function assignClustersMetrics(graph: Graph, communities: Array<any>) {
       })
     })
 
-    community.metrics = {
-      density,
-      centrality,
-    }
+    community.metrics = { density, centrality }
   })
+
+  if (normalize) {
+    // Collect all density and centrality values for min-max normalization
+    const densities = communities.map((c) => c.metrics.density)
+    const centralities = communities.map((c) => c.metrics.centrality)
+
+    const minDensity = Math.min(...densities)
+    const maxDensity = Math.max(...densities)
+    const rangeDensity = maxDensity - minDensity || 1
+
+    const minCentrality = Math.min(...centralities)
+    const maxCentrality = Math.max(...centralities)
+    const rangeCentrality = maxCentrality - minCentrality || 1
+
+    // Normalize both metrics using min-max scaling
+    communities.forEach((community) => {
+      community.metrics.density = (community.metrics.density - minDensity) / rangeDensity
+      community.metrics.centrality = (community.metrics.centrality - minCentrality) / rangeCentrality
+    })
+  }
 }

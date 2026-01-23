@@ -5,7 +5,7 @@ import cn from "classnames"
 import "./styles.scss"
 import NetworkClustersItems from "./items"
 import NetworkAnalytics from "./analytics"
-import NetworkQuadrants from "../quadrants"
+import NetworkQuadrants from "./quadrants"
 
 type ClustersTab = "items" | "analytics" | "quadrants"
 const clustersTabs: ClustersTab[] = ["items", "analytics", "quadrants"]

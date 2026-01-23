@@ -46,10 +46,10 @@ export type NetworkCommunity = {
     weight?: number
     page?: string
   }>
-  maxYear?: number
   metadata?: {
     documentsByYear?: Record<string, number>
     documentsCount?: number
+    documentsMaxYear?: number
     documents?: Array<Record<string, string | number>>
     citationsByYear?: Record<string, number>
     citationsCount?: number
@@ -142,6 +142,7 @@ export type ElasticHit = {
   id: string
   label?: LangField
   title?: LangField
+  year?: number
   cited_by_counts_by_year?: Record<string, number>
 }
 

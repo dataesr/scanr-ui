@@ -56,6 +56,8 @@ export default function OrganizationPresentation({
 		NETWORK_BADGES_CODES.includes(b.code.toLowerCase()),
 	);
 
+	console.log("data", data)
+
 	const propre = data?.institutionOf
 		?.filter((element) =>
 			["établissement tutelle", "primary"].includes(element.relationType),
@@ -316,8 +318,7 @@ export default function OrganizationPresentation({
 									)}
 									<OrganizationNetwork
 										data={network}
-										value={data.id}
-										label={getLangFieldValue(locale)(data.label)}
+										affiliationsIds={[{value: data.id, label: getLangFieldValue(locale)(data.label)}, ...data?.externalIds?.map((extId) => ({value: extId.id, label: extId.id}))]}
 									/>
 									<OrganizationProjects
 										data={projects}

@@ -6,11 +6,10 @@ import { useIntl } from "react-intl"
 
 type OrganizationNetworkProps = {
   data: Network
-  value: string
-  label?: string
+  affiliationsIds: { value: string; label: string }[]
 }
 
-export default function OrganizationNetwork({ data: network, value, label }: OrganizationNetworkProps) {
+export default function OrganizationNetwork({ data: network, affiliationsIds }: OrganizationNetworkProps) {
   const intl = useIntl()
 
   if (!network) return null
@@ -25,10 +24,10 @@ export default function OrganizationNetwork({ data: network, value, label }: Org
   const networkFilter = stringifySearchFiltersForURL({
     "affiliations.id": {
       type: "terms",
-      values: [{ value: value, label: label }],
+      values: affiliationsIds,
     },
   })
-  const networkUrl = `/networks?q=*&tab=domains&filters=${networkFilter}`
+  const networkUrl = `/networks?q=*&model=domains&source=publications&filters=${networkFilter}`
 
   return (
     <>
@@ -52,7 +51,7 @@ export default function OrganizationNetwork({ data: network, value, label }: Org
         {intl.formatMessage({ id: "organizations.network.desc2" })}
       </Text>
       <Container fluid className="fr-mt-2w" style={{ height: "400px" }}>
-        <VOSviewerOnline key={[value, theme]} data={network} parameters={parameters} />
+        <VOSviewerOnline key={[affiliationsIds[0].value, theme]} data={network} parameters={parameters} />
       </Container>
       <Text className="fr-m-0 fr-text-mention-grey" size="xs">
         {intl.formatMessage({ id: "organizations.network.desc3" })}

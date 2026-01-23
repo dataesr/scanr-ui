@@ -21,6 +21,7 @@ export default function useOptions() {
   const handleModelChange = useCallback(
     (model: string) => {
       searchParams.set("model", model)
+      searchParams.delete("clusters")
       setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
@@ -30,6 +31,7 @@ export default function useOptions() {
     (source: string) => {
       searchParams.delete("model")
       searchParams.delete("filters")
+      searchParams.delete("clusters")
       searchParams.set("source", source)
       setSearchParams(searchParams)
     },
@@ -39,6 +41,7 @@ export default function useOptions() {
   const handleParameterChange = useCallback(
     (parameter: string, value: NetworkParameter) => {
       searchParams.set(parameter, String(value))
+      if (parameter !== "clusters") searchParams.delete("clusters")
       setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
@@ -46,6 +49,7 @@ export default function useOptions() {
 
   const resetParameters = useCallback(() => {
     Object.keys(NETWORK_PARAMETERS).forEach((key) => searchParams.delete(key))
+    searchParams.delete("clusters")
     setSearchParams(searchParams)
   }, [searchParams, setSearchParams, NETWORK_PARAMETERS])
 
