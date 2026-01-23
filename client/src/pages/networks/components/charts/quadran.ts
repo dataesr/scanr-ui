@@ -71,7 +71,7 @@ export default function getQuadrantChartsOptions({
           value: _x_median,
           zIndex: 1,
           label: {
-            text: `${title_xaxis}`,
+            text: `${title_yaxis}`,
             rotation: -90,
             x: -6,
             align: "right",
@@ -94,7 +94,7 @@ export default function getQuadrantChartsOptions({
           value: _y_median,
           zIndex: 1,
           label: {
-            text: `${title_yaxis}`,
+            text: `${title_xaxis}`,
             align: "right",
             x: -10,
             style: { color: "#999", fontSize: "10px" },

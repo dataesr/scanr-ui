@@ -202,7 +202,7 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
   communities.sort((a, b) => b.size - a.size)
 
   // Assign metrics
-  assignClustersMetrics(graph, communities)
+  assignClustersMetrics(graph, communities, true)
 
   if (computeClusters) {
     // Assign metadata

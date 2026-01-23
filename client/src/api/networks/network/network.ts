@@ -9,7 +9,7 @@ import communitiesCreate from "./communities"
 import { configGetItemPage, configGetItemSearch } from "./config"
 import { ElasticBucket } from "../../../types/commons"
 import { ignoreIds, institutionsAcronyms, institutionsReplaceLabel, mergeNodesFromLabel } from "./ignore"
-import { assignNodeMetrics, assignClustersMetrics } from "./metrics"
+import { assignNodeMetrics } from "./metrics"
 
 export const nodeGetId = (id: string) => {
   const nodeId = id.split("###")[0]
@@ -115,7 +115,6 @@ export default async function networkCreate(
 
   // Assign metrics
   assignNodeMetrics(graph)
-  assignClustersMetrics(graph, communities)
 
   // Create network
   const network: NetworkData = {
