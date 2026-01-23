@@ -20,8 +20,9 @@ export const FIELDS = [
 
   "participants.structure.label.*",
   "participants.structure.acronym.*",
-  "participants.structure.id",
   "participants.label.*",
+  "participants_id_search",
+  "participants.structure.institutions.label.*",
 ]
 export const LIGHT_SOURCE = [
   "label.*",

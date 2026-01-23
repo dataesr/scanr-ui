@@ -75,13 +75,13 @@ const exportNetwork = (source: string, network: NetworkData) => ({
     id: cluster.cluster,
     label: cluster.label,
     nodesCount: cluster.nodes.length,
-    documentsCount: cluster?.documentsCount,
+    documentsCount: cluster?.metadata?.documentsCount,
     ...(source === "publications" && {
-      citationsCount: cluster?.citationsCount,
-      citationsRecent: cluster?.citationsRecent,
-      citationsScore: cluster?.citationsScore,
+      citationsCount: cluster?.metadata?.citationsCount,
+      citationsRecent: cluster?.metadata?.citationsRecent,
+      citationsScore: cluster?.metadata?.citationsScore,
     }),
-    documents: cluster?.documents?.map((document) => ({
+    documents: cluster?.metadata?.documents?.map((document) => ({
       id: document?.id,
       title: document?.title,
       ...(source === "publications" && {

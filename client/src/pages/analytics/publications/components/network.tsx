@@ -38,37 +38,33 @@ function ClusterItem({ community }: ClusterItemArgs) {
       <Row>
         <Col>
           <BadgeGroup>
-            <Badge
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="purple-glycine"
-            >
+            <Badge style={{ cursor: "pointer" }} size="sm" color="purple-glycine">
               {`${community.size} auteurs`}
             </Badge>
-            <Badge
-              style={{ cursor: "pointer" }}
-              size="sm"
-              color="pink-macaron"
-            >
-              {`${community.documentsCount} publications`}
+            <Badge style={{ cursor: "pointer" }} size="sm" color="pink-macaron">
+              {`${community.metadata.documentsCount} publications`}
             </Badge>
-            <Badge noIcon size="sm" color={oaColor(community.oaPercent)}>
-              {`Accès ouvert: ${community.oaPercent.toFixed(1)}%`}
+            <Badge noIcon size="sm" color={oaColor(community.metadata.oaPercent)}>
+              {`Accès ouvert: ${community.metadata.oaPercent.toFixed(1)}%`}
             </Badge>
             <Badge size="sm" color="yellow-tournesol">
               {`Dernière publication: ${community?.maxYear || "N/A"}`}
             </Badge>
             {currentSource === "publications" && (
-              <Badge size="sm" color="blue-cumulus">{`Citations: ${community.citationsRecent} (${currentYear - 1}-${currentYear})`}</Badge>
+              <Badge size="sm" color="blue-cumulus">{`Citations: ${community.metadata.citationsRecent} (${
+                currentYear - 1
+              }-${currentYear})`}</Badge>
             )}
             {currentSource === "publications" && (
-              <Badge size="sm" color="blue-ecume">{`Citation score: ${community.citationsScore.toFixed(1)}`}</Badge>
+              <Badge size="sm" color="blue-ecume">{`Citation score: ${community.metadata.citationsScore.toFixed(1)}`}</Badge>
             )}
           </BadgeGroup>
         </Col>
       </Row>
       <Row verticalAlign="middle">
-        <div className="fr-mr-1w" style={{ color: `${community.color}` }}>{"█"} </div>
+        <div className="fr-mr-1w" style={{ color: `${community.color}` }}>
+          {"█"}{" "}
+        </div>
         <Text bold className="fr-mb-0">
           {community.label}
         </Text>
@@ -83,8 +79,8 @@ function ClusterItem({ community }: ClusterItemArgs) {
         <i>{community.size > 10 ? ", ..." : "."}</i>
       </Text>
       <Text bold size="sm" className="fr-mb-0">
-        {community?.domains
-          ? Object.entries(community.domains)
+        {community?.metadata?.domains
+          ? Object.entries(community.metadata.domains)
               .sort((a, b) => b[1] - a[1])
               .slice(0, 6)
               .map(([domain], k) => (
@@ -122,7 +118,7 @@ function ClusterItem({ community }: ClusterItemArgs) {
       <Modal isOpen={showDocumentsModal} hide={() => setShowDocumentsModal(false)}>
         <ModalTitle>Liste des publications</ModalTitle>
         <ModalContent>
-          {community?.documents?.map((publication) => (
+          {community?.metadata?.documents?.map((publication) => (
             <li key={publication.id} className="fr-mt-1w">
               <Link
                 key={publication.id}

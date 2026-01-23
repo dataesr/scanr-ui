@@ -205,13 +205,13 @@ async function getStructurePublicationsById(ids: any): Promise<any> {
 async function getStructureProjectsById(ids: any): Promise<any> {
   const body: any = {
     size: 0,
-    query: { bool: {
-      should: [
-        { terms: { "participants.structure.id.keyword": ids } },
-        { terms: { "participants.structure.institutions.structure.keyword": ids } },
-      ],
-      minimum_should_match: 1,
-    } },
+    query: {
+      bool: {
+        filter: [
+          { terms: { "participants_id_search.keyword": ids } },
+        ],
+      }
+    },
     aggs: {
       byType: {
         terms: {

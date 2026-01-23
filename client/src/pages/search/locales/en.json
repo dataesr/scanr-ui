@@ -132,7 +132,7 @@
   "search.filters.current.projects.type": "Funding type",
   "search.filters.current.projects.year": "Funding years",
   "search.filters.current.projects.participants.structure.mainAddress.localisationSuggestions": "Location of a participant",
-  "search.filters.current.projects.participants.structure.id": "Participants",
+  "search.filters.current.projects.participants_id_search": "Participants",
   "search.filters.current.publications.isOa": "Access type",
   "search.filters.current.publications.tags.id": "Tags",
   "search.filters.current.patents.isInternational": "Selected region",

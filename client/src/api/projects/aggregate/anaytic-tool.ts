@@ -39,7 +39,7 @@ export async function aggregateProjectsForAnalyticsTool(
       },
       byInstitution: {
         terms: {
-          field: "participants.structure.id_name.keyword",
+          field: "participants_id_name_search.keyword",
           size: 500,
         }
       },
