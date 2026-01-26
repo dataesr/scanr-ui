@@ -52,7 +52,7 @@ export default function PublicationAuthorFilter() {
       <TagGroup>
         {currentFilters?.["authors.person"]?.values?.map(({ value, label }) => (
           <DismissibleTag
-            key={value}
+            key={JSON.stringify(value)}
             className="fr-mr-1v"
             color="orange-terre-battue"
             onClick={(e) => {
