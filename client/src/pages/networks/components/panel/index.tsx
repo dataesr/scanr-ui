@@ -28,7 +28,6 @@ export default function NetworkPanel() {
   const { integrationOptions } = useIntegration()
   const { screen } = useScreenSize()
 
-  console.log("screen", screen)
   if (["xs", "sm", "mg"].includes(screen)) {
     return (
       <Container fluid className="fr-card">
