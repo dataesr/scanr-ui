@@ -5,7 +5,7 @@ import useIntegration from "../../networks/hooks/useIntegration";
 
 type FilterValues = {
   label?: string;
-  value: string | number;
+  value: string | number | (string | number)[];
 }[];
 export type Filter = {
   type: "terms" | "range" | "bool";
@@ -67,13 +67,13 @@ export function filtersToElasticQuery(
     if (!filter?.values?.length || !filter?.type) return [];
     if (filter.operator === "and") {
       return filter?.values?.map(({ value }) =>
-        fromFilterToElasticQuery(field, [value], filter.type)
+        fromFilterToElasticQuery(field, Array.isArray(value) ? value : [value], filter.type)
       );
     }
     return [
       fromFilterToElasticQuery(
         field,
-        filter.values.map(({ value }) => value),
+        filter.values.flatMap(({ value }) => (Array.isArray(value) ? value : [value])),
         filter.type
       ),
     ];
@@ -164,6 +164,42 @@ export default function useUrl() {
     [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
   );
 
+  const handleArrayFilterChange = useCallback(
+    ({ field, value, filterType = "terms", label = null }: { field: string; value: (string | number)[]; filterType?: "terms" | "range" | "bool"; label?: string }) => {
+      if (!field || !value) return;
+      const prev = { ...currentFilters };
+      const filter = prev?.[field];
+      if (!filter) {
+        const nextFilters = {
+          ...prev,
+          [field]: {
+            values: [{ value, label }],
+            type: filterType,
+            operator: "or" as "or" | "and",
+          },
+        };
+        searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+        setSearchParams(searchParams);
+        return;
+      }
+      const arrayExists = filter?.values?.some((el) => JSON.stringify(el.value) === JSON.stringify(value))
+      const nextFilterValues = arrayExists
+        ? filter?.values?.filter((el) => JSON.stringify(el.value) !== JSON.stringify(value))
+        : [...filter.values, { value, label }];
+      if (!nextFilterValues.length && filter?.operator !== "and") {
+        return handleDeleteFilter({ field });
+      }
+      const nextFilters = {
+        ...prev,
+        [field]: { ...filter, values: nextFilterValues },
+      };
+
+      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
+      setSearchParams(searchParams);
+    },
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
+  );
+
   const handleFilterChange = useCallback(
     ({ field, value, filterType = "terms", label = null }) => {
       if (!field || !value) return;
@@ -239,6 +275,7 @@ export default function useUrl() {
       handleDeleteFilter,
       handleRangeFilterChange,
       handleBoolFilterChange,
+      handleArrayFilterChange,
     };
   }, [
     api,
@@ -252,6 +289,7 @@ export default function useUrl() {
     handleDeleteFilter,
     handleRangeFilterChange,
     handleBoolFilterChange,
+    handleArrayFilterChange,
   ]);
 
   return values;

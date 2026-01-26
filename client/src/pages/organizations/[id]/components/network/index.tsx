@@ -6,7 +6,7 @@ import { useIntl } from "react-intl"
 
 type OrganizationNetworkProps = {
   data: Network
-  affiliationsIds: { value: string; label: string }[]
+  affiliationsIds: { value: any; label: string }[]
 }
 
 export default function OrganizationNetwork({ data: network, affiliationsIds }: OrganizationNetworkProps) {
