@@ -178,7 +178,7 @@ export default async function communitiesCreate(graph: Graph, computeClusters: b
   const filters: NetworkFilters = graph.getAttribute("filters")
 
   // Assign communities
-  const randomSeed = query + model + JSON.stringify(filters)
+  const randomSeed = (query || "*") + model + JSON.stringify(filters)
   louvain.assign(graph, { rng: seedrandom(randomSeed) })
 
   // Find number of communities
