@@ -318,7 +318,12 @@ export default function OrganizationPresentation({
 									)}
 									<OrganizationNetwork
 										data={network}
-										affiliationsIds={[{value: data.id, label: getLangFieldValue(locale)(data.label)}, ...data?.externalIds?.map((extId) => ({value: extId.id, label: extId.id}))]}
+										affiliationsIds={[
+											{ value: data.id, label: getLangFieldValue(locale)(data.label) },
+											...data?.externalIds?.filter((extId) => extId.id !== data.id).map((extId) =>
+												({ value: extId.id, label: extId.id })
+											),
+										]}
 									/>
 									<OrganizationProjects
 										data={projects}
