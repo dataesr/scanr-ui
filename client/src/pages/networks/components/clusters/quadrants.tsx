@@ -2,7 +2,7 @@ import { useState } from "react"
 import getQuadrantChartsOptions from "../charts/quadran"
 import useSearchData from "../../hooks/useSearchData"
 import AnalyticsGraph from "../../../../components/analytics-graph"
-import { Container, Select, SelectOption, Text } from "@dataesr/dsfr-plus"
+import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
 import { isInProduction } from "../../../../utils/helpers"
 import useOptions from "../../hooks/useOptions"
@@ -111,6 +111,10 @@ export default function NetworkQuadrants() {
     <Container fluid style={{ width: "100%" }}>
       <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
       {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
+      <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
+        {`For more information about the strategic quadrants see the `}&nbsp;
+        <Link href="/about/FAQ?question=q63">{"FAQ"}</Link>
+      </Text>
     </Container>
   )
 }
