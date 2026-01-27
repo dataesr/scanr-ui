@@ -69,143 +69,9 @@ export default function FAQ() {
     ul: (chunks: any) => <ul>{chunks}</ul>,
     li: (chunks: any) => <li>{chunks}</li>,
 
-    aES: (chunks) => (
-      <a href="https://www.elastic.co/" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aC: (chunks) => (
-      <a href="contact" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aGit: (chunks) => (
-      <a href="https://github.com/dataesr/affiliation-matcher" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aHal: (chunks) => (
-      <a href="https://hal.science/hal-03365806/" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aB: (chunks) => (
-      <a href="https://bit.ly/2LKOWW6" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aWipo: (chunks) => (
-      <a href="https://www.wipo.int/pct/en/faqs/faqs.html" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aEpo: (chunks) => (
-      <a
-        href="https://www.epo.org/searching-for-patents/helpful-resources/first-time-here/patent-families_fr.html"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {chunks}
-      </a>
-    ),
-    aWp: (chunks) => (
-      <a href="https://bit.ly/38qctFD" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aVos: (chunks) => (
-      <a href="https://www.vosviewer.com" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aCWTS: (chunks) => (
-      <a href="https://www.cwts.nl" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aLeiden: (chunks) => (
-      <a href="https://www.universiteitleiden.nl/en" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aWikiLouvainFr: (chunks) => (
-      <a href="https://fr.wikipedia.org/wiki/M%C3%A9thode_de_Louvain" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aWikiLouvainEn: (chunks) => (
-      <a href="https://en.wikipedia.org/wiki/Louvain_method" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aWikiGraphFr: (chunks) => (
-      <a href="https://fr.wikipedia.org/wiki/Th%C3%A9orie_des_graphes" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aWikiGraphEn: (chunks) => (
-      <a href="https://en.wikipedia.org/wiki/Graph_theory" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aMistral: (chunks) => (
-      <a href="https://mistral.ai" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aOpendata: (chunks) => (
-      <a href="/" target="_blank" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ7: (chunks) => (
-      <a href="FAQ?question=q7" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ10: (chunks) => (
-      <a href="FAQ?question=q10" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ11: (chunks) => (
-      <a href="FAQ?question=q11" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ18: (chunks) => (
-      <a href="FAQ?question=q18" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ27: (chunks) => (
-      <a href="FAQ?question=q27" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ31: (chunks) => (
-      <a href="FAQ?question=q31" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ45: (chunks) => (
-      <a href="FAQ?question=q45" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ64: (chunks) => (
-      <a href="FAQ?question=q64" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
-    aQ65: (chunks) => (
-      <a href="FAQ?question=q65" rel="noopener noreferrer">
-        {chunks}
-      </a>
-    ),
     link: (chunks) => (
-      <a href={String(chunks).split(":::")[0]} target="_blank" rel="noopener noreferrer">
-        {String(chunks).split(":::")[1]}
+      <a className="fr-link" href={String(chunks).split(":::")[0]} target="_blank" rel="noopener noreferrer">
+        {String(chunks).split(":::")?.[1] || String(chunks).split(":::")[0]}
       </a>
     ),
     linkQuestion: (chunks) => (
@@ -214,13 +80,13 @@ export default function FAQ() {
         style={{ cursor: "pointer" }}
         onClick={() => handleQuestionClick(String(chunks).split(":::")[0])}
       >
-        {String(chunks).split(":::")[1]}
+        {String(chunks).split(":::")?.[1] || String(chunks).split(":::")[0]}
       </Text>
     ),
     imgInsert: (chunks) => (
       <figure>
         <img src={String(chunks).split(":::")[0]} alt={String(chunks).split(":::")[1]} width="50%" height="50%" />
-        <figcaption className="fr-text--xs fr-text--legend">{String(chunks).split(":::")[1]}</figcaption>
+        <figcaption className="fr-text--xs fr-text--legend">{String(chunks).split(":::")?.[1] || ""}</figcaption>
       </figure>
     ),
   }
