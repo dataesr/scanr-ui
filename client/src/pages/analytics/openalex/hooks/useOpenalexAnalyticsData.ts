@@ -6,8 +6,6 @@ import useUrl from "../../hooks/useUrl";
 export default function useOpenalexAnalyticsData() {
 	const { currentQuery, filters } = useUrl();
 
-	console.log(currentQuery, filters)
-
 	return useQuery<
 		any,
 		unknown,

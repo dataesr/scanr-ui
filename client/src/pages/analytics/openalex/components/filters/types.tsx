@@ -5,8 +5,10 @@ import useUrl from "../../../hooks/useUrl";
 
 export default function PublicationTypeFilter() {
   const { currentFilters, handleFilterChange } = useUrl()
-  const { data = { byType: [] } } = useFilters()
+  const { data = { byType: [] }, isError } = useFilters()
   const { byType } = data as PublicationAggregations
+
+  if (isError) return null;
 
   return (
     <>

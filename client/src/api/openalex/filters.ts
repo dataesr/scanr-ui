@@ -14,7 +14,14 @@ export async function fetchOpenFilters({
   const urls = groupBysFilters.map((groupBy) => getOpenalexUrl(query, groupBy));
 
 	const responses = await Promise.all(urls.map((url) => fetch(url)));
-	const results = await Promise.all(responses.map((res) => res.json()));
+	const results = await Promise.all(
+    responses.map(async (res) => {
+      if (!res.ok) {
+        throw new Error(`Error ${res.status} while fetching OpenAlex filters${res?.statusText ? `: ${res.statusText}` : ''}`)
+      }
+      return res.json()
+    })
+  )
 	const years = results?.[0]?.group_by.map((item) => ({
 		key: parseInt(item.key, 10),
 		doc_count: item.count,

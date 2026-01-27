@@ -11,7 +11,7 @@ const groupBys = [
 	"primary_topic.id",
 	// "keywords.id",
 	"primary_location.source.id",
-	"grants.funder",
+	"awards.funder_display_name",
 	// "authorships.institutions.continent",
 ];
 
@@ -37,7 +37,12 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
 	});
 
 	const responses = await Promise.all(urls.map((url) => fetch(url)));
-	const results = await Promise.all(responses.map((res) => res.json()));
+	const results = await Promise.all(responses.map(async (res) => {
+		if (!res.ok) {
+			throw new Error(`Error ${res.status} while fetching OpenAlex aggregations${res?.statusText ? `: ${res.statusText}` : ''}`)
+    }
+    return res.json()
+  }));
 	const [
 		publicationYear,
 		publicationType,

@@ -9,6 +9,5 @@ export default function useFilters() {
   return useQuery<any, unknown, any>({
     queryKey: ["analytics", "openalex", "filters", currentQuery],
     queryFn: () => fetchOpenFilters({ query: currentQuery }),
-    throwOnError: true,
   })
 }

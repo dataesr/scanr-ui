@@ -10,11 +10,12 @@ import Network from "../components/network";
 
 import usePublicationsAnalyticsData from "../hooks/usePublicationsAnalyticsData.ts";
 import useUrl from "../../hooks/useUrl.ts";
+import Error from "../../components/error.tsx";
 
 export default function PublicationsAnalyticsContent() {
   const { currentMinAuthors } = useUrl();
 	const { data, isLoading, isError } = usePublicationsAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 	if (isLoading) return <AnalyticsSkeleton />;
 
 	const {
