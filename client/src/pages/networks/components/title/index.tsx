@@ -1,13 +1,14 @@
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
 import { getBsoLocals } from "../../integration/config"
 import { Container, Title } from "@dataesr/dsfr-plus"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkTitle() {
   const intl = useIntl()
-  const { integrationId, integrationOptions } = useIntegration()
-  const { currentSource } = useOptions()
+  const {
+    options: { currentSource },
+    integration: { integrationId, integrationOptions },
+  } = useNetworkContext()
   const { showTitle } = integrationOptions
 
   if (showTitle === false) return null
@@ -23,7 +24,7 @@ export default function NetworkTitle() {
         <Title as="h4" className="fr-mb-1w">
           {intl.formatMessage(
             { id: "networks.header.title" },
-            { source: intl.formatMessage({ id: `networks.source.${currentSource}` }).toLowerCase() }
+            { source: intl.formatMessage({ id: `networks.source.${currentSource}` }).toLowerCase() },
           )}{" "}
           {comment}
         </Title>

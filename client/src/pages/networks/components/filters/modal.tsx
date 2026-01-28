@@ -1,4 +1,4 @@
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 import NetworkFiltersPatentsModal from "./patents"
 import NetworkFiltersProjectsModal from "./projects"
 import NetworkFiltersPublicationsModal from "./publications"
@@ -10,7 +10,9 @@ const SOURCES_MAPPING = {
 }
 
 export default function NetworkFiltersModal() {
-  const { currentSource } = useOptions()
+  const {
+    options: { currentSource },
+  } = useNetworkContext()
 
   return SOURCES_MAPPING[currentSource]
 }

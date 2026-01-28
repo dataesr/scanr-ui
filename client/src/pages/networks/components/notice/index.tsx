@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react"
 import { Notice } from "@dataesr/dsfr-plus"
-import useSearchData from "../../hooks/useSearchData"
 import { useIntl } from "react-intl"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkNotice() {
   const intl = useIntl()
   const {
     search: { data, isFetching },
-  } = useSearchData()
-  const { parameters } = useOptions()
+    options: { parameters },
+  } = useNetworkContext()
   const [display, setDisplay] = useState<string>("inherit")
 
   useEffect(() => {

@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 import { useIntl } from "react-intl"
 import { TextInput } from "@dataesr/dsfr-plus"
-import useOptions from "../../../hooks/useOptions"
 import { NETWORK_PARAMETERS } from "../../../config/parameters"
+import { useNetworkContext } from "../../../context"
 
 export default function InputMaxComponents() {
   const intl = useIntl()
   const {
-    parameters: { maxComponents },
-    handleParameterChange,
-  } = useOptions()
+    options: {
+      parameters: { maxComponents },
+      handleParameterChange,
+    },
+  } = useNetworkContext()
   const [input, setInput] = useState<number>(maxComponents)
   const defaultValues = NETWORK_PARAMETERS["maxComponents"]
 

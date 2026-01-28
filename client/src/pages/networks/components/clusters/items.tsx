@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useIntl } from "react-intl"
 import { Container, Row, Button, Link, Text, Modal, ModalContent, ModalTitle, ButtonGroup, Tag } from "@dataesr/dsfr-plus"
 import { NetworkCommunity, NetworkData } from "../../../../types/network"
-import useSearchData from "../../hooks/useSearchData"
 import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import Separator from "../../../../components/separator"
@@ -22,10 +21,11 @@ interface ClusterItemArgs {
 function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
   const intl = useIntl()
   const currentYear = new Date().getFullYear()
-  const { currentSource } = useOptions()
+  const {
+    options: { currentSource, setFocusItem },
+  } = useNetworkContext()
   const [showNodesModal, setShowNodesModal] = useState(false)
   const [showDocumentsModal, setShowDocumentsModal] = useState(false)
-  const { setFocusItem } = useNetworkContext()
   const metadata = community.metadata
 
   const oaColor = (percent: number) =>
@@ -79,7 +79,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
                 <Text as="span" size="sm">
                   {`${intl.formatMessage(
                     { id: "networks.section.clusters.citations" },
-                    { count: metadata.citationsRecent }
+                    { count: metadata.citationsRecent },
                   )} (${currentYear - 1}-${currentYear})`}
                 </Text>
               </div>
@@ -182,10 +182,8 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
 export default function NetworkClustersItems() {
   const intl = useIntl()
   const { currentModel, parameters } = useOptions()
-  const { search } = useSearchData()
+  const { search } = useNetworkContext()
   const [seeMore, setSeeMore] = useState(false)
-
-  console.log("search", search)
 
   const network = search?.data?.network as NetworkData
   const communities = network?.clusters
@@ -231,7 +229,7 @@ export default function NetworkClustersItems() {
                   })
                 : intl.formatMessage(
                     { id: "networks.section.clusters.see-more" },
-                    { count: communities?.length - SEE_MORE_AFTER }
+                    { count: communities?.length - SEE_MORE_AFTER },
                   )}
             </Button>
           </Separator>

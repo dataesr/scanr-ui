@@ -27,15 +27,9 @@ export default function NetworkClusters() {
           ))}
         </Container>
         <Container className="clusters-tabs__content">
-          <div className={cn("clusters-tabs__pane", clustersTab === "items" && "clusters-tabs__pane--active")}>
-            <NetworkClustersItems />
-          </div>
-          <div className={cn("clusters-tabs__pane", clustersTab === "analytics" && "clusters-tabs__pane--active")}>
-            <NetworkAnalytics />
-          </div>
-          <div className={cn("clusters-tabs__pane", clustersTab === "quadrants" && "clusters-tabs__pane--active")}>
-            <NetworkQuadrants />
-          </div>
+          {clustersTab === "items" && <NetworkClustersItems />}
+          {clustersTab === "analytics" && <NetworkAnalytics />}
+          {clustersTab === "quadrants" && <NetworkQuadrants />}
         </Container>
       </Container>
     </Container>

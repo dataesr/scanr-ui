@@ -2,20 +2,20 @@ import { Container, Row, Col, Accordion } from "@dataesr/dsfr-plus"
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton"
 import { useIntl } from "react-intl"
 import AnalyticsGraph from "../../../../components/analytics-graph"
-import useSearchData from "../../hooks/useSearchData"
 import getHorizontalBarChartOptions from "../charts/hbar"
 import getYearsChartOptions from "../charts/years"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import useIntegration from "../../hooks/useIntegration"
 import useOptions from "../../hooks/useOptions"
 import ClustersButton from "./button"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkAnalytics() {
   const intl = useIntl()
   const { screen } = useScreenSize()
   const { integrationOptions } = useIntegration()
   const { currentSource, currentModel, parameters } = useOptions()
-  const { search } = useSearchData()
+  const { search } = useNetworkContext()
   const clusters = search.data?.network?.clusters
 
   if (Boolean(search.error) || !parameters.clusters || integrationOptions.showClustersAnalytics === false)
@@ -63,7 +63,7 @@ export default function NetworkAnalytics() {
               tab: intl.formatMessage({
                 id: `networks.model.of.${currentModel}`,
               }),
-            }
+            },
           )}
           description={intl.formatMessage(
             { id: "networks.analytics.clusters.size.description" },
@@ -71,7 +71,7 @@ export default function NetworkAnalytics() {
               tab: intl.formatMessage({
                 id: `networks.model.of.${currentModel}`,
               }),
-            }
+            },
           )}
           options={sizeChartOptions}
         />
@@ -119,7 +119,7 @@ export default function NetworkAnalytics() {
         </Col>
       )}
     </Row>
-  );
+  )
 
   if (["xs", "sm"].includes(screen)) {
     return (

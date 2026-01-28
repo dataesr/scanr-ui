@@ -1,9 +1,9 @@
 import { Suspense } from "react"
 import { createIntl, RawIntlProvider } from "react-intl"
 import { messages } from "../config/messages"
-import useIntegration from "../hooks/useIntegration"
 import { NetworkContext } from "../context"
 import NetworksLayout from "../layout"
+import useIntegration from "../hooks/useIntegration"
 
 export default function NetworksIntegration() {
   const { integrationId, integrationLang: locale } = useIntegration()

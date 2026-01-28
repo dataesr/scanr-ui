@@ -2,13 +2,14 @@ import { Button, Container, Listbox, ListboxItem } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import { useIntl } from "react-intl"
 import { NETWORK_SOURCES } from "../../config/sources"
-import useOptions from "../../hooks/useOptions"
-import useIntegration from "../../hooks/useIntegration"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectSourceModal() {
   const intl = useIntl()
-  const { integrationId } = useIntegration()
-  const { currentSource, handleSourceChange } = useOptions()
+  const {
+    options: { currentSource, handleSourceChange },
+    integration,
+  } = useNetworkContext()
   const id = "networks-options-select-source-modal"
 
   return (
@@ -22,7 +23,7 @@ export default function NetworkSelectSourceModal() {
             selected && handleSourceChange(selected)
           }}
         >
-          {integrationId ? (
+          {integration.integrationId ? (
             <ListboxItem
               key={NETWORK_SOURCES[0].label}
               startContent={<span className={`fr-mr-3v fr-icon--lg fr-icon-${NETWORK_SOURCES[0].icon}`} />}

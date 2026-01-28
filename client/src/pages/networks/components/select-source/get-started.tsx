@@ -3,12 +3,14 @@ import { useIntl } from "react-intl"
 import NetworkGetStartedPage from "../get-started/template"
 import { NETWORK_SOURCES } from "../../config/sources"
 import useGetStarted from "../../hooks/useGetStarted"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectSourceGetStarted() {
   const intl = useIntl()
-  const { currentSource } = useOptions()
   const { handlePageChange } = useGetStarted()
+  const {
+    options: { currentSource },
+  } = useNetworkContext()
 
   return (
     <NetworkGetStartedPage title={intl.formatMessage({ id: "networks.get-started.select-source.title" })}>

@@ -1,14 +1,15 @@
 import { useIntl } from "react-intl"
 import { Button } from "@dataesr/dsfr-plus"
-import useIntegration from "../../hooks/useIntegration"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import useOptions from "../../hooks/useOptions"
 import { NETWORK_SOURCES } from "../../config/sources"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectSourceButton() {
   const intl = useIntl()
-  const { currentSource } = useOptions()
-  const { integrationOptions } = useIntegration()
+  const {
+    options: { currentSource },
+    integration: { integrationOptions },
+  } = useNetworkContext()
   const { screen } = useScreenSize()
 
   if (integrationOptions.showSelectSource === false) return null

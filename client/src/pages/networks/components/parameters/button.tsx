@@ -1,11 +1,13 @@
 import { Button } from "@dataesr/dsfr-plus"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkParametersButton() {
   const intl = useIntl()
-  const { integrationOptions } = useIntegration()
+  const {
+    integration: { integrationOptions },
+  } = useNetworkContext()
   const { screen } = useScreenSize()
 
   if (integrationOptions.showParameters === false) return null

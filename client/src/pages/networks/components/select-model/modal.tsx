@@ -2,11 +2,13 @@ import { Button, Container, Listbox, ListboxItem } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import { NETWORK_MODELS } from "../../config/models"
 import { useIntl } from "react-intl"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectModelModal() {
   const intl = useIntl()
-  const { currentModel, currentSource, handleModelChange } = useOptions()
+  const {
+    options: { currentModel, currentSource, handleModelChange },
+  } = useNetworkContext()
   const id = "networks-options-select-model-modal"
 
   return (

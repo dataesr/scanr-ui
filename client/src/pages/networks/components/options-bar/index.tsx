@@ -5,10 +5,12 @@ import NetworkSelectModelButton from "../select-model/button"
 import NetworkSelectSourceButton from "../select-source/button"
 import NetworkFiltersButton from "../filters/button"
 import NetworkParametersButton from "../parameters/button"
-import useIntegration from "../../hooks/useIntegration"
+import { useNetworkContext } from "../../context"
 
 export default function NetworksOptionsBar() {
-  const { integrationOptions } = useIntegration()
+  const {
+    integration: { integrationOptions },
+  } = useNetworkContext()
 
   if (integrationOptions.showOptionsBar === false) return null
 

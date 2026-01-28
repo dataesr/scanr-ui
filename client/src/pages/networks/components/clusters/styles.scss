@@ -51,15 +51,6 @@
     padding-right: 1rem;
     overflow-y: auto;
   }
-
-  &__pane {
-    display: none;
-
-    &--active {
-      display: block;
-      animation: fadeIn 0.4s ease-out;
-    }
-  }
 }
 
 @keyframes fadeIn {

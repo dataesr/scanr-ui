@@ -1,6 +1,5 @@
 import { useState } from "react"
 import getQuadrantChartsOptions from "../charts/quadran"
-import useSearchData from "../../hooks/useSearchData"
 import AnalyticsGraph from "../../../../components/analytics-graph"
 import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
@@ -8,6 +7,7 @@ import { isInProduction } from "../../../../utils/helpers"
 import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import { useIntl } from "react-intl"
+import { useNetworkContext } from "../../context"
 
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
@@ -105,7 +105,7 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
   )
 }
 export default function NetworkQuadrants() {
-  const { search } = useSearchData()
+  const { search } = useNetworkContext()
   const intl = useIntl()
 
   if (!search?.data && search?.isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />

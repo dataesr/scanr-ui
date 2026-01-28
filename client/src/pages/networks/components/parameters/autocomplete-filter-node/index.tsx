@@ -1,10 +1,11 @@
 import { Autocomplete, AutocompleteItem, Container, Text, useAutocompleteList } from "@dataesr/dsfr-plus"
-import useSearchData from "../../../hooks/useSearchData"
-import useOptions from "../../../hooks/useOptions"
+import { useNetworkContext } from "../../../context"
 
 export default function AutocompleteFilterNode() {
-  const { handleParameterChange } = useOptions()
-  const { search } = useSearchData()
+  const {
+    search,
+    options: { handleParameterChange },
+  } = useNetworkContext()
 
   const nodes = search?.data?.network?.items?.map((item) => ({ label: item.label, id: item.id }))
   const autocomplete =

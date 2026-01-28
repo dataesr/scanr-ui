@@ -1,15 +1,16 @@
 import { MenuButton, MenuItem } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
-import useSearchData from "../../hooks/useSearchData"
 import useExportData from "../../hooks/useExportData"
-import useIntegration from "../../hooks/useIntegration"
 import useScreenSize from "../../../../hooks/useScreenSize"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkExportsButton() {
   const intl = useIntl()
   const { screen } = useScreenSize()
-  const { integrationOptions } = useIntegration()
-  const { search } = useSearchData()
+  const {
+    search,
+    integration: { integrationOptions },
+  } = useNetworkContext()
   const { isExporting, exportFile } = useExportData()
 
   if (integrationOptions?.showExports === false) return null
@@ -26,8 +27,8 @@ export default function NetworkExportsButton() {
         ["xs", "sm", "mg", "lg"].includes(screen)
           ? ""
           : isExporting
-          ? intl.formatMessage({ id: "networks.exports.is-exporting" })
-          : intl.formatMessage({ id: "networks.exports.title" })
+            ? intl.formatMessage({ id: "networks.exports.is-exporting" })
+            : intl.formatMessage({ id: "networks.exports.title" })
       }
       className="fr-mt-1w"
       size="md"
