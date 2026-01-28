@@ -28,8 +28,8 @@ export default function PublicationOrganizationsFilter() {
     },
   });
 
-  const filter = currentFilters?.["affiliations.id"];
-  const operator = filter?.operator || "or";
+  const filter = currentFilters?.["affiliations.id"]
+  const operator = filter?.operator || "or"
 
   return (
     <>
@@ -89,7 +89,7 @@ export default function PublicationOrganizationsFilter() {
             endContent={<span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>}
             description={item.address?.find((a) => a.main)?.city}
             key={`${getLangFieldValue(locale)(item.label)}###${[
-              ...new Set([item.id, ...(item.externalIds?.map((id) => id.id) || [])]),
+              ...new Set([item.id, ...(item.externalIds?.map((id) => id.id) || [])]), // force first id to be the main one
             ].join("|||")}`}
           >
             {getLangFieldValue(locale)(item.label)}
