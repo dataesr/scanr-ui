@@ -5,12 +5,13 @@ import getYearChartOptions from "../../../../components/analytics-graph/graph-op
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton";
 import usePatentsAnalyticsData from "../hooks/usePatentsAnalyticsData";
 import CpcChart from "../../../../components/patent-chart/cpc";
+import Error from "../../components/error";
 
 
 
 export default function PatentsAnalyticsContent() {
 	const { data, isLoading, isError } = usePatentsAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 	if (isLoading) return <AnalyticsSkeleton />;
 
 	const {

@@ -5,11 +5,12 @@ import Filters from "../components/filters/index";
 import useUrl from "../../hooks/useUrl.ts";
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton.tsx";
 import useProjectsAnalyticsData from "../hooks/useProjectsAnalyticsData.ts";
+import Error from "../../components/error.tsx";
 
 export default function ProjectsAnalyticsHeader() {
   const { currentQuery, currentFilters } = useUrl();
 	const { data, isLoading, isError } = useProjectsAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 
 	const bluidSearchUrl = () => {
     const searchParams = new URLSearchParams()

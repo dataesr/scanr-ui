@@ -5,7 +5,8 @@ import OpenalexTypeFilter from "./types";
 import useFilters from "../../hooks/useFilters";
 
 export default function Filters({ id }: { id: string }) {
-  const { isLoading } = useFilters()
+  const { isLoading, isError } = useFilters()
+  if (isError) return null
 
   return (
     <>

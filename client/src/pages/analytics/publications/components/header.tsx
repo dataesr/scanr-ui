@@ -5,11 +5,12 @@ import Filters from "../components/filters/index.tsx";
 import usePublicationsAnalyticsData from "../hooks/usePublicationsAnalyticsData.ts";
 import useUrl from "../../hooks/useUrl.ts";
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton.tsx";
+import Error from "../../components/error.tsx";
 
 export default function PublicationsAnalyticsHeader() {
   const { currentQuery, currentFilters } = useUrl();
 	const { data, isLoading, isError } = usePublicationsAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 
 	const bluidSearchUrl = () => {
     const searchParams = new URLSearchParams()

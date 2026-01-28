@@ -6,10 +6,10 @@ import useUrl from "../../../hooks/useUrl";
 
 export default function PublicationYearFilter() {
   const { handleRangeFilterChange, currentFilters } = useUrl();
-  const { data = { byYear: [] } } = useFilters()
+  const { data = { byYear: [] }, isError } = useFilters()
   const { byYear = [] } = data as PublicationAggregations
 
-  if (!byYear.length) return null;
+  if (!byYear.length || isError) return null;
   const min = currentFilters?.year?.values?.[0]?.value || byYear[0].value;
   const max = currentFilters?.year?.values?.[1]?.value || byYear[byYear.length - 1].value;
 

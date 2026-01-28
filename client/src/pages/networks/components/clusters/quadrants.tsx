@@ -2,11 +2,12 @@ import { useState } from "react"
 import getQuadrantChartsOptions from "../charts/quadran"
 import useSearchData from "../../hooks/useSearchData"
 import AnalyticsGraph from "../../../../components/analytics-graph"
-import { Container, Select, SelectOption, Text } from "@dataesr/dsfr-plus"
+import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
 import { isInProduction } from "../../../../utils/helpers"
 import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
+import { useIntl } from "react-intl"
 
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
@@ -73,6 +74,7 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 
 function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }) {
   const { currentModel } = useOptions()
+  const intl = useIntl()
 
   if (!clusters) return null
   const data = clusters?.map(({ label, color, metrics }) => ({
@@ -94,8 +96,8 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
     <Container fluid>
       {data && (
         <AnalyticsGraph
-          title="Communities quadrants"
-          description="Quadrants of the communities strategic diagram"
+          title={intl.formatMessage({ id: "networks.clusters.quadrants.title" })}
+          description={intl.formatMessage({ id: "networks.clusters.quadrants.description" })}
           options={quadrantOptions}
         />
       )}
@@ -104,6 +106,7 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
 }
 export default function NetworkQuadrants() {
   const { search } = useSearchData()
+  const intl = useIntl()
 
   if (!search?.data && search?.isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
 
@@ -111,6 +114,10 @@ export default function NetworkQuadrants() {
     <Container fluid style={{ width: "100%" }}>
       <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
       {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
+      <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
+        {intl.formatMessage({ id: "networks.clusters.quadrants.faq-link" })}&nbsp;
+        <Link href="/about/FAQ?question=q63">{"FAQ"}</Link>
+      </Text>
     </Container>
   )
 }

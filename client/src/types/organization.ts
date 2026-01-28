@@ -145,6 +145,7 @@ export type LightOrganization = {
 	level: string;
 	nature: string;
 	id: string;
+	externalIds?: Array<ExternalIdsData>;
 	creationYear: string;
 	isFrench: string;
 	active: string;

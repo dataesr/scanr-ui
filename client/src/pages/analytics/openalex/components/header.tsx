@@ -39,7 +39,7 @@ export default function OpenalexAnalyticsHeader() {
 					}}
 				>
 					<Title as="h2" className="fr-mb-0 fr-text--lg">
-            {isLoading ? <BaseSkeleton width="200px" height="28px" /> : `${data?.total}  publications internationales`}
+            {isLoading ? <BaseSkeleton width="200px" height="28px" /> : `${data?.total || 0}  publications internationales`}
             <Text size="xs" className="fr-text--regular fr-text-mention--grey fr-pr-5w">
               pour la recherche <b>{currentQuery}</b>
             </Text>

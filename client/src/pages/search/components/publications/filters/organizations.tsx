@@ -16,9 +16,9 @@ import getLangFieldValue from "../../../../../utils/lang";
 
 export default function PublicationOrganizationsFilter() {
   const { locale } = useDSFRConfig();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
+  const { currentFilters, handleArrayFilterChange, setOperator } = useUrl();
 
-  const authorsAutocompletedList = useAutocompleteList<LightOrganization>({
+  const organizationsAutocompletedList = useAutocompleteList<LightOrganization>({
     async load({ filterText }) {
       if (!filterText) {
         return { items: [] };
@@ -55,31 +55,32 @@ export default function PublicationOrganizationsFilter() {
       <TagGroup>
         {filter?.values?.map(({ value, label }) => (
           <DismissibleTag
-            key={value}
+            key={Array.isArray(value) ? value.join("|||") : value}
             className="fr-mr-1v"
             color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              handleFilterChange({ field: "affiliations.id", value })
+              handleArrayFilterChange({ field: "affiliations.id", value: Array.isArray(value) ? value : [value] })
             }}
           >
-            {label || value}
+            {label || (Array.isArray(value) ? value.join(", ") : value)}
           </DismissibleTag>
         ))}
       </TagGroup>
       <Autocomplete
         label="Rechercher des structures"
-        items={authorsAutocompletedList.items}
-        inputValue={authorsAutocompletedList.filterText}
-        onInputChange={authorsAutocompletedList.setFilterText}
-        loadingState={authorsAutocompletedList.loadingState}
+        items={organizationsAutocompletedList.items}
+        inputValue={organizationsAutocompletedList.filterText}
+        onInputChange={organizationsAutocompletedList.setFilterText}
+        loadingState={organizationsAutocompletedList.loadingState}
         // menuTrigger="focus"
         size="md"
         onSelectionChange={(item) => {
           if (!item) return
-          const [value, label] = item.toString().split("###")
-          handleFilterChange({ field: "affiliations.id", value, label })
-          authorsAutocompletedList.setFilterText('')
+          const [label, values] = item.toString().split("###")
+          const value = values.split("|||")
+          handleArrayFilterChange({ field: "affiliations.id", value, label })
+          organizationsAutocompletedList.setFilterText("")
         }}
       >
         {(item) => (
@@ -87,7 +88,9 @@ export default function PublicationOrganizationsFilter() {
             startContent={<span className="fr-mr-3v fr-icon--md fr-icon-user-line" />}
             endContent={<span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>}
             description={item.address?.find((a) => a.main)?.city}
-            key={`${item.id}###${getLangFieldValue(locale)(item.label)}`}
+            key={`${getLangFieldValue(locale)(item.label)}###${[
+              ...new Set([item.id, ...(item.externalIds?.map((id) => id.id) || [])]),
+            ].join("|||")}`}
           >
             {getLangFieldValue(locale)(item.label)}
           </AutocompleteItem>

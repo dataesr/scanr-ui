@@ -4,14 +4,13 @@ import getBarChartOptions from "../../../../components/analytics-graph/graph-opt
 import getYearChartOptions from "../../../../components/analytics-graph/graph-options/years";
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton";
 import useOpenalexAnalyticsData from "../hooks/useOpenalexAnalyticsData.ts";
+import Error from "../../components/error.tsx";
 
 
 export default function OpenalexAnalyticsContent() {
 	const { data, isLoading, isError } = useOpenalexAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 	if (isLoading) return <AnalyticsSkeleton />;
-
-
 
 	const {
 		publicationYear,

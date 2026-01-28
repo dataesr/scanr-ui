@@ -5,12 +5,12 @@ import getYearChartOptions from "../../../../components/analytics-graph/graph-op
 import AnalyticsSkeleton from "../../../../components/skeleton/analytics-skeleton";
 import useProjectsAnalyticsData from "../hooks/useProjectsAnalyticsData";
 import TagCloud from "../../../../components/tag-cloud";
+import Error from "../../components/error";
 
 export default function ProjectsAnalytics() {
 	const { data, isLoading, isError } = useProjectsAnalyticsData();
-	if (isError) return "Une erreur est survenue";
+	if (isError) return <Error />;
 	if (isLoading) return <AnalyticsSkeleton />;
-
 
 	const {
 		byYear: projectsByYear,
