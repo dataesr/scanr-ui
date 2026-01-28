@@ -86,7 +86,11 @@ export default function PublicationOrganizationsFilter() {
         {(item) => (
           <AutocompleteItem
             startContent={<span className="fr-mr-3v fr-icon--md fr-icon-user-line" />}
-            endContent={<span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>}
+            endContent={
+              item.publicationsCount ? (
+                <span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>
+              ) : null
+            }
             description={item.address?.find((a) => a.main)?.city}
             key={`${getLangFieldValue(locale)(item.label)}###${[
               ...new Set([item.id, ...(item.externalIds?.map((id) => id.id) || [])]), // force first id to be the main one
