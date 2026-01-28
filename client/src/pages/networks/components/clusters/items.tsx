@@ -185,6 +185,8 @@ export default function NetworkClustersItems() {
   const { search } = useSearchData()
   const [seeMore, setSeeMore] = useState(false)
 
+  console.log("search", search)
+
   const network = search?.data?.network as NetworkData
   const communities = network?.clusters
 
