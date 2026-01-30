@@ -85,7 +85,8 @@ const communityGetOaPercent = (aggs: ElasticAggregations): number => {
 const communityGetDocuments = (hits: ElasticHits): Array<Record<string, string | number>> =>
   hits.map((hit) => ({
     id: hit.id,
-    title: hit?.title?.default || hit?.label?.en,
+    title:
+      hit?.title?.default || hit?.title?.fr || hit?.title?.en || hit?.label?.default || hit?.label?.fr || hit?.label?.en,
     citationsCount: nodeGetCitationsCount(hit?.cited_by_counts_by_year),
     citationsRecent: nodeGetCitationsRecent(hit?.cited_by_counts_by_year),
   }))
