@@ -73,7 +73,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
         <Container fluid>
           <Separator className="fr-mb-1w" />
           <Row className="cluster-metrics fr-mt-1w">
-            {metadata?.citationsRecent && (
+            {!!metadata?.citationsRecent && (
               <div title="Number of citations over the last two years">
                 <i className="fr-icon-quote-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
                 <Text as="span" size="sm">
@@ -84,7 +84,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
                 </Text>
               </div>
             )}
-            {metadata?.citationsScore && (
+            {!!metadata?.citationsScore && (
               <div
                 title="Number of recent citations (over the last two years) divided by the number of total publications in the cluster.&#10;This score is intended to help detect hotspots in the communities."
               >
@@ -94,7 +94,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
                 </Text>
               </div>
             )}
-            {metadata?.oaPercent && (
+            {!!metadata?.oaPercent && (
               <div title="Percentage of open access documents">
                 <i className="fr-icon-lock-unlock-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
                 <Text style={{ color: `var(--${oaColor(metadata.oaPercent)})` }} as="span" size="sm">
@@ -105,7 +105,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
                 </Text>
               </div>
             )}
-            {metadata?.documentsMaxYear && (
+            {!!metadata?.documentsMaxYear && (
               <div title="Most recent document">
                 <i className="fr-icon-calendar-line fr-icon--sm fr-mr-2v" style={{ color: community.color }} />
                 <Text as="span" size="sm">
@@ -201,6 +201,7 @@ export default function NetworkClustersItems() {
         {!parameters.clusters && <ClustersButton />}
         {communities?.slice(0, seeMore ? communities?.length + 1 : SEE_MORE_AFTER)?.map((community, index) => (
           <div
+            key={index}
             className="fr-card fr-p-1w fr-mb-2w"
             style={{
               borderLeft: `6px solid ${community.color}`,
@@ -209,7 +210,7 @@ export default function NetworkClustersItems() {
             }}
           >
             <ClusterItem
-              key={index}
+              // key={index}
               currentModel={currentModel}
               community={community}
               isFetching={Boolean(parameters.clusters && search.isFetching)}

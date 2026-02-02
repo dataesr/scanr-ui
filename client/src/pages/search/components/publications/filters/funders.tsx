@@ -18,7 +18,7 @@ export default function PublicationFunderFilter() {
         <FormattedMessage id="search.filters.publications.by-project-description" />
       </Text>
       <TagGroup>
-        {byFunder.map((funder) => (
+        {byFunder?.map((funder) => (
           <SelectableTag
             selected={currentFilters?.['projects.type']?.values?.map(v => v.value)?.includes(funder.value)}
             key={funder.value}
