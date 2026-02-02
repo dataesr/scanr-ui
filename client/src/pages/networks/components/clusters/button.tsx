@@ -1,12 +1,12 @@
 import { useIntl } from "react-intl"
 import { Button, ButtonGroup } from "@dataesr/dsfr-plus"
-import useSearchData from "../../hooks/useSearchData"
 import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function ClustersButton() {
   const intl = useIntl()
   const { parameters, handleParameterChange } = useOptions()
-  const { search } = useSearchData()
+  const { search } = useNetworkContext()
 
   return (
     <ButtonGroup size="md">

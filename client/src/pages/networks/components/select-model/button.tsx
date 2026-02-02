@@ -1,14 +1,15 @@
 import { Button } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectModelButton() {
   const intl = useIntl()
   const { screen } = useScreenSize()
-  const { integrationOptions } = useIntegration()
-  const { currentModel } = useOptions()
+  const {
+    options: { currentModel },
+    integration: { integrationOptions },
+  } = useNetworkContext()
 
   if (integrationOptions.showSelectModel === false) return null
 

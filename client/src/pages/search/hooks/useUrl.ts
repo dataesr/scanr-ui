@@ -182,9 +182,10 @@ export default function useUrl() {
         setSearchParams(searchParams);
         return;
       }
-      const arrayExists = filter?.values?.some((el) => JSON.stringify(el.value) === JSON.stringify(value))
+      // we assume the first value is the main one for array filters (see PublicationsOrganizationsFilter)
+      const arrayExists = filter?.values?.some((el) => el.value[0] === value[0])
       const nextFilterValues = arrayExists
-        ? filter?.values?.filter((el) => JSON.stringify(el.value) !== JSON.stringify(value))
+        ? filter?.values?.filter((el) => el.value[0] !== value[0])
         : [...filter.values, { value, label }];
       if (!nextFilterValues.length && filter?.operator !== "and") {
         return handleDeleteFilter({ field });

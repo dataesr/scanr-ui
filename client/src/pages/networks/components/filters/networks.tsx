@@ -1,14 +1,16 @@
 import { Container, Text } from "@dataesr/dsfr-plus"
 import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
-import useOptions from "../../hooks/useOptions"
 import { CONFIG } from "../../../../api/networks/network/config"
 import { RangeSlider } from "../../../../components/range-slider"
+import { useNetworkContext } from "../../context"
 
 export default function NetworksCoElementsFilters() {
   const intl = useIntl()
   const { currentFilters, handleRangeFilterChange } = useUrl()
-  const { currentModel, currentSource } = useOptions()
+  const {
+    options: { currentModel, currentSource },
+  } = useNetworkContext()
   const countField = CONFIG[currentSource][currentModel]?.count
 
   if (countField === undefined) return null
@@ -29,7 +31,7 @@ export default function NetworksCoElementsFilters() {
       <RangeSlider
         label={intl.formatMessage(
           { id: "networks.filters.range-co-elements.label" },
-          { value: currentMaxValue || maxValue, model: modelLabel }
+          { value: currentMaxValue || maxValue, model: modelLabel },
         )}
         value={currentMaxValue || maxValue}
         minValue={minValue}

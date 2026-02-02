@@ -3,12 +3,14 @@ import Modal from "../../../../components/modal"
 import InputMaxNodes from "./input-max-nodes"
 import InputMaxComponents from "./input-max-components"
 import { useIntl } from "react-intl"
-import useOptions from "../../hooks/useOptions"
 import ToggleSample from "./toggle-sample"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkParametersModal() {
   const intl = useIntl()
-  const { resetParameters } = useOptions()
+  const {
+    options: { resetParameters },
+  } = useNetworkContext()
 
   const id = "networks-options-parameters-modal"
 

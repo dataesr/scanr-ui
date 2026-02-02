@@ -1,10 +1,12 @@
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
+import { useNetworkContext } from "../../context"
 import { Breadcrumb, Link } from "@dataesr/dsfr-plus"
 
 export default function NetworksBreadcrumb() {
   const intl = useIntl()
-  const { integrationOptions } = useIntegration()
+  const {
+    integration: { integrationOptions },
+  } = useNetworkContext()
 
   if (integrationOptions?.showBreadcrumb === false) return null
 

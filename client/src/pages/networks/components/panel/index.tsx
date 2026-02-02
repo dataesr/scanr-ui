@@ -5,8 +5,8 @@ import { Button, Container } from "@dataesr/dsfr-plus"
 import NetworkClusters from "../clusters"
 import NetworkGraph from "../graph"
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
 import useScreenSize from "../../../../hooks/useScreenSize"
+import { useNetworkContext } from "../../context"
 
 function PanelButton({ isOpen, onChange }: { isOpen: boolean; onChange: () => void }) {
   const intl = useIntl()
@@ -25,7 +25,9 @@ function PanelButton({ isOpen, onChange }: { isOpen: boolean; onChange: () => vo
 
 export default function NetworkPanel() {
   const [openAnalytics, setOpenAnalytics] = useState(false)
-  const { integrationOptions } = useIntegration()
+  const {
+    integration: { integrationOptions },
+  } = useNetworkContext()
   const { screen } = useScreenSize()
 
   if (["xs", "sm", "mg"].includes(screen)) {

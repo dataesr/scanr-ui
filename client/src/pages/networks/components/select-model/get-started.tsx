@@ -3,12 +3,14 @@ import { NETWORK_MODELS } from "../../config/models"
 import { useIntl } from "react-intl"
 import NetworkGetStartedPage from "../get-started/template"
 import useGetStarted from "../../hooks/useGetStarted"
-import useOptions from "../../hooks/useOptions"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSelectModelGetStarted() {
   const intl = useIntl()
   const { navigateToNetwork } = useGetStarted()
-  const { currentModel, currentSource } = useOptions()
+  const {
+    options: { currentModel, currentSource },
+  } = useNetworkContext()
 
   return (
     <NetworkGetStartedPage title={intl.formatMessage({ id: "networks.get-started.select-model.title" })}>

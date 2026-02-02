@@ -1,14 +1,16 @@
 import { Button } from "@dataesr/dsfr-plus"
-import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
-import useIntegration from "../../hooks/useIntegration"
 import useScreenSize from "../../../../hooks/useScreenSize"
+import { useNetworkContext } from "../../context"
 
 export default function NetworkSearchBarButton() {
   const intl = useIntl()
   const { screen } = useScreenSize()
-  const { integrationOptions } = useIntegration()
-  const { currentQuery } = useUrl()
+  const {
+    currentQuery,
+    integration: { integrationOptions },
+  } = useNetworkContext()
+
   const isEmptyQuery = !currentQuery || currentQuery === "*"
   const shortQuery = (currentQuery?.length || 0) > 20 ? currentQuery.slice(0, 17) + "..." : currentQuery
 
@@ -28,8 +30,8 @@ export default function NetworkSearchBarButton() {
       {["xs"].includes(screen)
         ? null
         : isEmptyQuery
-        ? intl.formatMessage({ id: "networks.search-bar.button.label.anything" })
-        : shortQuery}
+          ? intl.formatMessage({ id: "networks.search-bar.button.label.anything" })
+          : shortQuery}
     </Button>
   )
 }

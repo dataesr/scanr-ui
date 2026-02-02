@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 import { useIntl } from "react-intl"
 import { TextInput } from "@dataesr/dsfr-plus"
-import useOptions from "../../../hooks/useOptions"
 import { NETWORK_PARAMETERS } from "../../../config/parameters"
+import { useNetworkContext } from "../../../context"
 
 export default function InputMaxNodes() {
   const intl = useIntl()
   const {
-    parameters: { maxNodes },
-    handleParameterChange,
-  } = useOptions()
+    options: {
+      parameters: { maxNodes },
+      handleParameterChange,
+    },
+  } = useNetworkContext()
   const [input, setInput] = useState<number>(maxNodes)
   const defaultValues = NETWORK_PARAMETERS["maxNodes"]
 

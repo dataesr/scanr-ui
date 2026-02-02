@@ -1,12 +1,12 @@
 import { Container } from "@dataesr/dsfr-plus"
 import NavigateToSearch from "../navigate-to-search"
 import ContributeButton from "../contribute/button"
-import useIntegration from "../../hooks/useIntegration"
+import { useNetworkContext } from "../../context"
 
 export default function NetworksOptionsFooter() {
-  const { integrationId } = useIntegration()
+  const { integration } = useNetworkContext()
 
-  if (integrationId) return null
+  if (integration?.integrationId) return null
 
   return (
     <Container fluid className="fr-mt-2w" style={{ display: "flex", justifyContent: "space-between" }}>

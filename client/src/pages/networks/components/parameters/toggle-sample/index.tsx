@@ -1,13 +1,15 @@
 import { useIntl } from "react-intl"
 import { Toggle } from "@dataesr/dsfr-plus"
-import useOptions from "../../../hooks/useOptions"
+import { useNetworkContext } from "../../../context"
 
 export default function ToggleSample() {
   const intl = useIntl()
   const {
-    parameters: { sample },
-    handleParameterChange,
-  } = useOptions()
+    options: {
+      parameters: { sample },
+      handleParameterChange,
+    },
+  } = useNetworkContext()
 
   return (
     <Toggle
