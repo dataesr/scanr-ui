@@ -91,6 +91,8 @@ export default function Search() {
   const { search, total } = useSearchData()
   const { data, error, isFetchingNextPage, fetchNextPage, hasNextPage, isFetching } = search
 
+  console.log("data", data)
+
   const isMobile = screen === "sm" || screen === "xs"
 
   const AnalyticsComponent = API_MAPPING[api]?.analytics
@@ -203,10 +205,10 @@ export default function Search() {
           <Col xs="12" lg="4" offsetLg="1">
             <Container fluid>
               {!isMobile && <CurrentFilters />}
-              {["publications", "patents", "projects"].includes(api) && (
+              {["publications", "patents", "projects", "authors"].includes(api) && (
                 <>
                   <hr />
-                  <NavigateToNetwork />
+                  <NavigateToNetwork currentList={data?.map(({ _source: data }) => data) || []} />
                 </>
               )}
               <hr />
