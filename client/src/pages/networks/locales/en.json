@@ -11,6 +11,7 @@
     "networks.select-model.modal.display": "Display Network",
     "networks.select-source.label": "Source",
     "networks.select-source.modal.display": "Display Network",
+    "networks.select-source.warning": "Changing the source will reset the search filters.",
     "networks.parameters.title": "Advanced parameters",
     "networks.parameters.input-max-nodes.label": "Max number of nodes",
     "networks.parameters.input-max-nodes.hint": "Number between 3 and 1000 (default=300)",

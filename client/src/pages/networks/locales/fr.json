@@ -11,6 +11,7 @@
     "networks.select-model.modal.display": "Afficher le réseau",
     "networks.select-source.label": "Source",
     "networks.select-source.modal.display": "Afficher le réseau",
+    "networks.select-source.warning": "Le changement de source entraine la réinitialisation des filtres de recherche.",
     "networks.parameters.title": "Paramètres avancés",
     "networks.parameters.input-max-nodes.label": "Nombre de nœuds max",
     "networks.parameters.input-max-nodes.hint": "Nombre entre 3 et 1000 (default=300)",

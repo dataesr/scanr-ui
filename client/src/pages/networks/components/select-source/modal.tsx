@@ -1,4 +1,4 @@
-import { Button, Container, Listbox, ListboxItem } from "@dataesr/dsfr-plus"
+import { Button, Container, Listbox, ListboxItem, Text } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import { useIntl } from "react-intl"
 import { NETWORK_SOURCES } from "../../config/sources"
@@ -45,6 +45,9 @@ export default function NetworkSelectSourceModal() {
             ))
           )}
         </Listbox>
+        <Text className="fr-mt-3w fr-message fr-message--warning" size="xs">
+          {intl.formatMessage({ id: "networks.select-source.warning" })}
+        </Text>
       </Container>
       <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", justifyContent: "right" }}>
         <Button aria-controls={id}>{intl.formatMessage({ id: "networks.select-source.modal.display" })}</Button>
