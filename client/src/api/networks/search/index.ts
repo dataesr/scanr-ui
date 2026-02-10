@@ -1,6 +1,5 @@
 import { postHeaders } from "../../../config/api"
 import {
-  Network,
   NetworkSearchBody,
   NetworkSearchArgs,
   ElasticHits,
@@ -9,11 +8,8 @@ import {
   NetworkCountBody,
   NetworkCountArgs,
 } from "../../../types/network"
-import { CONFIG } from "../network/config"
-import networkCreate from "../network/network"
-import configCreate from "../network/config"
-import infoCreate from "../network/info"
-import { ElasticAggregations } from "../../../types/commons"
+import { CONFIG } from "../config/elastic"
+import { ElasticAggregations, ElasticBuckets } from "../../../types/commons"
 
 const CURRENT_YEAR = new Date().getFullYear()
 const DEFAULT_YEARS = Array.from({ length: (2010 - CURRENT_YEAR) / -1 + 1 }, (_, i) => CURRENT_YEAR + i * -1)
@@ -57,11 +53,9 @@ export async function networkSearch({
   source,
   model,
   query,
-  lang,
   parameters,
   filters,
-  integration,
-}: NetworkSearchArgs): Promise<Network> {
+}: NetworkSearchArgs): Promise<ElasticBuckets> {
   const modelAggregation = {
     [model]: {
       terms: { field: CONFIG[source][model].co_aggregation, size: DEFAULT_SIZE },
@@ -112,27 +106,7 @@ export async function networkSearch({
     throw new Error(`Elasticsearch error: no co-${model} aggregation found for query ${query}`)
   }
 
-  const network = await networkCreate(source, query, model, filters, aggregation, parameters, lang, integration).catch(
-    (error) => {
-      console.error(error)
-      return null
-    }
-  )
-  const config = configCreate(source, model)
-  const info = infoCreate(source, query, model)
-
-  if (network.items.length < 3) {
-    throw new Error(`Network error: need at least three items to display the network (items=${network.items.length})`)
-  }
-
-  const data = {
-    network: network,
-    config: config,
-    info: info,
-    ...(parameters.sample && { count: json.aggregations?.sample?.doc_count }),
-  }
-
-  return data
+  return aggregation
 }
 
 export async function networkSearchHits({

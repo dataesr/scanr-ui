@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { networkSearch } from "../../../../api/networks/search/search"
 import useUrl from "../../hooks/useUrl"
 import { NetworkParameters } from "../../../../types/network"
+import getNetwork from "../../../../api/networks"
 
 const currentSource = "publications"
 
@@ -16,16 +16,13 @@ const PARAMS: NetworkParameters = {
 }
 
 export default function useNetworks(currentModel: "authors" | "structures") {
-  const { currentQuery, filters } = useUrl();
-  const parameters = currentModel === "authors"
-    ? { ...PARAMS, clusters: true, maxComponents: 10, maxNodes: 1000 }
-    : PARAMS
-
+  const { currentQuery, filters } = useUrl()
+  const parameters = currentModel === "authors" ? { ...PARAMS, clusters: true, maxComponents: 10, maxNodes: 1000 } : PARAMS
 
   const { data, error, isFetching } = useQuery({
     queryKey: ["network", "search", currentModel, currentQuery, filters, parameters],
     queryFn: () =>
-      networkSearch({
+      getNetwork({
         source: currentSource,
         model: currentModel,
         query: currentQuery,

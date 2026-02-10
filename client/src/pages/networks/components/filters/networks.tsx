@@ -1,9 +1,9 @@
 import { Container, Text } from "@dataesr/dsfr-plus"
 import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
-import { CONFIG } from "../../../../api/networks/network/config"
 import { RangeSlider } from "../../../../components/range-slider"
 import { useNetworkContext } from "../../context"
+import { CONFIG } from "../../../../api/networks/config/elastic"
 
 export default function NetworksCoElementsFilters() {
   const intl = useIntl()

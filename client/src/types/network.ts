@@ -101,12 +101,12 @@ export type NetworkSearchBody = {
   aggs?: Record<string, unknown>
 }
 export type NetworkSearchArgs = {
+  query?: string
   source: string
   model: string
-  query?: string
   filters?: NetworkFilters
+  parameters: NetworkParameters
   lang?: string
-  parameters?: NetworkParameters
   integration?: string
 }
 export type NetworkSearchHitsArgs = {

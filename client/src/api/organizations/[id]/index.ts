@@ -1,7 +1,7 @@
 import { organizationsIndex, patentsIndex, postHeaders, projectsIndex, publicationsIndex } from "../../../config/api"
 import { Organization } from "../../../types/organization"
 import { publicationTypeMapping } from "../../../utils/string"
-import { getStructureNetworkById } from "../../networks/search/organization"
+import { getStructureNetworkById } from "../../networks"
 import { processYearAggregations } from "../../utils/years"
 
 export async function getOrganizationById(id: string): Promise<Organization> {

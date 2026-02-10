@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { networkCount } from "../../../api/networks/search/search"
+import { networkCount } from "../../../api/networks/search"
 import useUrl from "../../search/hooks/useUrl"
 import useOptions from "./useOptions"
 

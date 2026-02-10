@@ -8,10 +8,6 @@ import { weightedUndirectedDegree } from "graphology-metrics/node/weighted-degre
 import { density } from "graphology-metrics/graph/density"
 import subgraph from "graphology-operators/subgraph"
 
-/**
- * Compute local density (ego graph density) for a node
- * The ego graph is the subgraph containing the node and all its neighbors
- */
 function computeLocalDensity(graph: Graph, node: string): number {
   const neighbors = graph.neighbors(node)
   if (neighbors.length < 2) return 0
@@ -23,10 +19,6 @@ function computeLocalDensity(graph: Graph, node: string): number {
   return density(egoGraph)
 }
 
-/**
- * Compute clustering coefficient for a node
- * The ratio of existing edges between neighbors to the maximum possible edges
- */
 function computeClusteringCoefficient(graph: Graph, node: string): number {
   const neighbors = graph.neighbors(node)
   const k = neighbors.length
@@ -49,7 +41,7 @@ function computeClusteringCoefficient(graph: Graph, node: string): number {
   return edgeCount / maxEdges
 }
 
-export function assignNodeMetrics(graph: Graph) {
+export default function graphAssignNodesMetrics(graph: Graph) {
   // Assign centrality metrics to nodes
   betweennessCentrality.assign(graph, {
     getEdgeWeight: null,
@@ -90,49 +82,4 @@ export function assignNodeMetrics(graph: Graph) {
       },
     }
   })
-}
-
-export function assignClustersMetrics(graph: Graph, communities: Array<any>, normalize: boolean = false) {
-  communities.forEach((community) => {
-    const nodes = new Set(community.nodes.map(({ id }) => id))
-    let density = 0
-    let centrality = 0
-
-    nodes.forEach((node) => {
-      graph.forEachEdge(node, (_, attr, source, target) => {
-        const weight = attr.weight || 1
-        const isInternal = nodes.has(source) && nodes.has(target)
-
-        if (isInternal) {
-          // Internal edge: contributes to density (divide by 2 as we count each edge twice)
-          density += weight / 2
-        } else {
-          // External edge: contributes to centrality
-          centrality += weight
-        }
-      })
-    })
-
-    community.metrics = { density, centrality }
-  })
-
-  if (normalize) {
-    // Collect all density and centrality values for min-max normalization
-    const densities = communities.map((c) => c.metrics.density)
-    const centralities = communities.map((c) => c.metrics.centrality)
-
-    const minDensity = Math.min(...densities)
-    const maxDensity = Math.max(...densities)
-    const rangeDensity = maxDensity - minDensity || 1
-
-    const minCentrality = Math.min(...centralities)
-    const maxCentrality = Math.max(...centralities)
-    const rangeCentrality = maxCentrality - minCentrality || 1
-
-    // Normalize both metrics using min-max scaling
-    communities.forEach((community) => {
-      community.metrics.density = (community.metrics.density - minDensity) / rangeDensity
-      community.metrics.centrality = (community.metrics.centrality - minCentrality) / rangeCentrality
-    })
-  }
 }
