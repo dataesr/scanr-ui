@@ -12,6 +12,7 @@ const PARAMS: NetworkParameters = {
   clusters: false,
   filterNode: "",
   sample: false,
+  filterFocus: false,
 }
 
 export default function useNetworks(currentModel: "authors" | "structures") {

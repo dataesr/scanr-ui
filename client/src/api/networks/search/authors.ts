@@ -8,7 +8,14 @@ export async function getAuthorsNetworkById(ids: string[], source: string, model
     model: model,
     filters: [authorsFilter],
     lang: "fr",
-    parameters: { maxNodes: 300, maxComponents: 5, clusters: false, filterNode: "", sample: true },
+    parameters: {
+      maxNodes: 300,
+      maxComponents: 5,
+      clusters: false,
+      filterNode: "",
+      sample: true,
+      filterFocus: true,
+    },
   })
     .then((data) => data)
     .catch(() => undefined)

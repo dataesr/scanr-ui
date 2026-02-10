@@ -21,6 +21,8 @@
     "networks.parameters.select-layout.hint": "Spatialization layout algorithm",
     "networks.parameters.toggle-sample.label": "Quick search",
     "networks.parameters.toggle-sample.hint": "Use a sample of the top-scoring 10,000 documents related to the query. Randomly sampled if no query is defined.",
+    "networks.parameters.toggle-filter-focus.label": "Force display of filtered entities",
+    "networks.parameters.toggle-filter-focus.hint": "For author and affiliation networks (institutions and laboratories), this option keeps only the filtered entities. The maximum number of nodes and components are overridden.",
     "networks.parameters.button.label": "Parameters",
     "networks.parameters.modal.title": "Parameters",
     "networks.parameters.modal.reset": "Reset Parameters",

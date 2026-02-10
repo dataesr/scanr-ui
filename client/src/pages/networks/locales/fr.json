@@ -23,6 +23,8 @@
     "networks.parameters.select-clustering.hint": "Algorithme de clusterisation",
     "networks.parameters.toggle-sample.label": "Recherche rapide",
     "networks.parameters.toggle-sample.hint": "Recherche uniquement dans les 10 000 documents qui correspondent le plus à la requête. Les documents sont sélectionnées aléatoirement si aucune requête n'est définie.",
+    "networks.parameters.toggle-filter-focus.label": "Afficher uniquement les entités filtrées",
+    "networks.parameters.toggle-filter-focus.hint": "Pour les réseaux d'auteurs et d'affiliations (établissements et laboratoires), cette option permet de garder uniquement les entités filtrées. Le nombre de noeuds et de composantes maximum sont outrepassés.",
     "networks.parameters.button.label": "Paramètres",
     "networks.parameters.modal.title": "Paramètres",
     "networks.parameters.modal.display": "Afficher le réseau",

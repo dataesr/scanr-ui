@@ -6,7 +6,7 @@ import forceAtlas2 from "graphology-layout-forceatlas2";
 import betweennessCentrality from "graphology-metrics/centrality/betweenness";
 import { NetworkFilters, NetworkData, NetworkParameters } from "../../../types/network"
 import communitiesCreate from "./communities"
-import { configGetItemPage, configGetItemSearch } from "./config"
+import { CONFIG, configGetItemPage, configGetItemSearch } from "./config"
 import { ElasticBucket } from "../../../types/commons"
 import { ignoreIds, institutionsAcronyms, institutionsReplaceLabel, mergeNodesFromLabel } from "./ignore"
 import { assignNodeMetrics } from "./metrics"
@@ -32,7 +32,7 @@ export default async function networkCreate(
   aggregation: Array<ElasticBucket>,
   parameters: NetworkParameters,
   lang: string,
-  integration: string
+  integration: string,
 ): Promise<NetworkData> {
   // Create Graph object
   let graph = new UndirectedGraph()
@@ -41,7 +41,7 @@ export default async function networkCreate(
   graph.setAttribute("model", model)
   graph.setAttribute("filters", filters)
 
-  const { maxNodes, maxComponents, filterNode, clusters } = parameters
+  const { maxNodes, maxComponents, filterNode, clusters, filterFocus } = parameters
 
   aggregation.forEach((item) => {
     const { key, doc_count: count } = item
@@ -56,7 +56,7 @@ export default async function networkCreate(
         label: attr?.label || nodeGetLabel(id, lang),
         weight: (attr?.weight ?? 0) + count,
         links: attr?.links ? [...attr.links, key] : [key],
-      }))
+      })),
     )
 
     // Add edges and compute weight
@@ -67,34 +67,46 @@ export default async function networkCreate(
     }))
   })
 
-  // Merge nodes with same labels
+  // Merge nodes with same labels (only for domains)
   graph = mergeNodesFromLabel(graph, model)
 
-  // Filter nodes
-  if (filterNode) {
-    graph = subgraph(graph, [...graph.neighbors(filterNode), filterNode])
-  }
+  if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
+    // Limit graph to filtered ids (only for authors and affiliations)
+    const focusIds = filters.reduce(
+      (acc, filter) => [...acc, ...(filter?.terms?.[CONFIG[source][model].aggregation] || [])],
+      [],
+    )
+    graph = subgraph(
+      graph,
+      focusIds.filter((id) => graph.hasNode(id)),
+    )
+  } else {
+    // Filter nodes
+    if (filterNode) {
+      graph = subgraph(graph, [...graph.neighbors(filterNode), filterNode])
+    }
 
-  // Keep only largests components
-  const sortedComponents = connectedComponents(graph).sort((a, b) => b.length - a.length)
-  let numberOfComponents = maxComponents || sortedComponents.length
-  graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
-  while (graph.order > maxNodes && numberOfComponents > 1) {
-    numberOfComponents -= 1
+    // Keep only largests components
+    const sortedComponents = connectedComponents(graph).sort((a, b) => b.length - a.length)
+    let numberOfComponents = maxComponents || sortedComponents.length
     graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
-  }
+    while (graph.order > maxNodes && numberOfComponents > 1) {
+      numberOfComponents -= 1
+      graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
+    }
 
-  // Keep only largests nodes
-  if (graph.order > maxNodes) {
-    betweennessCentrality.assign(graph)
-    const sortedNodes = graph
-      .mapNodes((node, attr) => ({
-        node: node,
-        centrality: attr.betweennessCentrality,
-      }))
-      .sort((a, b) => b.centrality - a.centrality)
-      .map((node) => node.node)
-    graph = subgraph(graph, sortedNodes.slice(0, maxNodes))
+    // Keep only largests nodes
+    if (graph.order > maxNodes) {
+      betweennessCentrality.assign(graph)
+      const sortedNodes = graph
+        .mapNodes((node, attr) => ({
+          node: node,
+          centrality: attr.betweennessCentrality,
+        }))
+        .sort((a, b) => b.centrality - a.centrality)
+        .map((node) => node.node)
+      graph = subgraph(graph, sortedNodes.slice(0, maxNodes))
+    }
   }
 
   // Replace institutions labels
