@@ -205,7 +205,7 @@ export default function Search() {
           <Col xs="12" lg="4" offsetLg="1">
             <Container fluid>
               {!isMobile && <CurrentFilters />}
-              {["publications", "patents", "projects", "authors"].includes(api) && (
+              {["publications", "patents", "projects"].includes(api) && (
                 <>
                   <hr />
                   <NavigateToNetwork currentList={data?.map(({ _source: data }) => data) || []} />
