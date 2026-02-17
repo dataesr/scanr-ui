@@ -1,5 +1,5 @@
 import { useState } from "react"
-import getQuadrantChartsOptions from "../charts/quadran"
+import { getQuadrantChartsOptions, getVectorQuadrantChartsOptions } from "../charts/quadrants"
 import AnalyticsGraph from "../../../../components/analytics-graph"
 import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
@@ -31,9 +31,11 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 
   const centralityOptions = (centrality: string, density: string) =>
     getQuadrantChartsOptions({
-      data: data,
-      y: density,
-      x: centrality,
+      data: data.map((d) => ({
+        ...d,
+        x: d[centrality],
+        y: d[density],
+      })),
       title_yaxis: densities.find((d) => d.value === density)?.label,
       title_xaxis: centralities.find((c) => c.value === centrality)?.label,
     })
@@ -80,12 +82,11 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
   const data = clusters?.map(({ label, color, metrics }) => ({
     label,
     color,
-    ...metrics,
+    x: metrics.centrality,
+    y: metrics.density,
   }))
   const quadrantOptions = getQuadrantChartsOptions({
     data: data,
-    y: "density",
-    x: "centrality",
     title_yaxis: "Density",
     title_xaxis: "Centrality",
     themesName: currentModel.toLowerCase(),
@@ -104,6 +105,43 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
     </Container>
   )
 }
+
+function NetworkClustersVectorQuadrants({ clusters }: { clusters: NetworkCommunities }) {
+  const { currentModel } = useOptions()
+  const intl = useIntl()
+
+  if (!clusters) return null
+  console.log("clusters", clusters)
+  const data = clusters?.map(({ label, color, metrics, similarity }) => ({
+    label,
+    color,
+    x1: similarity?.sourceCentrality,
+    y1: similarity?.sourceDensity,
+    x2: metrics.centrality,
+    y2: metrics.density,
+  }))
+  console.log("vectordata", data)
+  const quadrantOptions = getVectorQuadrantChartsOptions({
+    data: data,
+    title_yaxis: "Density",
+    title_xaxis: "Centrality",
+    themesName: currentModel.toLowerCase(),
+    useColorFromData: true,
+  })
+
+  return (
+    <Container fluid>
+      {data && (
+        <AnalyticsGraph
+          title={intl.formatMessage({ id: "networks.clusters.quadrants.title" })}
+          description={intl.formatMessage({ id: "networks.clusters.quadrants.description" })}
+          options={quadrantOptions}
+        />
+      )}
+    </Container>
+  )
+}
+
 export default function NetworkQuadrants() {
   const { search } = useNetworkContext()
   const intl = useIntl()
@@ -113,6 +151,7 @@ export default function NetworkQuadrants() {
   return (
     <Container fluid style={{ width: "100%" }}>
       <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
+      <NetworkClustersVectorQuadrants clusters={search?.data?.network?.clusters} />
       {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
       <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
         {intl.formatMessage({ id: "networks.clusters.quadrants.faq-link" })}&nbsp;

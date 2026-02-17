@@ -65,8 +65,10 @@ export type NetworkCommunity = {
     centrality: number
   }
   similarity?: {
-    sourceCluster: number
-    sourceColor: string
+    sourceCluster?: number
+    sourceColor?: string
+    sourceCentrality?: number
+    sourceDensity?: number
   }
 }
 export type NetworkConfig = {

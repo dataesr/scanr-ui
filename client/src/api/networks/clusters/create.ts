@@ -40,7 +40,7 @@ export default async function clustersCreate(
   clusters.sort((a, b) => b.size - a.size)
 
   // Assign metrics
-  clustersAssignMetrics(graph, clusters, true)
+  clustersAssignMetrics(graph, clusters, true, true)
 
   if (computeClusters) {
     // Assign metadata

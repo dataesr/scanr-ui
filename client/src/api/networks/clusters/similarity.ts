@@ -54,11 +54,8 @@ export default function clustersAssignSimilarity(clustersGroups: NetworkCommunit
           cluster.similarity = {
             sourceColor: matchingSimilarity.source.color,
             sourceCluster: matchingSimilarity.source.cluster,
-          }
-        } else {
-          cluster.similarity = {
-            sourceColor: "#a4a6bc",
-            sourceCluster: -1,
+            sourceCentrality: matchingSimilarity.source.metrics.centrality,
+            sourceDensity: matchingSimilarity.source.metrics.density,
           }
         }
       })

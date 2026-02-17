@@ -1,7 +1,13 @@
 import Graph from "graphology"
 import { NetworkCommunities } from "../../../types/network"
+import { arrayGetMedian } from "../_utils/functions"
 
-export default function clustersAssignMetrics(graph: Graph, clusters: NetworkCommunities, normalize: boolean = false) {
+export default function clustersAssignMetrics(
+  graph: Graph,
+  clusters: NetworkCommunities,
+  normalize: boolean = false,
+  normalizeFromMedian: boolean = false,
+) {
   clusters.forEach((cluster) => {
     const nodes = new Set(cluster.nodes.map(({ id }) => id))
     let density = 0
@@ -26,7 +32,6 @@ export default function clustersAssignMetrics(graph: Graph, clusters: NetworkCom
   })
 
   if (normalize) {
-    // Collect all density and centrality values for min-max normalization
     const densities = clusters.map((c) => c.metrics.density)
     const centralities = clusters.map((c) => c.metrics.centrality)
 
@@ -38,11 +43,26 @@ export default function clustersAssignMetrics(graph: Graph, clusters: NetworkCom
     const maxCentrality = Math.max(...centralities)
     const rangeCentrality = maxCentrality - minCentrality || 1
 
-    // Normalize both metrics using min-max scaling
+    // Normalize using min-max scaling
     clusters.forEach((cluster) => {
       cluster.metrics.density = (cluster.metrics.density - minDensity) / rangeDensity
       cluster.metrics.centrality = (cluster.metrics.centrality - minCentrality) / rangeCentrality
     })
   }
+
+  if (normalizeFromMedian) {
+    const densities = clusters.map((c) => c.metrics.density)
+    const centralities = clusters.map((c) => c.metrics.centrality)
+
+    const medianDensity = arrayGetMedian(densities)
+    const medianCentrality = arrayGetMedian(centralities)
+
+    // Normalize from medians
+    clusters.forEach((cluster) => {
+      cluster.metrics.density = cluster.metrics.density - medianDensity
+      cluster.metrics.centrality = cluster.metrics.centrality - medianCentrality
+    })
+  }
 }
+
 
