@@ -111,16 +111,14 @@ function NetworkClustersVectorQuadrants({ clusters }: { clusters: NetworkCommuni
   const intl = useIntl()
 
   if (!clusters) return null
-  console.log("clusters", clusters)
   const data = clusters?.map(({ label, color, metrics, similarity }) => ({
     label,
     color,
-    x1: similarity?.sourceCentrality,
-    y1: similarity?.sourceDensity,
+    x1: similarity?.matches?.[0]?.source?.metrics?.centrality,
+    y1: similarity?.matches?.[0]?.source?.metrics?.density,
     x2: metrics.centrality,
     y2: metrics.density,
   }))
-  console.log("vectordata", data)
   const quadrantOptions = getVectorQuadrantChartsOptions({
     data: data,
     title_yaxis: "Density",
@@ -150,9 +148,9 @@ export default function NetworkQuadrants() {
 
   return (
     <Container fluid style={{ width: "100%" }}>
-      <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
+      {/* <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} /> */}
       <NetworkClustersVectorQuadrants clusters={search?.data?.network?.clusters} />
-      {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
+      {/* {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />} */}
       <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
         {intl.formatMessage({ id: "networks.clusters.quadrants.faq-link" })}&nbsp;
         <Link href="/about/FAQ?question=q63">{"FAQ"}</Link>

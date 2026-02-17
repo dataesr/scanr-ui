@@ -5,8 +5,8 @@ import { arrayGetMedian } from "../_utils/functions"
 export default function clustersAssignMetrics(
   graph: Graph,
   clusters: NetworkCommunities,
-  normalize: boolean = false,
-  normalizeFromMedian: boolean = false,
+  normalize: boolean = true,
+  normalizeFromMedian: boolean = true,
 ) {
   clusters.forEach((cluster) => {
     const nodes = new Set(cluster.nodes.map(({ id }) => id))
@@ -27,7 +27,6 @@ export default function clustersAssignMetrics(
         }
       })
     })
-
     cluster.metrics = { density, centrality }
   })
 

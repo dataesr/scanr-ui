@@ -212,10 +212,8 @@ export function getVectorQuadrantChartsOptions({
     y1: d.y1,
     x2: d.x2,
     y2: d.y2,
-    z: 10, // Constant size for a cleaner look
     color: useColorFromData ? d.color : getQuadrantColor(d.x1, d.y1),
   }))
-  console.log("_data", _data)
 
   return {
     chart: {
@@ -333,7 +331,6 @@ export function getVectorQuadrantChartsOptions({
     },
     plotOptions: {
       bubble: {
-        minSize: 15,
         maxSize: 15,
         marker: {
           fillOpacity: 0.8,
@@ -363,6 +360,9 @@ export function getVectorQuadrantChartsOptions({
             ...d,
             x: d.x1,
             y: d.y1,
+            z: 8,
+            name: null,
+            color: d.color,
           })),
       },
       {
@@ -370,7 +370,7 @@ export function getVectorQuadrantChartsOptions({
         data: _data.map((d) => ({
           x: d.x2,
           y: d.y2,
-          z: d.z,
+          z: 15,
           name: d.name,
           color: d.color,
         })),

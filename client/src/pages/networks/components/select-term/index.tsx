@@ -17,9 +17,12 @@ export default function NetworkSelectTerm() {
         legendInline
         onChangeValue={(value) => setSelectedTerm(Number(value))}
       >
-        {Array.from({ length: n }, (_, index: number) => (
+        {/* {Array.from({ length: n }, (_, index: number) => (
           <SegmentedElement label={`Réseau ${index}`} value={String(index)} />
-        ))}
+        ))} */}
+        <SegmentedElement label={`Général`} value={String(0)} />
+        <SegmentedElement label={`2017 - 2023`} value={String(1)} />
+        <SegmentedElement label={`2020 - 2026`} value={String(2)} />
       </SegmentedControl>
     </Container>
   )

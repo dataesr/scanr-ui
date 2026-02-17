@@ -65,11 +65,17 @@ export type NetworkCommunity = {
     centrality: number
   }
   similarity?: {
-    sourceCluster?: number
-    sourceColor?: string
-    sourceCentrality?: number
-    sourceDensity?: number
+    matches?: Array<NetworkCommunitySimilarity>
+    candidates?: Array<NetworkCommunitySimilarity>
   }
+}
+export type NetworkCommunitySimilarity = {
+  source: NetworkCommunity
+  intersection: number
+  union: number
+  jaccard: number
+  overlap: number
+  core: number
 }
 export type NetworkConfig = {
   terminology?: Record<string, unknown>
