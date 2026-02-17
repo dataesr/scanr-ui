@@ -5,7 +5,7 @@ import useUrl from "../../search/hooks/useUrl"
 import useIntegration from "./useIntegration"
 import useOptions from "./useOptions"
 import { NetworkParameters } from "../../../types/network"
-import getNetwork from "../../../api/networks"
+import { getMultipleNetworks } from "../../../api/networks"
 
 export default function useSearchData(forceClusters?: boolean) {
   const { currentQuery, filters } = useUrl()
@@ -20,7 +20,7 @@ export default function useSearchData(forceClusters?: boolean) {
   const { data, error, isFetching } = useQuery({
     queryKey: currentKey,
     queryFn: () =>
-      getNetwork({
+      getMultipleNetworks({
         source: currentSource,
         model: currentModel,
         query: currentQuery,

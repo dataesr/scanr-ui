@@ -64,6 +64,10 @@ export type NetworkCommunity = {
     density: number
     centrality: number
   }
+  similarity?: {
+    sourceCluster: number
+    sourceColor: string
+  }
 }
 export type NetworkConfig = {
   terminology?: Record<string, unknown>

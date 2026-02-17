@@ -11,6 +11,7 @@ type NetworkContextType = {
     data: Network
     isFetching: boolean
     error: Error
+    n: number
   }
   currentQuery: string
   filters: Record<string, unknown>[]
@@ -24,6 +25,8 @@ type NetworkContextType = {
     resetParameters: () => void
     focusItem: string
     setFocusItem: (id: string) => void
+    selectedTerm: number
+    setSelectedTerm: (index: number) => void
   }
   integration: {
     integrationId: string
@@ -44,7 +47,8 @@ export function NetworkContext({ children }: { children: ReactNode }) {
   const integration = useIntegration()
   const { locale: lang } = useDSFRConfig()
   const theme = document.documentElement.getAttribute("data-fr-theme")
-  const [focusItem, setFocusItem] = useState("")
+  const [focusItem, setFocusItem] = useState<string>("")
+  const [selectedTerm, setSelectedTerm] = useState<number>(0)
   const [key, setKey] = useState("")
 
   useEffect(() => {
@@ -59,6 +63,7 @@ export function NetworkContext({ children }: { children: ReactNode }) {
           lang,
           theme,
           focusItem,
+          selectedTerm,
         }),
       )
     }
@@ -73,18 +78,24 @@ export function NetworkContext({ children }: { children: ReactNode }) {
     lang,
     theme,
     focusItem,
+    selectedTerm,
   ])
 
   const value = useMemo(
     () => ({
       key,
-      search,
+      search: {
+        data: search.data?.[selectedTerm],
+        isFetching: search.isFetching,
+        error: search.error,
+        n: search.data?.length || 0,
+      },
       currentQuery,
       filters,
-      options: { ...options, focusItem, setFocusItem },
+      options: { ...options, focusItem, setFocusItem, selectedTerm, setSelectedTerm },
       integration,
     }),
-    [search, key, currentQuery, filters, options, focusItem, integration],
+    [search, key, currentQuery, filters, options, focusItem, integration, selectedTerm],
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>

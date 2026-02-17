@@ -3,6 +3,7 @@ import configCreate from "./config/vosviewer"
 import infoCreate from "./config/info"
 import { networkSearch } from "./search"
 import networkCreate from "./network/create"
+import clustersAssignSimilarity from "./clusters/similarity"
 
 export default async function getNetwork(args: NetworkSearchArgs): Promise<Network> {
   try {
@@ -20,6 +21,33 @@ export default async function getNetwork(args: NetworkSearchArgs): Promise<Netwo
     console.error(error)
     throw new Error(error)
   }
+}
+
+export async function getMultipleNetworks(args: NetworkSearchArgs): Promise<Network[]> {
+  const currentYear = new Date().getFullYear()
+
+  const networksPromises = [
+    getNetwork(args),
+    getNetwork({
+      ...args,
+      filters: args.filters.concat({ range: { year: { gte: currentYear - 9, lte: currentYear - 3 } } }),
+    }),
+    getNetwork({ ...args, filters: args.filters.concat({ range: { year: { gte: currentYear - 6, lte: currentYear } } }) }),
+  ]
+  const networks = await Promise.all(networksPromises)
+    .then((data) => data)
+    .catch((error) => {
+      console.log(error)
+      return undefined
+    })
+
+  const clustersGroups = networks.map((network) => network.network.clusters)
+  clustersAssignSimilarity(clustersGroups)
+  networks.forEach((network, index) => {
+    network.network.clusters = clustersGroups[index]
+  })
+  console.log("networks", networks)
+  return networks
 }
 
 export async function getStructureNetworkById(ids: any, source: string, model: string): Promise<Network> {

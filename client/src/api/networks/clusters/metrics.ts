@@ -1,6 +1,7 @@
 import Graph from "graphology"
+import { NetworkCommunities } from "../../../types/network"
 
-export default function clustersAssignMetrics(graph: Graph, clusters: Array<any>, normalize: boolean = false) {
+export default function clustersAssignMetrics(graph: Graph, clusters: NetworkCommunities, normalize: boolean = false) {
   clusters.forEach((cluster) => {
     const nodes = new Set(cluster.nodes.map(({ id }) => id))
     let density = 0
@@ -44,3 +45,4 @@ export default function clustersAssignMetrics(graph: Graph, clusters: Array<any>
     })
   }
 }
+
