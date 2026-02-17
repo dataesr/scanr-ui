@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useState } from "react"
-import useSearchData from "./useSearchData"
 import { NetworkData } from "../../../types/network"
 import * as XLSX from "xlsx"
 import useOptions from "./useOptions"
+import { useNetworkContext } from "../context"
+import { getDefined } from "../utils"
 
 function stringToArrayBuffer(string: string) {
   const buffer = new ArrayBuffer(string.length)
@@ -14,22 +15,31 @@ function stringToArrayBuffer(string: string) {
 const XSLXFormatter = (network: any) => {
   const workbook = XLSX.utils.book_new()
 
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(network.items), "Items")
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.json_to_sheet(
+      network.items.map((item) => {
+        const { metadata, ..._item } = item
+        return { ..._item, ...getDefined(metadata || {}) }
+      }),
+    ),
+    "Items",
+  )
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(network.links), "Links")
   XLSX.utils.book_append_sheet(
     workbook,
     XLSX.utils.json_to_sheet(
       network.clusters.map((cluster) => {
-        const _cluster = { ...cluster }
-        delete _cluster.documents
-        return _cluster
-      })
+        const { metadata, ..._cluster } = cluster
+        const { documents, domains, documentsByYear, citationsByYear, ..._metadata } = metadata || {}
+        return { ..._cluster, ...getDefined(_metadata) }
+      }),
     ),
-    "Clusters"
+    "Clusters",
   )
 
   const documentsList = network.clusters?.reduce((acc, cluster) => {
-    cluster?.documents.forEach((document) => {
+    cluster?.metadata?.documents?.forEach((document) => {
       acc = [
         ...acc,
         {
@@ -41,7 +51,14 @@ const XSLXFormatter = (network: any) => {
     })
     return acc
   }, [])
+  const domainsList = network.clusters?.reduce((acc, cluster) => {
+    Object.entries(cluster?.metadata?.domains || {}).forEach(([domain, count]) => {
+      acc = [...acc, { domain, count, cluster: cluster.id, clusterLabel: cluster.label }]
+    })
+    return acc
+  }, [])
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(documentsList), "Documents")
+  XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(domainsList), "Domains")
 
   const workbookOutput = XLSX.write(workbook, { type: "binary", bookType: "xlsx" })
   return new Blob([stringToArrayBuffer(workbookOutput)], { type: "application/octet-stream" })
@@ -53,7 +70,7 @@ const JSONFormatter = (network: any) => {
 
 const exporter = (format: string) => (format === "xlsx" ? XSLXFormatter : JSONFormatter)
 
-const exportNetwork = (source: string, network: NetworkData) => ({
+const exportNetwork = (network: NetworkData) => ({
   items: network.items.map((item) => ({
     id: item.id,
     label: item.label || "",
@@ -61,12 +78,7 @@ const exportNetwork = (source: string, network: NetworkData) => ({
     ...(network.clusters.length && {
       clusterLabel: network.clusters.find((cluster) => cluster.cluster === item.cluster).label,
     }),
-    documentsCount: item?.documentsCount,
-    ...(source === "publications" && {
-      citationsCount: item?.citationsCount,
-      citationsRecent: item?.citationsRecent,
-      citationsScore: item?.citationsScore,
-    }),
+    ...(item?.metadata && { metadata: getDefined(item.metadata) }),
     degree: item?.weights?.Degree,
     weight: item?.weights?.Weight,
   })),
@@ -75,32 +87,28 @@ const exportNetwork = (source: string, network: NetworkData) => ({
     id: cluster.cluster,
     label: cluster.label,
     nodesCount: cluster.nodes.length,
-    documentsCount: cluster?.metadata?.documentsCount,
-    ...(source === "publications" && {
-      citationsCount: cluster?.metadata?.citationsCount,
-      citationsRecent: cluster?.metadata?.citationsRecent,
-      citationsScore: cluster?.metadata?.citationsScore,
+    ...(cluster?.metadata && {
+      metadata: {
+        ...getDefined(cluster.metadata),
+        ...(cluster.metadata?.documents?.length && {
+          documents: cluster.metadata.documents.map((document) => getDefined(document)),
+        }),
+      },
     }),
-    documents: cluster?.metadata?.documents?.map((document) => ({
-      id: document?.id,
-      title: document?.title,
-      ...(source === "publications" && {
-        citationsCount: document?.citationsCount,
-        citationsRecent: document?.citationsRecent,
-      }),
-    })),
   })),
 })
 
 export default function useExportData() {
   const { currentSource, currentModel } = useOptions()
-  const { search } = useSearchData()
+  const {
+    search: { data },
+  } = useNetworkContext()
   const [isLoading, setIsLoading] = useState(false)
 
   const exportFile = useCallback(
     async (format: "json" | "xlsx") => {
       setIsLoading(true)
-      const network = exportNetwork(currentSource, search?.data?.network)
+      const network = exportNetwork(data?.network)
       const blob = exporter(format)(network)
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement("a")
@@ -111,7 +119,7 @@ export default function useExportData() {
       link.remove()
       setIsLoading(false)
     },
-    [currentModel, search]
+    [currentModel, data],
   )
 
   const values = useMemo(() => {

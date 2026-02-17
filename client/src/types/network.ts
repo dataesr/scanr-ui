@@ -23,10 +23,12 @@ export type NetworkItem = {
   metrics?: Record<string, number>
   page?: string
   search?: string
-  documentsCount?: number
-  citationsCount?: number
-  citationsRecent?: number
-  citationsScore?: number
+  metadata?: {
+    documentsCount?: number
+    citationsCount?: number
+    citationsRecent?: number
+    citationsScore?: number
+  }
 }
 export type NetworkLinks = Array<NetworkLink>
 export type NetworkLink = {

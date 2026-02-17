@@ -125,14 +125,17 @@ export default async function clustersAssignMetadatas(
           const nodeCitationsCount = nodeGetCitationsCount(nodeCitationsByYear)
           const nodeCitationsRecent = nodeGetCitationsRecent(nodeCitationsByYear)
           const nodeCitationsScore = nodeCitationsRecent / (nodeDocumentsCount || 1) || 0
-          graph.setNodeAttribute(key, "documentsCount", nodeDocumentsCount)
-          graph.setNodeAttribute(key, "documentsMaxYear", nodeDocumentsMaxYear)
-          graph.setNodeAttribute(key, "citationsCount", nodeCitationsCount)
-          graph.setNodeAttribute(key, "citationsRecent", nodeCitationsRecent)
-          graph.setNodeAttribute(key, "citationsScore", nodeCitationsScore)
+          graph.setNodeAttribute(key, "metadata", {
+            documentsCount: nodeDocumentsCount,
+            documentsMaxYear: nodeDocumentsMaxYear,
+            citationsCount: nodeCitationsCount,
+            citationsRecent: nodeCitationsRecent,
+            citationsScore: nodeCitationsScore,
+          })
         })
       }
 
+      // add infos to cluster
       cluster.metadata = {
         ...(aggs && {
           documentsCount: clusterGetDocumentsCount(aggs),

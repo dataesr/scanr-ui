@@ -12,3 +12,6 @@ export const getMedian = (arr: number[]) => {
     return sorted[middle]
   }
 }
+
+export const getDefined = (obj: Record<string, unknown>) =>
+  Object.fromEntries(Object.entries(obj).filter(([_, value]) => value != undefined))

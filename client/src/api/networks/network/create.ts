@@ -39,18 +39,7 @@ export default async function networkCreate(args: NetworkCreateArgs): Promise<Ne
     scores: { ...(attr?.documentsMaxYear && { "Last document": attr.documentsMaxYear }) },
     page: configGetItemPage(source, model, key),
     search: configGetItemSearch(query, source, model, key, integration),
-    ...(attr?.documentsCount !== undefined && {
-      documentsCount: attr?.documentsCount,
-    }),
-    ...(attr?.citationsCount !== undefined && {
-      citationsCount: attr?.citationsCount,
-    }),
-    ...(attr?.citationsRecent !== undefined && {
-      citationsRecent: attr?.citationsRecent,
-    }),
-    ...(attr?.citationsScore !== undefined && {
-      citationsScore: attr?.citationsScore,
-    }),
+    ...(attr?.metadata && { metadata: attr.metadata }),
   }))
 
   // Get links
