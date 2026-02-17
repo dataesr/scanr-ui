@@ -53,7 +53,7 @@ export default function graphAssignNodesMetrics(graph: Graph) {
     // Sometimes it doesnt convert
     eigenvectorCentrality.assign(graph)
   } catch (error) {
-    console.error(error)
+    console.warn(error)
   }
   pagerank.assign(graph)
 

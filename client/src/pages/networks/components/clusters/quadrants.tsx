@@ -1,5 +1,5 @@
 import { useState } from "react"
-import getQuadrantChartsOptions from "../charts/quadran"
+import { getQuadrantChartsOptions, getVectorQuadrantChartsOptions } from "../charts/quadrants"
 import AnalyticsGraph from "../../../../components/analytics-graph"
 import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
 import { NetworkCommunities, NetworkItems } from "../../../../types/network"
@@ -8,6 +8,7 @@ import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import { useIntl } from "react-intl"
 import { useNetworkContext } from "../../context"
+import NetworkSelectTerm from "../select-term"
 
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
@@ -31,9 +32,11 @@ function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
 
   const centralityOptions = (centrality: string, density: string) =>
     getQuadrantChartsOptions({
-      data: data,
-      y: density,
-      x: centrality,
+      data: data.map((d) => ({
+        ...d,
+        x: d[centrality],
+        y: d[density],
+      })),
       title_yaxis: densities.find((d) => d.value === density)?.label,
       title_xaxis: centralities.find((c) => c.value === centrality)?.label,
     })
@@ -80,12 +83,11 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
   const data = clusters?.map(({ label, color, metrics }) => ({
     label,
     color,
-    ...metrics,
+    x: metrics.centrality,
+    y: metrics.density,
   }))
   const quadrantOptions = getQuadrantChartsOptions({
     data: data,
-    y: "density",
-    x: "centrality",
     title_yaxis: "Density",
     title_xaxis: "Centrality",
     themesName: currentModel.toLowerCase(),
@@ -104,20 +106,61 @@ function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }
     </Container>
   )
 }
-export default function NetworkQuadrants() {
-  const { search } = useNetworkContext()
+
+function NetworkClustersVectorQuadrants({ clusters }: { clusters: NetworkCommunities }) {
+  const { currentModel } = useOptions()
   const intl = useIntl()
 
-  if (!search?.data && search?.isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
+  if (!clusters) return null
+  const data = clusters?.map(({ label, color, metrics, similarity }) => ({
+    label,
+    color,
+    x1: similarity?.matches?.[0]?.source?.metrics?.centrality,
+    y1: similarity?.matches?.[0]?.source?.metrics?.density,
+    x2: metrics.centrality,
+    y2: metrics.density,
+  }))
+  const quadrantOptions = getVectorQuadrantChartsOptions({
+    data: data,
+    title_yaxis: "Density",
+    title_xaxis: "Centrality",
+    themesName: currentModel.toLowerCase(),
+    useColorFromData: true,
+  })
+
+  return (
+    <Container fluid>
+      {data && (
+        <AnalyticsGraph
+          title={intl.formatMessage({ id: "networks.clusters.quadrants.title" })}
+          description={intl.formatMessage({ id: "networks.clusters.quadrants.description" })}
+          options={quadrantOptions}
+        />
+      )}
+    </Container>
+  )
+}
+
+export default function NetworkQuadrants() {
+  const {
+    search: { data, isFetching },
+  } = useNetworkContext()
+  const intl = useIntl()
+
+  if (!data && isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
 
   return (
     <Container fluid style={{ width: "100%" }}>
-      <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} />
-      {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />}
+      {isInProduction() ? (
+        <NetworkClustersQuadrants clusters={data?.network?.clusters} />
+      ) : (
+        <NetworkClustersVectorQuadrants clusters={data?.network?.clusters} />
+      )}
       <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
         {intl.formatMessage({ id: "networks.clusters.quadrants.faq-link" })}&nbsp;
         <Link href="/about/FAQ?question=q63">{"FAQ"}</Link>
       </Text>
+      <NetworkSelectTerm />
     </Container>
   )
 }
