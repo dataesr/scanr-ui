@@ -43,7 +43,12 @@ function computeSimilarity(
         matches[targetCluster.cluster] = [
           ...(matches?.[targetCluster.cluster] || []),
           {
-            source: sourceCluster,
+            source: {
+              cluster: sourceCluster.cluster,
+              label: sourceCluster.label,
+              metrics: sourceCluster.metrics,
+              size: sourceCluster.size,
+            },
             jaccard,
             overlap,
             core,
@@ -55,7 +60,12 @@ function computeSimilarity(
         candidates[targetCluster.cluster] = [
           ...(candidates?.[targetCluster.cluster] || []),
           {
-            source: sourceCluster,
+            source: {
+              cluster: sourceCluster.cluster,
+              label: sourceCluster.label,
+              metrics: sourceCluster.metrics,
+              size: sourceCluster.size,
+            },
             jaccard,
             overlap,
             core,

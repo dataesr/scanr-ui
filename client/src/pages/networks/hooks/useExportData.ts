@@ -31,7 +31,7 @@ const XSLXFormatter = (network: any) => {
     XLSX.utils.json_to_sheet(
       network.clusters.map((cluster) => {
         const { metadata, ..._cluster } = cluster
-        const { documents, domains, documentsByYear, citationsByYear, ..._metadata } = metadata || {}
+        const { documents, domains, documentsByYear, citationsByYear, similarity, metrics, ..._metadata } = metadata || {}
         return { ..._cluster, ...getDefined(_metadata) }
       }),
     ),
@@ -86,7 +86,7 @@ const exportNetwork = (network: NetworkData) => ({
   clusters: network.clusters.map((cluster) => ({
     id: cluster.cluster,
     label: cluster.label,
-    nodesCount: cluster.nodes.length,
+    size: cluster.size,
     ...(cluster?.metadata && {
       metadata: {
         ...getDefined(cluster.metadata),
@@ -95,6 +95,7 @@ const exportNetwork = (network: NetworkData) => ({
         }),
       },
     }),
+    ...(cluster?.similarity && { similarity: getDefined(cluster.similarity) }),
   })),
 })
 

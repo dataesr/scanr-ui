@@ -3,7 +3,7 @@ import { NetworkCommunities, NetworkFilters } from "../../../types/network"
 import louvain from "graphology-communities-louvain"
 import seedrandom from "seedrandom"
 import { COLORS } from "../_utils/constants"
-import { clusterGetNodes, clusterGetSize } from "./cluster"
+import { clusterGetNodes } from "./cluster"
 import clustersAssignMetrics from "./metrics"
 import clustersAssignAILabels from "./labels"
 import clustersAssignMetadatas from "./metadata"
@@ -32,7 +32,7 @@ export default async function clustersCreate(
       cluster: index + 1,
       label: `${clusterNodes[0].label}${clusterNodes.length > 1 ? ` (+${clusterNodes.length - 1})` : ""}`,
       color: COLORS?.[index] ?? "#e2e2e2",
-      size: clusterGetSize(graph, index),
+      size: clusterNodes.length,
       nodes: clusterNodes,
     }
     return cluster

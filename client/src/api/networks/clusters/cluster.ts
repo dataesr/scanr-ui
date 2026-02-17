@@ -4,9 +4,6 @@ import { configGetItemPage } from "../config/vosviewer"
 export const clusterGetIds = (graph: Graph, cluster: number): Array<string> =>
   graph.filterNodes((_, attr) => attr?.cluster === cluster)
 
-export const clusterGetSize = (graph: Graph, cluster: number): number =>
-  graph.filterNodes((_, attr) => attr?.cluster === cluster).length
-
 export const clusterGetNodes = (
   graph: Graph,
   cluster: number,
