@@ -1,8 +1,10 @@
-import { useState } from "react"
+// import { useState } from "react"
 import { getQuadrantChartsOptions, getVectorQuadrantChartsOptions } from "../charts/quadrants"
 import AnalyticsGraph from "../../../../components/analytics-graph"
-import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
-import { NetworkCommunities, NetworkItems } from "../../../../types/network"
+// import { Container, Select, SelectOption, Text, Link } from "@dataesr/dsfr-plus"
+import { Container, Text, Link } from "@dataesr/dsfr-plus"
+// import { NetworkCommunities, NetworkItems } from "../../../../types/network"
+import { NetworkCommunities } from "../../../../types/network"
 import { isInProduction } from "../../../../utils/helpers"
 import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
@@ -10,70 +12,70 @@ import { useIntl } from "react-intl"
 import { useNetworkContext } from "../../context"
 import NetworkSelectTerm from "../select-term"
 
-function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
-  const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
-  const [selectedDensity, setSelectedDensity] = useState("localDensity")
-  if (!nodes) return null
-  const data = nodes.map(({ label, metrics }) => ({
-    label,
-    ...metrics,
-  }))
-  const centralities = [
-    { value: "degreeCentrality", label: "Degree centrality" },
-    { value: "betweennessCentrality", label: "Betweenness centrality" },
-    { value: "closenessCentrality", label: "Closeness centrality" },
-    { value: "eigenvectorCentrality", label: "Eigenvector centrality" },
-    { value: "pagerank", label: "PageRank" },
-  ]
-  const densities = [
-    { value: "localDensity", label: "Local density" },
-    { value: "clusteringCoefficient", label: "Clustering coefficient" },
-  ]
+// function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
+//   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
+//   const [selectedDensity, setSelectedDensity] = useState("localDensity")
+//   if (!nodes) return null
+//   const data = nodes.map(({ label, metrics }) => ({
+//     label,
+//     ...metrics,
+//   }))
+//   const centralities = [
+//     { value: "degreeCentrality", label: "Degree centrality" },
+//     { value: "betweennessCentrality", label: "Betweenness centrality" },
+//     { value: "closenessCentrality", label: "Closeness centrality" },
+//     { value: "eigenvectorCentrality", label: "Eigenvector centrality" },
+//     { value: "pagerank", label: "PageRank" },
+//   ]
+//   const densities = [
+//     { value: "localDensity", label: "Local density" },
+//     { value: "clusteringCoefficient", label: "Clustering coefficient" },
+//   ]
 
-  const centralityOptions = (centrality: string, density: string) =>
-    getQuadrantChartsOptions({
-      data: data.map((d) => ({
-        ...d,
-        x: d[centrality],
-        y: d[density],
-      })),
-      title_yaxis: densities.find((d) => d.value === density)?.label,
-      title_xaxis: centralities.find((c) => c.value === centrality)?.label,
-    })
+//   const centralityOptions = (centrality: string, density: string) =>
+//     getQuadrantChartsOptions({
+//       data: data.map((d) => ({
+//         ...d,
+//         x: d[centrality],
+//         y: d[density],
+//       })),
+//       title_yaxis: densities.find((d) => d.value === density)?.label,
+//       title_xaxis: centralities.find((c) => c.value === centrality)?.label,
+//     })
 
-  return (
-    <Container fluid>
-      <Text size="lead">Nodes quadrants</Text>
-      <Text size="sm" className="fr-mb-1w">
-        Centrality
-      </Text>
-      <Select onSelectionChange={(value) => setSelectedCentrality(String(value))} defaultSelectedKey={selectedCentrality}>
-        {centralities.map((centrality) => (
-          <SelectOption key={centrality.value}>{centrality.label}</SelectOption>
-        ))}
-      </Select>
-      <Text size="sm" className="fr-mb-1w">
-        Density
-      </Text>
-      <Select
-        buttonLabel="Density"
-        onSelectionChange={(value) => setSelectedDensity(String(value))}
-        defaultSelectedKey={selectedDensity}
-      >
-        {densities.map((density) => (
-          <SelectOption key={density.value}>{density.label}</SelectOption>
-        ))}
-      </Select>
-      {data && (
-        <AnalyticsGraph
-          title="Nodes importance"
-          description="Nodes degree vs centrality"
-          options={centralityOptions(selectedCentrality, selectedDensity)}
-        />
-      )}
-    </Container>
-  )
-}
+//   return (
+//     <Container fluid>
+//       <Text size="lead">Nodes quadrants</Text>
+//       <Text size="sm" className="fr-mb-1w">
+//         Centrality
+//       </Text>
+//       <Select onSelectionChange={(value) => setSelectedCentrality(String(value))} defaultSelectedKey={selectedCentrality}>
+//         {centralities.map((centrality) => (
+//           <SelectOption key={centrality.value}>{centrality.label}</SelectOption>
+//         ))}
+//       </Select>
+//       <Text size="sm" className="fr-mb-1w">
+//         Density
+//       </Text>
+//       <Select
+//         buttonLabel="Density"
+//         onSelectionChange={(value) => setSelectedDensity(String(value))}
+//         defaultSelectedKey={selectedDensity}
+//       >
+//         {densities.map((density) => (
+//           <SelectOption key={density.value}>{density.label}</SelectOption>
+//         ))}
+//       </Select>
+//       {data && (
+//         <AnalyticsGraph
+//           title="Nodes importance"
+//           description="Nodes degree vs centrality"
+//           options={centralityOptions(selectedCentrality, selectedDensity)}
+//         />
+//       )}
+//     </Container>
+//   )
+// }
 
 function NetworkClustersQuadrants({ clusters }: { clusters: NetworkCommunities }) {
   const { currentModel } = useOptions()
