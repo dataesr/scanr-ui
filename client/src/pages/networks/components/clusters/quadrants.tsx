@@ -8,6 +8,7 @@ import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import { useIntl } from "react-intl"
 import { useNetworkContext } from "../../context"
+import NetworkSelectTerm from "../select-term"
 
 function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {
   const [selectedCentrality, setSelectedCentrality] = useState("degreeCentrality")
@@ -141,20 +142,25 @@ function NetworkClustersVectorQuadrants({ clusters }: { clusters: NetworkCommuni
 }
 
 export default function NetworkQuadrants() {
-  const { search } = useNetworkContext()
+  const {
+    search: { data, isFetching },
+  } = useNetworkContext()
   const intl = useIntl()
 
-  if (!search?.data && search?.isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
+  if (!data && isFetching) return <BaseSkeleton width="100%" height="30rem" className="fr-my-1v" />
 
   return (
     <Container fluid style={{ width: "100%" }}>
-      {/* <NetworkClustersQuadrants clusters={search?.data?.network?.clusters} /> */}
-      <NetworkClustersVectorQuadrants clusters={search?.data?.network?.clusters} />
-      {/* {!isInProduction() && <NetworkNodesQuadrants nodes={search?.data?.network?.items} />} */}
+      {isInProduction() ? (
+        <NetworkClustersQuadrants clusters={data?.network?.clusters} />
+      ) : (
+        <NetworkClustersVectorQuadrants clusters={data?.network?.clusters} />
+      )}
       <Text className="fr-mt-1w fr-mb-3w fr-message fr-message--info" size="xs">
         {intl.formatMessage({ id: "networks.clusters.quadrants.faq-link" })}&nbsp;
         <Link href="/about/FAQ?question=q63">{"FAQ"}</Link>
       </Text>
+      <NetworkSelectTerm />
     </Container>
   )
 }

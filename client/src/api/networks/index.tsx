@@ -4,6 +4,7 @@ import infoCreate from "./config/info"
 import { networkSearch } from "./search"
 import networkCreate from "./network/create"
 import clustersAssignSimilarity from "./clusters/similarity"
+import { isInProduction } from "../../utils/helpers"
 
 export default async function getNetwork(args: NetworkSearchArgs): Promise<Network> {
   try {
@@ -24,6 +25,11 @@ export default async function getNetwork(args: NetworkSearchArgs): Promise<Netwo
 }
 
 export async function getMultipleNetworks(args: NetworkSearchArgs): Promise<Network[]> {
+  // TODO: only to test vector quadrants in staging
+  if (isInProduction()) {
+    return [await getNetwork(args)]
+  }
+
   const currentYear = new Date().getFullYear()
 
   const networksPromises = [

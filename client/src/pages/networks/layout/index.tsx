@@ -7,7 +7,6 @@ import NetworkNotice from "../components/notice"
 import NetworkPanel from "../components/panel"
 import NetworksOptionsFooter from "../components/options-bar/footer"
 import { useNetworkContext } from "../context"
-import NetworkSelectTerm from "../components/select-term"
 
 export default function NetworksLayout() {
   const {
@@ -25,7 +24,6 @@ export default function NetworksLayout() {
         <NetworkNotice />
         <NetworkPanel />
         <NetworksOptionsFooter />
-        <NetworkSelectTerm />
       </Container>
     </Container>
   )
