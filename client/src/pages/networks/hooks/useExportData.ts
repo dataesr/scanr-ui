@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState } from "react"
 import { NetworkData } from "../../../types/network"
 import * as XLSX from "xlsx"
-import useOptions from "./useOptions"
 import { useNetworkContext } from "../context"
 import { getDefined } from "../utils"
 
@@ -30,8 +29,8 @@ const XSLXFormatter = (network: any) => {
     workbook,
     XLSX.utils.json_to_sheet(
       network.clusters.map((cluster) => {
-        const { metadata, ..._cluster } = cluster
-        const { documents, domains, documentsByYear, citationsByYear, similarity, metrics, ..._metadata } = metadata || {}
+        const { metadata, similarity, ..._cluster } = cluster
+        const { documents, domains, documentsByYear, citationsByYear, metrics, ..._metadata } = metadata || {}
         return { ..._cluster, ...getDefined(_metadata) }
       }),
     ),
@@ -100,9 +99,9 @@ const exportNetwork = (network: NetworkData) => ({
 })
 
 export default function useExportData() {
-  const { currentSource, currentModel } = useOptions()
   const {
     search: { data },
+    options: { currentSource, currentModel },
   } = useNetworkContext()
   const [isLoading, setIsLoading] = useState(false)
 
