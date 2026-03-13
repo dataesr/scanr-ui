@@ -39,6 +39,11 @@ export default function OrganizationClinicalTrials({
                 },
               },
               {
+                term: {
+                  status_simplified: "Completed",
+                },
+              },
+              {
                 range: {
                   study_completion_year: {
                     gte: 2010,
