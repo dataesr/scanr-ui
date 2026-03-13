@@ -19,16 +19,6 @@ export default function OrganizationClinicalTrials({
       const ror = data.externalIds.find((item) => item.type === "ror").id;
       const previousYear = new Date().getFullYear() - 1;
       const body: any = {
-        _source: {
-          excludes: [
-            "publications",
-            "projects",
-            "web_content",
-            "patents",
-            "autocompleted",
-            "autocompletedText",
-          ],
-        },
         size: 0,
         query: {
           bool: {
@@ -40,7 +30,7 @@ export default function OrganizationClinicalTrials({
               },
               {
                 term: {
-                  status_simplified: "Completed",
+                  "status_simplified.keyword": "Completed",
                 },
               },
               {
@@ -59,7 +49,7 @@ export default function OrganizationClinicalTrials({
             terms: {
               field: "study_completion_year",
               order: { _key: "asc" },
-              size: "20",
+              size: "50",
             },
           },
         },

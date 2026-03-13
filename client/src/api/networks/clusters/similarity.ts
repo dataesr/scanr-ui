@@ -75,10 +75,8 @@ function computeSimilarity(
         ]
       }
     })
-  })
-  console.log("targetClusters", targetGroup)
-  console.log("matches", matches)
-  console.log("candidates", candidates)
+  });
+
   return { matches, candidates }
 }
 

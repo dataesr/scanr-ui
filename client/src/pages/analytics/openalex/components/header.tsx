@@ -10,7 +10,6 @@ export default function OpenalexAnalyticsHeader() {
   const { data, isLoading } = useOpenalexAnalyticsData();
   const {currentQuery, currentFilters} = useUrl();
 
-    console.log("buildSearchURL", currentFilters)
   const buildSearchUrl = () => {
     const baseUrl = "https://openalex.org/works?page=1&filter=";
     // /* @ts-expect-error unknown */
@@ -22,7 +21,6 @@ export default function OpenalexAnalyticsHeader() {
 		const typesFilter = types ? `type:${types}` : "";
 
 		const finalQuery= [`title_and_abstract.search:${currentQuery}`, typesFilter, yearsFilter].filter(Boolean).join(",")
-		console.log(finalQuery)
 		return baseUrl + finalQuery;
   };
 

@@ -16,7 +16,6 @@ const groupBys = [
 ];
 
 export async function fetchOpenAlexAggregations({ query, filters = [] }: AggregationArgs): Promise<any> {
-  console.log("fetchOpenAlexAggregations", query, filters)
 	const urls = groupBys.map((groupBy) => {
 	if (filters.length) {
     /* @ts-expect-error unknown */
@@ -30,7 +29,6 @@ export async function fetchOpenAlexAggregations({ query, filters = [] }: Aggrega
 		const typesFilter = types?.length > 0 ? `type:${types.join("|")}` : "";
 		const yearsFilter = (yearMin && yearMax) ? `publication_year:${parseInt(yearMin)}-${parseInt(yearMax)}` : "";
 		const finalQuery= [query, typesFilter, yearsFilter].filter(Boolean).join(",")
-		console.log("finalQuery", finalQuery)
 		return getOpenalexUrl(finalQuery, groupBy);
 	}
 	return getOpenalexUrl(query, groupBy);
