@@ -8,6 +8,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { RawIntlProvider, createIntl } from "react-intl";
 import { useParams } from "react-router-dom";
+
 import { getOrganizationById } from "../../../api/organizations/[id]";
 import PageSkeleton from "../../../components/skeleton/page-skeleton";
 import getLangFieldValue from "../../../utils/lang";
@@ -30,6 +31,7 @@ export default function Organization() {
   const { locale } = useDSFRConfig();
   const intl = createIntl({ locale, messages: messages[locale] });
   const { id } = useParams();
+
   const { data, isLoading } = useQuery({
     queryKey: ["organizations", id],
     queryFn: () => getOrganizationById(id),

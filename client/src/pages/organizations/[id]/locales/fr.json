@@ -45,7 +45,6 @@
   "organizations.header.description.ia-generated-hover": "En savoir plus",
   "organizations.header.description.ia-edit-label": "Éditer",
   "organizations.header.description.ia-edit-hover": "Proposer une description manuelle",
-  "organizations.patents.count": "Familles de brevets répertoriés par scanR",
   "organizations.sectionLabels.humanNecessities": "Nécessités courantes de la vie",
   "organizations.sectionLabels.performingOperations": "Techniques industrielles diverses; transports",
   "organizations.sectionLabels.chemistryMetallurgy": "Chimie; métallurgie",
@@ -55,6 +54,7 @@
   "organizations.sectionLabels.physics": "Physique",
   "organizations.sectionLabels.electricity": "Electricité",
   "organizations.sectionLabels.other": "Technologies émergentes ou celles qui couvrent plusieurs sections",
+  "organizations.patents.count": "Familles de brevets répertoriés par scanR",
   "organizations.patents.search": "Voir la liste des brevets",
   "organizations.patents.chart.families": "{value} {value, plural, one {famille de brevets} other {familles de brevets}}",
   "organizations.patents.chart.totalFamilies": "{count, plural, one {# famille} other {# familles}}",
@@ -90,5 +90,7 @@
   "organizations.networks.since": "depuis le",
   "organizations.section.more-like-this": "Structures similaires",
   "organizations.section.contribute.title": "Contribuer",
-  "organizations.section.contribute.button-label": "Signaler une erreur"
+  "organizations.section.contribute.button-label": "Signaler une erreur",
+  "organizations.clinical-trials": "Essais cliniques répertoriés par scanR, par année de fin de l'essai",
+  "organizations.clinical-trials.year-bars.name": "Essais cliniques"
 }
