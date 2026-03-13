@@ -147,7 +147,7 @@ export function OrganizationNetworks({
         >
           <Row verticalAlign="middle" gutters className="fr-mb-3w">
             {data?.map((structure) => (
-              <Col key={structure?.denormalized?.id} xs="12" xs="12">
+              <Col key={structure?.denormalized?.id} xs="12">
                 <StructureCard structure={structure} icon={icon} />
               </Col>
             ))}

@@ -1,12 +1,9 @@
 import { Col, Row, Spinner, Text } from "@dataesr/dsfr-plus";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { useIntl } from "react-intl";
 
-import CpcWordCloud from "../../../../../components/patent-chart";
 import YearBars from "../../../../../components/year-bars";
 import { clinicalTrialsIndex, postHeadersBso } from "../../../../../config/api";
-import useScreenSize from "../../../../../hooks/useScreenSize";
 import type { Organization } from "../../../../../types/organization";
 
 export default function OrganizationClinicalTrials({
