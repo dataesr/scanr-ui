@@ -25,7 +25,7 @@ export default function OrganizationPatents({
     "applicants.ids.id": { values: [{ value, label }], type: "terms" },
   };
   const patentsFilterUrl = `/search/patents?filters=${encodeURIComponent(
-    JSON.stringify(searchFilters)
+    JSON.stringify(searchFilters),
   )}`;
 
   if (!patents.patentsCount || patents.patentsCount === 0) {
@@ -140,11 +140,9 @@ export default function OrganizationPatents({
               years={patents.byYear.map((year) => year.label)}
             />
           )}
-          <>
-            {projectGraph === "cpc" && patents.byCpc && (
-              <CpcWordCloud data={patents.byCpc} />
-            )}
-          </>
+          {projectGraph === "cpc" && patents.byCpc && (
+            <CpcWordCloud data={patents.byCpc} />
+          )}
         </Col>
       </Row>
       <hr />

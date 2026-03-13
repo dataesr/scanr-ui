@@ -13,7 +13,7 @@ export default function OrganizationClinicalTrials({
 }) {
   const intl = useIntl();
 
-  const { data: data2, isLoading } = useQuery({
+  const { data: cts, isLoading } = useQuery({
     queryKey: ["organizations", "clinical-trials", data.id],
     queryFn: async () => {
       const ror = data.externalIds.find((item) => item.type === "ror").id;
@@ -67,11 +67,14 @@ export default function OrganizationClinicalTrials({
           headers: postHeadersBso,
         },
       ).then((r) => r.json());
-      return {
-        byYear: organizationClinicalTrials.aggregations.byYear.buckets.map(
-          (bucket) => ({ count: bucket.doc_count, label: bucket.key }),
-        ),
-      };
+      if (organizationClinicalTrials?.aggregations?.byYear) {
+        return {
+          byYear: organizationClinicalTrials.aggregations.byYear.buckets.map(
+            (bucket) => ({ count: bucket.doc_count, label: bucket.key }),
+          ),
+        };
+      }
+      return {};
     },
     throwOnError: true,
   });
@@ -79,43 +82,45 @@ export default function OrganizationClinicalTrials({
   if (isLoading) return <Spinner />;
 
   return (
-    <>
-      <div
-        className="fr-mb-3w"
-        style={{
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ flexGrow: 1 }}>
-          <Text size="lg" className="fr-m-0" bold>
-            {intl.formatMessage({ id: "organizations.clinical-trials" })}
-          </Text>
-        </div>
-        {/*<Button
-          as="a"
-          variant="text"
-          icon="arrow-right-s-line"
-          iconPosition="right"
-          href={patentsFilterUrl}
+    (cts?.byYear?.length ?? 0 > 0) && (
+      <>
+        <div
+          className="fr-mb-3w"
+          style={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "center",
+          }}
         >
-          {intl.formatMessage({ id: "organizations.patents.search" })}
-        </Button>*/}
-      </div>
-      <Row gutters>
-        <Col xs="12" className="fr-pb-6w">
-          <YearBars
-            name={intl.formatMessage({
-              id: "organizations.clinical-trials.year-bars.name",
-            })}
-            height="300px"
-            counts={(data2?.byYear ?? []).map((year) => year.count)}
-            years={(data2?.byYear ?? []).map((year) => year.label)}
-          />
-        </Col>
-      </Row>
-      <hr />
-    </>
+          <div style={{ flexGrow: 1 }}>
+            <Text size="lg" className="fr-m-0" bold>
+              {intl.formatMessage({ id: "organizations.clinical-trials" })}
+            </Text>
+          </div>
+          {/*<Button
+              as="a"
+              variant="text"
+              icon="arrow-right-s-line"
+              iconPosition="right"
+              href={patentsFilterUrl}
+            >
+              {intl.formatMessage({ id: "organizations.patents.search" })}
+            </Button>*/}
+        </div>
+        <Row gutters>
+          <Col xs="12" className="fr-pb-6w">
+            <YearBars
+              name={intl.formatMessage({
+                id: "organizations.clinical-trials.year-bars.name",
+              })}
+              height="300px"
+              counts={(cts?.byYear ?? []).map((year) => year.count)}
+              years={(cts?.byYear ?? []).map((year) => year.label)}
+            />
+          </Col>
+        </Row>
+        <hr />
+      </>
+    )
   );
 }

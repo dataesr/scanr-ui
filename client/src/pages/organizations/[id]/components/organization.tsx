@@ -16,7 +16,7 @@ import SocialMedias from "../../../../components/social-medias";
 import Websites from "../../../../components/websites";
 import useScreenSize from "../../../../hooks/useScreenSize";
 import type { Organization } from "../../../../types/organization";
-import { isInProduction, isInStaging } from "../../../../utils/helpers";
+import { isInProduction } from "../../../../utils/helpers";
 import getLangFieldValue from "../../../../utils/lang";
 import OrganizationAgreements from "./agreements";
 import OrganizationAwards from "./awards";
@@ -338,7 +338,9 @@ export default function OrganizationPresentation({
                   label={getLangFieldValue(locale)(data.label)}
                 />
                 {(data?.categories ?? []).includes("Centre hospitalier") &&
-                  isInStaging() && <OrganizationClinicalTrials data={data} />}
+                  !isInProduction() && (
+                    <OrganizationClinicalTrials data={data} />
+                  )}
               </PageSection>
               <PageSection
                 size="lead"
