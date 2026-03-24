@@ -30,8 +30,8 @@ const XSLXFormatter = (clustersGroup: Array<any>) => {
 
   const clustersList = clustersGroup.flatMap((clusters, index) =>
     clusters.map((cluster) => {
-      const { metadata, similarity, ..._cluster } = cluster
-      const { documents, domains, documentsByYear, citationsByYear, metrics, ..._metadata } = metadata || {}
+      const { metadata, similarity, metrics, ..._cluster } = cluster
+      const { documents, domains, documentsByYear, citationsByYear, ..._metadata } = metadata || {}
       return { period: indexToPeriod(index), ..._cluster, ...getDefined(_metadata) }
     }),
   )
@@ -66,6 +66,7 @@ const XSLXFormatter = (clustersGroup: Array<any>) => {
     clusters.reduce((acc, cluster) => {
       cluster?.similarity?.matches?.forEach((match) => {
         const { source, ..._match } = match
+        const sourceData = clustersGroup[index - 1].find((c) => c.id === source.cluster)
         acc = [
           ...acc,
           {
@@ -73,9 +74,19 @@ const XSLXFormatter = (clustersGroup: Array<any>) => {
             period: indexToPeriod(index),
             cluster: cluster.id,
             clusterLabel: cluster.label,
+            clusterSize: cluster.size,
+            ClusterDocs: cluster.metadata.documentsCount,
+            clusterCore: cluster.core,
+            clusterCentrality: cluster.metrics.centrality,
+            clusterDensity: cluster.metrics.density,
             sourcePeriod: indexToPeriod(index - 1),
             sourceCluster: source.cluster,
             sourceLabel: source.label,
+            sourceSize: sourceData.size,
+            sourceDocs: sourceData.metadata.documentsCount,
+            sourceCore: sourceData.core,
+            sourceCentrality: sourceData.metrics.centrality,
+            sourceDensity: sourceData.metrics.density,
             ..._match,
           },
         ]
@@ -87,6 +98,7 @@ const XSLXFormatter = (clustersGroup: Array<any>) => {
     clusters.reduce((acc, cluster) => {
       cluster?.similarity?.candidates?.forEach((candidate) => {
         const { source, ..._candidate } = candidate
+        const sourceData = clustersGroup[index - 1].find((c) => c.id === source.cluster)
         acc = [
           ...acc,
           {
@@ -94,9 +106,19 @@ const XSLXFormatter = (clustersGroup: Array<any>) => {
             period: indexToPeriod(index),
             cluster: cluster.id,
             clusterLabel: cluster.label,
+            clusterSize: cluster.size,
+            ClusterDocs: cluster.metadata.documentsCount,
+            clusterCore: cluster.core,
+            clusterCentrality: cluster.metrics.centrality,
+            clusterDensity: cluster.metrics.density,
             sourcePeriod: indexToPeriod(index - 1),
             sourceCluster: source.cluster,
             sourceLabel: source.label,
+            sourceSize: sourceData.size,
+            sourceDocs: sourceData.metadata.documentsCount,
+            sourceCore: sourceData.core,
+            sourceCentrality: sourceData.metrics.centrality,
+            sourceDensity: sourceData.metrics.density,
             ..._candidate,
           },
         ]
@@ -127,6 +149,13 @@ const exportNetwork = (networks: NetworkData[]) =>
       id: cluster.cluster,
       label: cluster.label,
       size: cluster.size,
+      core: cluster.nodes
+        .slice(0, 10)
+        .map((n) => n.label)
+        .join(", "),
+      ...(cluster?.metrics && {
+        metrics: getDefined(cluster.metrics),
+      }),
       ...(cluster?.metadata && {
         metadata: {
           ...getDefined(cluster.metadata),
