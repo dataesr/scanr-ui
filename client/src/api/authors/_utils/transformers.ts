@@ -18,7 +18,7 @@ export function getWikiDomains(domains: DomainsDoc[], slice: number = 30) {
 
   wikiData.forEach((item) => {
 			const label = item.label?.default?.toLowerCase();
-			if (label) if (label) counts.set(label, (counts.get(label) || 0) + 1);
+			if (label) if (label) counts.set(label, (counts.get(label) || 0) + item.count);
 		})
 
   return Array.from(counts.entries())

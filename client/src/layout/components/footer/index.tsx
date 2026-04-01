@@ -132,7 +132,7 @@ export default function MainFooter() {
                       as="h3"
                       className={cn(
                         "fr-footer__top-cat",
-                        styles["text-center"]
+                        styles["text-center"],
                       )}
                     >
                       {intl.formatMessage({
@@ -213,7 +213,7 @@ export default function MainFooter() {
                           href="https://works-magnet.esr.gouv.fr/"
                           target="_blank"
                         >
-                          Works Magnet
+                          Works-Magnet
                         </Link>
                       </li>
                       <li>
@@ -250,7 +250,9 @@ export default function MainFooter() {
             </Row>
           </Container>
         </FooterTop>
-        <FooterBody description={intl.formatMessage({ id: "layout.footer.tagline" })}>
+        <FooterBody
+          description={intl.formatMessage({ id: "layout.footer.tagline" })}
+        >
           <Link
             className="fr-footer__content-link"
             target="_blank"

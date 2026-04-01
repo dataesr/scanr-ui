@@ -23,10 +23,12 @@ export type NetworkItem = {
   metrics?: Record<string, number>
   page?: string
   search?: string
-  documentsCount?: number
-  citationsCount?: number
-  citationsRecent?: number
-  citationsScore?: number
+  metadata?: {
+    documentsCount?: number
+    citationsCount?: number
+    citationsRecent?: number
+    citationsScore?: number
+  }
 }
 export type NetworkLinks = Array<NetworkLink>
 export type NetworkLink = {
@@ -62,6 +64,18 @@ export type NetworkCommunity = {
     density: number
     centrality: number
   }
+  similarity?: {
+    matches?: Array<NetworkCommunitySimilarity>
+    candidates?: Array<NetworkCommunitySimilarity>
+  }
+}
+export type NetworkCommunitySimilarity = {
+  source: NetworkCommunity
+  intersection: number
+  union: number
+  jaccard: number
+  overlap: number
+  core: number
 }
 export type NetworkConfig = {
   terminology?: Record<string, unknown>
@@ -101,12 +115,12 @@ export type NetworkSearchBody = {
   aggs?: Record<string, unknown>
 }
 export type NetworkSearchArgs = {
+  query?: string
   source: string
   model: string
-  query?: string
   filters?: NetworkFilters
+  parameters: NetworkParameters
   lang?: string
-  parameters?: NetworkParameters
   integration?: string
 }
 export type NetworkSearchHitsArgs = {
@@ -168,5 +182,6 @@ export type NetworkParameters = {
   maxComponents: number
   clusters: boolean
   filterNode: string
+  filterFocus: boolean
   sample: boolean
 }

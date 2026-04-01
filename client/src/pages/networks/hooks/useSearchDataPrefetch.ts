@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useDSFRConfig } from "@dataesr/dsfr-plus"
-import { networkSearch } from "../../../api/networks/search/search"
+import getNetwork from "../../../api/networks"
 import useOptions from "./useOptions"
 
 export default function useSearchDataPrefetch() {
@@ -11,7 +11,7 @@ export default function useSearchDataPrefetch() {
   queryClient.prefetchQuery({
     queryKey: ["network", "search", "publications", "domains", "", [], locale, parameters],
     queryFn: () =>
-      networkSearch({
+      getNetwork({
         source: "publications",
         model: "domains",
         query: "",

@@ -87,5 +87,7 @@
   "organizations.networks.since": "since",
   "organizations.section.more-like-this": "Similar structures",
   "organizations.section.contribute.title": "Contribute",
-  "organizations.section.contribute.button-label": "Report an error"
+  "organizations.section.contribute.button-label": "Report an error",
+  "organizations.clinical-trials": "Clinical trials listed by scanR, by trial completion year",
+  "organizations.clinical-trials.year-bars.name": "Clinical trials"
 }

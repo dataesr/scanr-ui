@@ -19,7 +19,6 @@ export async function getMoreAuthorsLikeThis(id: string, filters?: any[]) {
       }
     }
   })
-  console.log(filters, body)
   const res = await fetch(`${authorsIndex}/_search`, { method: 'POST', body, headers: postHeaders })
   const data = await res.json();
   return data?.hits?.hits?.map(({ _source }) => _source) || []

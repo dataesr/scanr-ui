@@ -13,16 +13,14 @@ type TrendsTableItemProps = {
   item: TrendsRankingItem
 }
 export default function TrendsTableItem({ index, item }: TrendsTableItemProps) {
-  const { trendsYears } = useTrends()
-  const { focus, setFocus } = useTrendsContext()
-  const { currentModel, currentPage } = useOptions()
-  const { wikis } = useWikidata()
-  const wiki = wikis?.find((w) => w.code === item.id)
-  const url = wiki?.url
-  const description = wiki?.extract || ""
-  const isFocused = Boolean(focus === index)
-
-  isFocused && console.log("item", item)
+  const { trendsYears } = useTrends();
+  const { focus, setFocus } = useTrendsContext();
+  const { currentModel, currentPage } = useOptions();
+  const { wikis } = useWikidata();
+  const wiki = wikis?.find((w) => w.code === item.id);
+  const url = wiki?.url;
+  const description = wiki?.extract || "";
+  const isFocused = Boolean(focus === index);
 
   return (
     <>

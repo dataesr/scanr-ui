@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import useUrl from "../../search/hooks/useUrl"
-import { mistralAgentCompletion } from "../../../api/networks/network/mistralai"
 import { useMemo } from "react"
+import { mistralAgentCompletion } from "../../../api/networks/_utils/mistralai"
 
 export default function useSearchExpansion(forcedQuery?: string) {
   const { currentQuery } = useUrl()
