@@ -12,6 +12,7 @@ import PublicationTypeFilter from "./types";
 import PublicationYearFilter from "./years";
 import PublicationCountriesFilter from "./countries"
 import PublicationTagsFilter from "./tags"
+import PublicationAuthorsAwardsFilter from "./awards"
 
 export default function PublicationFilters() {
   const intl = useIntl()
@@ -31,6 +32,8 @@ export default function PublicationFilters() {
           <PublicationTypeFilter />
           <hr className="fr-mt-3w" />
           <PublicationAuthorFilter />
+          <hr className="fr-mt-3w" />
+          <PublicationAuthorsAwardsFilter />
           <hr className="fr-mt-3w" />
           <PublicationOrganizationsFilter />
           <hr className="fr-mt-3w" />

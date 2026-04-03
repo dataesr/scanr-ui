@@ -37,6 +37,12 @@ const AGGS = {
       field: "source.title.keyword",
       size: 10,
     }
+  },
+  byAward: {
+    terms: {
+      field: "authors.awards.label.keyword",
+      size: 10,
+    }
   }
 }
 
@@ -107,5 +113,12 @@ export async function aggregatePublications(
     }
   }
   ).filter(el => el) || [];
-  return { byYear, byType, byAuthors, byFunder, byIsOa, byReview }
+  const byAward = data?.byAward?.buckets?.map((element) => {
+    return {
+      value: element.key,
+      label: element.key,
+      count: element.doc_count,
+    }
+  }).filter(el => el) || [];
+  return { byYear, byType, byAuthors, byFunder, byIsOa, byReview, byAward }
 }
