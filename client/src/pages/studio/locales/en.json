@@ -9,7 +9,7 @@
   "studio.define.link.bso-local": "View the local variations of the French Open Science Monitor",
   "studio.define.link.bso-studio": "Submit a request for a local variation (monitor and scanR)",
   "studio.create.identifier.label": "Establishment identifier (or HAL structure or collection)",
-  "studio.create.identifier.hint": "If ad-hoc scope, identifier provided by the BSO or RoR team. In all cases, HAL structure identifier, or HAL collection code",
+  "studio.create.identifier.hint": "If ad-hoc scope, identifier provided by the BSO or RoR team. In all cases, HAL structure identifier, or HAL collection code. Multiple ids separated by space",
   "studio.create.identifier.message": "Please enter an identifier",
   "studio.create.select-lang.label": "Language",
   "studio.create.lang.fr": "French",
