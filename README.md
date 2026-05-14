@@ -23,4 +23,5 @@ git tag -l (to get the tag list)
 git commit -m '<new tag>'
 git tag <new tag>
 git push origin main --tags
+git switch staging
 ```
