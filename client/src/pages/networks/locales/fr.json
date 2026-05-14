@@ -82,7 +82,7 @@
     "networks.get-started.select-model.description": "Les différentes communautés sont obtenues par co-occurence au sein du corpus de documents correspondant à la recherche effectuée. La visualisation prend la forme d'un réseau composé de noeuds representant les différents élements reliés entre eux en fonction de leur nombre de co-occurences.",
     "networks.search-bar.button.label.anything": "Tout",
     "networks.search-bar.modal.title": "Rechercher",
-        "networks.select-model.modal.title": "Réseau",
+    "networks.select-model.modal.title": "Réseau",
     "networks.select-source.modal.title": "Source",
     "networks.filters.button.label": "Filtres",
     "networks.notice.quick-search": "La recherche est limitée à 10 000 documents. Pour une recherche plus approfondie, désactivez la recherche rapide dans les paramètres. (Cela peut prendre quelques minutes.)",
@@ -212,5 +212,6 @@
     "networks.navigate-to-search.patents": "Rechercher les brevets associés",
     "networks.navigate-to-search.patents.short": "Brevets associés",
     "networks.navigate-to-search.projects": "Rechercher les financements associés",
-    "networks.navigate-to-search.projects.short": "Financements associés"
+    "networks.navigate-to-search.projects.short": "Financements associés",
+    "networks.and": "et"
 }

@@ -102,7 +102,7 @@ export default function useUrl() {
   const currentQuery = searchParams.get("q") || "";
   const currentFilters = parseSearchFiltersFromURL(searchParams.get("filters"));
   const filters = filtersToElasticQuery(currentFilters);
-  if (integrationId) filters.push({ terms: { "bso_local_affiliations.keyword": integrationId.trim().toLowerCase().split(' ').filter((local) => local !== '').map((local) => local.trim()) } })
+  if (integrationId) filters.push({ terms: { "bso_local_affiliations.keyword": integrationId.trim().toLowerCase().split(/[ ,]+/).filter((local) => local !== '').map((local) => local.trim()) } })
 
   const clearFilters = useCallback(() => {
     searchParams.delete("filters");

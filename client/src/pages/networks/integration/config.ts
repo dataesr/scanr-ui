@@ -18,17 +18,23 @@ export const DEFAULT_INTEGRATION: NetworksIntegrationOptions = {
   graphHeight: "640px",
 }
 
-const url = "https://raw.githubusercontent.com/dataesr/bso-ui/main/src/config/locals.json"
+const urlBsoLocals = "https://raw.githubusercontent.com/dataesr/bso-ui/main/src/config/locals.json"
+const urlOpenAlex = "https://raw.githubusercontent.com/dataesr/bso-ui/main/src/config/openalex.json"
 
 export function getBsoLocals() {
-  const { data } = useSuspenseQuery({
+  const { data: dataBsoLocals } = useSuspenseQuery({
     queryKey: ["bso", "locals"],
-    queryFn: () => fetch(url).then((response) => (response.ok ? response.json() : {})),
+    queryFn: () => fetch(urlBsoLocals).then((response) => (response.ok ? response.json() : {})),
+  })
+
+  const { data: dataOpenAlex } = useSuspenseQuery({
+    queryKey: ["bso", "openalex"],
+    queryFn: () => fetch(urlOpenAlex).then((response) => (response.ok ? response.json() : {})),
   })
 
   const values = useMemo(() => {
-    return data
-  }, [data])
+    return { ...dataOpenAlex, ...dataBsoLocals }
+  }, [dataBsoLocals, dataOpenAlex])
 
   return values
 }
