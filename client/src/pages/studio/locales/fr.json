@@ -9,7 +9,7 @@
   "studio.define.link.bso-local": "Voir les déclinaisons locales du Baromètre de la Science Ouverte",
   "studio.define.link.bso-studio": "Soumettre une demande de déclinaison locale (Baromètre et scanR)",
   "studio.create.identifier.label": "Identifiant de l'établissement (ou de structure ou collection HAL)",
-  "studio.create.identifier.hint": "Si périmètre ad-hoc, identifiant communiqué par l'équipe BSO ou RoR. Dans tous les cas, identifiant de structure HAL, ou code collection HAL. Plusieurs ids possible, séparés par un espace.",
+  "studio.create.identifier.hint": "Si périmètre ad-hoc, identifiant communiqué par l'équipe BSO ou RoR. Dans tous les cas, identifiant de structure HAL, code collection HAL ou lineage OpenAlex. Plusieurs ids possible, séparés par un espace.",
   "studio.create.identifier.message": "Merci de saisir un identifiant",
   "studio.create.select-lang.label": "Langue",
   "studio.create.lang.fr": "Français",

@@ -213,5 +213,6 @@
     "networks.navigate-to-search.patents": "Search associated patents",
     "networks.navigate-to-search.patents.short": "Search associated patents",
     "networks.navigate-to-search.projects": "Search associated fundings",
-    "networks.navigate-to-search.projects.short": "Search associated fundings"
+    "networks.navigate-to-search.projects.short": "Search associated fundings",
+    "networks.and": "and"
 }

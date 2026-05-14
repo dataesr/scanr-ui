@@ -1,7 +1,8 @@
-import { useIntl } from "react-intl"
-import { getBsoLocals } from "../../integration/config"
 import { Container, Title } from "@dataesr/dsfr-plus"
+import { useIntl } from "react-intl"
+
 import { useNetworkContext } from "../../context"
+import { getBsoLocals } from "../../integration/config"
 
 export default function NetworkTitle() {
   const intl = useIntl()
@@ -14,9 +15,10 @@ export default function NetworkTitle() {
   if (showTitle === false) return null
 
   const locals = integrationId ? getBsoLocals() : {}
-  const comment: string =
-    (intl.locale === "en" ? locals?.[integrationId]?.commentsNameEN : locals?.[integrationId]?.commentsName) ||
-    (integrationId ? `${intl.formatMessage({ id: "networks.header.title.perimeter" })} ${integrationId}` : "")
+  const commentNameField = intl.locale === 'en' ? 'commentsNameEN' : 'commentsName'
+  const comment: string = integrationId.trim().toLowerCase().split(/[ ,]+/)
+    .map((item) => locals?.[item.trim()]?.[commentNameField] ?? `${intl.formatMessage({ id: "networks.header.title.perimeter" })} ${item}`)
+    .join(` ${intl.formatMessage({ id: "networks.and" })} `)
 
   return (
     <Container fluid className="fr-mb-2w">
