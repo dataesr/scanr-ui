@@ -130,6 +130,7 @@
   "search.filters.current.publications.affiliations.id": "Affiliations",
   "search.filters.current.publications.affiliations.country": "Pays",
   "search.filters.current.publications.authors.person": "Auteurs",
+  "search.filters.current.publications.authors.awards.label": "Prix d'auteurs",
   "search.filters.current.publications.type": "Type de publication",
   "search.filters.current.publications.year": "Années de publication",
   "search.filters.current.publications.projects.type": "Type de financement",

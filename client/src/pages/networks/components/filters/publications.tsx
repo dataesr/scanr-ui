@@ -11,6 +11,7 @@ import PublicationFunderFilter from "../../../search/components/publications/fil
 import PublicationTagsFilter from "../../../search/components/publications/filters/tags"
 import useUrl from "../../../search/hooks/useUrl"
 import NetworksCoElementsFilters from "./networks"
+import PublicationAuthorsAwardsFilter from "../../../search/components/publications/filters/awards"
 
 export default function NetworkFiltersPublicationsModal() {
   const intl = useIntl()
@@ -26,6 +27,8 @@ export default function NetworkFiltersPublicationsModal() {
           <PublicationTypeFilter />
           <hr className="fr-mt-3w" />
           <PublicationAuthorFilter />
+          <hr className="fr-mt-3w" />
+          <PublicationAuthorsAwardsFilter />
           <hr className="fr-mt-3w" />
           <PublicationOrganizationsFilter />
           <hr className="fr-mt-3w" />

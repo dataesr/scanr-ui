@@ -126,6 +126,7 @@
   "search.filters.current.publications.affiliations.id": "Affiliations",
   "search.filters.current.publications.affiliations.country": "Countries",
   "search.filters.current.publications.authors.person": "Authors",
+  "search.filters.current.publications.authors.awards.label": "Authors' awards",
   "search.filters.current.publications.type": "Publication type",
   "search.filters.current.publications.year": "Publication years",
   "search.filters.current.publications.projects.type": "Funding type",
