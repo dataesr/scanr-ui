@@ -16,9 +16,9 @@ export default function NetworkTitle() {
 
   const locals = integrationId ? getBsoLocals() : {}
   const commentNameField = intl.locale === 'en' ? 'commentsNameEN' : 'commentsName'
-  const comment: string = integrationId.trim().toLowerCase().split(/[ ,]+/)
+  const comment: string = integrationId ? integrationId.trim().toLowerCase().split(/[ ,]+/)
     .map((item) => locals?.[item.trim()]?.[commentNameField] ?? `${intl.formatMessage({ id: "networks.header.title.perimeter" })} ${item}`)
-    .join(` ${intl.formatMessage({ id: "networks.and" })} `)
+    .join(` ${intl.formatMessage({ id: "networks.and" })} `) : ''
 
   return (
     <Container fluid className="fr-mb-2w">
