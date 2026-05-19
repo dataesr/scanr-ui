@@ -161,7 +161,7 @@ export default function PatentPage({ data }: { data: Patent }) {
               </PageSection>
               {!isInProduction() && (
                 <PageSection
-                  icon="link"
+                  icon="book-2-line"
                   show
                   size="lead"
                   title={intl.formatMessage({ id: "patents.section.publications-linked" })}
@@ -172,7 +172,7 @@ export default function PatentPage({ data }: { data: Patent }) {
                         <PublicationItem data={publication} key={publication.doi} />
                       )}
                     </div>
-                  ) : <Text className="fr-card__detail fr-text--md">{intl.formatMessage({ id: "more-like-this.empty" })}</Text>}
+                  ) : <Text className="fr-card__detail fr-text--md">{intl.formatMessage({ id: "patents.section.publications-linked.empty" })}</Text>}
                 </PageSection>
               )}
               <PageSection

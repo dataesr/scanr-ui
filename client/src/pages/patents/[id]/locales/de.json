@@ -41,6 +41,8 @@
     "patents.section.map.regional.publication": "Regionales Veröffentlichungsdatum",
     "patents.section.map.regional.grant": "Regionales Gewährungsdatum",
     "patents.section.publications-linked": "Verwandte Publikationen",
+    "patents.section.publications-linked.empty": "Keine verwandten Publikationen",
+    "search.publications.other": "Andere",
     "SE": "Schweden",
     "EP": "Europäisches Patentamt",
     "WO": "Weltorganisation für geistiges Eigentum",

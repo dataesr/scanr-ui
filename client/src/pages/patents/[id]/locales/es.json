@@ -41,6 +41,8 @@
     "patents.section.map.regional.publication": "Fecha de publicación regional",
     "patents.section.map.regional.grant": "Fecha de concesión regional",
     "patents.section.publications-linked": "Publicaciones relacionadas",
+    "patents.section.publications-linked.empty": "No hay publicaciones relacionadas",
+    "search.publications.other": "Otro",
     "SE": "Suecia",
     "EP": "Oficina Europea de Patentes",
     "WO": "Organización Mundial de la Propiedad Intelectual",
