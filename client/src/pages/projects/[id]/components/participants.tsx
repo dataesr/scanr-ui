@@ -6,6 +6,7 @@ import type { Participant } from "../../../../types/project";
 import getLangFieldValue from "../../../../utils/lang";
 
 type Data = Participant & {
+	funding: number,
 	subParticipants: Participant[];
 };
 
@@ -71,13 +72,13 @@ export default function ProjectParticipants({
 								) : (
 									part.label?.default?.split("__")?.[0]
 								)}
-								{part.funding && (
+								{(part?.funding !== 0) && (
 									<Text className="fr-card__detail" size="sm">
 										<i>
 											{intl.formatMessage(
 												{ id: "projects.section.participants.financed" },
 												{
-													funding: part.funding.toLocaleString(),
+													funding: Number(part.funding).toLocaleString(),
 												},
 											)}
 										</i>
