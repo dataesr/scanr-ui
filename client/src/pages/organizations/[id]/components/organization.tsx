@@ -119,16 +119,18 @@ export default function OrganizationPresentation({
               >
                 <OrganizationAwards awards={data?.awards} />
               </PageSection>
-              <PageSection
-                size="lead"
-                icon="team-line"
-                title={intl.formatMessage({
-                  id: "organizations.section.leaders.title",
-                })}
-                show={!!data?.leaders?.length}
-              >
-                <OrganizationLeaders data={data?.leaders} />
-              </PageSection>
+              {!isInProduction() && (
+                <PageSection
+                  size="lead"
+                  icon="team-line"
+                  title={intl.formatMessage({
+                    id: "organizations.section.leaders.title",
+                  })}
+                  show={!!data?.leaders?.length}
+                >
+                  <OrganizationLeaders data={data?.leaders} />
+                </PageSection>
+              )}
               <PageSection
                 size="lead"
                 icon="git-branch-line"
