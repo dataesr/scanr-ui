@@ -1,13 +1,14 @@
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { RawIntlProvider, createIntl } from "react-intl";
-import { Breadcrumb, Container, Link, useDSFRConfig } from "@dataesr/dsfr-plus";
-import { getPublicationById } from "../../../api/publications/[id]";
-import These from "./components/these";
-import Publication from "./components/publication";
-import BaseSkeleton from "../../../components/skeleton/base-skeleton";
-import PageSkeleton from "../../../components/skeleton/page-skeleton";
-import getLangFieldValue from "../../../utils/lang";
+import { Breadcrumb, Container, Link, useDSFRConfig } from "@dataesr/dsfr-plus"
+import { useQuery } from "@tanstack/react-query"
+import { RawIntlProvider, createIntl } from "react-intl"
+import { useParams } from "react-router-dom"
+
+import { getPublicationById } from "../../../api/publications/[id]"
+import BaseSkeleton from "../../../components/skeleton/base-skeleton"
+import PageSkeleton from "../../../components/skeleton/page-skeleton"
+import getLangFieldValue from "../../../utils/lang"
+import Publication from "./components/publication"
+import These from "./components/these"
 
 const modules = import.meta.glob('./locales/*.json', { eager: true, import: 'default' })
 
@@ -17,22 +18,20 @@ const messages = Object.keys(modules).reduce((acc, key) => {
     return { ...acc, [locale]: modules[key] }
   }
   return acc;
-}, {});
-
-
+}, {})
 
 export default function Production() {
-  const { locale } = useDSFRConfig();
+  const { locale } = useDSFRConfig()
   const intl = createIntl({ locale, messages: messages[locale] })
-  const { id } = useParams();
+  const { id } = useParams()
 
   const { data, isLoading } = useQuery({
     queryKey: ["publication", id],
     queryFn: () => getPublicationById(id),
     throwOnError: true,
-  });
+  })
 
-  const title = getLangFieldValue(locale)(data?.title);
+  const title = getLangFieldValue(locale)(data?.title)
 
   return (
     <RawIntlProvider value={intl}>

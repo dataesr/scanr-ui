@@ -58,7 +58,7 @@ export async function getMultipleNetworks(
   const networks = await Promise.all(networksPromises)
     .then((data) => data)
     .catch((error) => {
-      console.log(error);
+      console.error(error);
       return undefined;
     });
 

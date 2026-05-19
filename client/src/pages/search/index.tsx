@@ -1,7 +1,3 @@
-import PublicationItem from "./components/publications/publication-item";
-import AuthorItem from "./components/authors/author-item";
-import SearchResultListSkeleton from "../../components/skeleton/search-result-list-skeleton";
-import useSearchData from "./hooks/useSearchData";
 import {
   Breadcrumb,
   Button,
@@ -12,40 +8,45 @@ import {
   SearchBar,
   Text,
   useDSFRConfig,
-} from "@dataesr/dsfr-plus";
-import { FormattedMessage, createIntl, RawIntlProvider } from "react-intl";
-import Separator from "../../components/separator";
-import { useEffect } from "react";
-import { MAX_RESULTS_BEFORE_USER_CLICK } from "../../config/app";
-import { useInView } from "react-intersection-observer";
-import PublicationAnalytics from "./components/publications/publication-analytics";
-import OrganizationItem from "./components/organizations/organization-item";
-import ProjectItem from "./components/projects/project-item";
-import BaseSkeleton from "../../components/skeleton/base-skeleton";
-import PublicationFilters from "./components/publications/filters";
+} from "@dataesr/dsfr-plus"
+import { useEffect } from "react"
+import { useInView } from "react-intersection-observer"
+import { createIntl, FormattedMessage, RawIntlProvider } from "react-intl"
 
-import OrganizationFilters from "./components/organizations/filters";
-import Error500 from "../../components/errors/error-500";
-import ProjectFilters from "./components/projects/filters";
-import AuthorFilters from "./components/authors/filters";
-import useUrl from "./hooks/useUrl";
-import OrganizationsAnalytics from "./components/organizations/organization-analytics";
-import CurrentFilters from "./components/commons/current-filters";
-import ResultExports from "./components/commons/exports";
-import useScreenSize from "../../hooks/useScreenSize";
-import ProjectAnalytics from "./components/projects/projects-analytics";
-import AuthorAnalytics from "./components/authors/author-analytics";
-import PatentItem from "./components/patents/patent-item/index.tsx";
-import { ObjectModel } from "../../types/commons";
-import { ItemProps } from "./types";
-import PatentFilters from "./components/patents/filters";
-import PatentAnalytics from "./components/patents/patent-analytics";
+import Error500 from "../../components/errors/error-500"
+import Separator from "../../components/separator"
+import BaseSkeleton from "../../components/skeleton/base-skeleton"
+import SearchResultListSkeleton from "../../components/skeleton/search-result-list-skeleton"
+import { MAX_RESULTS_BEFORE_USER_CLICK } from "../../config/app"
+import useScreenSize from "../../hooks/useScreenSize"
+import { ObjectModel } from "../../types/commons"
+import AuthorAnalytics from "./components/authors/author-analytics"
+import AuthorItem from "./components/authors/author-item"
+import AuthorFilters from "./components/authors/filters"
+import CurrentFilters from "./components/commons/current-filters"
+import ResultExports from "./components/commons/exports"
 import NavigateToNetwork from "./components/commons/navigate-to-network.tsx"
+import OrganizationFilters from "./components/organizations/filters"
+import OrganizationsAnalytics from "./components/organizations/organization-analytics"
+import OrganizationItem from "./components/organizations/organization-item"
+import PatentFilters from "./components/patents/filters"
+import PatentAnalytics from "./components/patents/patent-analytics"
+import PatentItem from "./components/patents/patent-item/index.tsx"
+import ProjectFilters from "./components/projects/filters"
+import ProjectItem from "./components/projects/project-item"
+import ProjectAnalytics from "./components/projects/projects-analytics"
+import PublicationFilters from "./components/publications/filters"
+import PublicationAnalytics from "./components/publications/publication-analytics"
+import PublicationItem from "./components/publications/publication-item"
+import useSearchData from "./hooks/useSearchData"
+import useUrl from "./hooks/useUrl"
+import { ItemProps } from "./types"
 
 const modules = import.meta.glob("./locales/*.json", {
   eager: true,
   import: "default",
 })
+
 const messages = Object.keys(modules).reduce((acc, key) => {
   const locale = key.match(/\.\/locales\/(.+)\.json$/)?.[1]
   if (locale) {
@@ -55,11 +56,6 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 }, {})
 
 const API_MAPPING = {
-  publications: {
-    item: PublicationItem,
-    analytics: PublicationAnalytics,
-    filters: PublicationFilters,
-  },
   authors: {
     item: AuthorItem,
     analytics: AuthorAnalytics,
@@ -70,15 +66,20 @@ const API_MAPPING = {
     analytics: OrganizationsAnalytics,
     filters: OrganizationFilters,
   },
+  patents: {
+    item: PatentItem,
+    analytics: PatentAnalytics,
+    filters: PatentFilters,
+  },
   projects: {
     item: ProjectItem,
     analytics: ProjectAnalytics,
     filters: ProjectFilters,
   },
-  patents: {
-    item: PatentItem,
-    analytics: PatentAnalytics,
-    filters: PatentFilters,
+  publications: {
+    item: PublicationItem,
+    analytics: PublicationAnalytics,
+    filters: PublicationFilters,
   },
 }
 
@@ -89,14 +90,12 @@ export default function Search() {
   const [ref, inView] = useInView()
   const { api, currentQuery, handleQueryChange } = useUrl()
   const { search, total } = useSearchData()
-  const { data, error, isFetchingNextPage, fetchNextPage, hasNextPage, isFetching } = search
 
-  const isMobile = screen === "sm" || screen === "xs";
-
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage } = search
+  const isMobile = screen === "sm" || screen === "xs"
   const AnalyticsComponent = API_MAPPING[api]?.analytics
   const FilterComponent = API_MAPPING[api]?.filters
   const ItemComponent: React.FC<ItemProps<ObjectModel>> = API_MAPPING[api]?.item
-
   const shouldClickToLoad = data?.length ? data.length >= MAX_RESULTS_BEFORE_USER_CLICK : false
 
   useEffect(() => {
@@ -104,9 +103,9 @@ export default function Search() {
       fetchNextPage()
     }
   }, [inView, fetchNextPage])
-  if (error) {
-    return <Error500 error={error} />
-  }
+
+  if (error) return <Error500 error={error} />
+
   return (
     <RawIntlProvider value={intl}>
       <Container className={`bg-${api}`} fluid>

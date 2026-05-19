@@ -1,22 +1,23 @@
 import {
-  Link,
   Button,
   ButtonGroup,
   Col,
   Container,
+  Link,
   Row,
-} from "@dataesr/dsfr-plus";
-import Share from "../../../../components/share";
-import PublicationsHeader from "./header";
-import { useIntl } from "react-intl";
-import { PageContent, PageSection } from "../../../../components/page-content";
-import useScreenSize from "../../../../hooks/useScreenSize";
-import Wiki from "../../../../components/wiki";
-import ProjectItem from "../../../search/components/projects/project-item";
-import Identifiers from "../../../../components/identifiers";
-import MoreLikeThis from "../../../../components/more-like-this";
-import { Publication } from "../../../../types/publication";
-import { encode } from "../../../../utils/string";
+} from "@dataesr/dsfr-plus"
+import { useIntl } from "react-intl"
+
+import Identifiers from "../../../../components/identifiers"
+import MoreLikeThis from "../../../../components/more-like-this"
+import { PageContent, PageSection } from "../../../../components/page-content"
+import Share from "../../../../components/share"
+import Wiki from "../../../../components/wiki"
+import useScreenSize from "../../../../hooks/useScreenSize"
+import { Publication } from "../../../../types/publication"
+import { encode } from "../../../../utils/string"
+import ProjectItem from "../../../search/components/projects/project-item"
+import PublicationsHeader from "./header"
 import Software from "./software"
 
 export default function PublicationPage({ data }: { data: Publication }) {

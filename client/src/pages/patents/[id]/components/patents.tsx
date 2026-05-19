@@ -9,37 +9,50 @@ import {
   Text,
   Title,
   useDSFRConfig,
-} from "@dataesr/dsfr-plus";
-import { useIntl } from "react-intl";
-import { Patent } from "../../../../types/patent";
-import useScreenSize from "../../../../hooks/useScreenSize";
-import { PageContent, PageSection } from "../../../../components/page-content";
-import Share from "../../../../components/share";
-import getLangFieldValue from "../../../../utils/lang";
-import PatentCPC from "./cpc";
-import PatentMap from "./coverage-map";
-import Truncate from "../../../../components/truncate";
-import PatentTimeline from "./timeline";
-import Websites from "../../../../components/websites";
-import MoreLikeThis from "../../../../components/more-like-this";
-import PatentActors from "./actors";
+} from "@dataesr/dsfr-plus"
+import { useIntl } from "react-intl"
+
+import MoreLikeThis from "../../../../components/more-like-this"
+import { PageContent, PageSection } from "../../../../components/page-content"
+import Share from "../../../../components/share"
+import Truncate from "../../../../components/truncate"
+import Websites from "../../../../components/websites"
+import useScreenSize from "../../../../hooks/useScreenSize"
+import { Patent } from "../../../../types/patent"
+import { isInProduction } from "../../../../utils/helpers"
+import getLangFieldValue from "../../../../utils/lang"
+import PatentActors from "./actors"
+import PatentMap from "./coverage-map"
+import PatentCPC from "./cpc"
+import PatentTimeline from "./timeline"
+import PublicationItem from "../../../search/components/publications/publication-item"
 
 export default function PatentPage({ data }: { data: Patent }) {
-  const { locale } = useDSFRConfig();
-  const intl = useIntl();
-  const { screen } = useScreenSize();
-  const priority = data.patents.find((patent) => patent.isPriority);
+  const { locale } = useDSFRConfig()
+  const intl = useIntl()
+  const { screen } = useScreenSize()
+  const priority = data.patents.find((patent) => patent.isPriority)
   const espaceNetUrl = priority
     ? priority.links?.[0]?.url
     : data.patents.sort(
-        (a, b) =>
-          new Date(b.applicationDate).getTime() -
-          new Date(a.applicationDate).getTime()
-      )?.[0]?.links?.[0]?.url;
+      (a, b) =>
+        new Date(b.applicationDate).getTime() -
+        new Date(a.applicationDate).getTime()
+    )?.[0]?.links?.[0]?.url
   const inpiId = data.patents
     .find((patent) => patent.office === "FR")
-    ?.publicationNumber?.split("A")[0];
-  const inpiUrl = inpiId && `https://data.inpi.fr/brevets/FR${inpiId}`;
+    ?.publicationNumber?.split("A")[0]
+  const inpiUrl = inpiId && `https://data.inpi.fr/brevets/FR${inpiId}`
+
+  const publications = (data?.publications ?? []).map((publication) => ({
+    ...publication,
+    authors: (publication?.authors ?? []).map((author) => ({ ...author, fullName: author.name })),
+    id: publication?.id || `doi${publication?.doi}`,
+    title: { default: publication?.title },
+    type: publication?.type === "article" ? "journal-article" : publication?.type,
+    source: { volume: publication.journals[0]?.name },
+    year: Number(publication.publicationYear),
+  }))
 
   return (
     <Container fluid>
@@ -146,6 +159,22 @@ export default function PatentPage({ data }: { data: Patent }) {
               >
                 <MoreLikeThis id={data._id} api="patents" />
               </PageSection>
+              {!isInProduction() && (
+                <PageSection
+                  icon="link"
+                  show
+                  size="lead"
+                  title={intl.formatMessage({ id: "patents.section.publications-linked" })}
+                >
+                  {publications?.length ? (
+                    <div className="result-list">
+                      {publications.map((publication) =>
+                        <PublicationItem data={publication} key={publication.doi} />
+                      )}
+                    </div>
+                  ) : <Text className="fr-card__detail fr-text--md">{intl.formatMessage({ id: "more-like-this.empty" })}</Text>}
+                </PageSection>
+              )}
               <PageSection
                 title="Data JSON"
                 description=""
@@ -242,5 +271,5 @@ export default function PatentPage({ data }: { data: Patent }) {
         </Col>
       </Row>
     </Container>
-  );
+  )
 }

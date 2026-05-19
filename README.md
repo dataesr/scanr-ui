@@ -14,7 +14,7 @@ To deploy in production:
 ```bash
 git switch main
 git pull origin main --rebase --tags
-git merge origin/staging
+git merge origin staging
 cd client
 npm version [patch|minor|major]
 cd ..
@@ -24,4 +24,6 @@ git commit -m '<new tag>'
 git tag <new tag>
 git push origin main --tags
 git switch staging
+git merge origin main
+git push origin staging --tags
 ```

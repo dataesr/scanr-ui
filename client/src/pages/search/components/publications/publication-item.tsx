@@ -138,6 +138,7 @@ export default function PublicationItem({
 			queryFn: () => getPublicationById(id),
 		});
 	}
+
 	return (
 		<Fragment key={publication.id}>
 			<div className="result-item">

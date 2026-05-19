@@ -1,30 +1,30 @@
-import { useMemo } from "react";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { searchPublications } from "../../../api/publications/search";
-import { searchAuthors } from "../../../api/authors/search";
-import { searchPatents } from "../../../api/patents/search";
+import { useInfiniteQuery } from "@tanstack/react-query"
+import { useMemo } from "react"
 
-import { searchOrganizations, searchOrganizationsForHe } from "../../../api/organizations/search";
-import { searchProjects } from "../../../api/projects/search";
+import { searchAuthors } from "../../../api/authors/search"
+import { searchOrganizations, searchOrganizationsForHe } from "../../../api/organizations/search"
+import { searchPatents } from "../../../api/patents/search"
+import { searchProjects } from "../../../api/projects/search"
+import { searchPublications } from "../../../api/publications/search"
 import {
   InfiniteResponse,
   InfiniteResult,
   ObjectModel,
-} from "../../../types/commons";
-import useUrl from "./useUrl";
+} from "../../../types/commons"
+import useUrl from "./useUrl"
 
 const API_MAPPING = {
-  publications: searchPublications,
   authors: searchAuthors,
-  projects: searchProjects,
+  he: searchOrganizationsForHe,
   organizations: searchOrganizations,
   patents: searchPatents,
-  he: searchOrganizationsForHe,
+  projects: searchProjects,
+  publications: searchPublications,
 };
 
 export default function useSearchData() {
-  const { api, currentQuery, filters } = useUrl();
-  const queryFn = API_MAPPING[api];
+  const { api, currentQuery, filters } = useUrl()
+  const queryFn = API_MAPPING[api]
   const {
     data,
     error,
@@ -47,7 +47,7 @@ export default function useSearchData() {
       total: data.pages[0]?.total || 0,
       results: data.pages.flatMap((page) => page.data),
     }),
-  });
+  })
 
   const values = useMemo(() => {
     return {
@@ -61,6 +61,6 @@ export default function useSearchData() {
         isFetching,
       },
     };
-  }, [data, error, isFetchingNextPage, fetchNextPage, hasNextPage, isFetching]);
-  return values;
+  }, [data, error, isFetchingNextPage, fetchNextPage, hasNextPage, isFetching])
+  return values
 }

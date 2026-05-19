@@ -55,6 +55,7 @@ export type Patent = {
     ss_classe: { code: string; label: string }[];
   };
   patents: PatentsData[];
+  publications: any[];
 };
 
 export type InventorData = {
