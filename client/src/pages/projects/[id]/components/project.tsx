@@ -10,22 +10,23 @@ import {
   Text,
   Title,
   useDSFRConfig,
-} from "@dataesr/dsfr-plus";
-import { Project } from "../../../../types/project";
-import CopyBadge from "../../../../components/copy/copy-badge";
-import { PageContent, PageSection } from "../../../../components/page-content";
-import Map from "../../../../components/map";
-import Truncate from "../../../../components/truncate";
-import LinkCard from "../../../../components/link-card";
-import { useIntl } from "react-intl";
-import getLangFieldValue from "../../../../utils/lang";
-import Modal from "../../../../components/modal";
-import ProjectsPublications from "./publications";
-import ProjectParticipants from "./participants";
-import Websites from "../../../../components/websites";
-import ProjectProgram from "./programs";
-import Share from "../../../../components/share";
-import MoreLikeThis from "../../../../components/more-like-this";
+} from "@dataesr/dsfr-plus"
+import { useIntl } from "react-intl"
+
+import CopyBadge from "../../../../components/copy/copy-badge"
+import LinkCard from "../../../../components/link-card"
+import Map from "../../../../components/map"
+import Modal from "../../../../components/modal"
+import MoreLikeThis from "../../../../components/more-like-this"
+import { PageContent, PageSection } from "../../../../components/page-content"
+import Share from "../../../../components/share"
+import Truncate from "../../../../components/truncate"
+import Websites from "../../../../components/websites"
+import { Project } from "../../../../types/project"
+import getLangFieldValue from "../../../../utils/lang"
+import ProjectParticipants from "./participants"
+import ProjectProgram from "./programs"
+import ProjectsPublications from "./publications"
 
 function calculateAccomplishment(startDate, endDate) {
   if (!startDate || !endDate) return null;
@@ -105,13 +106,13 @@ export default function ProjectPresentation({ data }: { data: Project }) {
   const fundingPercent =
     data.budgetTotal && data.budgetFinanced
       ? Math.floor((data.budgetFinanced / data.budgetTotal) * 100)
-      : null;
+      : null
 
   const logoUrl = typeLogoMapping[data.type?.toLowerCase()] || null;
 
   const coordinator = data?.participants?.find((part) =>
     ["coordinator", "coordinateur"].includes(part.role)
-  );
+  )
 
   const participantsWithSubParticipants = getParticipants(
     data.type,
@@ -121,21 +122,19 @@ export default function ProjectPresentation({ data }: { data: Project }) {
       data.type,
       data.participants,
       part.label?.default?.split("__")[2]?.slice(0, -2)
-    );
+    )
     return { ...part, subParticipants };
-  });
+  })
 
   const frenchParticipants = participantsWithSubParticipants.filter(
-    (part) =>
-      part?.structure && part.structure.mainAddress?.country === "France"
-  );
+    (part) => part?.structure?.isFrench === true
+  )
   const foreignParticipants = participantsWithSubParticipants.filter(
-    (part) =>
-      part?.structure && part.structure.mainAddress?.country !== "France"
-  );
+    (part) => part?.structure?.isFrench === false
+  )
   const undefinedParticipants = participantsWithSubParticipants.filter(
-    (part) => !part?.structure
-  );
+    (part) => part?.structure?.isFrench === undefined
+  )
 
   return (
     <>
