@@ -16,8 +16,8 @@ jobs:
     name: 📦 Publish Docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
           node-version: 20
 
@@ -53,7 +53,7 @@ jobs:
     needs: publish-ghcr
     steps:
       - name: 🏁 Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -63,13 +63,13 @@ jobs:
 
       - name: Create changelog text
         id: changelog
-        uses: loopwerk/tag-changelog@v1
+        uses: loopwerk/tag-changelog@v1.5.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config_file: .github/config/changelog.cjs
 
       - name: 📦 Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -97,7 +97,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: dataesr/mm-notifier-action@v1.0.2
+      - uses: dataesr/mm-notifier-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN}}
           mattermost_webhook_url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
