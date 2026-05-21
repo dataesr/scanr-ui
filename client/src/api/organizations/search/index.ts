@@ -54,6 +54,7 @@ function matchWords(query, words) {
 
   return normalizedQuery.match(regex) || [];
 }
+
 export async function searchOrganizations({
   cursor,
   query,

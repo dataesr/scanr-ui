@@ -20,7 +20,44 @@ const HIGHLIGHT = {
     "domains.label.default": {},
   }
 }
+
+const forbiddenQueries = [
+  ["film", "pornographique"],
+];
+
+function matchWords(query, words) {
+  const regexMetachars = /[(){[*+?.\\^$|]/g;
+  const normalizedQuery = query
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  for (let i = 0; i < words.length; i++) {
+    words[i] = words[i]
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(regexMetachars, "\\$&");
+  }
+
+  const regex = new RegExp("\\b(?:" + words.join("|") + ")\\b", "gi");
+
+  return normalizedQuery.match(regex) || [];
+}
+
 export async function searchAuthors({ cursor, query, filters, size }: SearchArgs): Promise<SearchResponse<LightAuthor>> {
+  for (let index = 0; index < forbiddenQueries.length; index++) {
+    const element = forbiddenQueries[index];
+    const matchedWords = matchWords(query, element);
+
+    if (
+      element.filter((el) => matchedWords.includes(el)).length ===
+      element.length
+    ) {
+      return { data: [], cursor: "", total: 0 };
+    }
+  }
+
   const body: any = {
     _source: LIGHT_SOURCE,
     sort: SORTER,
