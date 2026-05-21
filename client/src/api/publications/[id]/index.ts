@@ -2,7 +2,7 @@ import { publicationsIndex, postHeaders } from "../../../config/api"
 import { Publication } from "../../../types/publication"
 
 export async function getPublicationById(id: string): Promise<Publication> {
-  
+  const cleanId = id.startsWith('doi') ? id.slice(3) : id
   const body: any = {
     _source: [
       "title", "summary", "authors.fullName", "authors.person", "authors.role", "authors.affiliations",
@@ -11,7 +11,10 @@ export async function getPublicationById(id: string): Promise<Publication> {
     ],
     query: {
       bool: {
-        filter: [{term: { "id.keyword": id }}]
+        should: [
+          { term: { "id.keyword": id } },
+          { term: { "externalIds.id.keyword": cleanId } },
+        ]
       }
     },
   }
