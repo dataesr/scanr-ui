@@ -50,10 +50,5 @@ export async function searchClinicalTrials({ cursor, filters, query, size }: Sea
   const totalCount: number = data?.hits?.total?.value || 0
   const clinicalTrials: ElasticResult<LightClinicalTrial>[] = data?.hits?.hits || []
 
-  clinicalTrials.map((clinicalTrial) => ({
-    id: clinicalTrial?.NCTId ?? clinicalTrial?.CTIS ?? clinicalTrial?.eudraCT,
-    ...clinicalTrial,
-  }))
-
   return { cursor: nextCursor as string, data: clinicalTrials, total: totalCount }
 }

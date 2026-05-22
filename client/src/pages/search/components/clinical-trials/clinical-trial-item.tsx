@@ -33,16 +33,18 @@ export default function ClinicalTrialItem({
     });
   }
 
+  const id = clinicalTrial?.NCTId ?? clinicalTrial?.eudraCT ?? clinicalTrial?.CTIS;
+
   return (
-    <Fragment key={clinicalTrial.id}>
-      <div className="result-item" key={clinicalTrial.id}>
+    <Fragment key={id}>
+      <div className="result-item" key={id}>
         <BadgeGroup className="structure-badge-list fr-mt-1v">
           <Badge size="sm" color="blue-cumulus">
             { intl.formatMessage({ id: `search.clinical-trials.${clinicalTrial?.study_type}` }) }
           </Badge>
         </BadgeGroup>
-        <span onMouseEnter={() => prefetchClinicalTrial(clinicalTrial.id)}>
-          <Link href={`/clinical-trials/${clinicalTrial.id}`} className="fr-link">
+        <span onMouseEnter={() => prefetchClinicalTrial(id)}>
+          <Link href={`/clinical-trials/${id}`} className="fr-link">
             {clinicalTrial.title}
           </Link>
         </span>
