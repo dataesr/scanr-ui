@@ -73,7 +73,6 @@ export default function Router() {
           <Route path="/about/contact" element={<ContactPage />} />
           <Route path="/about/tutorials" element={<Tutorial />} />
           <Route path="/about/resources/:id" element={<ResourcesInformations />} />
-          {/* <Route path="/about/tutorial" element={<Tutorial />} /> */}
           {/* <Route path="/about/glossary" element={<Glossary />} /> */}
           <Route path="/bugs/:api/:id" element={<BugsReport />} />
           <Route path="/publications/:id" element={<Publication />} />
@@ -89,13 +88,12 @@ export default function Router() {
           <Route path="/patents/:id" element={<Patents />} />
           <Route path="/suggest/:id" element={<Suggest />} />
           <Route path="/search">
-            {/* <Route path="" element={<Navigate to="/search/organizations" replace />} /> */}
             <Route path="organizations" element={<Search />} />
             <Route path="authors" element={<Search />} />
             <Route path="projects" element={<Search />} />
             <Route path="publications" element={<Search />} />
             <Route path="patents" element={<Search />} />
-
+            <Route path="clinical-trials" element={<Search />} />
           </Route>
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/networks" element={<Networks />} />
@@ -107,7 +105,6 @@ export default function Router() {
         </Route>
         <Route path="/networks/integration" element={<NetworksIntegration />} />
         <Route path="/trends/integration" element={<TrendsIntegration />} />
-        {/* <Route path="/trends/integration" element={<TrendsIntegration />} /> */}
       </Routes>
     </>
   )

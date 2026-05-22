@@ -44,7 +44,7 @@ export default function PatentItem({
     <RawIntlProvider value={intl}>
       <div className="result-item" key={patent.id}>
         <BadgeGroup>
-          <Badge size="sm" color="purple-glycine">
+          <Badge size="sm" color="green-bourgeon">
             {intl.formatMessage({
               id: "patents.item.badges.main",
             })}

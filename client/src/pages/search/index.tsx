@@ -23,6 +23,7 @@ import { ObjectModel } from "../../types/commons"
 import AuthorAnalytics from "./components/authors/author-analytics"
 import AuthorItem from "./components/authors/author-item"
 import AuthorFilters from "./components/authors/filters"
+import ClinicalTrialItem from "./components/clinical-trials/clinical-trial-item"
 import CurrentFilters from "./components/commons/current-filters"
 import ResultExports from "./components/commons/exports"
 import NavigateToNetwork from "./components/commons/navigate-to-network.tsx"
@@ -57,29 +58,34 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 
 const API_MAPPING = {
   authors: {
-    item: AuthorItem,
     analytics: AuthorAnalytics,
     filters: AuthorFilters,
+    item: AuthorItem,
+  },
+  'clinical-trials': {
+    analytics: AuthorAnalytics, // TODO
+    filters: AuthorFilters, // TODO
+    item: ClinicalTrialItem,
   },
   organizations: {
-    item: OrganizationItem,
     analytics: OrganizationsAnalytics,
     filters: OrganizationFilters,
+    item: OrganizationItem,
   },
   patents: {
-    item: PatentItem,
     analytics: PatentAnalytics,
     filters: PatentFilters,
+    item: PatentItem,
   },
   projects: {
-    item: ProjectItem,
     analytics: ProjectAnalytics,
     filters: ProjectFilters,
+    item: ProjectItem,
   },
   publications: {
-    item: PublicationItem,
     analytics: PublicationAnalytics,
     filters: PublicationFilters,
+    item: PublicationItem,
   },
 }
 

@@ -1,8 +1,9 @@
-import { LightAuthor } from "./author";
-import { LightOrganization } from "./organization";
-import { LightPatent } from "./patent";
-import { LightProject } from "./project";
-import { LightPublication } from "./publication";
+import { LightAuthor } from "./author"
+import { LightClinicalTrial } from "./clinical-trial"
+import { LightOrganization } from "./organization"
+import { LightPatent } from "./patent"
+import { LightProject } from "./project"
+import { LightPublication } from "./publication"
 
 export type SearchArgs = {
   cursor?: string | unknown;
@@ -95,16 +96,18 @@ export type ExternalIdsData = {
 };
 
 export type ObjectModel =
-  | LightPublication
   | LightAuthor
-  | LightProject
+  | LightClinicalTrial
   | LightOrganization
-  | LightPatent;
+  | LightPatent
+  | LightProject
+  | LightPublication;
 
 export type ApiTypes =
-  | "publications"
   | "authors"
-  | "projects"
+  | "clinical-trials"
+  | "networks"
   | "organizations"
   | "patents"
-  | "networks";
+  | "projects"
+  | "publications";

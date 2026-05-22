@@ -2,6 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 
 import { searchAuthors } from "../../../api/authors/search"
+import { searchClinicalTrials } from "../../../api/clinical-trials/search"
 import { searchOrganizations, searchOrganizationsForHe } from "../../../api/organizations/search"
 import { searchPatents } from "../../../api/patents/search"
 import { searchProjects } from "../../../api/projects/search"
@@ -15,6 +16,7 @@ import useUrl from "./useUrl"
 
 const API_MAPPING = {
   authors: searchAuthors,
+  'clinical-trials': searchClinicalTrials,
   he: searchOrganizationsForHe,
   organizations: searchOrganizations,
   patents: searchPatents,

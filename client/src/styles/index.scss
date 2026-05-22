@@ -46,34 +46,30 @@
   border-bottom: 1px solid var(--border-default-grey);
 }
 
-.bg-organizations {
-  background-color: var(--background-alt-yellow-tournesol) !important;
-}
-
 .bg-authors {
   background-color: var(--background-alt-orange-terre-battue) !important;
 }
-
-.bg-publications {
-  background-color: var(--background-alt-purple-glycine) !important;
+.bg-clinical-trials {
+  background-color: var(--background-alt-blue-cumulus) !important;
 }
-
-.bg-patents {
-  background-color: var(--background-alt-purple-glycine) !important;
-}
-
-.bg-projects {
-  background-color: var(--background-alt-green-emeraude) !important;
-}
-
 .bg-network {
   background-color: var(--background-alt-blue-ecume) !important;
 }
-
+.bg-organizations {
+  background-color: var(--background-alt-yellow-tournesol) !important;
+}
+.bg-patents {
+  background-color: var(--background-alt-green-bourgeon) !important;
+}
+.bg-projects {
+  background-color: var(--background-alt-green-emeraude) !important;
+}
+.bg-publications {
+  background-color: var(--background-alt-purple-glycine) !important;
+}
 .bg-trends {
   background-color: var(--background-alt-pink-tuile) !important;
 }
-
 
 .histogram-filter {
   height: 80px;
