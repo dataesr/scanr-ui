@@ -44,16 +44,6 @@ export default function PatentPage({ data }: { data: Patent }) {
     ?.publicationNumber?.split("A")[0]
   const inpiUrl = inpiId && `https://data.inpi.fr/brevets/FR${inpiId}`
 
-  const publications = (data?.publications ?? []).map((publication) => ({
-    ...publication,
-    authors: (publication?.authors ?? []).map((author) => ({ ...author, fullName: author.name })),
-    id: publication?.id || `doi${publication?.doi}`,
-    title: { default: publication?.title },
-    type: publication?.type === "article" ? "journal-article" : publication?.type,
-    source: { volume: publication.journals[0]?.name },
-    year: Number(publication.publicationYear),
-  }))
-
   return (
     <Container fluid>
       <Row gutters={!["sm", "xs"].includes(screen)}>
@@ -166,9 +156,9 @@ export default function PatentPage({ data }: { data: Patent }) {
                   size="lead"
                   title={intl.formatMessage({ id: "patents.section.publications-linked" })}
                 >
-                  {publications?.length ? (
+                  {data?.publications?.length ? (
                     <div className="result-list">
-                      {publications.map((publication) =>
+                      {data.publications.map((publication) =>
                         <PublicationItem data={publication} key={publication.doi} />
                       )}
                     </div>
