@@ -1,10 +1,12 @@
 User-agent: Googlebot
 Allow: /
 Disallow: /authors
+Disallow: /search
 
 User-agent: Bingbot
 Allow: /
 Disallow: /authors
+Disallow: /search
 
 User-agent: *
 Disallow: /
