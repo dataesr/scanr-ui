@@ -1,8 +1,8 @@
 import { Network, NetworkSearchArgs } from "../../types/network";
-import configCreate from "./config/vosviewer";
-import infoCreate from "./config/info";
-import { networkSearch } from "./search";
+import { configCreate } from "./config/vosviewer"
+import { infoCreate } from "./config/vosviewer"
 import networkCreate from "./network/create";
+import { networkSearch } from "./search"
 import clustersAssignSimilarity from "./clusters/similarity";
 import { isInProduction } from "../../utils/helpers";
 

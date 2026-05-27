@@ -2,7 +2,7 @@ import { UndirectedGraph } from "graphology"
 import subgraph from "graphology-operators/subgraph"
 import { connectedComponents } from "graphology-components"
 import betweennessCentrality from "graphology-metrics/centrality/betweenness"
-import { CONFIG } from "../../config/elastic"
+import { ELASTIC_CONFIG } from "../../config/elastic"
 import { NetworkFilters, NetworkParameters } from "../../../../types/network"
 
 export default function graphFilterNodes(
@@ -17,7 +17,7 @@ export default function graphFilterNodes(
   if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
     // Limit graph to filtered ids (only for authors and affiliations)
     const focusIds = filters.reduce(
-      (acc, filter) => [...acc, ...(filter?.terms?.[CONFIG[source][model].aggregation] || [])],
+      (acc, filter) => [...acc, ...(filter?.terms?.[ELASTIC_CONFIG[source][model].aggregation] || [])],
       [],
     )
     graph = subgraph(

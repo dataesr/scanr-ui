@@ -17,7 +17,7 @@ const edgeGetKey = (id1: string, id2: string) => (id1 < id2 ? `${id1}-link-${id2
 
 export default function graphBuild(aggregation: ElasticBuckets, model: string, lang: string): UndirectedGraph {
   // Create Graph object
-  let graph = new UndirectedGraph()
+  const graph = new UndirectedGraph()
 
   aggregation.forEach((item) => {
     const { key, doc_count: count } = item

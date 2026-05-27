@@ -13,7 +13,7 @@ const publicationsSourceFields = [
   "cited_by_counts_by_year",
 ]
 
-export const CONFIG = {
+export const ELASTIC_CONFIG = {
   publications: {
     authors: {
       index: publicationsIndex,

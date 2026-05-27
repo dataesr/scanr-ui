@@ -15,7 +15,7 @@ export default function NetworkNotice() {
     if (parameters.sample === true) {
       setDisplay("inherit")
     }
-  }, [data])
+  }, [parameters.sample])
 
   if (isFetching) return null
   if (!data?.count || data.count < 10000) return null

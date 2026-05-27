@@ -3,7 +3,7 @@ import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
 import { RangeSlider } from "../../../../components/range-slider"
 import { useNetworkContext } from "../../context"
-import { CONFIG } from "../../../../api/networks/config/elastic"
+import { ELASTIC_CONFIG } from "../../../../api/networks/config/elastic"
 
 export default function NetworksCoElementsFilters() {
   const intl = useIntl()
@@ -11,7 +11,7 @@ export default function NetworksCoElementsFilters() {
   const {
     options: { currentModel, currentSource },
   } = useNetworkContext()
-  const countField = CONFIG[currentSource][currentModel]?.count
+  const countField = ELASTIC_CONFIG[currentSource][currentModel]?.count
 
   if (countField === undefined) return null
 

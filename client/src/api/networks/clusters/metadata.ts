@@ -2,7 +2,7 @@ import Graph from "graphology-types"
 import { arrayPush, labelClean } from "../_utils/functions"
 import { networkSearchHits, networkSearchAggs } from "../search"
 import { ElasticHits, NetworkCommunities, NetworkFilters } from "../../../types/network"
-import { CONFIG } from "../config/elastic"
+import { ELASTIC_CONFIG } from "../config/elastic"
 import { ElasticAggregations } from "../../../types/commons"
 import { nodeGetId } from "../graph/build"
 
@@ -72,10 +72,10 @@ const clusterGetDocuments = (hits: ElasticHits): Array<Record<string, string | n
 
 const clusterGetNodesInfos = (hits: ElasticHits, source: string, model: string): any =>
   hits.reduce((acc, hit) => {
-    const field = CONFIG[source][model].field.split(".").slice(0, -1).join(".")
+    const field = ELASTIC_CONFIG[source][model].field.split(".").slice(0, -1).join(".")
     const citationsByYear = hit?.cited_by_counts_by_year
     hit?.[field]?.forEach((node) => {
-      const key = node[CONFIG[source][model].field.split(".").at(-1)]
+      const key = node[ELASTIC_CONFIG[source][model].field.split(".").at(-1)]
       if (!key) return
       const id = nodeGetId(key)
       acc[id] = {

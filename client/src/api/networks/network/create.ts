@@ -33,14 +33,7 @@ export default async function networkCreate(
   } = args;
 
   // Get graph
-  let graph = graphCreate(
-    aggregation,
-    source,
-    model,
-    lang,
-    parameters,
-    filters,
-  );
+  const graph = graphCreate(aggregation, source, model, lang, parameters, filters)
 
   // Get clusters
   const clusters = await clustersCreate(

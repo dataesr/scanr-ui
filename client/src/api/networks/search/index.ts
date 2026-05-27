@@ -8,7 +8,7 @@ import {
   NetworkCountBody,
   NetworkCountArgs,
 } from "../../../types/network"
-import { CONFIG } from "../config/elastic"
+import { ELASTIC_CONFIG as config } from "../config/elastic"
 import { ElasticAggregations, ElasticBuckets } from "../../../types/commons"
 
 const CURRENT_YEAR = new Date().getFullYear()
@@ -25,7 +25,7 @@ export async function networkCount({ source, model, query, filters }: NetworkCou
           {
             query_string: {
               query: query || "*",
-              fields: CONFIG[source][model].search_fields,
+              fields: config[source][model].search_fields,
             },
           },
         ],
@@ -34,7 +34,7 @@ export async function networkCount({ source, model, query, filters }: NetworkCou
   }
   if (filters && filters.length > 0) body.query.bool.filter = filters
 
-  const res = await fetch(`${CONFIG[source][model].index}/_count`, {
+  const res = await fetch(`${config[source][model].index}/_count`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -58,7 +58,7 @@ export async function networkSearch({
 }: NetworkSearchArgs): Promise<ElasticBuckets> {
   const modelAggregation = {
     [model]: {
-      terms: { field: CONFIG[source][model].co_aggregation, size: DEFAULT_SIZE },
+      terms: { field: config[source][model].co_aggregation, size: DEFAULT_SIZE },
     },
   }
   // if filters: use standard sampler (top MAX_SIZE documents that match the query)
@@ -76,7 +76,7 @@ export async function networkSearch({
           {
             query_string: {
               query: query || "*",
-              fields: CONFIG[source][model].search_fields,
+              fields: config[source][model].search_fields,
             },
           },
         ],
@@ -89,7 +89,7 @@ export async function networkSearch({
   if (parameters.sample && isFilters && !isQuery)
     body.query = { function_score: { query: body.query, random_score: { seed: 42, field: "_seq_no" } } }
 
-  const res = await fetch(`${CONFIG[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -116,17 +116,17 @@ export async function networkSearchHits({
   filters,
   links,
 }: NetworkSearchHitsArgs): Promise<ElasticHits> {
-  const linksFilter = { terms: { [CONFIG[source][model].co_aggregation]: links } }
+  const linksFilter = { terms: { [config[source][model].co_aggregation]: links } }
   const body = {
     size: DEFAULT_SIZE,
-    _source: CONFIG[source][model].source_fields,
+    _source: config[source][model].source_fields,
     query: {
       bool: {
         must: [
           {
             query_string: {
               query: query || "*",
-              fields: CONFIG[source][model].search_fields,
+              fields: config[source][model].search_fields,
             },
           },
         ],
@@ -135,7 +135,7 @@ export async function networkSearchHits({
     },
   }
 
-  const res = await fetch(`${CONFIG[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -151,7 +151,7 @@ export async function networkSearchAggs({
   filters,
   links,
 }: NetworkSearchAggsArgs): Promise<ElasticAggregations> {
-  const linksFilter = { terms: { [CONFIG[source][model].co_aggregation]: links } }
+  const linksFilter = { terms: { [config[source][model].co_aggregation]: links } }
   const body = {
     size: 0,
     query: {
@@ -160,7 +160,7 @@ export async function networkSearchAggs({
           {
             query_string: {
               query: query || "*",
-              fields: CONFIG[source][model].search_fields,
+              fields: config[source][model].search_fields,
             },
           },
         ],
@@ -177,10 +177,10 @@ export async function networkSearchAggs({
       documentsMaxYear: { max: { field: "year" } },
       ...DEFAULT_YEARS.reduce(
         (acc, year) => (acc = { ...acc, [`citationsIn${year}`]: { sum: { field: `cited_by_counts_by_year.${year}` } } }),
-        {}
+        {},
       ),
       domains: {
-        terms: { field: CONFIG[source][model].topics },
+        terms: { field: config[source][model].topics },
       },
       isOa: {
         terms: { field: "isOa" },
@@ -188,7 +188,7 @@ export async function networkSearchAggs({
     },
   }
 
-  const res = await fetch(`${CONFIG[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,

@@ -10,7 +10,7 @@ function mergeNodesFromLabel(graph: Graph) {
     labels.get(label).push(key)
   })
 
-  labels.forEach((nodes, _) => {
+  labels.forEach((nodes) => {
     if (nodes.length <= 1) return
 
     const master = nodes[0]
@@ -24,7 +24,9 @@ function mergeNodesFromLabel(graph: Graph) {
       let masterLinkWeight = 0
       try {
         masterLinkWeight = graph.getUndirectedEdgeAttribute(master, dupe, "weight")
-      } catch (_) {}
+      } catch (_) {
+        // pass
+      }
       graph.updateNode(master, (attr) => ({
         label: attr.label,
         weight: attr.weight + dupeAttr.weight - masterLinkWeight,
