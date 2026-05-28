@@ -12,6 +12,7 @@ import PublicationTagsFilter from "../../../search/components/publications/filte
 import useUrl from "../../../search/hooks/useUrl"
 import PublicationAuthorsAwardsFilter from "../../../search/components/publications/filters/awards"
 import DocumentsFilters from "./documents"
+import PublicationVariationsFilter from "../../../search/components/publications/filters/variations"
 
 export default function NetworkFiltersPublicationsModal() {
   const intl = useIntl()
@@ -37,6 +38,8 @@ export default function NetworkFiltersPublicationsModal() {
           <PublicationAccessFilter />
           <hr className="fr-mt-3w" />
           <PublicationFunderFilter />
+          <hr className="fr-mt-3w" />
+          <PublicationVariationsFilter />
           <hr className="fr-mt-3w" />
           <PublicationTagsFilter />
           <hr className="fr-mt-3w" />

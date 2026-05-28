@@ -152,6 +152,8 @@
     "search.filters.publications.by-country-description": "Sélectionnez un ou plusieurs pays",
     "search.filters.publications.by-tag": "Filtrer par tag",
     "search.filters.publications.by-tag-description": "Sélectionnez un ou plusieurs tag",
+    "search.filters.publications.by-variations": "Filtrer par déclinaisons locales",
+    "search.filters.publications.by-variations-description": "Sélectionnez une ou plusieurs déclinaison locale",
     "search.filters.patents.by-year": "Filtrer par date de dépôt",
     "search.filters.patents.by-year-description": "Sélectionnez une période",
     "search.filters.patents.regions": "Caractéristiques de la famille de brevet",

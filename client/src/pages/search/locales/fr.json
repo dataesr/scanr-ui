@@ -66,6 +66,8 @@
   "search.filters.publications.by-country-description": "Sélectionnez un ou plusieurs pays",
   "search.filters.publications.by-tag": "Filtrer par tag",
   "search.filters.publications.by-tag-description": "Sélectionnez un ou plusieurs tag",
+    "search.filters.publications.by-variations": "Filtrer par déclinaisons locales",
+    "search.filters.publications.by-variations-description": "Sélectionnez une ou plusieurs déclinaison locale",
   "search.filters.organizations.by-project": "Filtrer par type de financement",
   "search.filters.organizations.by-project-description": "Sélectionnez un ou plusieurs types de financement",
   "search.filters.organizations.by-kind": "Filtrer par secteur",

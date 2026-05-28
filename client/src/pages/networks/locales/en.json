@@ -150,6 +150,8 @@
     "search.filters.publications.by-country-description": "Select one or more countries",
     "search.filters.publications.by-tag": "Filter by Tag",
     "search.filters.publications.by-tag-description": "Select one or more tag",
+    "search.filters.publications.by-variations": "Filter by local variations",
+    "search.filters.publications.by-variations-description": "Select one or more local variation",
     "search.filters.patents.by-year": "Filter by filing Date",
     "search.filters.patents.by-year-description": "Select a period",
     "search.filters.patents.by-organization": "Filter by Affiliation",
