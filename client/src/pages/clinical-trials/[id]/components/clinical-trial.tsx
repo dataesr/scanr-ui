@@ -1,8 +1,8 @@
 import {
   Badge,
   BadgeGroup,
-  Button,
-  ButtonGroup,
+  // Button,
+  // ButtonGroup,
   Col,
   Container,
   // Link,
@@ -13,7 +13,7 @@ import {
 import { useIntl } from "react-intl"
 
 import Identifiers from "../../../../components/identifiers"
-import MoreLikeThis from "../../../../components/more-like-this"
+// import MoreLikeThis from "../../../../components/more-like-this"
 import { PageContent, PageSection } from "../../../../components/page-content"
 import Share from "../../../../components/share"
 // import Wiki from "../../../../components/wiki"
