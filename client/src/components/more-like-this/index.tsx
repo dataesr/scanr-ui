@@ -28,6 +28,10 @@ const API_MAPPER = {
     item: AuthorItem,
     fn: getMoreAuthorsLikeThis
   },
+  'clinical-trials': {
+    item: AuthorItem, // TODO
+    fn: getMoreAuthorsLikeThis // TODO
+  },
   organizations: {
     item: OrganizationItem,
     fn: getMoreOrganizationsLikeThis

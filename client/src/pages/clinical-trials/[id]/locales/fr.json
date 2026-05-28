@@ -1,0 +1,11 @@
+{
+  "clinical-trials.breadcrumb.home": "Accueil",
+  "clinical-trials.breadcrumb.search": "Essais cliniques",
+  "clinical-trials.section.identifiers": "Identifiants de l'essai clinique",
+  "clinical-trials.section.identifiers-description": "Cliquez pour copier dans le presse-papier",
+  "clinical-trials.section.share": "Partager la page",
+  "clinical-trials.header.summary": "Résumé",
+  "clinical-trials.type.Interventional": "Etude interventionnelle",
+  "clinical-trials.type.Observational": "Etude observationnelle",
+  "clinical-trials.sponsor": "Promoteur"
+}

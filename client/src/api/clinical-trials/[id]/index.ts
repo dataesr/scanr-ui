@@ -3,12 +3,12 @@ import {
   postHeadersBso,
 } from "../../../config/api";
 import type { LightClinicalTrial } from "../../../types/clinical-trial";
-import { AUTHOR_SOURCE } from "../_utils/constants";
+import { CLINICAL_TRIAL_SOURCE } from "../_utils/constants";
 
 export async function getClinicalTrialById(id: string): Promise<LightClinicalTrial> {
   const queryBody = {
-    _source: AUTHOR_SOURCE,
-    query: { bool: { filter: [
+    _source: CLINICAL_TRIAL_SOURCE,
+    query: { bool: { should: [
       { term: { "NCTId.keyword": id } },
       { term: { "eudraCT.keyword": id } },
       { term: { "CTIS.keyword": id } },

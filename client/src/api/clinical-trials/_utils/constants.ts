@@ -13,6 +13,7 @@ export const LIGHT_SOURCE = [
   "eudraCT",
   "intervention_type",
   "lead_sponsor_normalized",
+  "lead_sponsor_type",
   "NCTId",
   "status_simplified",
   "study_completion_year",
@@ -34,7 +35,7 @@ export const AUTHOR_SOURCE = [
   "awards",
   "recentAffiliations",
   "domains",
-];
+]
 
 export const PUBLICATION_LIGHT_SOURCE = [
   "title.*",
@@ -43,7 +44,25 @@ export const PUBLICATION_LIGHT_SOURCE = [
   "authors.role",
   "source.*",
   "isOa",
-  'type',
-  'id',
-  'year',
+  "type",
+  "id",
+  "year",
+]
+
+export const CLINICAL_TRIAL_SOURCE = [
+  "all_sources",
+  "CTIS",
+  "eudraCT",
+  "id",
+  "intervention_type",
+  "lead_sponsor_normalized",
+  "lead_sponsor_type",
+  "NCTId",
+  "other_ids",
+  "status_simplified",
+  "study_completion_year",
+  "study_start_year",
+  "study_type",
+  "summary",
+  "title",
 ]

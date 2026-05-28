@@ -42,6 +42,9 @@ export default function ClinicalTrialItem({
           <Badge size="sm" color="blue-cumulus">
             { intl.formatMessage({ id: `search.clinical-trials.${clinicalTrial?.study_type}` }) }
           </Badge>
+          <Badge size="sm" color="blue-ecume">
+            {intl.formatMessage({ id: 'search.clinical-trials.sponsor' })} {clinicalTrial?.lead_sponsor_type}
+          </Badge>
         </BadgeGroup>
         <span onMouseEnter={() => prefetchClinicalTrial(id)}>
           <Link href={`/clinical-trials/${id}`} className="fr-link">

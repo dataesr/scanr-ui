@@ -1,41 +1,42 @@
 import { useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom"
+import { Route, Routes, useLocation } from "react-router-dom";
 
-import Layout from "./layout"
-import Home from "./pages/home"
-import Search from "./pages/search"
-import Publication from "./pages/publications/[id]"
-import Author from "./pages/authors/[id]"
-import Team from "./pages/about/team"
-import FAQ from "./pages/about/faq"
-import Error404 from "./components/errors/error-404"
-import Organization from "./pages/organizations/[id]"
-import Patents from "./pages/patents/[id]"
-import Project from "./pages/projects/[id]"
-import Networks from "./pages/networks"
-import Suggest from "./pages/suggest"
-import HEPartners from "./pages/search/he"
-import Resources from "./pages/about/resources"
-import ResourcesInformations from "./pages/about/resources/[id]"
-import Tutorial from "./pages/about/tutorial"
-// import Glossary from "./pages/about/glossary";
-import ContactPage from "./pages/about/contact"
-import BugsReport from "./pages/bugs/[api]/[id]"
-import PublicationIdParser from "./components/publication-id-parser"
-import ScanrPublicationsDocs from "./pages/docs/objects/publications"
-import { DocsLayout } from "./pages/docs/layout"
-import ProjectsDocs from "./pages/docs/objects/projects"
-import LegalNotices from "./pages/about/legal-notices"
-import Accessibility from "./pages/about/accessibility"
-import OrganizationsDocs from "./pages/docs/objects/organizations"
-import PersonsDocs from "./pages/docs/objects/persons"
-import Overview from "./pages/docs/objects/overview"
-import NetworksIntegration from "./pages/networks/integration"
-import Trends from "./pages/trends"
-import NetworksGetStarted from "./pages/networks/components/get-started"
-import TrendsIntegration from "./pages/trends/integration"
-import Studio from "./pages/studio"
+import Error404 from "./components/errors/error-404";
+import PublicationIdParser from "./components/publication-id-parser";
+import Layout from "./layout";
+import Accessibility from "./pages/about/accessibility";
+import ContactPage from "./pages/about/contact";
+import FAQ from "./pages/about/faq";
+import LegalNotices from "./pages/about/legal-notices";
+import Resources from "./pages/about/resources";
+import ResourcesInformations from "./pages/about/resources/[id]";
+import Team from "./pages/about/team";
+import Tutorial from "./pages/about/tutorial";
 import Analytics from "./pages/analytics";
+import Author from "./pages/authors/[id]";
+import BugsReport from "./pages/bugs/[api]/[id]";
+import ClinicalTrial from "./pages/clinical-trials/[id]";
+import { DocsLayout } from "./pages/docs/layout";
+import OrganizationsDocs from "./pages/docs/objects/organizations";
+import Overview from "./pages/docs/objects/overview";
+import PersonsDocs from "./pages/docs/objects/persons";
+import ProjectsDocs from "./pages/docs/objects/projects";
+import ScanrPublicationsDocs from "./pages/docs/objects/publications";
+import Home from "./pages/home";
+import Networks from "./pages/networks";
+import NetworksGetStarted from "./pages/networks/components/get-started";
+import NetworksIntegration from "./pages/networks/integration";
+import Organization from "./pages/organizations/[id]";
+import Patents from "./pages/patents/[id]";
+import Project from "./pages/projects/[id]";
+import Publication from "./pages/publications/[id]";
+import Search from "./pages/search";
+import HEPartners from "./pages/search/he";
+import Studio from "./pages/studio";
+import Suggest from "./pages/suggest";
+import Trends from "./pages/trends";
+import TrendsIntegration from "./pages/trends/integration";
+// import Glossary from "./pages/about/glossary";
 
 function ScrollToTopOnLocationChange() {
   const { pathname } = useLocation()
@@ -87,6 +88,7 @@ export default function Router() {
           <Route path="/project/:id" element={<Project />} />
           <Route path="/patents/:id" element={<Patents />} />
           <Route path="/suggest/:id" element={<Suggest />} />
+          <Route path="/clinical-trials/:id" element={<ClinicalTrial />} />
           <Route path="/search">
             <Route path="organizations" element={<Search />} />
             <Route path="authors" element={<Search />} />
