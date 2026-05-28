@@ -20,7 +20,7 @@ import Share from "../../../../components/share"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import Truncate from "../../../../components/truncate";
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
-import { ExternalIdsData } from "../../../../types/commons"
+// import { ExternalIdsData } from "../../../../types/commons"
 // import { encode } from "../../../../utils/string"
 // import ProjectItem from "../../../search/components/projects/project-item"
 // import PublicationsHeader from "./header"
@@ -169,7 +169,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
               >
                 <Software software={data?.software} />
               </PageSection> */}
-              <PageSection
+              {/* <PageSection
                 size="lead"
                 title={intl.formatMessage({
                   id: "publications.section.more-like-this",
@@ -178,7 +178,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 show
               >
                 <MoreLikeThis id={data._id} api="clinical-trials" />
-              </PageSection>
+              </PageSection> */}
               <PageSection title="Data JSON" description="" show={import.meta.env.DEV}>
                 <div>
                   <pre>{JSON.stringify(data || "", null, 2)}</pre>
@@ -189,7 +189,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
         </Col>
         <Col md="4" lg="3" offsetLg="1">
           <PageContent>
-            <PageSection
+            {/* <PageSection
               title={intl.formatMessage({ id: "publications.section.access" })}
               show={!!(data.pdfUrl || data.landingPage)}
             >
@@ -216,7 +216,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   </Button>
                 )}
               </ButtonGroup>
-            </PageSection>
+            </PageSection> */}
             <PageSection
               title={intl.formatMessage({
                 id: "clinical-trials.section.identifiers",
