@@ -1,17 +1,16 @@
+import { ELASTIC_CONFIG } from "../../../../api/networks/config/elastic"
 import { Container, Text } from "@dataesr/dsfr-plus"
 import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
 import { RangeSlider } from "../../../../components/range-slider"
 import { useNetworkContext } from "../../context"
-import { ELASTIC_CONFIG } from "../../../../api/networks/config/elastic"
 
-export default function NetworksCoElementsFilters() {
+function CoElementsFilters({ countField }: { countField?: string }) {
   const intl = useIntl()
   const { currentFilters, handleRangeFilterChange } = useUrl()
   const {
-    options: { currentModel, currentSource },
+    options: { currentModel },
   } = useNetworkContext()
-  const countField = ELASTIC_CONFIG[currentSource][currentModel]?.count
 
   if (countField === undefined) return null
 
@@ -38,6 +37,25 @@ export default function NetworksCoElementsFilters() {
         maxValue={maxValue}
         onChange={(value: number) => handleRangeFilterChange({ field: countField, value: [minValue, value] })}
       />
+    </Container>
+  )
+}
+
+export default function DocumentsFilters() {
+  // const intl = useIntl()
+  const {
+    options: { currentModel, currentSource },
+  } = useNetworkContext()
+
+  const countField: string = ELASTIC_CONFIG[currentSource][currentModel]?.count || ""
+  return (
+    <Container fluid>
+      {countField && (
+        <>
+          <CoElementsFilters countField={countField} />
+          <hr className="fr-mt-3w" />
+        </>
+      )}
     </Container>
   )
 }

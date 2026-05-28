@@ -5,6 +5,7 @@ import Modal from "../../../../components/modal"
 import PatentYearFilter from "../../../search/components/patents/filters/years"
 import PatentRegionFilter from "../../../search/components/patents/filters/region-switch"
 import PatentOrganizationsFilter from "../../../search/components/patents/filters/organizations"
+import DocumentsFilters from "./documents"
 
 export default function NetworkFiltersPatentsModal() {
   const intl = useIntl()
@@ -24,6 +25,7 @@ export default function NetworkFiltersPatentsModal() {
           <hr className="fr-mt-3w" />
           <PatentRegionFilter />
         </Container>
+        <DocumentsFilters />
         <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", alignItems: "center" }}>
           <div style={{ flexGrow: 1 }}>
             <Button variant="secondary" onClick={() => clearFilters()}>
