@@ -37,5 +37,7 @@
   "websites.types.inpi": "INPI",
   "websites.types.idref": "IdRef",
   "websites.types.orcid": "Orcid",
-  "websites.types.id_hal": "idHAL"
+  "websites.types.id_hal": "idHAL",
+  "websites.types.Flickr": "Flickr",
+  "websites.types.Scoopit": "Scoopit"
 }
