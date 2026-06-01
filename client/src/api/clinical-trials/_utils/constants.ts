@@ -11,6 +11,7 @@ export const LIGHT_SOURCE = [
   "all_sources",
   "CTIS",
   "eudraCT",
+  "id",
   "intervention_type",
   "lead_sponsor_normalized",
   "lead_sponsor_type",
@@ -50,6 +51,7 @@ export const PUBLICATION_LIGHT_SOURCE = [
 ]
 
 export const CLINICAL_TRIAL_SOURCE = [
+  "_id",
   "all_sources",
   "CTIS",
   "eudraCT",
@@ -59,6 +61,7 @@ export const CLINICAL_TRIAL_SOURCE = [
   "lead_sponsor_type",
   "NCTId",
   "other_ids",
+  "ror",
   "status_simplified",
   "study_completion_year",
   "study_start_year",

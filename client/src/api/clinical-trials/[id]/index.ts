@@ -9,9 +9,7 @@ export async function getClinicalTrialById(id: string): Promise<LightClinicalTri
   const queryBody = {
     _source: CLINICAL_TRIAL_SOURCE,
     query: { bool: { should: [
-      { term: { "NCTId.keyword": id } },
-      { term: { "eudraCT.keyword": id } },
-      { term: { "CTIS.keyword": id } },
+      { term: { "id.keyword": id } },
     ] } },
   }
   const res = await fetch(`${clinicalTrialsIndex}/_search`, {

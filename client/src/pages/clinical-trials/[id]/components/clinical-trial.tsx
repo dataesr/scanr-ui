@@ -5,7 +5,7 @@ import {
   // ButtonGroup,
   Col,
   Container,
-  // Link,
+  Link,
   Row,
   Text,
   Title,
@@ -13,12 +13,12 @@ import {
 import { useIntl } from "react-intl"
 
 import Identifiers from "../../../../components/identifiers"
-// import MoreLikeThis from "../../../../components/more-like-this"
+import MoreLikeThis from "../../../../components/more-like-this"
 import { PageContent, PageSection } from "../../../../components/page-content"
 import Share from "../../../../components/share"
 // import Wiki from "../../../../components/wiki"
+import Truncate from "../../../../components/truncate"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import Truncate from "../../../../components/truncate";
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
 // import { ExternalIdsData } from "../../../../types/commons"
 // import { encode } from "../../../../utils/string"
@@ -26,43 +26,33 @@ import { LightClinicalTrial } from "../../../../types/clinical-trial"
 // import PublicationsHeader from "./header"
 // import Software from "./software"
 
+const MAPPING_SOURCES = {
+  clinical_trials: 'ClinicalTrials.gov',
+  ctis: 'Clinical Trials Information System',
+  euctr: 'EU Clinical Trials Register',
+}
+
+const MAPPING_STATUS = {
+  Completed: 'Terminé',
+  Ongoing: 'En cours',
+  Unknown: 'Statut non renseigné',
+}
+
 export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
   const intl = useIntl()
   const { screen } = useScreenSize()
 
-  // const authors = data.authors?.filter((author) => author.role === "author") || []
-  // const wikis = data?.domains?.filter((domain) => domain.type === "wikidata")
-
-  // const affiliations = data?.authors
-  //   ?.flatMap(({ affiliations }) => affiliations?.filter((affiliation) => affiliation.name))
-  //   .reduce((acc, cur) => {
-  //     if (!cur) return acc
-  //     if (cur.rnsr) {
-  //       return [...acc.filter((a) => a.rnsr), cur]
-  //     }
-  //     if (acc.filter((a) => a.rnsr).length > 0) {
-  //       return acc
-  //     }
-  //     return [...acc, cur]
-  //   }, [])
-  //   .reduce((acc, cur) => {
-  //     if (acc.find((a) => a.name === cur.name)) {
-  //       return acc
-  //     }
-  //     return [...acc, cur]
-  //   }, [])
-  //   .map((affiliation, index) => {
-  //     const authors = data.authors
-  //       ?.filter((author) => author.affiliations?.find((a) => a.name === affiliation.name))
-  //       .map((author) => author.fullName)
-  //     return { ...affiliation, index, authors }
-  // })
-
   let identifiers = []
-  if (data?.NCTId) identifiers.push({ type: "ClinicalTrials.gov", id: data.NCTId })
-  if (data?.CTIS) identifiers.push({ type: "CTIS", id: data.CTIS })
-  if (data?.eudraCT) identifiers.push({ type: "EudraCT", id: data.eudraCT })
-  if (data?.other_ids) identifiers = [ ...identifiers, ...data.other_ids ]
+  if (data?.NCTId) identifiers.push({ id: data.NCTId, type: "ClinicalTrials.gov" })
+  if (data?.CTIS) identifiers.push({ id: data.CTIS, type: "CTIS" })
+  if (data?.eudraCT) identifiers.push({ id: data.eudraCT, type: "EudraCT" })
+  if (data?.other_ids) identifiers = [...identifiers, ...data.other_ids]
+  // Filter identifiers to remove duplicates based on id x type
+  identifiers = identifiers.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.id === value.id && t.type === value.type
+    ))
+  )
 
   return (
     <Container fluid>
@@ -71,40 +61,24 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
           <Container fluid className="fr-mb-6w">
             <section>
               <div>
-                <BadgeGroup className="structure-badge-list">
+                <BadgeGroup>
                   {data?.study_type && <Badge color="blue-cumulus" noIcon>{intl.formatMessage({ id: `clinical-trials.type.${data?.study_type}` })}</Badge>}
-                  <Badge size="sm" color="blue-ecume">
+                  <Badge color="blue-ecume">
                     {intl.formatMessage({ id: 'clinical-trials.sponsor' })} {data?.lead_sponsor_type}
                   </Badge>
+                  {data?.intervention_type && (
+                    <Badge>
+                      {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}` })}
+                    </Badge>
+                  )}
                 </BadgeGroup>
                 <Title className="fr-mb-1v" as="h1" look="h5">{data.title}</Title>
-                {/* <Text bold size="sm" className="fr-mb-1v">
-                  {authors.map((author, i) => (
-                    <Fragment key={i}>
-                      {(i > 0) ? ', ' : ''}
-                      {(author?.person) ? <Link href={`/authors/${encode(author.person)}`}>{author.fullName}</Link> : author.fullName}
-                      {affiliations
-                        ?.filter((affiliation) => affiliation.authors.includes(author.fullName))
-                        .map((affiliation, j) => (
-                          <Fragment key={j}>
-                            <sup>
-                              {(j > 0) ? ', ' : ''}
-                              {affiliation.index + 1}
-                            </sup>
-                          </Fragment>
-                        )
-                        )}
-                    </Fragment>
-                  ))}
-                </Text> */}
                 <Text bold size="md" className="fr-card__detail">
-                  {data?.lead_sponsor_normalized}
-                  {' / '}
                   {`${data?.study_start_year ?? '...'} - ${data?.study_completion_year ?? '...'}`}
                   {' / '}
-                  {data?.status_simplified}
+                  {MAPPING_STATUS?.[data?.status_simplified] ?? data?.status_simplified}
                   {' / '}
-                  {data?.all_sources.join(", ")}
+                  {data?.all_sources.map((source) => MAPPING_SOURCES?.[source] ?? intl.formatMessage({ id: 'clinical-trials.source-unknown' })).join(", ")}
                 </Text>
               </div>
               {data?.summary && (<Row>
@@ -117,29 +91,26 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
           </Container>
           <Container fluid>
             <PageContent>
-              {/* <PageSection
+              <PageSection
                 size="lead"
                 title={intl.formatMessage({
-                  id: "publications.section.affiliations",
+                  id: "clinical-trials.section.lead-sponsor",
                 })}
                 icon="building-line"
-                show={!!affiliations?.length}
+                show={!!data?.lead_sponsor_normalized}
               >
                 <div className="fr-mb-6w">
-                  {affiliations?.map((affiliation, i) => (
-                    <div style={{ display: "inline-flex" }} key={i}>
-                      <sup>{affiliation.index + 1}</sup>{" "}
-                      <div>
-                        {affiliation?.rnsr ? (
-                          <Link href={`/organizations/${affiliation.rnsr}`}>{affiliation.name}</Link>
-                        ) : (
-                          affiliation.name
-                        )}
-                      </div>
+                  <div style={{ display: "inline-flex" }}>
+                    <div>
+                      {data?.ror ? (
+                        <Link href={data.ror} target="_blank">{data.lead_sponsor_normalized} ({data.ror})</Link>
+                      ) : (
+                        data.lead_sponsor_normalized
+                      )}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </PageSection> */}
+              </PageSection>
               {/* <PageSection
                 size="lead"
                 title={intl.formatMessage({
@@ -169,16 +140,16 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
               >
                 <Software software={data?.software} />
               </PageSection> */}
-              {/* <PageSection
+              <PageSection
                 size="lead"
                 title={intl.formatMessage({
-                  id: "publications.section.more-like-this",
+                  id: "clinical-trials.section.more-like-this",
                 })}
                 icon="article-line"
                 show
               >
                 <MoreLikeThis id={data._id} api="clinical-trials" />
-              </PageSection> */}
+              </PageSection>
               <PageSection title="Data JSON" description="" show={import.meta.env.DEV}>
                 <div>
                   <pre>{JSON.stringify(data || "", null, 2)}</pre>

@@ -3,11 +3,13 @@ import { createIntl } from "react-intl"
 
 import { Notice, Text, useDSFRConfig } from "@dataesr/dsfr-plus"
 import { getMoreAuthorsLikeThis } from "../../api/authors/more-like-this"
+import { getMoreClinicalTrialsLikeThis } from "../../api/clinical-trials/more-like-this"
 import { getMoreOrganizationsLikeThis } from "../../api/organizations/more-like-this"
 import { getMorePatentsLikeThis } from "../../api/patents/more-like-this"
 import { getMoreProjectsLikeThis } from "../../api/projects/more-like-this"
 import { getMorePublicationsLikeThis } from "../../api/publications/more-like-this"
 import AuthorItem from "../../pages/search/components/authors/author-item"
+import ClinicalTrialItem from "../../pages/search/components/clinical-trials/clinical-trial-item"
 import OrganizationItem from "../../pages/search/components/organizations/organization-item"
 import PatentItem from "../../pages/search/components/patents/patent-item/index.tsx"
 import ProjectItem from "../../pages/search/components/projects/project-item"
@@ -29,8 +31,8 @@ const API_MAPPER = {
     fn: getMoreAuthorsLikeThis
   },
   'clinical-trials': {
-    item: AuthorItem, // TODO
-    fn: getMoreAuthorsLikeThis // TODO
+    item: ClinicalTrialItem,
+    fn: getMoreClinicalTrialsLikeThis
   },
   organizations: {
     item: OrganizationItem,

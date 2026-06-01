@@ -7,16 +7,16 @@ import { getClinicalTrialById } from "../../../../api/clinical-trials/[id]";
 import { LightClinicalTrial } from "../../../../types/clinical-trial";
 import { ItemProps } from "../../types";
 
-const MAPPING_STATUS = {
-  Completed: 'Terminé',
-  Ongoing: 'En cours',
-  Unknown: 'Statut non renseigné',
-}
-
 const MAPPING_SOURCES = {
   clinical_trials: 'ClinicalTrials.gov',
   ctis: 'Clinical Trials Information System',
   euctr: 'EU Clinical Trials Register',
+}
+
+const MAPPING_STATUS = {
+  Completed: 'Terminé',
+  Ongoing: 'En cours',
+  Unknown: 'Statut non renseigné',
 }
 
 export default function ClinicalTrialItem({
@@ -33,21 +33,24 @@ export default function ClinicalTrialItem({
     });
   }
 
-  const id = clinicalTrial?.NCTId ?? clinicalTrial?.eudraCT ?? clinicalTrial?.CTIS;
-
   return (
-    <Fragment key={id}>
-      <div className="result-item" key={id}>
-        <BadgeGroup className="structure-badge-list fr-mt-1v">
+    <Fragment key={clinicalTrial.id}>
+      <div className="result-item" key={clinicalTrial.id}>
+        <BadgeGroup className="fr-mt-1v">
           <Badge size="sm" color="blue-cumulus">
-            { intl.formatMessage({ id: `search.clinical-trials.${clinicalTrial?.study_type}` }) }
+            { intl.formatMessage({ id: `search.clinical-trials.${clinicalTrial?.study_type}`, defaultMessage: clinicalTrial?.study_type }) }
           </Badge>
           <Badge size="sm" color="blue-ecume">
             {intl.formatMessage({ id: 'search.clinical-trials.sponsor' })} {clinicalTrial?.lead_sponsor_type}
           </Badge>
+          {clinicalTrial?.intervention_type && (
+            <Badge>
+              {intl.formatMessage({ id: `search.clinical-trials.intervention-type.${clinicalTrial.intervention_type.toLowerCase()}` })}
+            </Badge>
+          )}
         </BadgeGroup>
-        <span onMouseEnter={() => prefetchClinicalTrial(id)}>
-          <Link href={`/clinical-trials/${id}`} className="fr-link">
+        <span onMouseEnter={() => prefetchClinicalTrial(clinicalTrial.id)}>
+          <Link href={`/clinical-trials/${clinicalTrial.id}`} className="fr-link">
             {clinicalTrial.title}
           </Link>
         </span>
