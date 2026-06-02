@@ -2,6 +2,7 @@ import { Badge, BadgeGroup, Link, Text } from "@dataesr/dsfr-plus";
 import { useQueryClient } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { type IntlShape, useIntl } from "react-intl";
+
 import { getPublicationById } from "../../../../api/publications/[id]";
 import type { LightPublication } from "../../../../types/publication";
 import { encode, publicationTypeMapping } from "../../../../utils/string";
@@ -109,8 +110,8 @@ const ArticleAuthors = ({
   );
 };
 const Authors = ({
-  intl,
   authors = [],
+  intl,
   isThesis,
 }: {
   authors: LightPublication["authors"];
@@ -173,8 +174,8 @@ export default function PublicationItem({
         </span>
         {publication.authors && (
           <Authors
-            intl={intl}
             authors={publication.authors}
+            intl={intl}
             isThesis={isThesis(publication)}
           />
         )}
