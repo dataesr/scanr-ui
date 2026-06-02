@@ -1,5 +1,6 @@
 import { Link, Notice, useDSFRConfig } from "@dataesr/dsfr-plus";
 import { RawIntlProvider, createIntl } from "react-intl";
+import { useLocation } from "react-router-dom";
 
 const modules = import.meta.glob("./locales/*.json", {
 	eager: true,
@@ -15,7 +16,14 @@ const messages = Object.keys(modules).reduce((acc, key) => {
 
 export default function Error404({ error }: { error?: unknown }) {
 	const { locale } = useDSFRConfig();
+	const { pathname } = useLocation()
 	const intl = createIntl({ locale, messages: messages[locale] });
+	let doi;
+	if (error === '404-DOI') {
+		const p = pathname.split('/')
+		doi = p[p.length - 1].slice(3)
+	}
+
 	return (
 		<RawIntlProvider value={intl}>
 			<div className="fr-container">
@@ -25,31 +33,49 @@ export default function Error404({ error }: { error?: unknown }) {
 						<p className="fr-text--sm fr-mb-3w">
 							{intl.formatMessage({ id: "error404.code" })}
 						</p>
-						<p className="fr-text--lead fr-mb-3w">
-							{intl.formatMessage({ id: "error404.message" })}
-						</p>
-						<p className="fr-text--sm fr-mb-5w">
-							{intl.formatMessage({ id: "error404.checkUrl" })}
-							<br />
-							{intl.formatMessage({ id: "error404.continue" })}
-							<br />
-							{intl.formatMessage({ id: "error404.contact" })}
-						</p>
-						<ul className="fr-btns-group fr-btns-group--inline-md">
-							<li>
-								<Link className="fr-btn" href="/">
-									{intl.formatMessage({ id: "error.home" })}
-								</Link>
-							</li>
-							<li>
-								<Link
-									className="fr-btn fr-btn--secondary"
-									href="/about/contact"
-								>
-									{intl.formatMessage({ id: "error.contactUs" })}
-								</Link>
-							</li>
-						</ul>
+
+						{(error === '404-DOI' && doi) ? (
+							<>
+								<p className="fr-text--lead fr-mb-3w">
+									{intl.formatMessage({ id: "error404.messageDoi" })}
+								</p>
+								<p className="fr-text--sm fr-mb-5w">
+									{intl.formatMessage({ id: "error404.continueDoi" })}
+									<br />
+									<Link href={`https://doi.org/${doi}`} target="_blank">
+										{`https://doi.org/${doi}`}
+									</Link>
+								</p>
+							</>
+						) : (
+							<>
+								<p className="fr-text--lead fr-mb-3w">
+									{intl.formatMessage({ id: "error404.message" })}
+								</p>
+								<p className="fr-text--sm fr-mb-5w">
+									{intl.formatMessage({ id: "error404.checkUrl" })}
+									<br />
+									{intl.formatMessage({ id: "error404.continue" })}
+									<br />
+									{intl.formatMessage({ id: "error404.contact" })}
+								</p>
+								<ul className="fr-btns-group fr-btns-group--inline-md">
+									<li>
+										<Link className="fr-btn" href="/">
+											{intl.formatMessage({ id: "error.home" })}
+										</Link>
+									</li>
+									<li>
+										<Link
+											className="fr-btn fr-btn--secondary"
+											href="/about/contact"
+										>
+											{intl.formatMessage({ id: "error.contactUs" })}
+										</Link>
+									</li>
+								</ul>
+							</>
+						)}
 						{error && (
 							<Notice className="fr-my-5w" type="error" closeMode="disallow">
 								<pre>

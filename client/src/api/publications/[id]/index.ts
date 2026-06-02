@@ -21,6 +21,9 @@ export async function getPublicationById(id: string): Promise<Publication> {
   const res = await fetch(`${publicationsIndex}/_search`, { method: 'POST', body: JSON.stringify(body), headers: postHeaders })
   const data = await res.json()
   const publication = data?.hits?.hits?.[0]?._source
-  if (!publication) throw new Error('404')
+  if (!publication) {
+    if (id.startsWith('doi')) throw new Error('404-DOI')
+    else throw new Error('404')
+  }
   return { ...publication, _id: data?.hits?.hits?.[0]._id }
 }

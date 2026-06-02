@@ -33,7 +33,7 @@ class ErrorBoundaryClass extends Component<Props, State> {
 	public render() {
 		if (!this.state.hasError) return this.props.children;
 
-		if (this.state.error === "404") {
+		if (["404", "404-DOI"].includes(this.state.error)) {
 			return <Error404 error={this.state.error} />;
 		}
 		if (this.state.error !== "500") {

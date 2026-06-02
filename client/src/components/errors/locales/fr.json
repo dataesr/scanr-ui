@@ -5,6 +5,8 @@
   "error404.checkUrl": "Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n’est peut-être plus disponible.",
   "error404.continue": "Dans ce cas, pour continuer votre visite vous pouvez consulter notre page d’accueil, ou effectuer une recherche avec notre moteur de recherche en haut de page.",
   "error404.contact": "Sinon contactez-nous pour que l’on puisse vous rediriger vers la bonne information.",
+  "error404.messageDoi": "Le DOI que vous recherchez n'est pas présent sur scanR. Excusez-nous pour la gène occasionnée.",
+  "error404.continueDoi": "Si ce DOI existe, retrouvez-le sur le site doi.org : ",
   "error.home": "Page d'accueil",
   "error.contactUs": "Contactez-nous",
   "error500.title": "Erreur inattendue",
