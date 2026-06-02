@@ -19,7 +19,6 @@ import Truncate from "../../../../components/truncate"
 import Websites from "../../../../components/websites"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { Patent } from "../../../../types/patent"
-import { isInProduction } from "../../../../utils/helpers"
 import getLangFieldValue from "../../../../utils/lang"
 import PatentActors from "./actors"
 import PatentMap from "./coverage-map"
@@ -149,22 +148,20 @@ export default function PatentPage({ data }: { data: Patent }) {
               >
                 <MoreLikeThis id={data._id} api="patents" />
               </PageSection>
-              {!isInProduction() && (
-                <PageSection
-                  icon="book-2-line"
-                  show
-                  size="lead"
-                  title={intl.formatMessage({ id: "patents.section.publications-linked" })}
-                >
-                  {data?.publications?.length ? (
-                    <div className="result-list">
-                      {data.publications.map((publication) =>
-                        <PublicationItem data={publication} key={publication.doi} />
-                      )}
-                    </div>
-                  ) : <Text className="fr-card__detail fr-text--md">{intl.formatMessage({ id: "patents.section.publications-linked.empty" })}</Text>}
-                </PageSection>
-              )}
+              <PageSection
+                icon="book-2-line"
+                show
+                size="lead"
+                title={intl.formatMessage({ id: "patents.section.publications-linked" })}
+              >
+                {data?.publications?.length ? (
+                  <div className="result-list">
+                    {data.publications.map((publication) =>
+                      <PublicationItem data={publication} key={publication.doi} />
+                    )}
+                  </div>
+                ) : <Text className="fr-card__detail fr-text--md">{intl.formatMessage({ id: "patents.section.publications-linked.empty" })}</Text>}
+              </PageSection>
               <PageSection
                 title="Data JSON"
                 description=""
