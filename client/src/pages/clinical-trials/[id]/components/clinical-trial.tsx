@@ -1,8 +1,6 @@
 import {
   Badge,
   BadgeGroup,
-  // Button,
-  // ButtonGroup,
   Col,
   Container,
   Link,
@@ -16,20 +14,26 @@ import Identifiers from "../../../../components/identifiers"
 import MoreLikeThis from "../../../../components/more-like-this"
 import { PageContent, PageSection } from "../../../../components/page-content"
 import Share from "../../../../components/share"
-// import Wiki from "../../../../components/wiki"
 import Truncate from "../../../../components/truncate"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
-// import { ExternalIdsData } from "../../../../types/commons"
-// import { encode } from "../../../../utils/string"
-// import ProjectItem from "../../../search/components/projects/project-item"
-// import PublicationsHeader from "./header"
-// import Software from "./software"
 
 const MAPPING_SOURCES = {
-  clinical_trials: 'ClinicalTrials.gov',
-  ctis: 'Clinical Trials Information System',
-  euctr: 'EU Clinical Trials Register',
+  clinical_trials: {
+    field: 'NCTId',
+    label: 'ClinicalTrials.gov',
+    url: 'https://clinicaltrials.gov/study/',
+  },
+  ctis: {
+    field: 'CTIS',
+    label: 'Clinical Trials Information System',
+    url: 'https://euclinicaltrials.eu/search-for-clinical-trials/?lang=en&EUCT=',
+  },
+  euctr: {
+    field: 'eudraCT',
+    label: 'EU Clinical Trials Register',
+    url: 'https://www.clinicaltrialsregister.eu/ctr-search/search?query=',
+  },
 }
 
 const MAPPING_STATUS = {
@@ -73,13 +77,6 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   )}
                 </BadgeGroup>
                 <Title className="fr-mb-1v" as="h1" look="h5">{data.title}</Title>
-                <Text bold size="md" className="fr-card__detail">
-                  {`${data?.study_start_year ?? '...'} - ${data?.study_completion_year ?? '...'}`}
-                  {' / '}
-                  {MAPPING_STATUS?.[data?.status_simplified] ?? data?.status_simplified}
-                  {' / '}
-                  {data?.all_sources.map((source) => MAPPING_SOURCES?.[source] ?? intl.formatMessage({ id: 'clinical-trials.source-unknown' })).join(", ")}
-                </Text>
               </div>
               {data?.summary && (<Row>
                 <Text className="fr-mt-3w fr-mb-0" bold>{intl.formatMessage({ id: "clinical-trials.header.summary" })}</Text>
@@ -103,7 +100,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   <div style={{ display: "inline-flex" }}>
                     <div>
                       {data?.ror ? (
-                        <Link href={data.ror} target="_blank">{data.lead_sponsor_normalized} ({data.ror})</Link>
+                        <Link href={`/organizations/${data.ror.replace('https://ror.org/', '')}`}>{data.lead_sponsor_normalized}</Link>
                       ) : (
                         data.lead_sponsor_normalized
                       )}
@@ -111,35 +108,30 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   </div>
                 </div>
               </PageSection>
-              {/* <PageSection
+              <PageSection
                 size="lead"
                 title={intl.formatMessage({
-                  id: "publications.section.fundings",
+                  id: "clinical-trials.section.data",
                 })}
-                icon="money-euro-circle-line"
-                show={!!data?.projects?.filter((p) => p.label)?.length}
+                icon="list-check"
+                show={!!data?.lead_sponsor_normalized}
               >
-                <div className="result-list">
-                  {data?.projects
-                    ?.filter((p) => p.label)
-                    ?.map((project) => (
-                      <ProjectItem data={project} key={project.id} />
-                    ))}
+                <div className="fr-mb-6w">
+                  <div>
+                    {data?.study_start_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-start" })}: {data?.study_start_year}</div>}
+                    {data?.study_completion_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-completion" })}: {data?.study_completion_year}</div>}
+                    {data?.status_simplified && <div>{intl.formatMessage({ id: "clinical-trials.section.status" })}: {MAPPING_STATUS?.[data?.status_simplified] ?? data?.status_simplified}</div>}
+                    {data?.all_sources && <div>{intl.formatMessage({ id: "search.clinical-trials.sources" })}: 
+                      <ul>
+                        {data?.all_sources.map((source) => {
+                          if (MAPPING_SOURCES?.[source])
+                            return <li><Link href={`${MAPPING_SOURCES?.[source]?.url}${data?.[MAPPING_SOURCES?.[source]?.field]}`} target="_blank">{MAPPING_SOURCES?.[source]?.label ?? intl.formatMessage({ id: 'clinical-trials.source-unknown' })}</Link></li>
+                        })}
+                      </ul>
+                    </div>}
+                  </div>
                 </div>
-              </PageSection> */}
-              {/* <PageSection
-                size="lead"
-                icon="code-s-slash-line"
-                title={intl.formatMessage({
-                  id: "publications.section.software.title",
-                })}
-                description={intl.formatMessage({
-                  id: "publications.section.software.legend",
-                })}
-                show={!!data?.software?.length}
-              >
-                <Software software={data?.software} />
-              </PageSection> */}
+              </PageSection>
               <PageSection
                 size="lead"
                 title={intl.formatMessage({
@@ -160,34 +152,6 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
         </Col>
         <Col md="4" lg="3" offsetLg="1">
           <PageContent>
-            {/* <PageSection
-              title={intl.formatMessage({ id: "publications.section.access" })}
-              show={!!(data.pdfUrl || data.landingPage)}
-            >
-              <ButtonGroup size="sm">
-                {data.pdfUrl && (
-                  <Button as="a" href={data.pdfUrl} target="_blank" icon="file-download-line" iconPosition="right">
-                    {intl.formatMessage({
-                      id: "publications.section.access.download",
-                    })}
-                  </Button>
-                )}
-                {data.landingPage && (
-                  <Button
-                    as="a"
-                    href={data.landingPage}
-                    target="_blank"
-                    variant="tertiary"
-                    icon="external-link-line"
-                    iconPosition="right"
-                  >
-                    {intl.formatMessage({
-                      id: "publications.section.access.visit",
-                    })}
-                  </Button>
-                )}
-              </ButtonGroup>
-            </PageSection> */}
             <PageSection
               title={intl.formatMessage({
                 id: "clinical-trials.section.identifiers",
@@ -199,31 +163,9 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
             >
               <Identifiers data={identifiers} />
             </PageSection>
-            {/* <PageSection title={intl.formatMessage({ id: "publications.section.wikis" })} show={!!wikis?.length}>
-              <Wiki wikis={wikis} />
-            </PageSection> */}
             <PageSection title={intl.formatMessage({ id: "clinical-trials.section.share" })} show>
               <Share />
             </PageSection>
-            {/* <PageSection
-              title={intl.formatMessage({
-                id: "publications.section.contribute",
-              })}
-              show
-            >
-              <ButtonGroup>
-                <Button
-                  as="a"
-                  href={`/bugs/publications/${encode(data.id)}`}
-                  color="error"
-                  variant="tertiary"
-                  icon="bug-line"
-                  iconPosition="left"
-                >
-                  {intl.formatMessage({ id: "publications.signals.bug" })}
-                </Button>
-              </ButtonGroup>
-            </PageSection> */}
           </PageContent>
         </Col>
       </Row>

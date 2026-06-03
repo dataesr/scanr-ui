@@ -10,6 +10,7 @@ import {
 } from "@dataesr/dsfr-plus";
 import { RawIntlProvider, createIntl, useIntl } from "react-intl";
 import "./styles.scss"
+import { isInProduction } from "../../utils/helpers";
 
 const modules = import.meta.glob("./locales/*.json", {
   eager: true,
@@ -217,6 +218,42 @@ function ObjectsBanner() {
               </Link>
             </div>
           </Col>
+          {!isInProduction() && (
+            <Col xs="6" lg="2">
+              <div className="fr-p-2w search-object">
+                <svg
+                  className="fr-artwork"
+                  aria-hidden="true"
+                  viewBox="0 0 80 80"
+                  width="100px"
+                  height="100px"
+                >
+                  <use
+                    className="fr-artwork-decorative"
+                    href="/artwork/pictograms/document/contract.svg#artwork-decorative"
+                  />
+                  <use
+                    className="fr-artwork-minor"
+                    href="/artwork/pictograms/document/contract.svg#artwork-minor"
+                  />
+                  <use
+                    className="fr-artwork-major"
+                    href="/artwork/pictograms/document/contract.svg#artwork-major"
+                  />
+                </svg>
+                <Title as="h3" className="fr-mb-1w">
+                  {intl.formatMessage({ id: "home.objects.clinical-trials" })}
+                </Title>
+                <hr className="fr-pb-2w" style={{ width: "60px" }} />
+                <Link
+                  className="search-object-link fr-link fr-icon-arrow-right-line fr-link--icon-right"
+                  href="/search/clinical-trials"
+                >
+                  {intl.formatMessage({ id: "home.objects.link" })}
+                </Link>
+              </div>
+            </Col>
+          )}
         </Row>
       </Container>
     </Container>

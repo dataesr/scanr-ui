@@ -30,5 +30,9 @@
   "search.clinical-trials.intervention-type.diagnostic_test": "Test diagnostique",
   "search.clinical-trials.intervention-type.biological": "Biologique",
   "search.clinical-trials.intervention-type.procedure": "Procédure",
-  "search.clinical-trials.intervention-type.dietary_supplement": "Complément alimentaire"
+  "search.clinical-trials.intervention-type.dietary_supplement": "Complément alimentaire",
+  "clinical-trials.section.data": "Métadonnées",
+  "clinical-trials.section.year-start": "Date de début",
+  "clinical-trials.section.year-completion": "Date de complétion",
+  "clinical-trials.section.status": "Statut"
 }
