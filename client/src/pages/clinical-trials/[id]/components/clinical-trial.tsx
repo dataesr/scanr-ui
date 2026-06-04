@@ -102,7 +102,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 title={intl.formatMessage({
                   id: "clinical-trials.section.data",
                 })}
-                icon="list-check"
+                icon="survey-line"
                 show={!!data?.lead_sponsor_normalized}
               >
                 <div className="fr-mb-6w">
@@ -111,7 +111,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                     {data?.study_completion_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-completion" })}: {data?.study_completion_year}</div>}
                     {data?.intervention_type && <div>{intl.formatMessage({ id: "clinical-trials.section.intervention-type" })}: {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}` })}</div>}
                     {data?.status_simplified && <div>{intl.formatMessage({ id: "clinical-trials.section.status" })}: {intl.formatMessage({ id: `clinical-trials.status.${data?.status_simplified}` })}</div>}
-                    {data?.all_sources && <div>{intl.formatMessage({ id: "search.clinical-trials.sources" })}: 
+                    {data?.all_sources && <div>{intl.formatMessage({ id: "search.clinical-trials.sources" })}:
                       <ul>
                         {data?.all_sources.map((source) => {
                           if (MAPPING_SOURCES?.[source])
@@ -119,6 +119,31 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                         })}
                       </ul>
                     </div>}
+                  </div>
+                </div>
+              </PageSection>
+              <PageSection
+                size="lead"
+                title={intl.formatMessage({
+                  id: "clinical-trials.section.results",
+                })}
+                icon="trophy-line"
+                show={!!data?.lead_sponsor_normalized}
+              >
+                <div className="fr-mb-6w">
+                  <div>
+                    <ul>
+                      {Object.keys(data?.results_details).sort().filter((year) => year.endsWith('Q4')).map((year) => {
+                        const d = data?.results_details?.[year]
+                        return <li>Tel que mesuré en {year.slice(0, 4)}: {d?.has_results_or_publications
+                          ? <><span className="fr-icon-check-line fr-icon--sm fr-text-label--green-menthe" /> Présence de résultats
+                            (postage: {d?.has_results ? <span className="fr-icon-check-line fr-icon--sm fr-text-label--green-menthe" /> : <span className="fr-icon-close-line fr-icon--sm fr-text-label--red-marianne" />}
+                            , publication: {d?.has_publications_result ? <span className="fr-icon-check-line fr-icon--sm fr-text-label--green-menthe" /> : <span className="fr-icon-close-line fr-icon--sm fr-text-label--red-marianne" />})
+                          </>
+                          : <><span className="fr-icon-close-line fr-icon--sm fr-text-label--red-marianne" />Pas de resultats</>}
+                        </li>
+                      })}
+                    </ul>
                   </div>
                 </div>
               </PageSection>

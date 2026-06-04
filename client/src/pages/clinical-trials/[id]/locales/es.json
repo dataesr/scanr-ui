@@ -32,6 +32,7 @@
   "search.clinical-trials.intervention-type.procedure": "Procedimiento",
   "search.clinical-trials.intervention-type.dietary_supplement": "Suplemento dietético",
   "clinical-trials.section.data": "Metadatos",
+  "clinical-trials.section.results": "Resultados",
   "clinical-trials.section.year-start": "Fecha de inicio",
   "clinical-trials.section.year-completion": "Fecha de finalización",
   "clinical-trials.section.status": "Estado",

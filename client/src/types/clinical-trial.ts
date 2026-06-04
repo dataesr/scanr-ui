@@ -15,6 +15,7 @@ export type LightClinicalTrial = {
   lead_sponsor_type: string
   NCTId: string
   other_ids: ExternalIdsData[]
+  results_details: object
   ror: string
   status_simplified: string
   study_completion_year: number

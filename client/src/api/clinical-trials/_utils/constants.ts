@@ -61,6 +61,7 @@ export const CLINICAL_TRIAL_SOURCE = [
   "lead_sponsor_type",
   "NCTId",
   "other_ids",
+  "results_details",
   "ror",
   "status_simplified",
   "study_completion_year",
