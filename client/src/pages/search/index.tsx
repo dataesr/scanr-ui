@@ -24,6 +24,7 @@ import AuthorAnalytics from "./components/authors/author-analytics"
 import AuthorItem from "./components/authors/author-item"
 import AuthorFilters from "./components/authors/filters"
 import ClinicalTrialItem from "./components/clinical-trials/clinical-trial-item"
+import ClinicalTrialFilters from "./components/clinical-trials/filters"
 import CurrentFilters from "./components/commons/current-filters"
 import ResultExports from "./components/commons/exports"
 import NavigateToNetwork from "./components/commons/navigate-to-network.tsx"
@@ -63,8 +64,8 @@ const API_MAPPING = {
     item: AuthorItem,
   },
   'clinical-trials': {
-    analytics: AuthorAnalytics, // TODO
-    filters: AuthorFilters, // TODO
+    analytics: () => <></>, // TODO
+    filters: ClinicalTrialFilters,
     item: ClinicalTrialItem,
   },
   organizations: {

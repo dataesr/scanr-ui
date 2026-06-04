@@ -1,37 +1,40 @@
-import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { aggregatePublications } from "../../../api/publications/aggregate";
+import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import { aggregateAuthors } from "../../../api/authors/aggregate";
 import {
   aggregateOrganizations,
   aggregateOrganizationsForHe,
 } from "../../../api/organizations/aggregate";
-import { aggregateProjects } from "../../../api/projects/aggregate";
-import { ProjectAggregations } from "../../../types/project";
-import { AuthorsAggregations } from "../../../types/author";
-import { PublicationAggregations } from "../../../types/publication";
-import { OrganizationAggregations } from "../../../types/organization";
-import useUrl from "./useUrl";
 import { aggregatePatents } from "../../../api/patents/aggregate";
+import { aggregateProjects } from "../../../api/projects/aggregate";
+import { aggregatePublications } from "../../../api/publications/aggregate";
+import { AuthorsAggregations } from "../../../types/author";
+import { OrganizationAggregations } from "../../../types/organization";
 import { PatentAggregations } from "../../../types/patent";
-import { useSearchParams } from "react-router-dom"
+import { ProjectAggregations } from "../../../types/project";
+import { PublicationAggregations } from "../../../types/publication";
+import { aggregateClinicalTrials } from "../../../api/clinical-trials/aggregate";
+import useUrl from "./useUrl";
 
 const API_MAPPING = {
-  publications: aggregatePublications,
   authors: aggregateAuthors,
-  projects: aggregateProjects,
-  organizations: aggregateOrganizations,
+  'clinical-trials': aggregateClinicalTrials,
   he: aggregateOrganizationsForHe,
+  organizations: aggregateOrganizations,
   patents: aggregatePatents,
+  projects: aggregateProjects,
+  publications: aggregatePublications,
   trends: aggregatePublications,
 }
 
 type AggregationsModel =
-  | PublicationAggregations
-  | OrganizationAggregations
-  | ProjectAggregations
   | AuthorsAggregations
+  | OrganizationAggregations
   | PatentAggregations
+  | ProjectAggregations
+  | PublicationAggregations
 
 export default function useAggregateData(type: "analytics" | "filters") {
   const { api, currentQuery, filters } = useUrl()

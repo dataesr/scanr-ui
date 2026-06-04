@@ -34,5 +34,9 @@
   "clinical-trials.section.data": "Metadata",
   "clinical-trials.section.year-start": "Start date",
   "clinical-trials.section.year-completion": "Date of completion",
-  "clinical-trials.section.status": "Status"
+  "clinical-trials.section.status": "Status",
+  "clinical-trials.section.intervention-type": "Type of intervention",
+  "clinical-trials.status.Completed": "Completed",
+  "clinical-trials.status.Ongoing": "Ongoing",
+  "clinical-trials.status.Unknown": "Unknown"
 }

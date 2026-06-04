@@ -34,5 +34,9 @@
   "clinical-trials.section.data": "Métadonnées",
   "clinical-trials.section.year-start": "Date de début",
   "clinical-trials.section.year-completion": "Date de complétion",
-  "clinical-trials.section.status": "Statut"
+  "clinical-trials.section.status": "Statut",
+  "clinical-trials.section.intervention-type": "Type d'intervention",
+  "clinical-trials.status.Completed": "Terminé",
+  "clinical-trials.status.Ongoing": "En cours",
+  "clinical-trials.status.Unknown": "Statut non renseigné"
 }

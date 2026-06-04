@@ -45,7 +45,7 @@ const CSVFormatter = (data: ExportPublication[], ctx: string) => {
     item.isOa,
     item.publicationDate && new Date(item.publicationDate).toISOString(),
     item.submissionDate && new Date(item.submissionDate).toISOString(),
-    `https://scanr.enseignementsup-recherche.gouv.fr/publication/${item.id}`,
+    `https://scanr.enseignementsup-recherche.gouv.fr/publications/${item.id}`,
     new Date().toISOString(),
     ctx,
   ]);

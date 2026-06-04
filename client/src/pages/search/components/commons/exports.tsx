@@ -4,14 +4,13 @@ import { useIntl } from "react-intl";
 import useExportData from "../../hooks/useExportData";
 
 export default function ResultExports() {
-  const intl = useIntl();
-  const { total } = useSearchData();
-  const { isExporting, exportFile } = useExportData();
-
+  const intl = useIntl()
+  const { total } = useSearchData()
+  const { exportFile, isError, isExporting } = useExportData()
 
   const handleExport = async (key: string) => {
-    const format = key.split('>')[1] as 'json' | 'csv';
-    await exportFile(format);
+    const format = key.split('>')[1] as 'json' | 'csv'
+    await exportFile(format)
   }
 
   return (
@@ -26,9 +25,14 @@ export default function ResultExports() {
               {intl.formatMessage({ id: "search.exports.description" })}
             </p>
           )}
-          {(isExporting) && (
+          {isExporting && (
             <p className="fr-text--xs fr-text-mention--grey">
               {intl.formatMessage({ id: "search.exports.is-exporting" })}
+            </p>
+          )}
+          {isError && (
+            <p className="fr-text--xs fr-text-label--red-marianne">
+              {intl.formatMessage({ id: "search.exports.is-error" })}
             </p>
           )}
         </div>

@@ -13,12 +13,6 @@ const MAPPING_SOURCES = {
   euctr: 'EU Clinical Trials Register',
 }
 
-const MAPPING_STATUS = {
-  Completed: 'Terminé',
-  Ongoing: 'En cours',
-  Unknown: 'Statut non renseigné',
-}
-
 export default function ClinicalTrialItem({
   data: clinicalTrial,
   highlight,
@@ -43,11 +37,6 @@ export default function ClinicalTrialItem({
           <Badge size="sm" color="blue-ecume">
             {intl.formatMessage({ id: 'search.clinical-trials.sponsor' })} {clinicalTrial?.lead_sponsor_type}
           </Badge>
-          {clinicalTrial?.intervention_type && (
-            <Badge>
-              {intl.formatMessage({ id: `search.clinical-trials.intervention-type.${clinicalTrial.intervention_type.toLowerCase()}` })}
-            </Badge>
-          )}
         </BadgeGroup>
         <span onMouseEnter={() => prefetchClinicalTrial(clinicalTrial.id)}>
           <Link href={`/clinical-trials/${clinicalTrial.id}`} className="fr-link">
@@ -61,7 +50,7 @@ export default function ClinicalTrialItem({
           <i>
             {[
               `${clinicalTrial?.study_start_year ?? '...'} - ${clinicalTrial?.study_completion_year ?? '...'}`,
-              MAPPING_STATUS?.[clinicalTrial?.status_simplified] ?? clinicalTrial?.status_simplified,
+              intl.formatMessage({ id: `clinical-trials.status.${clinicalTrial.status_simplified}` }),
             ]
               .filter(Boolean)
               .join(", ")}

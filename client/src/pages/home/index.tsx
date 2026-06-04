@@ -221,26 +221,6 @@ function ObjectsBanner() {
           {!isInProduction() && (
             <Col xs="6" lg="2">
               <div className="fr-p-2w search-object">
-                <svg
-                  className="fr-artwork"
-                  aria-hidden="true"
-                  viewBox="0 0 80 80"
-                  width="100px"
-                  height="100px"
-                >
-                  <use
-                    className="fr-artwork-decorative"
-                    href="/artwork/pictograms/document/contract.svg#artwork-decorative"
-                  />
-                  <use
-                    className="fr-artwork-minor"
-                    href="/artwork/pictograms/document/contract.svg#artwork-minor"
-                  />
-                  <use
-                    className="fr-artwork-major"
-                    href="/artwork/pictograms/document/contract.svg#artwork-major"
-                  />
-                </svg>
                 <Title as="h3" className="fr-mb-1w">
                   {intl.formatMessage({ id: "home.objects.clinical-trials" })}
                 </Title>

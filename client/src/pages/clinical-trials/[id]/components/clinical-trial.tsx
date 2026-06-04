@@ -36,12 +36,6 @@ const MAPPING_SOURCES = {
   },
 }
 
-const MAPPING_STATUS = {
-  Completed: 'Terminé',
-  Ongoing: 'En cours',
-  Unknown: 'Statut non renseigné',
-}
-
 export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
   const intl = useIntl()
   const { screen } = useScreenSize()
@@ -51,7 +45,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
   if (data?.CTIS) identifiers.push({ id: data.CTIS, type: "CTIS" })
   if (data?.eudraCT) identifiers.push({ id: data.eudraCT, type: "EudraCT" })
   if (data?.other_ids) identifiers = [...identifiers, ...data.other_ids]
-  // Filter identifiers to remove duplicates based on id x type
+  // Filter identifiers to remove duplicates based on "id x type"
   identifiers = identifiers.filter((value, index, self) =>
     index === self.findIndex((t) => (
       t.id === value.id && t.type === value.type
@@ -70,11 +64,6 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   <Badge color="blue-ecume">
                     {intl.formatMessage({ id: 'clinical-trials.sponsor' })} {data?.lead_sponsor_type}
                   </Badge>
-                  {data?.intervention_type && (
-                    <Badge>
-                      {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}` })}
-                    </Badge>
-                  )}
                 </BadgeGroup>
                 <Title className="fr-mb-1v" as="h1" look="h5">{data.title}</Title>
               </div>
@@ -120,7 +109,8 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   <div>
                     {data?.study_start_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-start" })}: {data?.study_start_year}</div>}
                     {data?.study_completion_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-completion" })}: {data?.study_completion_year}</div>}
-                    {data?.status_simplified && <div>{intl.formatMessage({ id: "clinical-trials.section.status" })}: {MAPPING_STATUS?.[data?.status_simplified] ?? data?.status_simplified}</div>}
+                    {data?.intervention_type && <div>{intl.formatMessage({ id: "clinical-trials.section.intervention-type" })}: {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}` })}</div>}
+                    {data?.status_simplified && <div>{intl.formatMessage({ id: "clinical-trials.section.status" })}: {intl.formatMessage({ id: `clinical-trials.status.${data?.status_simplified}` })}</div>}
                     {data?.all_sources && <div>{intl.formatMessage({ id: "search.clinical-trials.sources" })}: 
                       <ul>
                         {data?.all_sources.map((source) => {

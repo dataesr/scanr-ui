@@ -27,6 +27,9 @@
   "search.clinical-trials.intervention-type.biological": "Biologique",
   "search.clinical-trials.intervention-type.procedure": "Procédure",
   "search.clinical-trials.intervention-type.dietary_supplement": "Complément alimentaire",
+  "clinical-trials.status.Completed": "Terminé",
+  "clinical-trials.status.Ongoing": "En cours",
+  "clinical-trials.status.Unknown": "Statut non renseigné",
   "search.top.patent.family.badge": "Famille de brevet",
   "search.top.filters-button-label": "Ajouter des filtres",
   "search.top.filters.clear": "Réintitialiser les filtres",
@@ -161,6 +164,7 @@
   "search.filters.current.patents.isOeb": "Région selectionnée",
   "search.filters.current.patents.isGranted": "Les brevets délivrés",
   "search.filters.current.patents.applicants.ids.id": "Filtrer par déposant",
+  "search.filters.current.clinical-trials.ror": "Filtrer par ROR",
   "search.top.patent.family.grandtedBadge": "Brevets délivrés",
   "search.filters.see-more": "En voir plus ({count})",
   "search.filters.see-less": "Réduire",
@@ -172,6 +176,7 @@
   "search.exports.title": "Exporter les résultats",
   "search.exports.description": "Pour des raisons de performance, scanR n'exporte qu'un maximum de 1000 résultats. Vous pouvez affiner votre recherche pour obtenir un export plus complet.",
   "search.exports.is-exporting": "Téléchargement des données en cours, veuillez patienter...",
+  "search.exports.is-error": "Le téléchargement a échoué",
   "search.exports.csv.title": "CSV",
   "search.exports.csv.description": "Exporter les résultats au format CSV",
   "search.exports.json.title": "JSON",
@@ -195,5 +200,9 @@
   "search.analytics.publications.by-authors.title": "Top 10 des auteurs",
   "search.analytics.publications.by-authors.description": "Calculé à partir des résultats de la recherche",
   "search.analytics.publications.by-reviews.title": "Top 10 des revues",
-  "search.analytics.publications.by-reviews.description": "Calculé à partir des résultats de la recherche"
+  "search.analytics.publications.by-reviews.description": "Calculé à partir des résultats de la recherche",
+  "search.filters.clinical-trials.by-ror": "Filtrer par ROR",
+  "search.filters.clinical-trials.by-ror-description": "Sélectionnez un ou plusieurs ROR",
+  "search.top.filters.clinical-trials.title": "Filtrer les essais cliniques",
+  "search.top.clinical-trials.filters.result-count": "{count, plural, =0 {# essai clinique} one {# essai clinique} other {# essais cliniques}}"
 }
