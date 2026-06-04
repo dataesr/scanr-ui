@@ -37,7 +37,7 @@ export async function aggregateClinicalTrials(
   const result = await res.json()
   const { aggregations: data } = result;
 
-  const byRor = data?.byRor?.buckets?.map((element) => element.key).filter(el => el) ?? []
+  const byRor = data?.byRor?.buckets?.map((element) => element.key) ?? []
 
   return { byRor }
 }

@@ -9,26 +9,25 @@ import {
 import { FormattedMessage, useIntl } from "react-intl";
 import useAggregateData from "../../../hooks/useAggregationData";
 import useUrl from "../../../hooks/useUrl";
-// import { AuthorsAggregations } from "../../../../../types/author";
+import { ClinicalTrialAggregations } from "../../../../../types/clinical-trial";
 import OperatorButton from "../../../../../components/operator-button";
 
 const SEE_MORE_AFTER = 8;
 
 export default function ClinicalTrialRorFilter() {
   const intl = useIntl();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
-  const { data = { byRor: [] } } = useAggregateData("filters");
-  // const { byRor } = data as AuthorsAggregations;
-  const { byRor } = data
+  const { currentFilters, handleFilterChange, setOperator } = useUrl()
+  const { data = { byRor: [] } } = useAggregateData("filters")
+  const { byRor } = data as ClinicalTrialAggregations
 
-  const [seeMore, setSeeMore] = useState(false);
+  const [seeMore, setSeeMore] = useState(false)
 
-  const [searchInput, setSearchInput] = useState("");
-  const filter = currentFilters["ror"];
-  const operator = filter?.operator || "or";
+  const [searchInput, setSearchInput] = useState("")
+  const filter = currentFilters["ror"]
+  const operator = filter?.operator || "or"
   const filteredByRor = byRor.filter((ror) =>
     ror.toLowerCase().includes(searchInput.toLowerCase())
-  );
+  )
 
   return (
     <>

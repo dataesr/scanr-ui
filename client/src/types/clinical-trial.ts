@@ -1,5 +1,9 @@
 import { ExternalIdsData } from "./commons"
 
+export type ClinicalTrialAggregations = {
+  byRor: string[];
+};
+
 export type LightClinicalTrial = {
   _id: string
   all_sources: string[]
