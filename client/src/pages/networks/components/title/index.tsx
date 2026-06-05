@@ -1,8 +1,7 @@
 import { Container, Title } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
-
 import { useNetworkContext } from "../../context"
-import { getBsoLocals } from "../../integration/config"
+import { GetBsoLocals } from "../../hooks/getBsoLocals"
 
 export default function NetworkTitle() {
   const intl = useIntl()
@@ -14,7 +13,7 @@ export default function NetworkTitle() {
 
   if (showTitle === false) return null
 
-  const locals = integrationId ? getBsoLocals() : {}
+  const locals = integrationId ? GetBsoLocals() : {}
   const commentNameField = intl.locale === 'en' ? 'commentsNameEN' : 'commentsName'
   const comment: string = integrationId ? integrationId.trim().toLowerCase().split(/[ ,]+/)
     .map((item) => locals?.[item.trim()]?.[commentNameField] ?? `${intl.formatMessage({ id: "networks.header.title.perimeter" })} ${item}`)

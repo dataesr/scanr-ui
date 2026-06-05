@@ -1,7 +1,7 @@
 import { Breadcrumb, Container, Link, Title } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
 import useIntegration from "../../hooks/useIntegration"
-import { getBsoLocals } from "../../../networks/integration/config"
+import { GetBsoLocals } from "../../../networks/hooks/getBsoLocals"
 
 function TrendsBreadcrumb() {
   const intl = useIntl()
@@ -23,7 +23,7 @@ function TrendsTitle() {
 
   if (integrationOptions.showTitle === false) return null
 
-  const locals = integrationId ? getBsoLocals() : {}
+  const locals = integrationId ? GetBsoLocals() : {}
   const comment: string =
     (intl.locale === "en" ? locals?.[integrationId]?.commentsNameEN : locals?.[integrationId]?.commentsName) ||
     (integrationId ? `${intl.formatMessage({ id: "trends.header.title.perimeter" })} ${integrationId}` : "")
