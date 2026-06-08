@@ -110,7 +110,7 @@
     "networks.filters.clear": "Clear Filters",
     "networks.filters.current.no-filter": "No active filter",
     "networks.filters.current.publications.affiliations.id": "Affiliations",
-    "networks.filters.current.publications.affiliations.country": "Countries",
+    "networks.filters.current.publications.affiliations.mainAddress.country": "Countries",
     "networks.filters.current.publications.authors.person": "Authors",
     "networks.filters.current.publications.type": "Publication Type",
     "networks.filters.current.publications.year": "Publication Years",

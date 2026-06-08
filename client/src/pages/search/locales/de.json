@@ -132,7 +132,7 @@
   "search.filters.current.he.isFrench": "Geografie",
   "search.filters.current.authors.awards.label": "Preise",
   "search.filters.current.publications.affiliations.id": "Zugehörigkeiten",
-  "search.filters.current.publications.affiliations.country": "Länder",
+  "search.filters.current.publications.affiliations.mainAddress.country": "Länder",
   "search.filters.current.publications.authors.person": "Autoren",
   "search.filters.current.publications.authors.awards.label": "Autorenpreise",
   "search.filters.current.publications.type": "Veröffentlichungstyp",

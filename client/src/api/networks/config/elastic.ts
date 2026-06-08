@@ -143,11 +143,11 @@ export const ELASTIC_CONFIG = {
     },
     countries: {
       index: publicationsIndex,
-      field: "affiliations.country",
+      field: "affiliations.mainAddress.country",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
-      source_fields: [...publicationsSourceFields, "affiliations.country"],
-      aggregation: "affiliations.country.keyword",
+      source_fields: [...publicationsSourceFields, "affiliations.mainAddress.country"],
+      aggregation: "affiliations.mainAddress.country.keyword",
       co_aggregation: "co_countries.keyword",
       url_search: "/search/publications",
       terminology: {

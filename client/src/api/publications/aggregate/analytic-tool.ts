@@ -208,7 +208,7 @@ export async function aggregatePublicationsForAnalyticTool(
       },
       byCountries: {
         terms: {
-          field: "affiliations.country.keyword",
+          field: "affiliations.mainAddress.country.keyword",
           size: 100,
         },
       },

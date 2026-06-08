@@ -133,7 +133,7 @@
   "search.filters.current.he.isFrench": "Geography",
   "search.filters.current.authors.awards.label": "Awards",
   "search.filters.current.publications.affiliations.id": "Affiliations",
-  "search.filters.current.publications.affiliations.country": "Countries",
+  "search.filters.current.publications.affiliations.mainAddress.country": "Countries",
   "search.filters.current.publications.authors.person": "Authors",
   "search.filters.current.publications.authors.awards.label": "Authors' awards",
   "search.filters.current.publications.type": "Publication type",

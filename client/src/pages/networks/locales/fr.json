@@ -112,7 +112,7 @@
     "networks.filters.clear": "Réinitialiser les filtres",
     "networks.filters.current.no-filter": "Aucun filtre actif",
     "networks.filters.current.publications.affiliations.id": "Affiliations",
-    "networks.filters.current.publications.affiliations.country": "Pays",
+    "networks.filters.current.publications.affiliations.mainAddress.country": "Pays",
     "networks.filters.current.publications.authors.person": "Auteurs",
     "networks.filters.current.publications.type": "Type de publication",
     "networks.filters.current.publications.year": "Années de publication",
