@@ -221,6 +221,7 @@ function ObjectsBanner() {
           {!isInProduction() && (
             <Col xs="6" lg="2">
               <div className="fr-p-2w search-object">
+                <img alt="Clinical Trials" aria-hidden src="/artwork/pictograms/health/clinical-trial.svg" />
                 <Title as="h3" className="fr-mb-1w">
                   {intl.formatMessage({ id: "home.objects.clinical-trials" })}
                 </Title>
