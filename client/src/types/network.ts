@@ -176,12 +176,12 @@ export type NetworksIntegrationOptions = {
   graphHeight?: string
 }
 
-export type NetworkParameter = number | boolean | string
+export type NetworkParameter = number | boolean | Array<string>
 export type NetworkParameters = {
   maxNodes: number
   maxComponents: number
   clusters: boolean
-  filterNode: string
+  filterNodes: Array<string>
   filterFocus: boolean
   sample: boolean
 }

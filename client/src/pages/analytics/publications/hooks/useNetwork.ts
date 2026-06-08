@@ -10,7 +10,7 @@ const PARAMS: NetworkParameters = {
   maxNodes: 300,
   maxComponents: 5,
   clusters: false,
-  filterNode: "",
+  filterNodes: [],
   sample: false,
   filterFocus: false,
 }

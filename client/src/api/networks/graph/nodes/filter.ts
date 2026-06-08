@@ -13,7 +13,7 @@ export default async function graphFilterNodes(
   filters: NetworkFilters,
   parameters: NetworkParameters,
 ): Promise<UndirectedGraph> {
-  const { maxNodes, maxComponents, filterNode, filterFocus } = parameters
+  const { maxNodes, maxComponents, filterNodes, filterFocus } = parameters
 
   if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
     // Limit graph to filtered ids (only for authors and affiliations)
@@ -44,8 +44,14 @@ export default async function graphFilterNodes(
     )
   } else {
     // Filter nodes
-    if (filterNode) {
-      graph = subgraph(graph, [...graph.neighbors(filterNode), filterNode])
+    console.log("filterNodes", filterNodes)
+    if (filterNodes?.length > 2) {
+      // graph = subgraph(graph, [...graph.neighbors(Object.keys(filterNodes)[0]), Object.keys(filterNodes)[0]])
+      // TODO: option to select neighbors as well
+      graph = subgraph(
+        graph,
+        filterNodes.filter((key) => graph.hasNode(key)),
+      )
     }
 
     // Keep only largests components

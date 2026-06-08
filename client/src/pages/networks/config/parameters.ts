@@ -12,8 +12,8 @@ export const NETWORK_PARAMETERS = {
   clusters: {
     default: false,
   },
-  filterNode: {
-    default: "",
+  filterNodes: {
+    default: [],
   },
   filterFocus: {
     default: false,

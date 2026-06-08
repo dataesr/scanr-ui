@@ -85,13 +85,13 @@ export async function getStructureNetworkById(
       maxNodes: 300,
       maxComponents: 5,
       clusters: false,
-      filterNode: "",
+      filterNodes: [],
       sample: true,
       filterFocus: true,
     },
   })
     .then((data) => data)
-    .catch(() => undefined);
+    .catch(() => undefined)
 
   return data;
 }
@@ -111,13 +111,13 @@ export async function getAuthorsNetworkById(
       maxNodes: 300,
       maxComponents: 5,
       clusters: false,
-      filterNode: "",
+      filterNodes: [],
       sample: true,
       filterFocus: true,
     },
   })
     .then((data) => data)
-    .catch(() => undefined);
+    .catch(() => undefined)
 
   return data;
 }
