@@ -8,7 +8,7 @@ let refreshPromise = null
 const CACHE_TTL = 60 * 60 * 1000
 
 // use cache
-export async function getBsoLocals(): Promise<Record<string, Record<string, unknown>>> {
+export async function getBsoLocals(): Promise<Record<string, Record<string, string>>> {
   const now = Date.now()
 
   if (cachedData && now - cacheTime < CACHE_TTL) {
@@ -31,6 +31,3 @@ export async function getBsoLocals(): Promise<Record<string, Record<string, unkn
 
   return refreshPromise
 }
-
-// initialize cached data
-await getBsoLocals()
