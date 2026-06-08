@@ -140,6 +140,11 @@ export default function PublicationItem({
     });
   }
 
+  const publicationTitle = highlight?.["title.default"] ||
+    publication.title?.default ||
+    publication.title?.fr ||
+    publication.title?.en
+
   return (
     <Fragment key={publication.id}>
       <div className="result-item">
@@ -159,16 +164,12 @@ export default function PublicationItem({
             href={`/publications/${encode(publication.id)}`}
             className="fr-link"
           >
-            {highlight?.["title.default"] ? (
+            {publicationTitle && (
               <span
                 dangerouslySetInnerHTML={{
-                  __html: highlight["title.default"],
+                  __html: publicationTitle,
                 }}
               />
-            ) : (
-              publication.title?.default ||
-              publication.title?.fr ||
-              publication.title?.en
             )}
           </Link>
         </span>
