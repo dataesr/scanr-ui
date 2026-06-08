@@ -5,11 +5,16 @@ import OperatorButton from "../../../../../components/operator-button"
 import IconLink from "../../../../../components/icon-link"
 
 export default function PublicationVariationsFilter() {
-  const { currentFilters, handleFilterChange, setOperator } = useUrl()
+  const { currentFilters, handleFilterChange, handleDeleteFilter, setOperator } = useUrl()
 
   const key = "bso_local_affiliations"
   const filter = currentFilters?.[key]
   const operator = filter?.operator || "or"
+
+  const handleTagsChange = (tags: string[]) => {
+    handleDeleteFilter({ field: key }) // delete before repopulate
+    tags.forEach((tag) => handleFilterChange({ field: key, value: tag }))
+  }
 
   return (
     <>
@@ -37,7 +42,7 @@ export default function PublicationVariationsFilter() {
         key={key}
         label=""
         tags={currentFilters?.[key]?.values?.map((tag) => String(tag.value))}
-        onTagsChange={(tags) => tags.forEach((tag) => handleFilterChange({ field: key, value: tag }))}
+        onTagsChange={handleTagsChange}
       />
     </>
   )

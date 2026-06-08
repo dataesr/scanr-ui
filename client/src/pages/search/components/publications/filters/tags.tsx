@@ -3,9 +3,14 @@ import { FormattedMessage } from "react-intl"
 import useUrl from "../../../hooks/useUrl"
 
 export default function PublicationTagsFilter() {
-  const { currentFilters, handleFilterChange } = useUrl()
+  const { currentFilters, handleFilterChange, handleDeleteFilter } = useUrl()
 
   const key = JSON.stringify(currentFilters?.["tags.id"]?.values?.map((tag) => String(tag.value)) || {})
+
+  const handleTagsChange = (tags: string[]) => {
+    handleDeleteFilter({ field: "tags.id" }) // delete before repopulate
+    tags.forEach((tag) => handleFilterChange({ field: "tags.id", value: tag }))
+  }
 
   return (
     <>
@@ -19,7 +24,7 @@ export default function PublicationTagsFilter() {
         key={key}
         label=""
         tags={currentFilters?.["tags.id"]?.values?.map((tag) => String(tag.value))}
-        onTagsChange={(tags) => tags.forEach((tag) => handleFilterChange({ field: "tags.id", value: tag }))}
+        onTagsChange={handleTagsChange}
       />
     </>
   )
