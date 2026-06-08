@@ -8,14 +8,14 @@ import graphAssignLayout from "./layout"
 import graphReplaceNodesLabels from "./nodes/label"
 import graphAssignNodesMetrics from "./nodes/metrics"
 
-export default function graphCreate(
+export default async function graphCreate(
   aggregation: ElasticBuckets,
   source: string,
   model: string,
   lang: string,
   parameters: NetworkParameters,
   filters: NetworkFilters,
-): UndirectedGraph {
+): Promise<UndirectedGraph> {
   // Create Graph object from aggregation
   let graph = graphBuild(aggregation, model, lang)
 
@@ -23,7 +23,7 @@ export default function graphCreate(
   graph = graphMergeNodes(graph, model)
 
   // Filter graph
-  graph = graphFilterNodes(graph, source, model, filters, parameters)
+  graph = await graphFilterNodes(graph, source, model, filters, parameters)
 
   // Replace labels
   graphReplaceNodesLabels(graph, model)

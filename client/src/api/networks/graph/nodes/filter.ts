@@ -4,18 +4,16 @@ import { connectedComponents } from "graphology-components"
 import betweennessCentrality from "graphology-metrics/centrality/betweenness"
 import { ELASTIC_CONFIG } from "../../config/elastic"
 import { NetworkFilters, NetworkParameters } from "../../../../types/network"
-// import { getBsoLocals } from "../../../bso"
+import { getBsoLocals } from "../../../bso"
 
-export default function graphFilterNodes(
+export default async function graphFilterNodes(
   graph: UndirectedGraph,
   source: string,
   model: string,
   filters: NetworkFilters,
   parameters: NetworkParameters,
-): UndirectedGraph {
+): Promise<UndirectedGraph> {
   const { maxNodes, maxComponents, filterNode, filterFocus } = parameters
-
-  console.log("filterFocus", filterFocus, "model", model)
 
   if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
     // Limit graph to filtered ids (only for authors and affiliations)
@@ -29,16 +27,15 @@ export default function graphFilterNodes(
       (acc, filter) => [...acc, ...(filter?.terms?.["bso_local_affiliations.keyword"] || [])],
       [],
     )
-    console.log("bsoFilters", bsoFilters)
 
     if (bsoFilters && ["institutions", "structures"].includes(model)) {
-      // const bsoLocals = getBsoLocals().then((data) => data ?? {})
-      // const bsoIds = bsoFilters.reduce((acc, filter) => {
-      //   if (bsoLocals?.[filter]?.["paysage"]) acc.push(bsoLocals[filter]["paysage"]) // add paysage ids
-      //   return acc
-      // }, [])
-      // focusIds.push(...bsoIds)
-      console.log("bsoLocals: focus not developped yet")
+      const bsoLocals = await getBsoLocals().then((data) => data ?? {})
+      const bsoIds = bsoFilters.reduce((acc, filter) => {
+        const currentLocal = bsoLocals?.[filter] ?? bsoLocals?.[filter.toUpperCase()]
+        if (currentLocal && currentLocal?.["paysage"]) acc.push(currentLocal["paysage"])
+        return acc
+      }, [])
+      focusIds.push(...bsoIds)
     }
 
     graph = subgraph(
