@@ -1,25 +1,29 @@
 .main-banner {
+  align-items: center;
   background-image: url('/img/bg-poudre.jpg');
-  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 33vh;
+  background-size: cover;
   display: flex;
   flex-direction: column;
+  height: 33vh;
   justify-content: center;
-  align-items: center;
 
-  H1 {
+  h1 {
     color: black;
     text-align: center;
   }
 }
 
 .search-object {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+
+  h3 {
+    white-space: nowrap;
+  }
 }
 
 
@@ -29,9 +33,9 @@
 }
 
 .search-object-list {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
+  justify-content: space-between;
 }
