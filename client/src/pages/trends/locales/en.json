@@ -68,7 +68,7 @@
   "trends.filters.clear": "Reset Filters",
   "trends.filters.current.no-filter": "No active filters",
   "trends.filters.current.publications.affiliations.id": "Affiliations",
-  "trends.filters.current.publications.affiliations.country": "Country",
+  "trends.filters.current.publications.affiliations.mainAddress.country": "Country",
   "trends.filters.current.publications.authors.person": "Authors",
   "trends.filters.current.publications.type": "Publication Type",
   "trends.filters.current.publications.year": "Publication Years",

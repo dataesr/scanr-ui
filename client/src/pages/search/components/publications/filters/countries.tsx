@@ -17,7 +17,7 @@ export default function PublicationCountriesFilter() {
     },
   })
 
-  const filter = currentFilters?.["affiliations.country"]
+  const filter = currentFilters?.["affiliations.mainAddress.country"]
   const operator = filter?.operator || "or"
 
   return (
@@ -33,7 +33,7 @@ export default function PublicationCountriesFilter() {
         </div>
         <OperatorButton
           operator={operator}
-          setOperator={(key) => setOperator("affiliations.country", key === "and" ? "and" : "or")}
+          setOperator={(key) => setOperator("affiliations.mainAddress.country", key === "and" ? "and" : "or")}
         />
       </div>
       {filter ? (
@@ -49,7 +49,7 @@ export default function PublicationCountriesFilter() {
             color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              handleFilterChange({ field: "affiliations.country", value })
+              handleFilterChange({ field: "affiliations.mainAddress.country", value })
             }}
           >
             {label || value}
@@ -66,7 +66,7 @@ export default function PublicationCountriesFilter() {
         size="md"
         onSelectionChange={(item) => {
           if (!item) return
-          handleFilterChange({ field: "affiliations.country", value: item })
+          handleFilterChange({ field: "affiliations.mainAddress.country", value: item })
           countriesAutocompletedList.setFilterText('')
         }}
       >
