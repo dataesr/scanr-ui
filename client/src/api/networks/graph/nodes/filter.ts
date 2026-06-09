@@ -44,7 +44,6 @@ export default async function graphFilterNodes(
     )
   } else {
     // Filter nodes
-    console.log("filterNodes", filterNodes)
     if (filterNodes?.length > 2) {
       // graph = subgraph(graph, [...graph.neighbors(Object.keys(filterNodes)[0]), Object.keys(filterNodes)[0]])
       // TODO: option to select neighbors as well

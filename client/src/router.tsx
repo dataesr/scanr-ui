@@ -27,6 +27,7 @@ import Networks from "./pages/networks";
 import NetworksGetStarted from "./pages/networks/components/get-started";
 import NetworksIntegration from "./pages/networks/integration";
 import Organization from "./pages/organizations/[id]";
+import RnsrRor from "./pages/organizations/[id]/rnsr-ror";
 import Patents from "./pages/patents/[id]";
 import Project from "./pages/projects/[id]";
 import Publication from "./pages/publications/[id]";
@@ -36,6 +37,7 @@ import Studio from "./pages/studio";
 import Suggest from "./pages/suggest";
 import Trends from "./pages/trends";
 import TrendsIntegration from "./pages/trends/integration";
+import { isInProduction } from "./utils/helpers";
 // import Glossary from "./pages/about/glossary";
 
 function ScrollToTopOnLocationChange() {
@@ -81,9 +83,12 @@ export default function Router() {
           <Route path="/authors/:id" element={<Author />} />
           <Route path="/person/:id" element={<Author />} />
           <Route path="/organizations/:id" element={<Organization />} />
-					<Route path="/structures/:id" element={<Organization />} />
-					<Route path="/structure/:id" element={<Organization />} />
-					<Route path="/entite/:id" element={<Organization />} />
+          {
+            !isInProduction() && <Route path="/organizations/:id/rnsr-ror" element={<RnsrRor />} />
+          }
+          <Route path="/structures/:id" element={<Organization />} />
+          <Route path="/structure/:id" element={<Organization />} />
+          <Route path="/entite/:id" element={<Organization />} />
           <Route path="/projects/:id" element={<Project />} />
           <Route path="/project/:id" element={<Project />} />
           <Route path="/patents/:id" element={<Patents />} />

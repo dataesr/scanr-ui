@@ -1,0 +1,72 @@
+.fr-table.fr-table--sm {
+  font-size: 0.75rem;
+
+  th {
+    font-size: 0.75rem;
+    vertical-align: top;
+    font-weight: 700;
+    padding: 0.5rem;
+  }
+
+  th:nth-child(1),
+  th:nth-child(2),
+  th:nth-child(3) {
+    min-width: 7rem;
+  }
+
+  th:nth-child(4),
+  th:nth-child(5),
+  th:nth-child(6),
+  th:nth-child(7),
+  th:nth-child(8) {
+    min-width: 10rem;
+  }
+
+  td {
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 0;
+  }
+}
+
+.fundings-datatable__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  padding: 2px 4px;
+}
+
+.fundings-datatable_filter {
+  min-height: unset;
+  padding: 0;
+  line-height: 1;
+}
+
+.fundings-datatable__input {
+  height: 2rem;
+  font-size: 0.75rem;
+  width: 100%;
+}
+
+.fundings-datatable__select {
+  height: 2rem;
+  font-size: 0.75rem;
+  width: 100%;
+}
+
+.fundings-datatable__page-size {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .fr-select {
+    width: auto;
+  }
+}
+
+.fr-pagination__list {
+  flex-wrap: nowrap;
+}
