@@ -3,6 +3,12 @@ import {
   postHeaders,
 } from "../../../config/api"
 
+const normalize = (str: string) => str
+  ?.normalize("NFD")
+  ?.replace(/[\u0300-\u036f]/g, "")
+  ?.toLowerCase()
+  ?? ''
+
 // TODO: type the array of objects returned by the promise
 export async function getOrganizationRnsrRor(id: string): Promise<any[]> {
   const body: any = {
@@ -62,8 +68,8 @@ export async function getOrganizationRnsrRor(id: string): Promise<any[]> {
     result["ror_creation"] = item?._source?.ror_infos?.creationYear
     result["ror_city"] = item?._source?.ror_infos?.address?.[0]?.city
     // Matches between RNSR and ROR
-    result["rnsr_ror_city_match"] = result?.ror_city === result?.rnsr_city
-    result["rnsr_ror_label_match"] = result?.ror_label === result?.rnsr_label
+    result["rnsr_ror_city_match"] = normalize(result?.ror_city) === normalize(result?.rnsr_city)
+    result["rnsr_ror_label_match"] = normalize(result?.ror_label) === normalize(result?.rnsr_label)
     result["rnsr_ror_creation_match"] = result?.ror_creation === result?.rnsr_creation
     results.push(result)
   })

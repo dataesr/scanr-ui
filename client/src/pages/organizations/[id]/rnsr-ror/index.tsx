@@ -1,7 +1,9 @@
 import {
   Breadcrumb,
+  Col,
   Container,
   Link,
+  Row,
   useDSFRConfig,
 } from "@dataesr/dsfr-plus";
 import { useQuery } from "@tanstack/react-query";
@@ -60,9 +62,15 @@ export default function RnsrRor() {
     queryFn: () => getOrganizationRnsrRor(id),
     throwOnError: true,
   });
-  console.log('data', data)
 
-  const breadcrumbLabel = getLangFieldValue(locale)(data?.label);
+  const meanWithIdref = Math.round(data?.filter((item) => item?.idref)?.length / data?.length * 100)
+  const meanWithRnsr = Math.round(data?.filter((item) => item?.rnsr)?.length / data?.length * 100)
+  const meanWithRor = Math.round(data?.filter((item) => item?.ror)?.length / data?.length * 100)
+  const accordCity = Math.round(data?.filter((item) => item?.rnsr_ror_city_match)?.length / data?.length * 100)
+  const accordCreationYear = Math.round(data?.filter((item) => item?.rnsr_ror_creation_match)?.length / data?.length * 100)
+  const accordLabel = Math.round(data?.filter((item) => item?.rnsr_ror_label_match)?.length / data?.length * 100)
+
+  const breadcrumbLabel = getLangFieldValue(locale)(id)
 
   const columns = useMemo<Column[]>(() => [
     {
@@ -125,6 +133,29 @@ export default function RnsrRor() {
         </Breadcrumb>
         {isLoading && <PageSkeleton />}
         {data && (
+          <>
+          <Row>
+            <Col>
+              Taux de présence d'Idref: {meanWithIdref} %
+            </Col>
+            <Col>
+              Taux de présence de RNSR: {meanWithRnsr} %
+            </Col>
+            <Col>
+              Taux de présence de ROR: {meanWithRor} %
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              Accord RNSR-ROR Label: {accordLabel} %
+            </Col>
+            <Col>
+              Accord RNSR-ROR City: {accordCity} %
+            </Col>
+            <Col>
+              Accord RNSR-ROR Creation year: {accordCreationYear} %
+            </Col>
+          </Row>
           <DataTable
             aggregations={{}}
             columns={columns}
@@ -137,6 +168,7 @@ export default function RnsrRor() {
             setSorting={setSorting}
             sorting={sorting}
           />
+          </>
         )}
       </Container>
     </RawIntlProvider>
