@@ -3,7 +3,7 @@ import {
   postHeaders,
 } from "../../../config/api"
 
-// TODO type the array of objects returned by the promise
+// TODO: type the array of objects returned by the promise
 export async function getOrganizationRnsrRor(id: string): Promise<any[]> {
   const body: any = {
     _source: [
@@ -36,7 +36,7 @@ export async function getOrganizationRnsrRor(id: string): Promise<any[]> {
 
   const results = [];
   (rnsrRorQuery?.hits?.hits ?? []).forEach((item) => {
-    const result = {};
+    const result: any = {};
     // RNSR data
     (item?._source?.externalIds ?? [])
       .filter((externalId) => ["idref", "rnsr", "ror"].includes(externalId?.type))
