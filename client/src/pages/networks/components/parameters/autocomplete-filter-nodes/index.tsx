@@ -18,8 +18,6 @@ export default function AutocompleteFilterNode() {
     options: { parameters, handleParameterChange },
   } = useNetworkContext()
 
-  console.log("filterNodes", parameters.filterNodes)
-
   // const nodes = search?.data?.network?.items?.map((item) => ({ label: item.label, id: item.id }))
   // const autocomplete = useAutocompleteList<Record<string, string>>({
   //   async load({ filterText }) {

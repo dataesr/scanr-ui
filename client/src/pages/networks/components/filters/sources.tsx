@@ -41,8 +41,7 @@ function CoElementsFilters({ countField }: { countField?: string }) {
   )
 }
 
-export default function DocumentsFilters() {
-  // const intl = useIntl()
+export default function SourcesFilters() {
   const {
     options: { currentModel, currentSource },
   } = useNetworkContext()

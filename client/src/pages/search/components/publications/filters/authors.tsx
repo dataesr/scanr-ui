@@ -27,6 +27,7 @@ export default function PublicationAuthorFilter() {
   });
 
   const operator = currentFilters?.["authors.person"]?.operator || "or";
+  console.log("authorsAutocompletedList", authorsAutocompletedList)
 
   return (
     <>
