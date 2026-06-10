@@ -16,7 +16,10 @@ export default async function graphFilterNodes(
   const { maxNodes, maxComponents, filterNodes, filterFocus } = parameters
 
   // store nodes ids before filter
-  graph.setAttribute("all_ids", graph.nodes())
+  graph.setAttribute(
+    "all_ids",
+    graph.nodes().map((n) => `${n}###${graph.getNodeAttribute(n, "label")}`),
+  )
 
   if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
     // Limit graph to filtered ids (only for authors and affiliations)
