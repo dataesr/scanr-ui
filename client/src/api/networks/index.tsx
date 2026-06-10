@@ -11,19 +11,20 @@ export default async function getNetwork(
 ): Promise<Network> {
   try {
     const aggregation = await networkSearch(args);
-    const network = await networkCreate({ ...args, aggregation });
+    const [network, meta] = await networkCreate({ ...args, aggregation })
     const config = configCreate(args.source, args.model);
     const info = infoCreate(args.source, args.model, args.query);
     return {
       network: network,
       config: config,
       info: info,
-      ...(args.parameters.sample && {
-        count: aggregation
-          .map((bucket) => bucket.doc_count)
-          .reduce((a, b) => a + b),
-      }),
-    };
+      meta: {
+        all_ids: meta.all_ids,
+        ...(args.parameters.sample && {
+          count: aggregation.map((bucket) => bucket.doc_count).reduce((a, b) => a + b),
+        }),
+      },
+    }
   } catch (error) {
     console.error(error);
     throw new Error(error);
