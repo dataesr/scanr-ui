@@ -9,17 +9,23 @@
   }
 
   th:nth-child(1),
-  th:nth-child(2),
-  th:nth-child(3) {
-    min-width: 7rem;
+  th:nth-child(2) {
+    min-width: 6rem;
   }
 
+  th:nth-child(3),
   th:nth-child(4),
-  th:nth-child(5),
+  th:nth-child(5) {
+    min-width: 8rem;
+  }
+
   th:nth-child(6),
   th:nth-child(7),
-  th:nth-child(8) {
-    min-width: 10rem;
+  th:nth-child(8),
+  th:nth-child(9),
+  th:nth-child(10),
+  th:nth-child(11) {
+    min-width: 9rem;
   }
 
   td {

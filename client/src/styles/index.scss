@@ -37,14 +37,18 @@
   }
 }
 
+// Backgrounds
 .bg-grey {
   background-color: var(--background-alt-blue-cumulus) !important;
 }
-
 .bg-alt-grey {
   background-color: var(--background-alt-grey) !important;
   border-bottom: 1px solid var(--border-default-grey);
 }
+.bg-error {
+  background-color: var(--background-action-low-red-marianne);
+}
+
 
 .bg-authors {
   background-color: var(--background-alt-orange-terre-battue) !important;
@@ -89,8 +93,7 @@
   overflow-y: scroll;
 }
 
-
-
+// Skeleton
 .skeleton {
   animation: skeleton-loading 1s linear infinite alternate;
   border-radius: 8px;

@@ -1,4 +1,4 @@
-export default function Gauge({ percent, label, color = "#aaa" }: { percent: number; label: string; color: string }) {
+export default function Gauge({ percent, label, color = "#aaa" }: { percent: number; label: string; color?: string }) {
   return (
     <div
       style={{
@@ -12,6 +12,7 @@ export default function Gauge({ percent, label, color = "#aaa" }: { percent: num
       <div
         style={{
           backgroundColor: color,
+          color: "black",
           fontSize: "0.8rem",
           overflow: "hidden",
           paddingLeft: "1rem",
@@ -19,7 +20,9 @@ export default function Gauge({ percent, label, color = "#aaa" }: { percent: num
           width: `${percent}%`,
         }}
       >
-        {`${label.toUpperCase()} ${percent.toFixed(1)} %`}
+        {label.toUpperCase()}
+        <br />
+        {`${percent.toFixed(0)} %`}
       </div>
     </div>
   )

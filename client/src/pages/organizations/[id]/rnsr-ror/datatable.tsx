@@ -56,6 +56,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
 
   const handleFilter = (column, event) => {
     if (event.target.value === '') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [column.id]: _, ...rest } = inputs as any;
       setInputs(rest);
     } else {
@@ -68,7 +69,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
       setFilters(Object.keys(inputs).map((id) => ({ id, value: inputs[id] })).filter((filter) => filter.value.length > 0))
     }, 500)
     return () => clearTimeout(timeoutId)
-  }, [inputs]);
+  }, [inputs, setFilters])
 
   return (
     <>
@@ -128,11 +129,11 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                   </tr>
                 </thead>
                 <tbody>
-                  {dataTable.map((row) => (
+                  {dataTable && dataTable.map((row) => (
                     <tr key={row.uniqId}>
                       {columns.map((column) => (
-                        <td key={`${column.id}-${row.id}`}>
-                          {column.getCellValue ? column.getCellValue(row) : row?.[column?.id]}
+                        <td key={`${column.id}-${row.id}`} className={column?.getClassName ? column.getClassName(row) : ''}>
+                          {column.getCellValue ? column.getCellValue(row) : <span title={row?.[column?.id]}>{row?.[column?.id]}</span>}
                         </td>
                       ))}
                     </tr>
