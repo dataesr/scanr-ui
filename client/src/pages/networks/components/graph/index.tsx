@@ -11,8 +11,6 @@ export default function NetworkGraph() {
   } = useNetworkContext()
   const theme = document.documentElement.getAttribute("data-fr-theme")
 
-  console.log("search", search)
-
   if (search.isFetching && !search.data) return <NetworkSpinner />
   if (!search.data?.network) return <Error204 />
 

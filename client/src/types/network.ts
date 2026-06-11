@@ -123,6 +123,7 @@ export type NetworkSearchArgs = {
   source: string
   model: string
   filters?: NetworkFilters
+  nodeFilters?: NetworkFilters
   parameters: NetworkParameters
   lang?: string
   integration?: string

@@ -13,6 +13,7 @@ interface NetworkCreateArgs {
   query?: string;
   model: string;
   filters?: NetworkFilters;
+  nodeFilters?: NetworkFilters;
   aggregation: Array<ElasticBucket>;
   parameters: NetworkParameters;
   lang?: string;

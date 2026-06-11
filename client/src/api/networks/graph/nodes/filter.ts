@@ -13,7 +13,7 @@ export default async function graphFilterNodes(
   filters: NetworkFilters,
   parameters: NetworkParameters,
 ): Promise<UndirectedGraph> {
-  const { maxNodes, maxComponents, filterNodes, filterFocus } = parameters
+  const { maxNodes, maxComponents, filterNodes } = parameters
 
   // store nodes ids before filter
   graph.setAttribute(
@@ -21,65 +21,35 @@ export default async function graphFilterNodes(
     graph.nodes().map((n) => `${n}###${graph.getNodeAttribute(n, "label")}`),
   )
 
-  if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
-    // Limit graph to filtered ids (only for authors and affiliations)
-    const focusIds = filters.reduce(
-      (acc, filter) => [...acc, ...(filter?.terms?.[ELASTIC_CONFIG[source][model].aggregation] || [])],
-      [],
-    )
-
-    // Special behavior for bso variations
-    const bsoFilters = filters.reduce(
-      (acc, filter) => [...acc, ...(filter?.terms?.["bso_local_affiliations.keyword"] || [])],
-      [],
-    )
-
-    if (bsoFilters && ["institutions", "structures"].includes(model)) {
-      const bsoLocals = await getBsoLocals().then((data) => data ?? {})
-      const bsoIds = bsoFilters.reduce((acc, filter) => {
-        const currentLocal = bsoLocals?.[filter] ?? bsoLocals?.[filter.toUpperCase()]
-        if (currentLocal && currentLocal?.["paysage"]) acc.push(currentLocal["paysage"])
-        return acc
-      }, [])
-      focusIds.push(...bsoIds)
-    }
-
+  // Filter nodes
+  if (filterNodes.length) {
+    // TODO: option to toggle neighbors
     graph = subgraph(
       graph,
-      focusIds.filter((id) => graph.hasNode(id)),
+      [...filterNodes.filter((key) => graph.hasNode(key)).flatMap((key) => [...graph.neighbors(key), key])],
     )
-  } else {
-    // Filter nodes
-    if (filterNodes?.length > 2) {
-      // graph = subgraph(graph, [...graph.neighbors(Object.keys(filterNodes)[0]), Object.keys(filterNodes)[0]])
-      // TODO: option to select neighbors as well
-      graph = subgraph(
-        graph,
-        filterNodes.filter((key) => graph.hasNode(key)),
-      )
-    }
+  }
 
-    // Keep only largests components
-    const sortedComponents = connectedComponents(graph).sort((a, b) => b.length - a.length)
-    let numberOfComponents = maxComponents || sortedComponents.length
+  // Keep only largests components
+  const sortedComponents = connectedComponents(graph).sort((a, b) => b.length - a.length)
+  let numberOfComponents = maxComponents || sortedComponents.length
+  graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
+  while (graph.order > maxNodes && numberOfComponents > 1) {
+    numberOfComponents -= 1
     graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
-    while (graph.order > maxNodes && numberOfComponents > 1) {
-      numberOfComponents -= 1
-      graph = subgraph(graph, sortedComponents.slice(0, numberOfComponents).flat())
-    }
+  }
 
-    // Keep only largests nodes
-    if (graph.order > maxNodes) {
-      betweennessCentrality.assign(graph)
-      const sortedNodes = graph
-        .mapNodes((node, attr) => ({
-          node: node,
-          centrality: attr.betweennessCentrality,
-        }))
-        .sort((a, b) => b.centrality - a.centrality)
-        .map((node) => node.node)
-      graph = subgraph(graph, sortedNodes.slice(0, maxNodes))
-    }
+  // Keep only largests nodes
+  if (graph.order > maxNodes) {
+    betweennessCentrality.assign(graph)
+    const sortedNodes = graph
+      .mapNodes((node, attr) => ({
+        node: node,
+        centrality: attr.betweennessCentrality,
+      }))
+      .sort((a, b) => b.centrality - a.centrality)
+      .map((node) => node.node)
+    graph = subgraph(graph, sortedNodes.slice(0, maxNodes))
   }
 
   if (graph.order < 3) {

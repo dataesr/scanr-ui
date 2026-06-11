@@ -9,6 +9,7 @@ import { getMultipleNetworks } from "../../../api/networks"
 
 export default function useSearchData(forceClusters?: boolean) {
   const { currentQuery, filters } = useUrl()
+  const { filters: nodeFilters } = useUrl("nodeFilters")
   const { integrationId, integrationLang } = useIntegration()
   const { currentModel, currentSource, parameters } = useOptions()
   const { locale } = useDSFRConfig()
@@ -16,7 +17,7 @@ export default function useSearchData(forceClusters?: boolean) {
 
   if (forceClusters !== undefined) parameters.clusters = forceClusters
 
-  const currentKey = ["network", "search", currentSource, currentModel, currentQuery, lang, filters, parameters]
+  const currentKey = ["network", "search", currentSource, currentModel, currentQuery, lang, filters, nodeFilters, parameters]
   const { data, error, isFetching } = useQuery({
     queryKey: currentKey,
     queryFn: () =>
@@ -28,6 +29,7 @@ export default function useSearchData(forceClusters?: boolean) {
         parameters: parameters,
         integration: integrationId,
         filters,
+        nodeFilters,
       }),
     placeholderData: (previousData, previousQuery) => {
       // return previous data if only clusters parameter changed
