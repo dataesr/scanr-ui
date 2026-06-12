@@ -53,37 +53,37 @@ export async function getOrganizationRnsrRor(filters: Filter[], id: string, pagi
   if (sorting?.id) {
     body.sort = { [sorting.id]: sorting.order }
   }
-  // if (filters.length > 0) {
-  //   filters.forEach((filter) => {
-  //     if (filter.id === 'id') {
-  //       body.query.bool.filter.push({ match: { 'project_id.keyword': filter.value } })
-  //     } else if (filter.id === 'instrument') {
-  //       body.query.bool.filter.push({ match: { 'project_instrument.keyword': filter.value } })
-  //     } else if (filter.id === 'label') {
-  //       body.query.bool.filter.push({ wildcard: { 'project_label.keyword': {
-  //         case_insensitive: true,
-  //         value: `*${filter.value.toLowerCase()}*`,
-  //       } } })
-  //     } else if (filter.id === 'participantId') {
-  //       body.query.bool.filter.push({ match: { 'participant_id.keyword': filter.value } })
-  //     } else if (filter.id === 'participantLabel') {
-  //       body.query.bool.filter.push({ wildcard: { 'participant_label.fr.keyword': {
-  //         case_insensitive: true,
-  //         value: `*${filter.value.toLowerCase()}*`,
-  //       } } })
-  //     } else if (filter.id === 'participationIsCoordinator') {
-  //       body.query.bool.filter.push({ term: { participation_is_coordinator: filter.value === "1" } })
-  //     } else if (filter.id === 'region') {
-  //       body.query.bool.filter.push({ match: { 'participant_region_with_labs.keyword': filter.value } })
-  //     } else if (filter.id === 'type') {
-  //       body.query.bool.filter.push({ match: { 'project_type.keyword': filter.value } })
-  //     } else if (filter.id === 'year') {
-  //       body.query.bool.filter.push({ match: { project_year: filter.value } })
-  //     } else {
-  //       console.error(`Filter id not supported : ${filter.id}`)
-  //     }
-  //   })
-  // }
+  if (filters.length > 0) {
+    filters.forEach((filter) => {
+      if (filter.id === 'id') {
+        body.query.bool.filter.push({ match: { 'id.keyword': filter.value } })
+      // } else if (filter.id === 'instrument') {
+      //   body.query.bool.filter.push({ match: { 'project_instrument.keyword': filter.value } })
+      // } else if (filter.id === 'label') {
+      //   body.query.bool.filter.push({ wildcard: { 'project_label.keyword': {
+      //     case_insensitive: true,
+      //     value: `*${filter.value.toLowerCase()}*`,
+      //   } } })
+      // } else if (filter.id === 'participantId') {
+      //   body.query.bool.filter.push({ match: { 'participant_id.keyword': filter.value } })
+      // } else if (filter.id === 'participantLabel') {
+      //   body.query.bool.filter.push({ wildcard: { 'participant_label.fr.keyword': {
+      //     case_insensitive: true,
+      //     value: `*${filter.value.toLowerCase()}*`,
+      //   } } })
+      // } else if (filter.id === 'participationIsCoordinator') {
+      //   body.query.bool.filter.push({ term: { participation_is_coordinator: filter.value === "1" } })
+      // } else if (filter.id === 'region') {
+      //   body.query.bool.filter.push({ match: { 'participant_region_with_labs.keyword': filter.value } })
+      // } else if (filter.id === 'type') {
+      //   body.query.bool.filter.push({ match: { 'project_type.keyword': filter.value } })
+      // } else if (filter.id === 'year') {
+      //   body.query.bool.filter.push({ match: { project_year: filter.value } })
+      // } else {
+      //   console.error(`Filter id not supported : ${filter.id}`)
+      }
+    })
+  }
 
   const rnsrRorQuery = await fetch(`${organizationsIndex}/_search`, {
     method: "POST",
