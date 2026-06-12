@@ -31,6 +31,8 @@
   "search.clinical-trials.intervention-type.biological": "Biológico",
   "search.clinical-trials.intervention-type.procedure": "Procedimiento",
   "search.clinical-trials.intervention-type.dietary_supplement": "Suplemento dietético",
+  "search.publications.openAccess": "Acceso abierto",
+  "search.publications.other": "Otros",
   "clinical-trials.section.data": "Metadatos",
   "clinical-trials.section.results": "Comunicación de los resultados",
   "clinical-trials.section.year-start": "Fecha de inicio",

@@ -59,6 +59,7 @@ export const CLINICAL_TRIAL_SOURCE = [
   "intervention_type",
   "lead_sponsor_normalized",
   "lead_sponsor_type",
+  "location_country",
   "NCTId",
   "other_ids",
   "results_details",

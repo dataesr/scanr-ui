@@ -35,5 +35,10 @@
   "publications.signals.fundings": "Finanzierung hinzufügen",
   "publications.signals.bug": "Einen Fehler melden",
   "publications.section.software.title": "Softwareerwähnungen",
-  "publications.section.software.legend": "Softwareerwähnungen, die von scanR in der Veröffentlichung gefunden wurden."
+  "publications.section.software.legend": "Softwareerwähnungen, die von scanR in der Veröffentlichung gefunden wurden.",
+  "search.publications.openAccess": "Open Access",
+  "search.publications.closedAccess": "Geschlossener Zugriff",
+  "search.publications.other": "anderes",
+  "search.publications.thesis.and": " und ",
+  "search.publication.thesis.directed": " unter der Leitung von "
 }

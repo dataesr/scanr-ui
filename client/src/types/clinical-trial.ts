@@ -13,6 +13,7 @@ export type LightClinicalTrial = {
   intervention_type: string
   lead_sponsor_normalized: string
   lead_sponsor_type: string
+  location_country: string[]
   NCTId: string
   other_ids: ExternalIdsData[]
   results_details: object

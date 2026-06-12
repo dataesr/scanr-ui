@@ -35,5 +35,10 @@
   "publications.signals.fundings": "Agregar financiamiento",
   "publications.signals.bug": "Reportar un error",
   "publications.section.software.title": "Menciones de Software",
-  "publications.section.software.legend": "Menciones de software encontradas por scanR en la publicación."
+  "publications.section.software.legend": "Menciones de software encontradas por scanR en la publicación.",
+  "search.publications.openAccess": "Acceso abierto",
+  "search.publications.closedAccess": "Acceso cerrado",
+  "search.publications.other": "Otros",
+  "search.publications.thesis.and": " y ",
+  "search.publication.thesis.directed": " bajo la dirección de "
 }

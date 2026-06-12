@@ -17,8 +17,10 @@ import Share from "../../../../components/share"
 import Truncate from "../../../../components/truncate"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
+import type { LightPublication } from "../../../../types/publication"
 import PublicationItem from "../../../search/components/publications/publication-item"
-import type { LightPublication } from "../../../../types/publication";
+
+const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
 
 const MAPPING_SOURCES = {
   clinical_trials: {
@@ -53,18 +55,23 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
       t.id === value.id && t.type === value.type
     ))
   )
-  const lastYearResults = Object.keys(data?.results_details ?? {}).filter((year) => year.endsWith('Q4')).sort().pop()
-  const lastYearResultsData = data?.results_details?.[lastYearResults]
-  lastYearResultsData.references2 = (lastYearResultsData?.references ?? []).map((reference) => {
-    const result: LightPublication = { externalIds: [], source: { title: '' } }
-    if (reference?.doi) result.id = `doi${reference.doi}`
+  const lastYearData = data?.results_details?.[lastYear]
+  const references = (lastYearData?.references ?? []).map((reference) => {
+    const result: LightPublication = {
+      authors: [],
+      externalIds: [],
+      id: `doi${reference.doi}`,
+      isOa: reference?.oa_details_latest?.is_oa,
+      source: { publisher: reference?.publisher_dissemination, title: '' },
+      title: { default: reference?.citation },
+      type: reference?.type,
+      year: reference?.year,
+    }
     if (reference?.doi) result.externalIds.push({ type: 'doi', id: reference.doi })
     if (reference?.pmid) result.externalIds.push({ type: 'pmid', id: reference.pmid })
-    if (reference?.year) result.year = reference.year
-    if (reference?.citation) result.title = { default: reference.citation }
-    if (reference?.publisher_dissemination) result.source.publisher = reference.publisher_dissemination
     return result;
   })
+  console.log('data', data)
 
   return (
     <Container fluid>
@@ -147,10 +154,10 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 <div className="fr-mb-6w">
                   <div>
                     <ul>
-                      {lastYearResultsData?.has_results_or_publications
-                        ? <Text>Des résultats ({lastYearResultsData?.has_results && 'postage'}{lastYearResultsData?.has_results && lastYearResultsData?.has_publications_result && ' et '}{lastYearResultsData?.has_publications_result && 'publication'}) ont été retrouvés</Text>
-                        : <Text>Aucun resultat (postage ou publication) retrouvé pour cet essai clinique</Text>}
-                      {lastYearResultsData?.has_publications_result && lastYearResultsData.references2?.map((reference, index) => <PublicationItem data={reference} key={`clinical-trials-publication-${index}`} />)}
+                      {lastYearData?.has_results_or_publications
+                        ? <Text>Des résultats ({lastYearData?.has_results && 'postage'}{lastYearData?.has_results && lastYearData?.has_publications_result && ' et '}{lastYearData?.has_publications_result && 'publication'}) ont été retrouvés</Text>
+                        : <Text>Aucun resultat (postage ou publication) retrouvé pour cet essai clinique.</Text>}
+                      {lastYearData?.has_publications_result && references.map((reference, index) => <PublicationItem data={reference} key={`clinical-trials-publication-${index}`} />)}
                     </ul>
                   </div>
                 </div>
