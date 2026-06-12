@@ -161,6 +161,7 @@
   "search.filters.current.patents.isGranted": "Granted patents",
   "search.filters.current.patents.applicants.ids.id": "Filter by depositor",
   "search.filters.current.clinical-trials.ror": "Filter by ROR",
+  "search.filters.current.clinical-trials.lead_sponsor_type": "Filter by sponsor type",
   "search.top.patent.family.grandtedBadge": "Granted patents",
   "search.filters.see-more": "See more ({count})",
   "search.filters.see-less": "Show less",
@@ -202,6 +203,10 @@
   "search.publications.thesis.by": " by ",
   "search.filters.clinical-trials.by-ror": "Filter by ROR",
   "search.filters.clinical-trials.by-ror-description": "Select one or more ROR",
+  "search.filters.clinical-trials.by-lead-sponsor-type": "Filter by sponsor type",
+  "search.filters.clinical-trials.by-lead-sponsor-type-description":"Select one or more types of sponsor",
+  "search.filters.clinical-trials.by-lead-sponsor-type.academique": "Academic",
+  "search.filters.clinical-trials.by-lead-sponsor-type.industriel": "Industrial",
   "search.top.filters.clinical-trials.title": "Filter by clinical trials",
   "search.top.clinical-trials.filters.result-count": "{count, plural, =0 {# clinical trials} one {# clinical trial} other {# clinical trials}}"
 }

@@ -160,6 +160,7 @@
   "search.filters.current.patents.isGranted": "Ausgestellte Patente",
   "search.filters.current.patents.applicants.ids.id": "Nach Antragsteller filtern",
   "search.filters.current.clinical-trials.ror": "Nach ROR filtern",
+  "search.filters.current.clinical-trials.lead_sponsor_type": "Nach Art des Bauträgers filtern",
   "search.top.patent.family.grandtedBadge": "Erteilte Patente",
   "search.filters.see-more": "Mehr anzeigen ({count})",
   "search.filters.see-less": "Weniger anzeigen",
@@ -198,6 +199,10 @@
   "search.analytics.publications.by-reviews.description": "Basierend auf den Suchergebnissen berechnet",
   "search.filters.clinical-trials.by-ror": "Nach ROR filtern",
   "search.filters.clinical-trials.by-ror-description": "Wählen Sie ein oder mehrere ROR aus",
+  "search.filters.clinical-trials.by-lead-sponsor-type": "Nach Art des Bauträgers filtern",
+  "search.filters.clinical-trials.by-lead-sponsor-type-description":"Wählen Sie einen oder mehrere Bauträgers aus",
+  "search.filters.clinical-trials.by-lead-sponsor-type.academique": "Akademisch",
+  "search.filters.clinical-trials.by-lead-sponsor-type.industriel": "Industriell",
   "search.top.filters.clinical-trials.title": "Klinische Studien filtern",
   "search.top.clinical-trials.filters.result-count": "{count, plural, =0 {# klinische Studie} one {# klinische Studie} other {# klinische Studien}}"
 }
