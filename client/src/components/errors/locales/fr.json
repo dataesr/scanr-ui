@@ -7,6 +7,8 @@
   "error404.contact": "Sinon contactez-nous pour que l’on puisse vous rediriger vers la bonne information.",
   "error404.messageDoi": "Le DOI que vous recherchez n'est pas présent sur scanR. Excusez-nous pour la gène occasionnée.",
   "error404.continueDoi": "Si ce DOI existe, retrouvez-le sur le site doi.org : ",
+  "error404.messageIdref": "L'idref que vous recherchez n'est pas présent sur scanR. Excusez-nous pour la gène occasionnée.",
+  "error404.continueIdref": "Si cet idref existe, retrouvez-le sur le site idref.fr : ",
   "error.home": "Page d'accueil",
   "error.contactUs": "Contactez-nous",
   "error500.title": "Erreur inattendue",
