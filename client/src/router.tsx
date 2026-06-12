@@ -37,7 +37,6 @@ import Studio from "./pages/studio";
 import Suggest from "./pages/suggest";
 import Trends from "./pages/trends";
 import TrendsIntegration from "./pages/trends/integration";
-import { isInProduction } from "./utils/helpers";
 // import Glossary from "./pages/about/glossary";
 
 function ScrollToTopOnLocationChange() {
@@ -83,9 +82,7 @@ export default function Router() {
           <Route path="/authors/:id" element={<Author />} />
           <Route path="/person/:id" element={<Author />} />
           <Route path="/organizations/:id" element={<Organization />} />
-          {
-            !isInProduction() && <Route path="/organizations/:id/rnsr-ror" element={<RnsrRor />} />
-          }
+          <Route path="/organizations/:id/rnsr-ror" element={<RnsrRor />} />
           <Route path="/structures/:id" element={<Organization />} />
           <Route path="/structure/:id" element={<Organization />} />
           <Route path="/entite/:id" element={<Organization />} />
