@@ -71,7 +71,6 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
     if (reference?.pmid) result.externalIds.push({ type: 'pmid', id: reference.pmid })
     return result;
   })
-  console.log('data', data)
 
   return (
     <Container fluid>
@@ -155,8 +154,33 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   <div>
                     <ul>
                       {lastYearData?.has_results_or_publications
-                        ? <Text>Des résultats ({lastYearData?.has_results && 'postage'}{lastYearData?.has_results && lastYearData?.has_publications_result && ' et '}{lastYearData?.has_publications_result && 'publication'}) ont été retrouvés</Text>
-                        : <Text>Aucun resultat (postage ou publication) retrouvé pour cet essai clinique.</Text>}
+                        ? <Text>
+                            {intl.formatMessage({ id: "clinical-trials.results.results" })}
+                            {' '}
+                            ({lastYearData?.has_results && intl.formatMessage({ id: "clinical-trials.results.posted" })}
+                            {lastYearData?.has_results && lastYearData?.has_publications_result && ` ${intl.formatMessage({ id: "clinical-trials.results.and" })} `}
+                            {lastYearData?.has_publications_result && intl.formatMessage({ id: "clinical-trials.results.published" })})
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.found" })}
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.for-clinical-trial" })}
+                            .
+                          </Text>
+                        : <Text>
+                            {intl.formatMessage({ id: "clinical-trials.results.no-results" })}
+                            {' '}
+                            ({intl.formatMessage({ id: "clinical-trials.results.posted" })}
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.or" })}
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.published" })})
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.not-found" })}
+                            {' '}
+                            {intl.formatMessage({ id: "clinical-trials.results.for-clinical-trial" })}
+                            .
+                          </Text>
+                      }
                       {lastYearData?.has_publications_result && references.map((reference, index) => <PublicationItem data={reference} key={`clinical-trials-publication-${index}`} />)}
                     </ul>
                   </div>

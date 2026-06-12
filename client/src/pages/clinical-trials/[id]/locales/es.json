@@ -41,5 +41,14 @@
   "clinical-trials.section.intervention-type": "Tipo de intervención",
   "clinical-trials.status.Completed": "Finalizado",
   "clinical-trials.status.Ongoing": "En curso",
-  "clinical-trials.status.Unknown": "Desconocido"
+  "clinical-trials.status.Unknown": "Desconocido",
+  "clinical-trials.results.results": "Resultados",
+  "clinical-trials.results.no-results": "No se han encontrado resultados",
+  "clinical-trials.results.posted": "gastos de envío",
+  "clinical-trials.results.published": "publicación",
+  "clinical-trials.results.and": "y",
+  "clinical-trials.results.or": "o",
+  "clinical-trials.results.found": "han sido encontrados",
+  "clinical-trials.results.not-found": "no se ha encontrado",
+  "clinical-trials.results.for-clinical-trial": "para este ensayo clínico"
 }

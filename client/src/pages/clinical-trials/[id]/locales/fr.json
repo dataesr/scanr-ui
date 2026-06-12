@@ -41,5 +41,14 @@
   "clinical-trials.section.intervention-type": "Type d'intervention",
   "clinical-trials.status.Completed": "Terminé",
   "clinical-trials.status.Ongoing": "En cours",
-  "clinical-trials.status.Unknown": "Statut non renseigné"
+  "clinical-trials.status.Unknown": "Statut non renseigné",
+  "clinical-trials.results.results": "Des résultats",
+  "clinical-trials.results.no-results": "Aucun résultat",
+  "clinical-trials.results.posted": "postage",
+  "clinical-trials.results.published": "publication",
+  "clinical-trials.results.and": "et",
+  "clinical-trials.results.or": "ou",
+  "clinical-trials.results.found": "ont été retrouvés",
+  "clinical-trials.results.not-found": "n'a été retrouvé",
+  "clinical-trials.results.for-clinical-trial": "pour cet essai clinique"
 }

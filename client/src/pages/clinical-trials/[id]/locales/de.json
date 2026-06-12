@@ -41,5 +41,14 @@
   "clinical-trials.section.intervention-type": "Art der Intervention",
   "clinical-trials.status.Completed": "Abgeschlossen",
   "clinical-trials.status.Ongoing": "Ongoing",
-  "clinical-trials.status.Unknown": "Unbekannt"
+  "clinical-trials.status.Unknown": "Unbekannt",
+  "clinical-trials.results.results": "Ergebnisse",
+  "clinical-trials.results.no-results": "Keine Ergebnisse",
+  "clinical-trials.results.posted": "veröffentlichtes Ergebnis",
+  "clinical-trials.results.published": "Veröffentlichung",
+  "clinical-trials.results.and": "und",
+  "clinical-trials.results.or": "oder",
+  "clinical-trials.results.found": "wurden gefunden",
+  "clinical-trials.results.not-found": "n'a été retrouvé",
+  "clinical-trials.results.for-clinical-trial": "für diese klinische Studie"
 }
