@@ -1,11 +1,12 @@
-import { Fragment } from "react";
+import { Badge, BadgeGroup, Link, Text, useDSFRConfig } from "@dataesr/dsfr-plus";
 import { useQueryClient } from "@tanstack/react-query";
-import { Text, Link, BadgeGroup, Badge, useDSFRConfig } from "@dataesr/dsfr-plus";
-import { encode } from "../../../../utils/string";
-import { ItemProps } from "../../types";
+import { Fragment } from "react";
+
 import { getOrganizationById } from "../../../../api/organizations/[id]";
 import { LightOrganization } from "../../../../types/organization";
 import getLangFieldValue from "../../../../utils/lang";
+import { encode } from "../../../../utils/string";
+import { ItemProps } from "../../types";
 // import CopyBadge from "../../../../components/copy/copy-badge";
 
 export default function OrganizationItem({
@@ -23,7 +24,6 @@ export default function OrganizationItem({
   }
 
   const hasAcronym = getLangFieldValue(locale)(organization.acronym);
-
 
   return (
     <Fragment key={organization.id}>

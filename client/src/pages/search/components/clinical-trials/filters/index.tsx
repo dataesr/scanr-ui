@@ -1,13 +1,14 @@
 import {
   Button, Container, Text
-} from "@dataesr/dsfr-plus";
-import { useIntl } from "react-intl";
-import useSearchData from "../../../hooks/useSearchData";
-import Modal from "../../../../../components/modal";
-import BaseSkeleton from "../../../../../components/skeleton/base-skeleton";
-import useUrl from "../../../hooks/useUrl";
-import ClinicalTrialRorFilter from "./rors";
+} from "@dataesr/dsfr-plus"
+import { useIntl } from "react-intl"
 
+import Modal from "../../../../../components/modal"
+import BaseSkeleton from "../../../../../components/skeleton/base-skeleton"
+import useSearchData from "../../../hooks/useSearchData"
+import useUrl from "../../../hooks/useUrl"
+import ClinicalTrialLeadSponsorTypeFilter from "./leadSponsorType"
+import ClinicalTrialRorFilter from "./ror"
 
 export default function ClinicalTrialFilters() {
   const intl = useIntl()
@@ -21,6 +22,7 @@ export default function ClinicalTrialFilters() {
       <Modal id={id} size="lg" title={intl.formatMessage({ id: "search.top.filters.clinical-trials.title" })}>
         <Container fluid className="fr-my-2w">
           <ClinicalTrialRorFilter />
+          <ClinicalTrialLeadSponsorTypeFilter />
           <hr className="fr-mt-3w" />
         </Container>
         <div className='fr-modal__footer fr-px-0' style={{ display: 'flex', width: '100%', alignItems: "center" }}>

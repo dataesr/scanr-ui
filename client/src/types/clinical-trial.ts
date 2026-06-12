@@ -1,6 +1,7 @@
 import { ExternalIdsData } from "./commons"
 
 export type ClinicalTrialAggregations = {
+  byLeadSponsorType: string[];
   byRor: string[];
 };
 

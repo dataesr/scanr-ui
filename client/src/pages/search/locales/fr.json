@@ -165,6 +165,7 @@
   "search.filters.current.patents.isGranted": "Les brevets délivrés",
   "search.filters.current.patents.applicants.ids.id": "Filtrer par déposant",
   "search.filters.current.clinical-trials.ror": "Filtrer par ROR",
+  "search.filters.current.clinical-trials.lead_sponsor_type": "Filtrer par type de promoteur",
   "search.top.patent.family.grandtedBadge": "Brevets délivrés",
   "search.filters.see-more": "En voir plus ({count})",
   "search.filters.see-less": "Réduire",
@@ -202,7 +203,11 @@
   "search.analytics.publications.by-reviews.title": "Top 10 des revues",
   "search.analytics.publications.by-reviews.description": "Calculé à partir des résultats de la recherche",
   "search.filters.clinical-trials.by-ror": "Filtrer par ROR",
-  "search.filters.clinical-trials.by-ror-description": "Sélectionnez un ou plusieurs ROR",
+  "search.filters.clinical-trials.by-ror-description": "Sélectionner un ou plusieurs ROR",
+  "search.filters.clinical-trials.by-lead-sponsor-type": "Filtrer par type de promoteur",
+  "search.filters.clinical-trials.by-lead-sponsor-type-description":"Sélectionner un ou plusieurs types de promoteur",
+  "search.filters.clinical-trials.by-lead-sponsor-type.academique": "Académique",
+  "search.filters.clinical-trials.by-lead-sponsor-type.industriel": "Industriel",
   "search.top.filters.clinical-trials.title": "Filtrer les essais cliniques",
   "search.top.clinical-trials.filters.result-count": "{count, plural, =0 {# essai clinique} one {# essai clinique} other {# essais cliniques}}"
 }

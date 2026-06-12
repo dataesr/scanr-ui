@@ -3,12 +3,18 @@ import type { AggregationArgs, ObjectAggregations } from "../../../types/commons
 import { FIELDS } from "../_utils/constants";
 
 const AGGS = {
+  byLeadSponsorType: {
+    terms: {
+      field: "lead_sponsor_type.keyword",
+      size: 5
+    }
+  },
   byRor: {
     terms: {
       field: "ror.keyword",
       size: 50
     }
-  }
+  },
 }
 
 type ClinicalTrialAggregations = ObjectAggregations<keyof typeof AGGS>;
@@ -37,7 +43,8 @@ export async function aggregateClinicalTrials(
   const result = await res.json()
   const { aggregations: data } = result;
 
+  const byLeadSponsorType = data?.byLeadSponsorType?.buckets?.map((element) => element.key) ?? []
   const byRor = data?.byRor?.buckets?.map((element) => element.key) ?? []
 
-  return { byRor }
+  return { byLeadSponsorType, byRor }
 }

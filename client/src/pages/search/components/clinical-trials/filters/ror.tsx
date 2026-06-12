@@ -23,7 +23,7 @@ export default function ClinicalTrialRorFilter() {
   const [seeMore, setSeeMore] = useState(false)
 
   const [searchInput, setSearchInput] = useState("")
-  const filter = currentFilters["ror"]
+  const filter = currentFilters?.ror
   const operator = filter?.operator || "or"
   const filteredByRor = byRor.filter((ror) =>
     ror.toLowerCase().includes(searchInput.toLowerCase())
