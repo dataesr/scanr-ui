@@ -18,9 +18,10 @@ import { useParams } from "react-router-dom"
 import { getOrganizationById } from "../../../../api/organizations/[id]/index.ts"
 import { getOrganizationReferences } from "../../../../api/organizations/[id]/references.ts"
 import Gauge from "../../../../components/gauge/index.tsx"
-import PageSkeleton from "../../../../components/skeleton/page-skeleton.tsx"
+import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
 import DataTable from "./datatable.tsx"
+import RorModal from "./components/ror-modal"
 
 type Column = {
   getCellValue?: (object) => ReactElement,
@@ -50,11 +51,8 @@ const modules = import.meta.glob("../locales/*.json", {
 })
 
 const messages = Object.keys(modules).reduce((acc, key) => {
-  const locale = key.match(/\.\/locales\/(.+)\.json$/)?.[1];
-  if (locale) {
-    return { ...acc, [locale]: modules[key] };
-  }
-  return acc;
+  const locale = key.match(/\.\/locales\/(.+)\.json$/)?.[1]
+  return locale ? { ...acc, [locale]: modules[key] } : acc
 }, {})
 
 export default function References() {
@@ -62,6 +60,7 @@ export default function References() {
   const intl = createIntl({ locale, messages: messages[locale] })
   const { id } = useParams()
 
+  const [acronym, setAcronym] = useState<string>()
   const [filters, setFilters] = useState<Filter[]>([])
   const [matchCity, setMatchCity] = useState<number>(0)
   // const [matchCreationYear, setMatchCreationYear] = useState<number>(0)
@@ -70,6 +69,7 @@ export default function References() {
   const [meanWithRor, setMeanWithRor] = useState<number>(0)
   const [numberOfResults, setNumberOfResults] = useState<number>(0)
   const [pagination, setPagination] = useState({ from: 0, size: 100 })
+  const [showRorModal, setShowRorModal] = useState(false);
   const [sorting, setSorting] = useState<Sort>({})
 
   const { data, isLoading } = useQuery({
@@ -97,7 +97,6 @@ export default function References() {
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
     // setMatchCreationYear(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_creation_match && item.rnsr_ror_creation_match)?.length / numberOfResults * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
-
   }, [dataReferencesAll?.results, numberOfResults])
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
@@ -133,7 +132,7 @@ export default function References() {
         },
         {
           id: 'ror',
-          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i><a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">Trouver mon ROR</a></i>,
+          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i onClick={() => { setAcronym(row.ror_acronym); setShowRorModal(true); }}>Trouver mon ROR</i>,
           getClassName: (row) => row?.ror ? '' : 'bg-error',
           label: 'ROR',
         },
@@ -147,25 +146,25 @@ export default function References() {
           id: 'rnsr_level',
           isFilterable: true,
           isFilterableBySelect: true,
-          label: 'RNSR Niveau',
+          label: 'Niveau',
         },
         {
           id: 'rnsr_label',
           isSortable: true,
-          label: 'RNSR Label',
+          label: 'Label',
           sortableField: 'label.fr.keyword',
         },
         {
           id: 'rnsr_city',
           // isSortable: true,
-          label: 'RNSR Ville',
+          label: 'Ville',
           // sortableField: 'address.city.keyword',
         },
         {
           id: 'rnsr_acronym',
           getCellValue: (row) => row?.ror ? row.rnsr_acronym : '',
           isSortable: true,
-          label: 'RNSR Acronyme',
+          label: 'Acronyme',
           sortableField: 'acronym.fr.keyword',
         },
       ],
@@ -177,25 +176,24 @@ export default function References() {
         {
           id: 'rnsr_ror_match',
           getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-          label: 'Match ROR',
+          label: 'Match RNSR',
         },
         {
           id: 'ror_label',
           getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
           isSortable: true,
-          label: 'ROR Label',
+          label: 'Label',
           sortableField: 'ror_infos.label.default.keyword',
         },
         {
           id: 'ror_city',
           getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
           isSortable: true,
-          label: 'ROR Ville',
+          label: 'Ville',
           sortableField: 'ror_infos.address.city.keyword',
         },
       ],
     },
-    
   ], [])
 
   const downloadCsv = (e) => {
@@ -224,6 +222,7 @@ export default function References() {
 
   return (
     <RawIntlProvider value={intl}>
+      <RorModal acronym={acronym} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
       <Container>
         <Breadcrumb>
           <Link href="/">

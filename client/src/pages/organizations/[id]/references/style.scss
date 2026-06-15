@@ -16,13 +16,18 @@
   }
   
   th:nth-child(8) {
-    min-width: 3rem;
+    min-width: 4rem;
   }
 
-  // th:nth-child(4),
-  // th:nth-child(5) {
-  //   min-width: 8rem;
-  // }
+  th:nth-child(4),
+  th:nth-child(5),
+  th:nth-child(6),
+  th:nth-child(7),
+  th:nth-child(9),
+  th:nth-child(10) {
+    min-width: 7rem;
+    max-width: 7rem;
+  }
 
   // th:nth-child(6),
   // th:nth-child(7),
@@ -35,18 +40,18 @@
 
   td {
     font-size: 0.75rem;
-    white-space: nowrap;
+    max-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 0;
+    white-space: nowrap;
   }
 }
 
 .references-datatable__header {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
+  display: flex;
   gap: 0.25rem;
+  justify-content: center;
   padding: 2px 4px;
 }
 

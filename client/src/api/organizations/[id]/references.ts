@@ -25,7 +25,7 @@ type Sort = {
 } | Record<string, never>
 
 // TODO: type the array of objects returned by the promise
-export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: object, results: any[] }> {
+export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: { rnsr_level: { buckets: any[] } }, results: any[] }> {
   const body: any = {
     _source: [
       "acronym",

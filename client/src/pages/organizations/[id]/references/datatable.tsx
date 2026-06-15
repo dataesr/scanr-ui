@@ -7,7 +7,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
   const inputsTmp = {}
   filters.forEach((filter) => {
     inputsTmp[filter.id] = filter.value
-  });
+  })
   const [inputs, setInputs] = useState(inputsTmp)
 
   const getLabelByBucketKey = (key: string) => {
