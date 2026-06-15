@@ -25,7 +25,7 @@ type Sort = {
 } | Record<string, never>
 
 // TODO: type the array of objects returned by the promise
-export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<any[]> {
+export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: object, results: any[] }> {
   const body: any = {
     _source: [
       "acronym",
@@ -49,6 +49,9 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
         ],
       },
     },
+    aggregations: {
+      rnsr_level: { terms: { field: 'level.keyword' } },
+    },
   }
   if (sorting?.id) {
     body.sort = { [sorting.id]: sorting.order }
@@ -57,8 +60,8 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     filters.forEach((filter) => {
       if (filter.id === 'id') {
         body.query.bool.filter.push({ match: { 'id.keyword': filter.value } })
-      // } else if (filter.id === 'instrument') {
-      //   body.query.bool.filter.push({ match: { 'project_instrument.keyword': filter.value } })
+      } else if (filter.id === 'rnsr_level') {
+        body.query.bool.filter.push({ match: { 'level.keyword': filter.value } })
       // } else if (filter.id === 'label') {
       //   body.query.bool.filter.push({ wildcard: { 'project_label.keyword': {
       //     case_insensitive: true,
@@ -84,15 +87,15 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
       }
     })
   }
-  
-  const rnsrRorQuery = await fetch(`${organizationsIndex}/_search`, {
+
+  const referencesQuery = await fetch(`${organizationsIndex}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
   }).then((r) => r.json())
 
   const results = [];
-  (rnsrRorQuery?.hits?.hits ?? []).forEach((item) => {
+  (referencesQuery?.hits?.hits ?? []).forEach((item) => {
     const result: any = {};
     // RNSR data
     (item?._source?.externalIds ?? [])
@@ -124,6 +127,7 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
     results.push(result)
   })
+  const aggregations = referencesQuery.aggregations
 
-  return results;
+  return { aggregations, results };
 }

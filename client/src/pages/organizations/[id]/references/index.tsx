@@ -11,7 +11,7 @@ import {
   useDSFRConfig,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
-import { ReactElement, useMemo, useState } from "react"
+import { ReactElement, useEffect, useMemo, useState } from "react"
 import { RawIntlProvider, createIntl } from "react-intl"
 import { useParams } from "react-router-dom"
 
@@ -25,6 +25,7 @@ import DataTable from "./datatable.tsx"
 type Column = {
   getCellValue?: (object) => ReactElement,
   getClassName?: (object) => string,
+  groups?: Column[],
   id: string,
   isFilterable?: boolean, // Is the column filterable, by default a simple tetx input is displayed. False if omitted
   isFilterableBySelect?: boolean, // If true and if an aggregation named like the colummn id exists, display a select, feeded by the aggregations buckets
@@ -62,6 +63,12 @@ export default function References() {
   const { id } = useParams()
 
   const [filters, setFilters] = useState<Filter[]>([])
+  const [matchCity, setMatchCity] = useState<number>(0)
+  // const [matchCreationYear, setMatchCreationYear] = useState<number>(0)
+  const [matchLabel, setMatchLabel] = useState<number>(0)
+  const [meanWithIdref, setMeanWithIdref] = useState<number>(0)
+  const [meanWithRor, setMeanWithRor] = useState<number>(0)
+  const [numberOfResults, setNumberOfResults] = useState<number>(0)
   const [pagination, setPagination] = useState({ from: 0, size: 100 })
   const [sorting, setSorting] = useState<Sort>({})
 
@@ -71,30 +78,27 @@ export default function References() {
     throwOnError: true,
   })
 
-  const { data: dataRnsrRor, isLoading: isLoadingRnsrRor } = useQuery({
+  const { data: dataReferences, isLoading: isLoadingReferences } = useQuery({
     queryKey: ["organizations", "references", filters, id, pagination, sorting],
     queryFn: () => getOrganizationReferences(filters, id, pagination, sorting),
     throwOnError: true,
   })
 
-  const { data: dataRnsrRorAll, isLoading: isLoadingRnsrRorAll } = useQuery({
-    queryKey: ["organizations", "references-all", id],
-    queryFn: () => getOrganizationReferences([], id, { from: 0, size: 2000 }, {}),
+  const { data: dataReferencesAll, isLoading: isLoadingReferencesAll } = useQuery({
+    queryKey: ["organizations", "references-all", filters, id],
+    queryFn: () => getOrganizationReferences(filters, id, { from: 0, size: 2000 }, {}),
     throwOnError: true,
   })
 
-  const meanWithIdref: number = Math.round(dataRnsrRorAll?.filter((item) => item?.idref && item.idref)?.length / dataRnsrRorAll?.length * 100)
-  const meanWithRor: number = Math.round(dataRnsrRorAll?.filter((item) => item?.ror && item.ror)?.length / dataRnsrRorAll?.length * 100)
-  const matchCity: number = Math.round(dataRnsrRorAll?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / dataRnsrRorAll?.length * 100)
-  // const matchCreationYear: number = Math.round(dataRnsrRorAll?.filter((item) => item?.rnsr_ror_creation_match && item.rnsr_ror_creation_match)?.length / dataRnsrRorAll?.length * 100)
-  const matchLabel: number = Math.round(dataRnsrRorAll?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / dataRnsrRorAll?.length * 100)
-  const rnsrLevels = {}
-  dataRnsrRorAll?.forEach((item) => {
-    if (!Object.keys(rnsrLevels).includes(item?.rnsr_level)) rnsrLevels[item?.rnsr_level] = 0
-    rnsrLevels[item.rnsr_level] += 1
-  })
-  const numberOfResults = dataRnsrRorAll?.length ?? 0
+  useEffect(() => {
+    setNumberOfResults(dataReferencesAll?.results?.length ?? 0)
+    setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResults * 100))
+    setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResults * 100))
+    setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
+    // setMatchCreationYear(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_creation_match && item.rnsr_ror_creation_match)?.length / numberOfResults * 100))
+    setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
 
+  }, [dataReferencesAll?.results, numberOfResults])
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
   const columns = useMemo<Column[]>(() => [
@@ -114,72 +118,93 @@ export default function References() {
     //   label: 'Match Année de création',
     // },
     {
-      id: 'rnsr',
-      getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
-      label: 'RNSR',
+      id: 'identifiers',
+      label: 'Identifiants',
+      groups: [
+        {
+          id: 'rnsr',
+          getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
+          label: 'RNSR',
+        },
+        {
+          id: 'idref',
+          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : <></>,
+          label: 'IdRef',
+        },
+        {
+          id: 'ror',
+          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i><a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">Trouver mon ROR</a></i>,
+          getClassName: (row) => row?.ror ? '' : 'bg-error',
+          label: 'ROR',
+        },
+      ],
     },
     {
-      id: 'idref',
-      getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : <></>,
-      label: 'IdRef',
+      id: 'rnsr',
+      label: 'RNSR',
+      groups: [
+        {
+          id: 'rnsr_level',
+          isFilterable: true,
+          isFilterableBySelect: true,
+          label: 'RNSR Niveau',
+        },
+        {
+          id: 'rnsr_label',
+          isSortable: true,
+          label: 'RNSR Label',
+          sortableField: 'label.fr.keyword',
+        },
+        {
+          id: 'rnsr_city',
+          // isSortable: true,
+          label: 'RNSR Ville',
+          // sortableField: 'address.city.keyword',
+        },
+        {
+          id: 'rnsr_acronym',
+          getCellValue: (row) => row?.ror ? row.rnsr_acronym : '',
+          isSortable: true,
+          label: 'RNSR Acronyme',
+          sortableField: 'acronym.fr.keyword',
+        },
+      ],
     },
     {
       id: 'ror',
-      getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i><a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">Trouver mon ROR</a></i>,
-      getClassName: (row) => row?.ror ? '' : 'bg-error',
       label: 'ROR',
+      groups: [
+        {
+          id: 'rnsr_ror_match',
+          getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+          label: 'Match ROR',
+        },
+        {
+          id: 'ror_label',
+          getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
+          isSortable: true,
+          label: 'ROR Label',
+          sortableField: 'ror_infos.label.default.keyword',
+        },
+        {
+          id: 'ror_city',
+          getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
+          isSortable: true,
+          label: 'ROR Ville',
+          sortableField: 'ror_infos.address.city.keyword',
+        },
+      ],
     },
-    {
-      id: 'rnsr_level',
-      label: 'RNSR Niveau',
-    },
-    {
-      id: 'rnsr_label',
-      isSortable: true,
-      label: 'RNSR Label',
-      sortableField: 'label.fr.keyword',
-    },
-    {
-      id: 'rnsr_city',
-      // isSortable: true,
-      label: 'RNSR Ville',
-      // sortableField: 'address.city.keyword',
-    },
-    {
-      id: 'rnsr_acronym',
-      getCellValue: (row) => row?.ror ? row.rnsr_acronym : <a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">{row.rnsr_acronym}</a>,
-      isSortable: true,
-      label: 'RNSR Acronyme',
-      sortableField: 'acronym.fr.keyword',
-    },
-    {
-      id: 'rnsr_ror_match',
-      getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-      label: 'Match ROR',
-    },
-    {
-      id: 'ror_label',
-      getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
-      isSortable: true,
-      label: 'ROR Label',
-      sortableField: 'ror_infos.label.default.keyword',
-    },
-    {
-      id: 'ror_city',
-      getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
-      isSortable: true,
-      label: 'ROR Ville',
-      sortableField: 'ror_infos.address.city.keyword',
-    }
+    
   ], [])
 
   const downloadCsv = (e) => {
     e.preventDefault()
     e.stopPropagation()
-    if (dataRnsrRorAll.length > 0) {
+    if (numberOfResults > 0) {
       // Extract keys from the first object to use as headers
-      const headers = Object.keys(dataRnsrRorAll[0])
-      const rows = dataRnsrRorAll.map((row) => headers.map((header) => row?.[header] ? `"${row[header]}"` : ""))
+      const headers = Object.keys(dataReferencesAll.results[0])
+      const rows = dataReferencesAll.results.map((row) => headers.map((header) => row?.[header] ? `"${row[header]}"` : ""))
       // Combine headers and rows into a single CSV string
       const csvContent = [
         headers.join(','),
@@ -187,7 +212,7 @@ export default function References() {
       ].join('\n')
       // Create a hidden download link
       const link = document.createElement('a')
-      link.download = `scan_rnsr_ror_${id}.csv`
+      link.download = `scan_references_${id}.csv`
       link.href = URL.createObjectURL(new Blob([csvContent], { type: 'text/csv;charset=utf-8' }))
       link.style.visibility = 'hidden'
       // Append link to DOM, trigger click, and clean up
@@ -209,8 +234,8 @@ export default function References() {
           </Link>
           <Link>{breadcrumbLabel}</Link>
         </Breadcrumb>
-        {(isLoading || isLoadingRnsrRor || isLoadingRnsrRorAll) && <PageSkeleton />}
-        {dataRnsrRorAll && (
+        {(isLoading || isLoadingReferences || isLoadingReferencesAll) && <PageSkeleton />}
+        {dataReferencesAll?.results && (
           <>
             <Row gutters>
               <Col>
@@ -235,8 +260,8 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {Object.keys(rnsrLevels).map((key) => <li key={`${id}-rnsr-level-${key}`}>
-                    {key} : {rnsrLevels[key]}
+                  {dataReferencesAll?.aggregations?.rnsr_level?.buckets?.map((level) => <li key={`${id}-rnsr-level-${level.key}`}>
+                    {level.key} : {level.doc_count}
                   </li>)}
                 </ul>
               </Col>
@@ -261,9 +286,9 @@ export default function References() {
               </Col>
             </Row>
             <DataTable
-              aggregations={{}}
+              aggregations={dataReferences.aggregations}
               columns={columns}
-              dataTable={dataRnsrRor}
+              dataTable={dataReferences.results}
               filters={filters}
               numberOfResults={numberOfResults}
               pagination={pagination}

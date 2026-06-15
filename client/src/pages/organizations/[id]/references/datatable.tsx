@@ -29,7 +29,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
       if ((id === sorting?.id) && (sorting?.order === 'desc')) icon = <span className="fr-icon-sort-desc" />
       return (
         <button
-          className="fr-btn fr-btn--secondary references-datatable_filter"
+          className="fr-btn fr-btn--secondary references-datatable_filter fr-ml-1w"
           onClick={() => handleSort(column)}
         >
           {icon}
@@ -71,6 +71,8 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
     return () => clearTimeout(timeoutId)
   }, [inputs, setFilters])
 
+  const columnHasGroups = columns.some((column) => column?.groups)
+
   return (
     <>
       <div className="fr-table fr-table--sm fr-table--multiline references-datatable">
@@ -82,7 +84,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                   <tr>
                     {columns.map((column) => {
                       return (
-                        <th key={column.id} scope="col">
+                        <th colSpan={columnHasGroups && column?.groups ? column.groups.length : 1} key={column.id} rowSpan={columnHasGroups && column?.groups ? 1 : 2} scope="col">
                           {column.isPlaceholder ? null : (
                             <>
                               <div className="references-datatable__header">
@@ -103,7 +105,55 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                                       value={inputs[column.id]}
                                     >
                                       <option key='all' value=''>
-                                        Tout
+                                        Tout ({numberOfResults})
+                                      </option>
+                                      {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
+                                        <option key={bucket.key} value={bucket.key}>
+                                          {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
+                                        </option>
+                                      ))}
+                                    </select>
+                                  ) : (
+                                    <input
+                                      className="fr-input references-datatable__input"
+                                      onChange={(event) => handleFilter(column, event)}
+                                      type="text"
+                                      value={inputs[column.id]}
+                                    />
+                                  )
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </th>
+                      )
+                    })}
+                  </tr>
+                  <tr>
+                    {columns.map((column) => column?.groups ?? []).flat().map((column) => {
+                      return (
+                        <th scope="col">
+                          {column.isPlaceholder ? null : (
+                            <>
+                              <div className="references-datatable__header">
+                                {column?.label ?? column.id}
+                                {' '}
+                                {column?.isFilterable}
+                                {' '}
+                                {getSortableIcon(column)}
+                              </div>
+                              <div>
+                                {column?.isFilterable && (
+                                  column?.isFilterableBySelect && aggregations?.[column.id] ? (
+                                    <select
+                                      className="fr-select references-datatable__select"
+                                      id={`references-structure-data-${column.id}`}
+                                      name={`references-structure-data-${column.id}`}
+                                      onChange={(event) => handleFilter(column, event)}
+                                      value={inputs[column.id]}
+                                    >
+                                      <option key='all' value=''>
+                                        Tout ({numberOfResults})
                                       </option>
                                       {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
                                         <option key={bucket.key} value={bucket.key}>
@@ -131,11 +181,21 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                 <tbody>
                   {dataTable && dataTable.map((row) => (
                     <tr key={row.uniqId}>
-                      {columns.map((column) => (
-                        <td key={`${column.id}-${row.id}`} className={column?.getClassName ? column.getClassName(row) : ''}>
-                          {column.getCellValue ? column.getCellValue(row) : <span title={row?.[column?.id]}>{row?.[column?.id]}</span>}
-                        </td>
-                      ))}
+                      {columns.map((column) => {
+                        if ((column?.groups ?? []).length > 0) {
+                          return column.groups.map((group) => (
+                            <td key={`${group.id}-${row.id}`} className={group?.getClassName ? group.getClassName(row) : ''}>
+                              {group.getCellValue ? group.getCellValue(row) : <span title={row?.[group?.id]}>{row?.[group?.id]}</span>}
+                            </td>
+                          ))
+                        } else {
+                          return (
+                            <td key={`${column.id}-${row.id}`} className={column?.getClassName ? column.getClassName(row) : ''}>
+                              {column.getCellValue ? column.getCellValue(row) : <span title={row?.[column?.id]}>{row?.[column?.id]}</span>}
+                            </td>
+                          )
+                        }
+                      })}
                     </tr>
                   ))}
                 </tbody>
