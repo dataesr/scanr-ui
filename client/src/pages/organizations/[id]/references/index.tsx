@@ -115,12 +115,12 @@ export default function References() {
     // },
     {
       id: 'rnsr',
-      getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : '',
+      getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
       label: 'RNSR',
     },
     {
       id: 'idref',
-      getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : '',
+      getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : <></>,
       label: 'IdRef',
     },
     {
@@ -154,7 +154,7 @@ export default function References() {
     },
     {
       id: 'rnsr_ror_match',
-      getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? '' : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+      getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
       label: 'Match ROR',
     },
     {
