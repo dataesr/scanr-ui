@@ -25,7 +25,7 @@ type Sort = {
 } | Record<string, never>
 
 // TODO: type the array of objects returned by the promise
-export async function getOrganizationRnsrRor(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<any[]> {
+export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<any[]> {
   const body: any = {
     _source: [
       "acronym",
@@ -39,7 +39,7 @@ export async function getOrganizationRnsrRor(filters: Filter[], id: string, pagi
       "ror_infos",
     ],
     from: pagination?.from ?? 0,
-    size: pagination?.size ?? 10,
+    size: pagination?.size ?? 100,
     query: {
       bool: {
         filter: [
@@ -84,7 +84,7 @@ export async function getOrganizationRnsrRor(filters: Filter[], id: string, pagi
       }
     })
   }
-
+  
   const rnsrRorQuery = await fetch(`${organizationsIndex}/_search`, {
     method: "POST",
     body: JSON.stringify(body),

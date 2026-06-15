@@ -15,11 +15,11 @@ import { ReactElement, useMemo, useState } from "react"
 import { RawIntlProvider, createIntl } from "react-intl"
 import { useParams } from "react-router-dom"
 
-import { getOrganizationById } from "../../../../api/organizations/[id]"
-import { getOrganizationRnsrRor } from "../../../../api/organizations/[id]/rnsr-ror"
+import { getOrganizationById } from "../../../../api/organizations/[id]/index.ts"
+import { getOrganizationReferences } from "../../../../api/organizations/[id]/references.ts"
 import Gauge from "../../../../components/gauge/index.tsx"
-import PageSkeleton from "../../../../components/skeleton/page-skeleton"
-import getLangFieldValue from "../../../../utils/lang"
+import PageSkeleton from "../../../../components/skeleton/page-skeleton.tsx"
+import getLangFieldValue from "../../../../utils/lang.ts"
 import DataTable from "./datatable.tsx"
 
 type Column = {
@@ -56,13 +56,13 @@ const messages = Object.keys(modules).reduce((acc, key) => {
   return acc;
 }, {})
 
-export default function RnsrRor() {
+export default function References() {
   const { locale } = useDSFRConfig()
   const intl = createIntl({ locale, messages: messages[locale] })
   const { id } = useParams()
 
   const [filters, setFilters] = useState<Filter[]>([])
-  const [pagination, setPagination] = useState({ from: 0, size: 10 })
+  const [pagination, setPagination] = useState({ from: 0, size: 100 })
   const [sorting, setSorting] = useState<Sort>({})
 
   const { data, isLoading } = useQuery({
@@ -72,14 +72,14 @@ export default function RnsrRor() {
   })
 
   const { data: dataRnsrRor, isLoading: isLoadingRnsrRor } = useQuery({
-    queryKey: ["organizations", "rnsr-ror", filters, id, pagination, sorting],
-    queryFn: () => getOrganizationRnsrRor(filters, id, pagination, sorting),
+    queryKey: ["organizations", "references", filters, id, pagination, sorting],
+    queryFn: () => getOrganizationReferences(filters, id, pagination, sorting),
     throwOnError: true,
   })
 
   const { data: dataRnsrRorAll, isLoading: isLoadingRnsrRorAll } = useQuery({
-    queryKey: ["organizations", "rnsr-ror-all", id],
-    queryFn: () => getOrganizationRnsrRor([], id, { from: 0, size: 2000 }, {}),
+    queryKey: ["organizations", "references-all", id],
+    queryFn: () => getOrganizationReferences([], id, { from: 0, size: 2000 }, {}),
     throwOnError: true,
   })
 
@@ -98,62 +98,78 @@ export default function RnsrRor() {
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
   const columns = useMemo<Column[]>(() => [
-    {
-      id: 'rnsr_ror_label_match',
-      getCellValue: (row) => row.rnsr_ror_label_match === undefined ? '' : (row.rnsr_ror_label_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-      label: 'Match Nom'
-    },
-    {
-      id: 'rnsr_ror_city_match',
-      getCellValue: (row) => row.rnsr_ror_city_match === undefined ? '' : (row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-      label: 'Match Ville'
-    },
+    // {
+    //   id: 'rnsr_ror_label_match',
+    //   getCellValue: (row) => row.rnsr_ror_label_match === undefined ? '' : (row.rnsr_ror_label_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+    //   label: 'Match Nom',
+    // },
+    // {
+    //   id: 'rnsr_ror_city_match',
+    //   getCellValue: (row) => row.rnsr_ror_city_match === undefined ? '' : (row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+    //   label: 'Match Ville',
+    // },
     // {
     //   id: 'rnsr_ror_creation_match',
     //   getCellValue: (row) => row.rnsr_ror_creation_match === undefined ? '' : (row.rnsr_ror_creation_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-    //   label: 'Match Année de création'
+    //   label: 'Match Année de création',
     // },
     {
       id: 'rnsr',
       getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : '',
-      label: 'RNSR'
+      label: 'RNSR',
     },
     {
       id: 'idref',
       getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : '',
-      label: 'Idref',
+      label: 'IdRef',
     },
     {
       id: 'ror',
-      getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : '',
-      label: 'ROR'
+      getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i><a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">Trouver mon ROR</a></i>,
+      getClassName: (row) => row?.ror ? '' : 'bg-error',
+      label: 'ROR',
     },
     {
       id: 'rnsr_level',
-      label: 'RNSR Niveau'
+      label: 'RNSR Niveau',
     },
     {
       id: 'rnsr_label',
-      label: 'RNSR Nom',
+      isSortable: true,
+      label: 'RNSR Label',
+      sortableField: 'label.fr.keyword',
     },
     {
       id: 'rnsr_city',
+      // isSortable: true,
       label: 'RNSR Ville',
+      // sortableField: 'address.city.keyword',
     },
     {
       id: 'rnsr_acronym',
       getCellValue: (row) => row?.ror ? row.rnsr_acronym : <a href={`https://ror.org/search?query=${row.rnsr_acronym}`} target="_blank">{row.rnsr_acronym}</a>,
-      label: 'RNSR Acronyme'
+      isSortable: true,
+      label: 'RNSR Acronyme',
+      sortableField: 'acronym.fr.keyword',
+    },
+    {
+      id: 'rnsr_ror_match',
+      getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? '' : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+      label: 'Match ROR',
     },
     {
       id: 'ror_label',
       getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
-      label: 'ROR Nom',
+      isSortable: true,
+      label: 'ROR Label',
+      sortableField: 'ror_infos.label.default.keyword',
     },
     {
       id: 'ror_city',
       getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
-      label: 'ROR Ville'
+      isSortable: true,
+      label: 'ROR Ville',
+      sortableField: 'ror_infos.address.city.keyword',
     }
   ], [])
 
@@ -198,7 +214,7 @@ export default function RnsrRor() {
           <>
             <Row gutters>
               <Col>
-                <Gauge label="Taux de présence d'Idref" percent={meanWithIdref} />
+                <Gauge label="Taux de présence d'IdRef" percent={meanWithIdref} />
               </Col>
               <Col>
                 <Gauge label="Taux de présence de ROR" percent={meanWithRor} />
@@ -206,7 +222,7 @@ export default function RnsrRor() {
             </Row>
             <Row gutters>
               <Col>
-                <Gauge label="Accord RNSR-ROR Nom" percent={matchLabel} />
+                <Gauge label="Accord RNSR-ROR Label" percent={matchLabel} />
               </Col>
               <Col>
                 <Gauge label="Accord RNSR-ROR Ville" percent={matchCity} />

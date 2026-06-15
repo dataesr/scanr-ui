@@ -24,12 +24,12 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
   const getSortableIcon = (column) => {
     if (column.isSortable) {
       const id = column?.sortableField ?? column.id
-      let icon = <i className="ri-arrow-up-down-fill" />
-      if ((id === sorting?.id) && (sorting?.order === 'asc')) icon = <i className="ri-sort-asc" />
-      if ((id === sorting?.id) && (sorting?.order === 'desc')) icon = <i className="ri-sort-desc" />
+      let icon = <span className="fr-icon-arrow-up-down-fill" />
+      if ((id === sorting?.id) && (sorting?.order === 'asc')) icon = <span className="fr-icon-sort-asc" />
+      if ((id === sorting?.id) && (sorting?.order === 'desc')) icon = <span className="fr-icon-sort-desc" />
       return (
         <button
-          className="fr-btn fundings-datatable_filter"
+          className="fr-btn fr-btn--secondary references-datatable_filter"
           onClick={() => handleSort(column)}
         >
           {icon}
@@ -73,7 +73,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
 
   return (
     <>
-      <div className="fr-table fr-table--sm fr-table--multiline fundings-datatable">
+      <div className="fr-table fr-table--sm fr-table--multiline references-datatable">
         <div className="fr-table__wrapper">
           <div className="fr-table__container">
             <div className="fr-table__content">
@@ -85,7 +85,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                         <th key={column.id} scope="col">
                           {column.isPlaceholder ? null : (
                             <>
-                              <div className="fundings-datatable__header">
+                              <div className="references-datatable__header">
                                 {column?.label ?? column.id}
                                 {' '}
                                 {column?.isFilterable}
@@ -96,9 +96,9 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                                 {column?.isFilterable && (
                                   column?.isFilterableBySelect && aggregations?.[column.id] ? (
                                     <select
-                                      className="fr-select fundings-datatable__select"
-                                      id={`fundings-structure-data-${column.id}`}
-                                      name={`fundings-structure-data-${column.id}`}
+                                      className="fr-select references-datatable__select"
+                                      id={`references-structure-data-${column.id}`}
+                                      name={`references-structure-data-${column.id}`}
                                       onChange={(event) => handleFilter(column, event)}
                                       value={inputs[column.id]}
                                     >
@@ -113,7 +113,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                                     </select>
                                   ) : (
                                     <input
-                                      className="fr-input fundings-datatable__input"
+                                      className="fr-input references-datatable__input"
                                       onChange={(event) => handleFilter(column, event)}
                                       type="text"
                                       value={inputs[column.id]}
@@ -146,13 +146,13 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
       </div>
       <Row className="fr-mt-1w">
         <Col>
-          <div className="fundings-datatable__page-size">
+          <div className="references-datatable__page-size">
             <select
               className="fr-select"
               onChange={(e) => setPagination({ from: 0, size: Number(e.target.value) })}
               value={pagination.size}
             >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[100, 300, 500].map((pageSize) => (
                 <option key={pageSize} value={pageSize}>
                   {pageSize}
                 </option>

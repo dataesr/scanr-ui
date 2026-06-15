@@ -140,23 +140,24 @@
 
 
 $icons:
-("intersect", "/icons/intersect.svg")
-("union", "/icons/union.svg")
-("corner-down-right", "/icons/corner-down-right.svg")
+('ai-generate-2', '/icons/ai-generate-2.svg')
+('ai', '/icons/ai.svg')
+('arrow-up-down-fill', '/icons/arrow-up-down-fill.svg')
+('check-double', '/icons/check-double.svg')
+('corner-down-right', '/icons/corner-down-right.svg')
 ('file-copy', '/icons/file-copy.svg')
-('sort-desc', '/icons/sort-desc.svg')
-("check-double", "/icons/check-double.svg")
-("hal", "/icons/hal.svg")
-('wikipedia', '/icons/wikipedia.svg')
+('hal', '/icons/hal.svg')
+('intersect', '/icons/intersect.svg')
+('mistral-ai', '/icons/mistral-ai.svg')
+('network-fill', '/icons/network-fill.svg')
+('network-line', '/icons/network-line.svg')
 ('shapes-line', '/icons/shapes-line.svg')
-("mistral-ai", "/icons/mistral-ai.svg")
-("network-line", "/icons/network-line.svg")
-("network-fill", "/icons/network-fill.svg")
-("ai", "/icons/ai.svg")
-("ai-generate-2", "/icons/ai-generate-2.svg");
+('sort-asc', '/icons/sort-asc.svg')
+('sort-desc', '/icons/sort-desc.svg')
+('union', '/icons/union.svg')
+('wikipedia', '/icons/wikipedia.svg');
 
 @each $name, $mask in $icons {
-
   .fr-icon-#{$name}::before,
   .fr-icon-#{$name}::after {
     -webkit-mask-image: url(#{$mask});
