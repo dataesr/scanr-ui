@@ -1,16 +1,16 @@
 import {
-  Container,
-  Col,
-  Title,
-  Row,
-  Link,
   Button,
   ButtonGroup,
+  Col,
+  Container,
+  Link,
+  Row,
+  Title,
   useDSFRConfig,
 } from "@dataesr/dsfr-plus";
 import { RawIntlProvider, createIntl, useIntl } from "react-intl";
-import "./styles.scss"
-import { isInProduction } from "../../utils/helpers";
+
+import "./styles.scss";
 
 const modules = import.meta.glob("./locales/*.json", {
   eager: true,
