@@ -7,7 +7,6 @@ import {
 import { useQuery } from "@tanstack/react-query"
 
 import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
-import { useEffect } from "react"
 
 export default function RorModal({ acronym, setShowRorModal, showRorModal } : { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
   const url = `https://api.ror.org/v2/organizations?query.advanced=types:facility%20AND%20locations.geonames_details.country_code:FR%20AND%20names.value:${acronym}%20AND%20status:active`
@@ -21,7 +20,6 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal } : { 
     throwOnError: true,
   })
 
-  useEffect(() => console.log(showRorModal), [showRorModal])
   return (
     <Modal isOpen={showRorModal} hide={() => setShowRorModal(false)}>
       <ModalTitle>Ajoute ton ROR</ModalTitle>

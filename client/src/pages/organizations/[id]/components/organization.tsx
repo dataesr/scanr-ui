@@ -305,14 +305,14 @@ export default function OrganizationPresentation({
               >
                 <OrganizationPublications
                   data={publications}
-                  value={data.id}
                   label={getLangFieldValue(locale)(data.label)}
+                  value={data.id}
                 />
                 {!isInProduction() && (
                   <OrganizationPublicationsDetection
                     data={publications}
-                    value={data.id}
                     label={getLangFieldValue(locale)(data.label)}
+                    value={data.id}
                   />
                 )}
                 <OrganizationNetwork
@@ -341,7 +341,11 @@ export default function OrganizationPresentation({
                 />
                 {(data?.categories ?? []).includes("Centre hospitalier") &&
                   !isInProduction() && (
-                    <OrganizationClinicalTrials data={data} />
+                    <OrganizationClinicalTrials
+                      data={data}
+                      label={getLangFieldValue(locale)(data.label)}
+                      value={data.externalIds.find((item) => item.type === "ror").id}
+                    />
                   )}
               </PageSection>
               <PageSection
