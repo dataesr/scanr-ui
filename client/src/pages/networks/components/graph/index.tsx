@@ -19,6 +19,7 @@ export default function NetworkGraph() {
     dark_ui: theme === "dark",
     simple_ui: false,
     show_item: focusItem,
+    max_label_length: 100,
   }
 
   return <VOSviewerOnline key={key} data={search.data} parameters={params} />
