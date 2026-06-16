@@ -11,7 +11,7 @@ const AGGS = {
   },
   byRor: {
     terms: {
-      field: "ror.keyword",
+      field: "ror_lead_sponsor_normalized.keyword",
       size: 50
     }
   },

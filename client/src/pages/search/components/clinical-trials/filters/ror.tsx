@@ -63,10 +63,10 @@ export default function ClinicalTrialRorFilter() {
                 ?.includes(ror)}
               key={ror}
               onClick={() =>
-                handleFilterChange({ field: "ror", value: ror })
+                handleFilterChange({ field: "ror", label: ror.split('###')[1], value: ror.split('###')[0] })
               }
             >
-              {ror}
+              {ror.split('###')[1]}
             </SelectableTag>
           ))}
       </TagGroup>
