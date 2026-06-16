@@ -259,7 +259,7 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {dataReferencesAll?.aggregations?.rnsr_level?.buckets?.map((level) => <li key={`${id}-rnsr-level-${level.key}`}>
+                  {(dataReferencesAll?.aggregations?.rnsr_level?.buckets ?? []).map((level) => <li key={`${id}-rnsr-level-${level.key}`}>
                     {level.key} : {level.doc_count}
                   </li>)}
                 </ul>
@@ -285,7 +285,7 @@ export default function References() {
               </Col>
             </Row>
             <DataTable
-              aggregations={dataReferences.aggregations}
+              aggregations={dataReferences?.aggregations ?? {}}
               columns={columns}
               dataTable={dataReferences.results}
               filters={filters}

@@ -16,6 +16,7 @@ export const LIGHT_SOURCE = [
   "lead_sponsor_normalized",
   "lead_sponsor_type",
   "NCTId",
+  "ror",
   "status_simplified",
   "study_completion_year",
   "study_start_year",

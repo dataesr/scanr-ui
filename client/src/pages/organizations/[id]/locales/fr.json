@@ -91,6 +91,7 @@
   "organizations.section.more-like-this": "Structures similaires",
   "organizations.section.contribute.title": "Contribuer",
   "organizations.section.contribute.button-label": "Signaler une erreur",
-  "organizations.clinical-trials": "Essais cliniques répertoriés par scanR, par année de fin de l'essai",
-  "organizations.clinical-trials.year-bars.name": "Essais cliniques"
+  "organizations.clinical-trials": "Essais cliniques terminés, répertoriés par scanR, par année de fin de l'essai",
+  "organizations.clinical-trials.year-bars.name": "Essais cliniques",
+  "organizations.clinical-trials.search": "Voir la liste des essais cliniques"
 }

@@ -60,6 +60,7 @@
   "organizations.section.more-like-this": "Estructuras Similares",
   "organizations.section.contribute.title": "Contribuir",
   "organizations.section.contribute.button-label": "Reportar un Error",
-  "organizations.clinical-trials": "Ensayos clínicos enumerados por scanR, por año de finalización del ensayo",
-  "organizations.clinical-trials.year-bars.name": "Ensayos clínicos"
+  "organizations.clinical-trials": "Ensayos clínicos finalizados, listados por scanR, por año de finalización del ensayo",
+  "organizations.clinical-trials.year-bars.name": "Ensayos clínicos",
+  "organizations.clinical-trials.search": "Consulte la lista de ensayos clínicos"
 }

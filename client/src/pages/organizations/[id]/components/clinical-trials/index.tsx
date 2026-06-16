@@ -1,4 +1,4 @@
-import { Col, Row, Spinner, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Row, Spinner, Text } from "@dataesr/dsfr-plus";
 import { useQuery } from "@tanstack/react-query";
 import { useIntl } from "react-intl";
 
@@ -8,15 +8,26 @@ import type { Organization } from "../../../../../types/organization";
 
 export default function OrganizationClinicalTrials({
   data,
+  label,
+  value,
 }: {
   data: Organization;
+  label?: string,
+  value: string,
 }) {
   const intl = useIntl();
+
+  const searchFilters = {
+    "ror": { values: [{ label, value: `https://ror.org/${value}` }], type: "terms" },
+  };
+  const clinicalTrialsFilterUrl = `/search/clinical-trials?filters=${encodeURIComponent(
+    JSON.stringify(searchFilters),
+  )}`;
 
   const { data: cts, isLoading } = useQuery({
     queryKey: ["organizations", "clinical-trials", data.id],
     queryFn: async () => {
-      const ror = data.externalIds.find((item) => item.type === "ror").id;
+
       const previousYear = new Date().getFullYear() - 1;
       const body: any = {
         size: 0,
@@ -25,7 +36,7 @@ export default function OrganizationClinicalTrials({
             filter: [
               {
                 term: {
-                  "bso_local_affiliations.keyword": `https://ror.org/${ror}`,
+                  "bso_local_affiliations.keyword": value,
                 },
               },
               {
@@ -64,7 +75,7 @@ export default function OrganizationClinicalTrials({
       ).then((r) => r.json());
       if (organizationClinicalTrials?.aggregations?.byYear) {
         return {
-          byYear: organizationClinicalTrials.aggregations.byYear.buckets.map(
+          byYear: (organizationClinicalTrials?.aggregations?.byYear?.buckets ?? []).map(
             (bucket) => ({ count: bucket.doc_count, label: bucket.key }),
           ),
         };
@@ -77,7 +88,7 @@ export default function OrganizationClinicalTrials({
   if (isLoading) return <Spinner />;
 
   return (
-    (cts?.byYear?.length ?? 0 > 0) && (
+    ((cts?.byYear?.length ?? 0) > 0) && (
       <>
         <div
           className="fr-mb-3w"
@@ -92,15 +103,15 @@ export default function OrganizationClinicalTrials({
               {intl.formatMessage({ id: "organizations.clinical-trials" })}
             </Text>
           </div>
-          {/*<Button
-              as="a"
-              variant="text"
-              icon="arrow-right-s-line"
-              iconPosition="right"
-              href={patentsFilterUrl}
-            >
-              {intl.formatMessage({ id: "organizations.patents.search" })}
-            </Button>*/}
+          <Button
+            as="a"
+            href={clinicalTrialsFilterUrl}
+            icon="arrow-right-s-line"
+            iconPosition="right"
+            variant="text"
+          >
+            {intl.formatMessage({ id: "organizations.clinical-trials.search" })}
+          </Button>
         </div>
         <Row gutters>
           <Col xs="12" className="fr-pb-6w">

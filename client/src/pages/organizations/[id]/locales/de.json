@@ -60,6 +60,7 @@
   "organizations.section.more-like-this": "Ähnliche Strukturen",
   "organizations.section.contribute.title": "Beitragen",
   "organizations.section.contribute.button-label": "Einen Fehler melden",
-  "organizations.clinical-trials": "Klinische Studien, aufgelistet von scanR, nach Abschlussjahr der Studie",
-  "organizations.clinical-trials.year-bars.name": "Klinische Studien"
+  "organizations.clinical-trials": "Abgeschlossene klinische Studien, aufgelistet nach scanR, nach Jahr des Studienabschlusses",
+  "organizations.clinical-trials.year-bars.name": "Klinische Studien",
+  "organizations.clinical-trials.search": "Siehe die Liste der klinischen Studien"
 }
