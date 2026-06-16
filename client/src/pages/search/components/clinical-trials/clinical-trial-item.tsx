@@ -44,7 +44,11 @@ export default function ClinicalTrialItem({
           </Link>
         </span>
         <Text bold size="sm" className="fr-mb-0">
-          {clinicalTrial?.lead_sponsor_normalized}
+          {clinicalTrial?.ror ? (
+            <Link href={`/organizations/${clinicalTrial.ror.replace('https://ror.org/', '')}`}>{clinicalTrial.lead_sponsor_normalized}</Link>
+          ) : (
+            clinicalTrial.lead_sponsor_normalized
+          )}
         </Text>
         <Text size="sm" className="fr-card__detail fr-mb-0">
           <i>
