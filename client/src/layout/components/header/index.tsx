@@ -121,14 +121,12 @@ export default function Header() {
 					>
 						{intl.formatMessage({ id: "layout.header.nav.search.patents" })}
 					</Link>
-					{!isInProduction() && (
-						<Link
-							current={pathname.split("/").includes("clinical-trials")}
-							href="/search/clinical-trials"
-						>
-							{intl.formatMessage({ id: "layout.header.nav.search.clinical-trials" })}
-						</Link>
-					)}
+					<Link
+						current={pathname.split("/").includes("clinical-trials")}
+						href="/search/clinical-trials"
+					>
+						{intl.formatMessage({ id: "layout.header.nav.search.clinical-trials" })}
+					</Link>
 				</NavItem>
 				<NavItem
 					current={
