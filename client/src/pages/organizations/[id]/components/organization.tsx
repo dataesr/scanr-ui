@@ -339,14 +339,13 @@ export default function OrganizationPresentation({
                   value={data.id}
                   label={getLangFieldValue(locale)(data.label)}
                 />
-                {(data?.categories ?? []).includes("Centre hospitalier") &&
-                  !isInProduction() && (
-                    <OrganizationClinicalTrials
-                      data={data}
-                      label={getLangFieldValue(locale)(data.label)}
-                      value={data.externalIds.find((item) => item.type === "ror").id}
-                    />
-                  )}
+                {(data?.categories ?? []).includes("Centre hospitalier") && (
+                  <OrganizationClinicalTrials
+                    data={data}
+                    label={getLangFieldValue(locale)(data.label)}
+                    value={data.externalIds.find((item) => item.type === "ror").id}
+                  />
+                )}
               </PageSection>
               <PageSection
                 size="lead"
