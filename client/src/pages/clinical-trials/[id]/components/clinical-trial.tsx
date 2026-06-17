@@ -148,7 +148,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                     {data?.intervention_type && (
                       <Text size="sm" className="fr-mb-1w">
                         <b>{intl.formatMessage({ id: "clinical-trials.section.intervention-type" })} :</b>{" "}
-                       {data.intervention_type.charAt(0).toUpperCase() + data.intervention_type.slice(1).toLowerCase()}
+                        {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}`, defaultMessage: data.intervention_type })}
                       </Text>
                     )}
                     </Col>
