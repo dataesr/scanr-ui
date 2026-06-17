@@ -213,7 +213,7 @@ export default function MainFooter() {
                           href="https://works-magnet.esr.gouv.fr/"
                           target="_blank"
                         >
-                          Works-Magnet
+                          Works-magnet
                         </Link>
                       </li>
                       <li>

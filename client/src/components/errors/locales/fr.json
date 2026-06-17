@@ -14,5 +14,5 @@
   "error500.title": "Erreur inattendue",
   "error500.code": "Erreur 500",
   "error500.message": "Désolé, le service rencontre un problème, nous travaillons pour le résoudre le plus rapidement possible.",
-  "error500.tryAgain": "Essayez de rafraîchir la page ou bien ressayez plus tard."
+  "error500.tryAgain": "Essayez de rafraîchir la page ou bien réessayez plus tard."
 }

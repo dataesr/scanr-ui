@@ -132,8 +132,8 @@ export default function References() {
         },
         {
           id: 'ror',
-          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : <i onClick={() => { setAcronym(row.ror_acronym); setShowRorModal(true); }}>Trouver mon ROR</i>,
-          getClassName: (row) => row?.ror ? '' : 'bg-error',
+          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <i onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }}>Trouver mon ROR</i> : <></>),
+          getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
           label: 'ROR',
         },
       ],
@@ -162,7 +162,7 @@ export default function References() {
         },
         {
           id: 'rnsr_acronym',
-          getCellValue: (row) => row?.ror ? row.rnsr_acronym : '',
+          getCellValue: (row) => row?.rnsr_acronym ? row.rnsr_acronym : '',
           isSortable: true,
           label: 'Acronyme',
           sortableField: 'acronym.fr.keyword',

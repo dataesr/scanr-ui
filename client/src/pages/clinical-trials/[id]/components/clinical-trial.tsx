@@ -11,6 +11,7 @@ import {
 import { useIntl } from "react-intl"
 
 import Identifiers from "../../../../components/identifiers"
+import LinkCard from "../../../../components/link-card"
 import MoreLikeThis from "../../../../components/more-like-this"
 import { PageContent, PageSection } from "../../../../components/page-content"
 import Share from "../../../../components/share"
@@ -19,7 +20,6 @@ import useScreenSize from "../../../../hooks/useScreenSize"
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
 import type { LightPublication } from "../../../../types/publication"
 import PublicationItem from "../../../search/components/publications/publication-item"
-import LinkCard from "../../../../components/link-card"
 
 const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
 
@@ -246,13 +246,13 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
         <Col md="4" lg="3" offsetLg="1">
           <PageContent>
             <PageSection
-              title={intl.formatMessage({
-                id: "clinical-trials.section.identifiers",
-              })}
               description={intl.formatMessage({
                 id: "clinical-trials.section.identifiers-description",
               })}
               show
+              title={intl.formatMessage({
+                id: "clinical-trials.section.identifiers",
+              })}
             >
               <Identifiers data={identifiers} />
             </PageSection>
