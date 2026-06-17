@@ -19,6 +19,7 @@ import useScreenSize from "../../../../hooks/useScreenSize"
 import { LightClinicalTrial } from "../../../../types/clinical-trial"
 import type { LightPublication } from "../../../../types/publication"
 import PublicationItem from "../../../search/components/publications/publication-item"
+import LinkCard from "../../../../components/link-card"
 
 const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
 
@@ -87,12 +88,12 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 </BadgeGroup>
                 <Title className="fr-mb-1v" as="h1" look="h5">{data.title}</Title>
               </div>
-              {data?.summary && (<Row>
-                <Text className="fr-mt-3w fr-mb-0" bold>{intl.formatMessage({ id: "clinical-trials.header.summary" })}</Text>
+              {data?.summary && (
                 <Truncate lines={6} className="fr-mt-2w">
+                  <Text className="fr-mt-3w fr-mb-0" bold>{intl.formatMessage({ id: "clinical-trials.header.summary" })}</Text>
                   <Text className="fr-m-0" size="sm">{data.summary}</Text>
                 </Truncate>
-              </Row>)}
+              )}
             </section>
           </Container>
           <Container fluid>
@@ -105,17 +106,22 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 icon="building-line"
                 show={!!data?.lead_sponsor_normalized}
               >
-                <div className="fr-mb-6w">
+                <LinkCard
+                  type="organization"
+                  icon="building-line"
+                >
                   <div style={{ display: "inline-flex" }}>
                     <div>
                       {data?.ror ? (
-                        <Link href={`/organizations/${data.ror.replace('https://ror.org/', '')}`}>{data.lead_sponsor_normalized}</Link>
+                        <Link href={`/organizations/${data.ror.replace('https://ror.org/', '')}`}>
+                          {data.lead_sponsor_normalized} - {data.lead_sponsor_type.charAt(0).toUpperCase() + data.lead_sponsor_type.slice(1)}
+                        </Link>
                       ) : (
-                        data.lead_sponsor_normalized
+                        `${data.lead_sponsor_normalized} - ${data.lead_sponsor_type.charAt(0).toUpperCase() + data.lead_sponsor_type.slice(1)}`
                       )}
                     </div>
                   </div>
-                </div>
+                </LinkCard>
               </PageSection>
               <PageSection
                 size="lead"
@@ -125,22 +131,55 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                 icon="survey-line"
                 show={!!data?.lead_sponsor_normalized}
               >
-                <div className="fr-mb-6w">
-                  <div>
-                    {data?.study_start_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-start" })}: {data?.study_start_year}</div>}
-                    {data?.study_completion_year && <div>{intl.formatMessage({ id: "clinical-trials.section.year-completion" })}: {data?.study_completion_year}</div>}
-                    {data?.intervention_type && <div>{intl.formatMessage({ id: "clinical-trials.section.intervention-type" })}: {intl.formatMessage({ id: `clinical-trials.intervention-type.${data.intervention_type.toLowerCase()}` })}</div>}
-                    {data?.status_simplified && <div>{intl.formatMessage({ id: "clinical-trials.section.status" })}: {intl.formatMessage({ id: `clinical-trials.status.${data?.status_simplified}` })}</div>}
-                    {data?.all_sources && <div>{intl.formatMessage({ id: "search.clinical-trials.sources" })}:
-                      <ul>
-                        {data?.all_sources.map((source) => {
-                          if (MAPPING_SOURCES?.[source])
-                            return <li><Link href={`${MAPPING_SOURCES?.[source]?.url}${data?.[MAPPING_SOURCES?.[source]?.field]}`} target="_blank">{MAPPING_SOURCES?.[source]?.label ?? intl.formatMessage({ id: 'clinical-trials.source-unknown' })}</Link></li>
-                        })}
-                      </ul>
-                    </div>}
-                  </div>
-                </div>
+                <Row gutters>
+                  <Col md="6" lg="4">
+                    {data?.study_start_year && (
+                      <Text size="sm" className="fr-mb-1w">
+                        <b>{intl.formatMessage({ id: "clinical-trials.section.year-start" })} :</b>{" "}
+                        {data.study_start_year}
+                      </Text>
+                    )}
+                    {data?.study_completion_year && (
+                      <Text size="sm" className="fr-mb-1w">
+                        <b>{intl.formatMessage({ id: "clinical-trials.section.year-completion" })} :</b>{" "}
+                        {data.study_completion_year}
+                      </Text>
+                    )}
+                    {data?.intervention_type && (
+                      <Text size="sm" className="fr-mb-1w">
+                        <b>{intl.formatMessage({ id: "clinical-trials.section.intervention-type" })} :</b>{" "}
+                       {data.intervention_type.charAt(0).toUpperCase() + data.intervention_type.slice(1).toLowerCase()}
+                      </Text>
+                    )}
+                    </Col>
+                  <Col md="6" lg="4">
+                    {data?.status_simplified && (
+                      <Text size="sm" className="fr-mb-1w">
+                        <b>{intl.formatMessage({ id: "clinical-trials.section.status" })} :</b>{" "}
+                        {intl.formatMessage({ id: `clinical-trials.status.${data.status_simplified}` })}
+                      </Text>
+                    )}
+                    {data?.all_sources && (
+                      <Text size="sm" className="fr-mb-1w">
+                        <b>{intl.formatMessage({ id: "search.clinical-trials.sources" })} :</b>{" "}
+                        {data.all_sources
+                          .filter((source) => MAPPING_SOURCES?.[source])
+                          .map((source, index, arr) => (
+                            <>
+                              <Link
+                                key={source}
+                                href={`${MAPPING_SOURCES[source].url}${data[MAPPING_SOURCES[source].field]}`}
+                                target="_blank"
+                              >
+                                {MAPPING_SOURCES[source].label}
+                              </Link>
+                              {index < arr.length - 1 && <br />}
+                            </>
+                          ))}
+                      </Text>
+                    )}
+                  </Col>
+                </Row>
               </PageSection>
               <PageSection
                 size="lead"
@@ -154,7 +193,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                   <div>
                     <ul>
                       {lastYearData?.has_results_or_publications
-                        ? <Text>
+                        ?  <Text size="sm" className="fr-mb-1w">
                             {intl.formatMessage({ id: "clinical-trials.results.results" })}
                             {' '}
                             ({lastYearData?.has_results && intl.formatMessage({ id: "clinical-trials.results.posted" })}
@@ -166,7 +205,7 @@ export default function ClinicalTrial({ data }: { data: LightClinicalTrial }) {
                             {intl.formatMessage({ id: "clinical-trials.results.for-clinical-trial" })}
                             .
                           </Text>
-                        : <Text>
+                        : <Text size="sm" className="fr-mb-1w">
                             {intl.formatMessage({ id: "clinical-trials.results.no-results" })}
                             {' '}
                             ({intl.formatMessage({ id: "clinical-trials.results.posted" })}
