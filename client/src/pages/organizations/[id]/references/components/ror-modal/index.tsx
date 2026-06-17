@@ -2,7 +2,6 @@ import {
   Modal,
   ModalTitle,
   ModalContent,
-  Radio,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
 
