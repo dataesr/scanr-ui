@@ -28,7 +28,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
           {(data?.items?.slice(0, 5) ?? []).map((item) => (
             <>
               <input type="radio" id={`ror-${item.id}`} name="ror" />
-              <label className="fr-label" htmlFor="storybook-radio">
+              <label className="fr-label" htmlFor="ror">
                 {item.names.find((name) => name.types.includes("ror_display")).value}
                 {' '}
                 {item.locations[0].geonames_details.name}
@@ -40,7 +40,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
             </>
           ))}
           <input type="radio" id="ror-other" name="ror" />
-          <label className="fr-label" htmlFor="storybook-radio">
+          <label className="fr-label" htmlFor="ror">
             Autre
             <input type="text" className="fr-input" />
           </label>
