@@ -287,7 +287,7 @@ export default function References() {
             <DataTable
               aggregations={dataReferences?.aggregations ?? {}}
               columns={columns}
-              dataTable={dataReferences.results}
+              dataTable={dataReferences?.results}
               filters={filters}
               numberOfResults={numberOfResults}
               pagination={pagination}
