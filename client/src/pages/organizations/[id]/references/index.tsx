@@ -20,27 +20,32 @@ import { getOrganizationReferences } from "../../../../api/organizations/[id]/re
 import Gauge from "../../../../components/gauge/index.tsx"
 import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
-import DataTable from "./datatable.tsx"
 import RorModal from "./components/ror-modal"
+import DataTable from "./datatable.tsx"
 
-type Column = {
+export type Column = {
   getCellValue?: (object) => ReactElement,
   getClassName?: (object) => string,
   groups?: Column[],
+  filterType?: 'missing' | 'select', // If "isFilterable" is True, "select" will display a dropdown, "missing" will diplay a button to filter on missing values only
   id: string,
   isFilterable?: boolean, // Is the column filterable, by default a simple tetx input is displayed. False if omitted
-  isFilterableBySelect?: boolean, // If true and if an aggregation named like the colummn id exists, display a select, feeded by the aggregations buckets
   isSortable?: boolean, // Is the column sortable. False if omitted
   label?: string, // Column label as header. If omitted, the column id is displayed instead
   sortableField?: string, // Is the column sortable
 }
 
-type Filter = {
+export type Filter = {
   id: string
   value: string
 }
 
-type Sort = {
+export type Pagination = {
+  from: number,
+  size: number,
+}
+
+export type Sort = {
   id: string
   order: 'asc' | 'desc'
 } | Record<string, never>
@@ -63,12 +68,11 @@ export default function References() {
   const [acronym, setAcronym] = useState<string>()
   const [filters, setFilters] = useState<Filter[]>([])
   const [matchCity, setMatchCity] = useState<number>(0)
-  // const [matchCreationYear, setMatchCreationYear] = useState<number>(0)
   const [matchLabel, setMatchLabel] = useState<number>(0)
   const [meanWithIdref, setMeanWithIdref] = useState<number>(0)
   const [meanWithRor, setMeanWithRor] = useState<number>(0)
   const [numberOfResults, setNumberOfResults] = useState<number>(0)
-  const [pagination, setPagination] = useState({ from: 0, size: 100 })
+  const [pagination, setPagination] = useState<Pagination>({ from: 0, size: 100 })
   const [showRorModal, setShowRorModal] = useState(false);
   const [sorting, setSorting] = useState<Sort>({})
 
@@ -95,27 +99,11 @@ export default function References() {
     setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResults * 100))
     setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResults * 100))
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
-    // setMatchCreationYear(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_creation_match && item.rnsr_ror_creation_match)?.length / numberOfResults * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
   }, [dataReferencesAll?.results, numberOfResults])
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
   const columns = useMemo<Column[]>(() => [
-    // {
-    //   id: 'rnsr_ror_label_match',
-    //   getCellValue: (row) => row.rnsr_ror_label_match === undefined ? '' : (row.rnsr_ror_label_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-    //   label: 'Match Nom',
-    // },
-    // {
-    //   id: 'rnsr_ror_city_match',
-    //   getCellValue: (row) => row.rnsr_ror_city_match === undefined ? '' : (row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-    //   label: 'Match Ville',
-    // },
-    // {
-    //   id: 'rnsr_ror_creation_match',
-    //   getCellValue: (row) => row.rnsr_ror_creation_match === undefined ? '' : (row.rnsr_ror_creation_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-    //   label: 'Match Année de création',
-    // },
     {
       id: 'identifiers',
       label: 'Identifiants',
@@ -128,12 +116,16 @@ export default function References() {
         {
           id: 'idref',
           getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : <></>,
+          isFilterable: true,
+          filterType: 'missing',
           label: 'IdRef',
         },
         {
           id: 'ror',
           getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <i onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }}>Trouver mon ROR</i> : <></>),
           getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
+          isFilterable: true,
+          filterType: 'missing',
           label: 'ROR',
         },
       ],
@@ -143,9 +135,9 @@ export default function References() {
       label: 'RNSR',
       groups: [
         {
+          filterType: 'select',
           id: 'rnsr_level',
           isFilterable: true,
-          isFilterableBySelect: true,
           label: 'Niveau',
         },
         {
@@ -251,9 +243,6 @@ export default function References() {
               <Col>
                 <Gauge label="Accord RNSR-ROR Ville" percent={matchCity} />
               </Col>
-              {/* <Col>
-              <Gauge label="Accord RNSR-ROR Année de création" percent={matchCreationYear} />
-            </Col> */}
             </Row>
             <Row>
               <Col>
@@ -287,7 +276,7 @@ export default function References() {
             <DataTable
               aggregations={dataReferences?.aggregations ?? {}}
               columns={columns}
-              dataTable={dataReferences?.results}
+              dataTable={dataReferences?.results ?? []}
               filters={filters}
               numberOfResults={numberOfResults}
               pagination={pagination}

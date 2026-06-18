@@ -1,9 +1,14 @@
-import { Col, Row, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Row, Text } from "@dataesr/dsfr-plus";
 import { useEffect, useState } from "react";
+
+import { type Column, type Filter, type Pagination, type Sort } from "./index";
 
 import "./style.scss";
 
-export default function DataTable({ aggregations, columns, dataTable, filters, numberOfResults, pagination, setFilters, setPagination, setSorting, sorting }) {
+export default function DataTable(
+  { aggregations, columns, dataTable, filters, numberOfResults, pagination, setFilters, setPagination, setSorting, sorting }
+    : { aggregations: any, columns: Column[], dataTable: any[], filters: Filter[], numberOfResults: number, pagination: Pagination, setFilters: any, setPagination: any, setSorting: any, sorting: Sort }
+) {
   const inputsTmp = {}
   filters.forEach((filter) => {
     inputsTmp[filter.id] = filter.value
@@ -64,9 +69,72 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
     }
   }
 
+  const ColumnHeader = ({ column }: { column: Column }) => {
+    return (
+      <>
+        <div className="references-datatable__header">
+          {column?.label ?? column.id}
+          {' '}
+          {column?.isFilterable}
+          {' '}
+          {getSortableIcon(column)}
+        </div>
+        <div>
+          {column?.isFilterable && (
+            column?.filterType === 'select' && aggregations?.[column.id] ? (
+              <select
+                className="fr-select references-datatable__select"
+                id={`references-structure-data-${column.id}`}
+                name={`references-structure-data-${column.id}`}
+                onChange={(event) => handleFilter(column, event)}
+                value={inputs[column.id]}
+              >
+                <option key='all' value=''>
+                  Tout ({numberOfResults})
+                </option>
+                {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
+                  <option key={bucket.key} value={bucket.key}>
+                    {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
+                  </option>
+                ))}
+              </select>
+            ) : (
+              column.filterType === 'missing' ? (
+                Object.keys(inputs).includes(column.id) ? (
+                  <Button
+                    className="fr-button fr-btn--secondary fr-btn--sm"
+                    onClick={(event) => handleFilter(column, event)}
+                    value=""
+                  >
+                    Restaurer toutes les structures
+                  </Button>
+                ) : (
+                  <Button
+                    className="fr-button fr-btn--secondary fr-btn--sm"
+                    onClick={(event) => handleFilter(column, event)}
+                    value="missing"
+                  >
+                    Filtrer sur les {column.label} manquants
+                  </Button>
+                )
+              ) : (
+                <input
+                  className="fr-input references-datatable__input"
+                  onChange={(event) => handleFilter(column, event)}
+                  type="text"
+                  value={inputs[column.id]}
+                />
+              )
+            )
+          )}
+        </div>
+      </>
+    )
+  }
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      setFilters(Object.keys(inputs).map((id) => ({ id, value: inputs[id] })).filter((filter) => filter.value.length > 0))
+      setFilters(Object.keys(inputs).map((id) => ({ id, value: inputs[id] })))
     }, 500)
     return () => clearTimeout(timeoutId)
   }, [inputs, setFilters])
@@ -85,46 +153,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                     {columns.map((column) => {
                       return (
                         <th colSpan={columnHasGroups && column?.groups ? column.groups.length : 1} key={column.id} rowSpan={columnHasGroups && column?.groups ? 1 : 2} scope="col">
-                          {column.isPlaceholder ? null : (
-                            <>
-                              <div className="references-datatable__header">
-                                {column?.label ?? column.id}
-                                {' '}
-                                {column?.isFilterable}
-                                {' '}
-                                {getSortableIcon(column)}
-                              </div>
-                              <div>
-                                {column?.isFilterable && (
-                                  column?.isFilterableBySelect && aggregations?.[column.id] ? (
-                                    <select
-                                      className="fr-select references-datatable__select"
-                                      id={`references-structure-data-${column.id}`}
-                                      name={`references-structure-data-${column.id}`}
-                                      onChange={(event) => handleFilter(column, event)}
-                                      value={inputs[column.id]}
-                                    >
-                                      <option key='all' value=''>
-                                        Tout ({numberOfResults})
-                                      </option>
-                                      {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
-                                        <option key={bucket.key} value={bucket.key}>
-                                          {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
-                                        </option>
-                                      ))}
-                                    </select>
-                                  ) : (
-                                    <input
-                                      className="fr-input references-datatable__input"
-                                      onChange={(event) => handleFilter(column, event)}
-                                      type="text"
-                                      value={inputs[column.id]}
-                                    />
-                                  )
-                                )}
-                              </div>
-                            </>
-                          )}
+                          <ColumnHeader column={column} />
                         </th>
                       )
                     })}
@@ -133,46 +162,7 @@ export default function DataTable({ aggregations, columns, dataTable, filters, n
                     {columns.map((column) => column?.groups ?? []).flat().map((column) => {
                       return (
                         <th scope="col">
-                          {column.isPlaceholder ? null : (
-                            <>
-                              <div className="references-datatable__header">
-                                {column?.label ?? column.id}
-                                {' '}
-                                {column?.isFilterable}
-                                {' '}
-                                {getSortableIcon(column)}
-                              </div>
-                              <div>
-                                {column?.isFilterable && (
-                                  column?.isFilterableBySelect && aggregations?.[column.id] ? (
-                                    <select
-                                      className="fr-select references-datatable__select"
-                                      id={`references-structure-data-${column.id}`}
-                                      name={`references-structure-data-${column.id}`}
-                                      onChange={(event) => handleFilter(column, event)}
-                                      value={inputs[column.id]}
-                                    >
-                                      <option key='all' value=''>
-                                        Tout ({numberOfResults})
-                                      </option>
-                                      {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
-                                        <option key={bucket.key} value={bucket.key}>
-                                          {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
-                                        </option>
-                                      ))}
-                                    </select>
-                                  ) : (
-                                    <input
-                                      className="fr-input references-datatable__input"
-                                      onChange={(event) => handleFilter(column, event)}
-                                      type="text"
-                                      value={inputs[column.id]}
-                                    />
-                                  )
-                                )}
-                              </div>
-                            </>
-                          )}
+                          <ColumnHeader column={column} />
                         </th>
                       )
                     })}
