@@ -114,7 +114,7 @@ export default function DataTable(
                     onClick={(event) => handleFilter(column, event)}
                     value="missing"
                   >
-                    Filtrer sur les {column.label} manquants
+                    {column.label} manquants
                   </Button>
                 )
               ) : (

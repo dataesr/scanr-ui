@@ -20,9 +20,11 @@ import { getOrganizationReferences } from "../../../../api/organizations/[id]/re
 import Gauge from "../../../../components/gauge/index.tsx"
 import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
-import IdrefModal from "./components/idref-modal"
 import RorModal from "./components/ror-modal"
 import DataTable from "./datatable.tsx"
+import { envoiClient } from "./formulaire.js"
+
+import "./subModal.css"
 
 export type Column = {
   getCellValue?: (object) => ReactElement,
@@ -74,7 +76,6 @@ export default function References() {
   const [meanWithRor, setMeanWithRor] = useState<number>(0)
   const [numberOfResults, setNumberOfResults] = useState<number>(0)
   const [pagination, setPagination] = useState<Pagination>({ from: 0, size: 100 })
-  const [showIdrefModal, setShowIdrefModal] = useState(false);
   const [showRorModal, setShowRorModal] = useState(false)
   const [sorting, setSorting] = useState<Sort>({})
 
@@ -103,6 +104,7 @@ export default function References() {
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
   }, [dataReferencesAll?.results, numberOfResults])
+
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
   const columns = useMemo<Column[]>(() => [
@@ -117,7 +119,7 @@ export default function References() {
         },
         {
           id: 'idref',
-          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); setShowIdrefModal(true); }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivit\xE9', row.rnsr_acronym, '', '', '', '', '', '', '') }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
           getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
           isFilterable: true,
           filterType: 'missing',
@@ -216,7 +218,6 @@ export default function References() {
 
   return (
     <RawIntlProvider value={intl}>
-      <IdrefModal acronym={acronym} setShowIdrefModal={setShowIdrefModal} showIdrefModal={showIdrefModal} />
       <RorModal acronym={acronym} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
       <Container>
         <Breadcrumb>
