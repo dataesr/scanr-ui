@@ -119,7 +119,7 @@ export default function References() {
         },
         {
           id: 'idref',
-          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivit\xE9', row.rnsr_acronym, '', '', '', '', '', '', '') }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', '', '', '', '', '') }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
           getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
           isFilterable: true,
           filterType: 'missing',

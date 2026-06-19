@@ -44,10 +44,6 @@ function envoiClient(
   zones,
 ) {
   index1Value = index1Value.replace(/'/g, "\\\'");
-  // a commenter pour votre application
-  // $('#resultat').html("");
-  // $('#resultat').hide();
-
   if (initClient() == 0) {}
   oFrame = document.getElementById("popupFrame");
   if (!idrefinit) {
@@ -57,18 +53,17 @@ function envoiClient(
     );
     idrefinit = false;
   }
-  //TODO : il faut mettre le nom de votre application cliente Ã  la place de la valeur : NomDeVotreApplication
   try {
     if (zones!=null && zones!=='')
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Nom de collectivit\xE9\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'NomDeVotreApplication\',AutoClick:\'false\'}), "*"); ');
+            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+Buffer.from('your string here').toString('base64')+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
         else if (filtre2!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Nom de collectivit\xE9\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'NomDeVotreApplication\',AutoClick:\'false\'}), "*"); ');
+            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
         else if (filtre1!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Nom de collectivit\xE9\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'NomDeVotreApplication\',AutoClick:\'false\'}), "*"); ');
+            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
         else if (index2!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Nom de collectivit\xE9\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'NomDeVotreApplication\',AutoClick:\'false\'}), "*"); ');
+            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
         else
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Nom de collectivit\xE9\',Index1Value:\''+index1Value+'\',fromApp:\'NomDeVotreApplication\',AutoClick:\'false\'}), "*"); ');
+            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
   } catch (e) {
     alert("oFrame.contentWindow Failed? " + e);
   }
@@ -80,7 +75,6 @@ function initClient() {
     showPopWin("", screen.width * 0.89, screen.height * 0.74, null);
     return 0;
   }
-
   showPopWin("", screen.width * 0.89, screen.height * 0.74, null);
   remoteClientExist = true;
   if (document.addEventListener) {
