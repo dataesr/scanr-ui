@@ -13,7 +13,7 @@ const SOURCE = [
   "patentsCount",
 ]
 
-export async function autocompleteOrganizations({ query, filters }: SearchArgs): Promise<Pick<SearchResponse<LightOrganization>, "data">> {
+export async function autocompleteOrganizations({ query, filters = [] }: SearchArgs): Promise<Pick<SearchResponse<LightOrganization>, "data">> {
   const body: any = {
     _source: SOURCE,
     size: 7,
@@ -34,7 +34,7 @@ export async function autocompleteOrganizations({ query, filters }: SearchArgs):
       },
     },
   }
-  if (filters.length) body.query.bool.filter.push(...filters)
+  if (filters.length > 0) body.query.bool.filter.push(...filters)
 
   const res = await fetch(
     `${organizationsIndex}/_search`,
