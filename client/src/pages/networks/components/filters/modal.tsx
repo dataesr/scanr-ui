@@ -1,17 +1,17 @@
-// import { useState } from "react"
+import { useState } from "react"
 import { useIntl } from "react-intl"
-import { Button, Container, Tab, Tabs, Title } from "@dataesr/dsfr-plus"
+import { useSearchParams } from "react-router-dom"
+import { Badge, Button, Container, Text, Title } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import { useNetworkContext } from "../../context/hook"
+import useUrl from "../../../search/hooks/useUrl"
 import SourcesFilters from "./sources"
 import NetworkFiltersPatents from "./patents"
 import NetworkFiltersProjects from "./projects"
 import NetworkFiltersPublications from "./publications"
-// import useUrl from "../../../search/hooks/useUrl"
 import ModelFilters from "./model"
 import NetworkFiltersAuthors from "./authors"
 import NetworkFiltersOrganizations from "./organizations"
-import { useSearchParams } from "react-router-dom"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -36,15 +36,17 @@ const MODEL_FILTERS = {
 export default function NetworkFiltersModal() {
   const intl = useIntl()
   const [searchParams, setSearchParams] = useSearchParams()
-  // const [tab, setTab] = useState<number>(0)
+  const [tab, setTab] = useState<number>(0)
+  const { filters } = useUrl()
+  const { filters: nfilters } = useUrl("nfilters")
   const {
     options: { currentSource, currentModel },
   } = useNetworkContext()
   const id = "networks-options-filters-modal"
 
-  const clearFilters = () => {
-    searchParams.delete("filters")
-    searchParams.delete("nfilters")
+  const clearFilters = (tab: number) => {
+    if (tab === 0) searchParams.delete("filters")
+    if (tab === 1) searchParams.delete("nfilters")
     searchParams.delete("filterNodes")
     setSearchParams(searchParams)
   }
@@ -52,7 +54,7 @@ export default function NetworkFiltersModal() {
   return (
     <>
       <Modal id={id} size="lg">
-        {/*<nav
+        <nav
           className="fr-nav xfr-nav--horizontal"
           aria-label="Menu"
           style={{ display: "flex", width: "100%", alignItems: "center" }}
@@ -61,61 +63,67 @@ export default function NetworkFiltersModal() {
             <li className="fr-nav__item" style={{ flex: 1 }}>
               <button
                 className="fr-nav__link"
-                style={{ width: "100%", textAlign: "center", fontSize: "1.1rem" }}
+                style={{ width: "100%", textAlign: "center" }}
                 aria-current={tab === 0}
                 onClick={() => setTab(0)}
               >
-                <div>{intl.formatMessage({ id: "networks.filters.modal.source.title" })}</div>
-                <div>{`( ${intl.formatMessage({ id: `networks.source.${currentSource}` })} )`}</div>
+                <span className="fr-icon-article-line fr-mr-1w" aria-hidden="true" />
+                <Text as="span" size="lg" bold className="fr-mr-1w">
+                  {intl.formatMessage({ id: "networks.filters.modal.source.title" })}
+                </Text>
+                <Badge className="fr-ml-1w" size="md" color="blue-ecume">
+                  {filters.length || 0}
+                </Badge>
               </button>
             </li>
             <li className="fr-nav__item" style={{ flex: 1 }}>
               <button
                 className="fr-nav__link"
-                style={{ width: "100%", textAlign: "center", fontSize: "1.1rem" }}
+                style={{ width: "100%", textAlign: "center", fontWeight: 500, fontSize: "1.2rem" }}
                 aria-current={tab === 1}
                 onClick={() => setTab(1)}
                 disabled={MODEL_FILTERS[currentModel] === null}
               >
-                <div>{intl.formatMessage({ id: "networks.filters.modal.model.title" })}</div>
-                <div>{`( ${intl.formatMessage({ id: `networks.model.${currentModel}` })} )`}</div>
+                <span className="fr-icon-network-line fr-mr-1w" aria-hidden="true" />
+                <Text as="span" size="lg" bold className="fr-mr-1w">
+                  {intl.formatMessage({ id: "networks.filters.modal.model.title" })}
+                </Text>
+                <Badge className="fr-ml-1w" size="md" color="blue-ecume">
+                  {nfilters.length || 0}
+                </Badge>
               </button>
             </li>
           </ul>
         </nav>
-         <Container className="fr-px-2w fr-my-5w">
+        <Container className="fr-px-2w fr-py-5w fr-card">
           {tab === 0 && (
             <Container fluid>
-              {SOURCE_FILTERS[currentSource]}
-              <SourcesFilters />
-            </Container>
-          )}
-          {tab === 1 && <Container fluid>{MODEL_FILTERS[currentModel]}</Container>}
-        </Container> */}
-        <Container fluid>
-          <Tabs>
-            <Tab icon="article-line" label={intl.formatMessage({ id: "networks.filters.modal.source.title" })}>
               <Title as="h3">
                 {intl.formatMessage({ id: "networks.filters.modal.title-plural" })}{" "}
                 {intl.formatMessage({ id: `networks.source.${currentSource}` }).toLowerCase()}
               </Title>
               {SOURCE_FILTERS[currentSource]}
               <SourcesFilters />
-            </Tab>
-            <Tab icon="network-line" label={intl.formatMessage({ id: "networks.filters.modal.model.title" })}>
+            </Container>
+          )}
+          {tab === 1 && (
+            <Container fluid>
               <Title as="h3">
                 {intl.formatMessage({ id: "networks.filters.modal.title-plural" })}{" "}
                 {intl.formatMessage({ id: `networks.model.${currentModel}` }).toLowerCase()}
               </Title>
               <ModelFilters />
               {MODEL_FILTERS[currentModel]}
-            </Tab>
-          </Tabs>
+            </Container>
+          )}
         </Container>
         <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", alignItems: "center" }}>
           <div style={{ flexGrow: 1 }}>
-            <Button variant="secondary" onClick={clearFilters}>
+            <Button variant="secondary" onClick={() => clearFilters(tab)}>
               {intl.formatMessage({ id: "networks.filters.modal.clear" })}
+              <Badge className="fr-ml-1w" size="md" color="blue-ecume">
+                {tab === 0 ? filters?.length || 0 : nfilters?.length || 0}
+              </Badge>
             </Button>
           </div>
           <Button aria-controls={id}>{intl.formatMessage({ id: "networks.filters.modal.display" })}</Button>

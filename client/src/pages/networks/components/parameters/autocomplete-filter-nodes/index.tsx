@@ -1,10 +1,8 @@
 import {
   Autocomplete,
   AutocompleteItem,
-  Col,
   Container,
   DismissibleTag,
-  Row,
   TagGroup,
   Text,
   Toggle,
@@ -44,32 +42,18 @@ export default function AutocompleteFilterNodes() {
   const nodes = parameters?.filterNodes || []
 
   return (
-    <Container fluid className="fr-mb-3w">
-      <Row verticalAlign="middle">
-        <Col md={8}>
-          <Text bold className="fr-mb-1v" size="md">
-            {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.label" })}
-          </Text>
-          <Text className="fr-card__detail fr-mb-1w" size="sm">
-            {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.hint" })}
-          </Text>
-        </Col>
-        <Col md={4}>
-          <Row verticalAlign="middle">
-            <Text className="fr-hint-text fr-mb-1v" size="md">
-              {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.toggle" })}
-            </Text>
-            <Toggle className="fr-ml-2w" checked={parameters.filterNeighbors} onChange={(event) => handleParameterChange("filterNeighbors", event.target.checked)} />
-          </Row>
-        </Col>
-      </Row>
-      {
-        !!nodes.length && (
-          <Text bold size="sm" className="fr-mb-1v">
-            <FormattedMessage id="search.filters.selected" /> {":"}
-          </Text>
-        )
-      }
+    <Container fluid>
+      <Text bold className="fr-mb-1v" size="md">
+        {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.label" })}
+      </Text>
+      <Text className="fr-card__detail fr-mb-1w" size="sm">
+        {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.hint" })}
+      </Text>
+      {!!nodes.length && (
+        <Text bold size="sm" className="fr-mb-1v">
+          <FormattedMessage id="search.filters.selected" /> {":"}
+        </Text>
+      )}
       <TagGroup>
         {nodes?.map((currentNode) => (
           <DismissibleTag
@@ -78,7 +62,10 @@ export default function AutocompleteFilterNodes() {
             color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              handleParameterChange("filterNodes", nodes?.filter((node) => node != currentNode))
+              handleParameterChange(
+                "filterNodes",
+                nodes?.filter((node) => node != currentNode),
+              )
             }}
           >
             {currentNode.split("###")[1]}
@@ -119,6 +106,13 @@ export default function AutocompleteFilterNodes() {
           {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.warning" })}
         </Text>
       )}
+      <Toggle
+        className="fr-mt-2w fr-pb-1w"
+        label={intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.toggle" })}
+        hint={intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.toggle-hint" })}
+        checked={parameters.filterNeighbors}
+        onChange={(event) => handleParameterChange("filterNeighbors", event.target.checked)}
+      />
     </Container>
   )
 }
