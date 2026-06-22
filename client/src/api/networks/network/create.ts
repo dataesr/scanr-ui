@@ -18,32 +18,14 @@ interface NetworkCreateArgs {
   lang?: string;
   integration?: string;
 }
-export default async function networkCreate(
-  args: NetworkCreateArgs,
-): Promise<NetworkData> {
-  const {
-    query,
-    aggregation,
-    source,
-    model,
-    lang,
-    parameters,
-    filters,
-    integration,
-  } = args;
+export default async function networkCreate(args: NetworkCreateArgs): Promise<[NetworkData, Record<string, any>]> {
+  const { query, aggregation, source, model, lang, parameters, filters, integration } = args
 
   // Get graph
   const graph = await graphCreate(aggregation, source, model, lang, parameters, filters)
 
   // Get clusters
-  const clusters = await clustersCreate(
-    graph,
-    query,
-    source,
-    model,
-    filters,
-    parameters.clusters,
-  );
+  const clusters = await clustersCreate(graph, query, source, model, filters, parameters.clusters)
 
   // Get items
   const items = graph.mapNodes((key, attr) => ({
@@ -64,20 +46,25 @@ export default async function networkCreate(
     page: configGetItemPage(source, model, key),
     search: configGetItemSearch(query, source, model, key, integration),
     ...(attr?.metadata && { metadata: attr.metadata }),
-  }));
+  }))
 
   // Get links
   const links = graph.mapEdges((_, attr, source, target) => ({
     source_id: source,
     target_id: target,
     strength: attr.weight,
-  }));
+  }))
+
+  // meta
+  const meta = {
+    all_ids: graph.getAttribute("all_ids"),
+  }
 
   const network: NetworkData = {
     items,
     links,
     clusters,
-  };
+  }
 
-  return network;
+  return [network, meta]
 }

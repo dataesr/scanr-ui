@@ -15,6 +15,9 @@ export default async function graphFilterNodes(
 ): Promise<UndirectedGraph> {
   const { maxNodes, maxComponents, filterNodes, filterFocus } = parameters
 
+  // store nodes ids before filter
+  graph.setAttribute("all_ids", graph.nodes())
+
   if (filterFocus && ["authors", "institutions", "structures"].includes(model)) {
     // Limit graph to filtered ids (only for authors and affiliations)
     const focusIds = filters.reduce(

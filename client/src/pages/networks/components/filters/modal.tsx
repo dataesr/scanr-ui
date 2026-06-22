@@ -1,14 +1,15 @@
 // import { useState } from "react"
 import { useIntl } from "react-intl"
-import { Button, Container, Tab, Tabs } from "@dataesr/dsfr-plus"
+import { Button, Container, Tab, Tabs, Title } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
 import { useNetworkContext } from "../../context"
 import SourcesFilters from "./sources"
 import NetworkFiltersPatents from "./patents"
 import NetworkFiltersProjects from "./projects"
 import NetworkFiltersPublications from "./publications"
-import NetworkFiltersPublicationsAuthors from "./publications.authors"
 import useUrl from "../../../search/hooks/useUrl"
+import ModelFilters from "./model"
+import NetworkFiltersPublicationsAuthors from "./publications.authors"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -87,11 +88,20 @@ export default function NetworkFiltersModal() {
         <Container fluid>
           <Tabs>
             <Tab icon="article-line" label={intl.formatMessage({ id: "networks.filters.modal.source.title" })}>
+              <Title as="h3">
+                {intl.formatMessage({ id: "networks.filters.modal.title-plural" })}{" "}
+                {intl.formatMessage({ id: `networks.source.${currentSource}` }).toLowerCase()}
+              </Title>
               {SOURCE_FILTERS[currentSource]}
               <SourcesFilters />
             </Tab>
             <Tab icon="network-line" label={intl.formatMessage({ id: "networks.filters.modal.model.title" })}>
+              <Title as="h3">
+                {intl.formatMessage({ id: "networks.filters.modal.title-plural" })}{" "}
+                {intl.formatMessage({ id: `networks.model.${currentModel}` }).toLowerCase()}
+              </Title>
               {MODEL_FILTERS[currentModel]}
+              <ModelFilters />
             </Tab>
           </Tabs>
         </Container>

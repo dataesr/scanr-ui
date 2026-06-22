@@ -18,7 +18,7 @@ export default function NetworkNotice() {
   }, [parameters.sample])
 
   if (isFetching) return null
-  if (!data?.count || data.count < 10000) return null
+  if (!data?.meta?.count || data?.meta?.count < 10000) return null
 
   return (
     <Notice

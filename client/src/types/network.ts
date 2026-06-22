@@ -4,6 +4,10 @@ export type Network = {
   network: NetworkData
   config?: NetworkConfig
   info?: NetworkInfo
+  meta?: NetworkMeta
+}
+export type NetworkMeta = {
+  all_ids: Array<string>
   count?: number
 }
 export type NetworkData = {
