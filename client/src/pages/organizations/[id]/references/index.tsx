@@ -119,7 +119,7 @@ export default function References() {
   }, [dataReferencesAll?.results, numberOfResults])
 
   const columns = useMemo<Column[]>(() => {
-    const getZones = (row: object) => {
+    const getZones = (row: any) => {
       // z008: Type d'autorité ou type de notice
       let zones = 'z008_a:"Tb5"'
       // z035: Autres identifiants (ROR, HAL, RNSR ...)
