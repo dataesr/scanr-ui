@@ -9,7 +9,7 @@ export default function Error204() {
     options: { currentModel },
   } = useNetworkContext()
 
-  const notEnoughError = error?.cause?.["reason"] == "not_enough_nodes"
+  const notEnoughError = error?.cause?.["reason"] == "not_enough_nodes" && error?.cause?.["order"] > 0
   const textId = notEnoughError ? "networks.search.error204.text-notenough" : "networks.search.error204.text"
 
   return (
