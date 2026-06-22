@@ -140,7 +140,7 @@ export default function References() {
       if (row?.rnsr_label) zones += `,z210_a:"@${row.rnsr_label}"`
       if (row?.rnsr_city) zones += `,z210_c:"${row.rnsr_city}"`
       // z410: Variante de point d'accès
-      if (row?.rnsr_acronym) zones += `,z410_a:@${row.rnsr_acronym}`
+      if (row?.rnsr_acronym) zones += `,z410_a:"@${row.rnsr_acronym}"`
       // z510: Nom de Collectivité ou de Congrès
       if (idref) {
         zones += `,z510_3:"${idref}",z510_5:"xxq"`
