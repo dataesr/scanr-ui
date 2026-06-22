@@ -11,6 +11,9 @@ export default function OrganizationFunderFilter(props: FilterProps) {
   const { data = { byFundings: [] } } = useAggregateData('filters', props)
   const { byFundings } = data as OrganizationAggregations
 
+  console.log("props", props)
+  console.log("byFundings", byFundings)
+
   const filter = currentFilters?.['projects.type']
   const operator = filter?.operator || 'or'
 

@@ -5,15 +5,19 @@ export type LocalisationAutocomplete = {
   autocompleted: string[];
 }
 
-export async function autocompleteLocalisations({ query }: SearchArgs): Promise<Pick<SearchResponse<LocalisationAutocomplete>, "data">> {
+export async function autocompleteLocalisations({ query, filters }: SearchArgs): Promise<Pick<SearchResponse<LocalisationAutocomplete>, "data">> {
   const body: any = {
     size: 7,
     query: {
-      match: {
-        autocompleted: query
-      }
-    }
+      bool: {
+        match: {
+          autocompleted: query,
+        },
+      },
+    },
   }
+  if (filters.length) body.query.bool.filter = filters
+
   const res = await fetch(
     `${localisationIndex}/_search`,
     { method: 'POST', body: JSON.stringify(body), headers: postHeaders })

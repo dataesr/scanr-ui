@@ -16,7 +16,8 @@ import OperatorButton from "../../../../../components/operator-button";
 import { FilterProps } from "../../../types";
 
 export default function OrganizationLocalisationsFilter(props: FilterProps) {
-  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam);
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const autocompleteFilters = props.filterIds ? [{ terms: { id: props.filterIds } }] : []
 
   const localisationAutocompletedList =
     useAutocompleteList<LocalisationAutocomplete>({
@@ -24,7 +25,10 @@ export default function OrganizationLocalisationsFilter(props: FilterProps) {
         if (!filterText) {
           return { items: [] };
         }
-        const res = await autocompleteLocalisations({ query: filterText });
+        const res = await autocompleteLocalisations({
+          query: filterText,
+          filters: autocompleteFilters,
+        })
 
         return { items: res.data?.map((org) => org._source) };
       },

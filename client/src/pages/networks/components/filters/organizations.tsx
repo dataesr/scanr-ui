@@ -1,5 +1,5 @@
 import { Container } from "@dataesr/dsfr-plus"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import OrganizationLocalisationsFilter from "../../../search/components/organizations/filters/localisation"
 import OrganizationKindFilter from "../../../search/components/organizations/filters/kind"
 import OrganizationLevelFilter from "../../../search/components/organizations/filters/level"
@@ -16,13 +16,13 @@ export default function NetworkFiltersOrganizations() {
 
   return (
     <Container fluid>
-      <OrganizationLocalisationsFilter filterParam="nfilters" />
+      <OrganizationLocalisationsFilter filterParam="nfilters" filterIds={filterIds} />
       <hr className="fr-mt-3w" />
       <OrganizationKindFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
       <OrganizationLevelFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
-      <OrganizationSupervisorsFilter filterParam="nfilters" />
+      <OrganizationSupervisorsFilter filterParam="nfilters" filterIds={filterIds} />
       <hr className="fr-mt-3w" />
       <OrganizationFunderFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
