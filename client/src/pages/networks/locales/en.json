@@ -150,6 +150,8 @@
     "search.filters.publications.by-author-description": "Select one or more authors",
     "search.filters.authors.by-award": "Filter by Awards",
     "search.filters.authors.by-award-description": "Select one or more awards",
+    "search.filters.authors.by-affiliation": "Filter by Affiliation",
+    "search.filters.authors.by-affiliation-description": "Select one or more affiliation",
     "search.filters.publications.by-is-oa": "Open Access",
     "search.filters.publications.by-is-oa-label": "Show only open access publications",
     "search.filters.publications.by-organization": "Filter by Affiliation",

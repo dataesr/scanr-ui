@@ -105,6 +105,8 @@
   "search.filters.organizations.is-french.foreign": "Étrangères",
   "search.filters.authors.by-award": "Filtrer par prix",
   "search.filters.authors.by-award-description": "Sélectionnez un ou plusieurs prix",
+  "search.filters.authors.by-affiliation": "Filtrer par affiliation",
+  "search.filters.authors.by-affiliation-description": "Sélectionnez une ou plusieurs affiliations",
   "search.filters.search-tags": "Filtrer par mots-clés",
   "search.filters.projects.by-localisation-description": "Région, Académies, Départements, Unités urbaines, ville d'un participant",
   "search.filters.projects.by-localisation": "Filtre géographique",

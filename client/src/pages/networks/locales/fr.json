@@ -152,6 +152,8 @@
     "search.filters.publications.by-author-description": "Sélectionnez un ou plusieurs auteurs",
     "search.filters.authors.by-award": "Filtrer par prix",
     "search.filters.authors.by-award-description": "Sélectionnez un ou plusieurs prix",
+    "search.filters.authors.by-affiliation": "Filtrer par affiliation",
+    "search.filters.authors.by-affiliation-description": "Sélectionnez une ou plusieurs affiliations",
     "search.filters.publications.by-is-oa": "Accès ouvert",
     "search.filters.publications.by-is-oa-label": "Afficher uniquement les publications en accès ouvert",
     "search.filters.publications.by-organization": "Filtrer par affiliation",
