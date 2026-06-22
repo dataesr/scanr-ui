@@ -63,7 +63,7 @@ jobs:
 
       - name: Create changelog text
         id: changelog
-        uses: loopwerk/tag-changelog@v1.5.0
+        uses: loopwerk/tag-changelog@v1.6.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config_file: .github/config/changelog.cjs

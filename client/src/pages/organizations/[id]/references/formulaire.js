@@ -92,16 +92,16 @@ function traiteResultat(e) {
   const data = serializer.parse(e.data);
 
   if (data["g"] != null) {
-    let resHtml = "<ul>";
-    resHtml += "<li>data['a'] : " + data["a"] + "</li>";
-    resHtml += "<li>data['b'] : " + data["b"] + "</li>";
-    resHtml += "<li>data['c'] : " + data["c"] + "</li>";
-    resHtml += "<li>data['d'] : " + data["d"] + "</li>";
-    resHtml += "<li>data['e'] : " + data["e"] + "</li>";
-    resHtml += "<li>data['f'] : " + escapeHtml(data["f"]) + "</li>";
-    resHtml += "<li>data['g'] : " + data["g"] + "</li>";
-    resHtml += "</ul>";
-    console.log(resHtml)
+    // let resHtml = "<ul>";
+    // resHtml += "<li>data['a'] : " + data["a"] + "</li>";
+    // resHtml += "<li>data['b'] : " + data["b"] + "</li>";
+    // resHtml += "<li>data['c'] : " + data["c"] + "</li>";
+    // resHtml += "<li>data['d'] : " + data["d"] + "</li>";
+    // resHtml += "<li>data['e'] : " + data["e"] + "</li>";
+    // resHtml += "<li>data['f'] : " + escapeHtml(data["f"]) + "</li>";
+    // resHtml += "<li>data['g'] : " + data["g"] + "</li>";
+    // resHtml += "</ul>";
+    // console.log(resHtml)
     hidePopWin(null);
   }
 }

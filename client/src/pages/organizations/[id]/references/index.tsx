@@ -69,7 +69,9 @@ export default function References() {
   const { id } = useParams()
 
   const [acronym, setAcronym] = useState<string>()
+  const [breadcrumbLabel, setBreadcrumbLabel] = useState<string>()
   const [filters, setFilters] = useState<Filter[]>([])
+  const [idref, setIdref] = useState<string>()
   const [matchCity, setMatchCity] = useState<number>(0)
   const [matchLabel, setMatchLabel] = useState<number>(0)
   const [meanWithIdref, setMeanWithIdref] = useState<number>(0)
@@ -98,6 +100,17 @@ export default function References() {
   })
 
   useEffect(() => {
+    initPopUp()
+  }, [])
+
+  useEffect(() => {
+    const idrefTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
+    if (idrefTmp) setIdref(idrefTmp)
+    const breadcrumbLabelTmp: string = getLangFieldValue(locale)(data?.label)
+    if (breadcrumbLabelTmp) setBreadcrumbLabel(breadcrumbLabelTmp)
+  }, [data, locale])
+
+  useEffect(() => {
     setNumberOfResults(dataReferencesAll?.results?.length ?? 0)
     setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResults * 100))
     setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResults * 100))
@@ -105,96 +118,117 @@ export default function References() {
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
   }, [dataReferencesAll?.results, numberOfResults])
 
-  useEffect(() => {
-    initPopUp()
-  }, [])
+  const columns = useMemo<Column[]>(() => {
+    const getZones = (row: object) => {
+      // z008: Type d'autorité ou type de notice
+      let zones = 'z008_a:"Tb5"'
+      // z035: Autres identifiants (ROR, HAL, RNSR ...)
+      if (row?.rnsr) zones += `,z035_a_1:"${row.rnsr}",z035_2_1:"RNSR",z035_C_1:"RNSR"`
+      // z035: Autres identifiants (ROR, HAL, RNSR ...)
+      if (row?.ror) zones += `,z035_a_2:"${row.ror}",z035_2_2:"ROR",z035_C_2:"ROR"`
+      // z101: Langue d'expression
+      zones += ',z101_a:"fre"'
+      // z102: Pays
+      zones += ',z102_a:"FR"'
+      // z103: Dtes d'activité
+      if (row?.rnsr_creation) zones += `,z103_a:"${row.rnsr_creation}-...."`
+      // z210: Nom de la collectivité / du congrès
+      if (row?.rnsr_label) zones += `,z210_a:"@${row.rnsr_label}"`
+      // z510: Nom de Collectivité ou de Congrès
+      if (idref) {
+        zones += `,z510_3:"${idref}",z510_5:"xxq"`
+        if (row?.rnsr_creation) zones += `,z510_0:"${row.rnsr_creation}-...."`
+      }
+      // z810: Source consultée avec profit
+      zones += ',z810_a:"RNSR"'
+      return zones
+    }
 
-  const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
-
-  const columns = useMemo<Column[]>(() => [
-    {
-      id: 'identifiers',
-      label: 'Identifiants',
-      groups: [
-        {
-          id: 'rnsr',
-          getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
-          label: 'RNSR',
-        },
-        {
-          id: 'idref',
-          getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', '', '', '', '', '') }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
-          getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
-          isFilterable: true,
-          filterType: 'missing',
-          label: 'IdRef',
-        },
-        {
-          id: 'ror',
-          getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
-          getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
-          isFilterable: true,
-          filterType: 'missing',
-          label: 'ROR',
-        },
-      ],
-    },
-    {
-      id: 'rnsr',
-      label: 'RNSR',
-      groups: [
-        {
-          filterType: 'select',
-          id: 'rnsr_level',
-          isFilterable: true,
-          label: 'Niveau',
-        },
-        {
-          id: 'rnsr_label',
-          isSortable: true,
-          label: 'Label',
-          sortableField: 'label.fr.keyword',
-        },
-        {
-          id: 'rnsr_city',
-          // isSortable: true,
-          label: 'Ville',
-          // sortableField: 'address.city.keyword',
-        },
-        {
-          id: 'rnsr_acronym',
-          isSortable: true,
-          label: 'Acronyme',
-          sortableField: 'acronym.fr.keyword',
-        },
-      ],
-    },
-    {
-      id: 'ror',
-      label: 'ROR',
-      groups: [
-        {
-          id: 'rnsr_ror_match',
-          getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-          label: 'Match RNSR',
-        },
-        {
-          id: 'ror_label',
-          getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
-          isSortable: true,
-          label: 'Label',
-          sortableField: 'ror_infos.label.default.keyword',
-        },
-        {
-          id: 'ror_city',
-          getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
-          isSortable: true,
-          label: 'Ville',
-          sortableField: 'ror_infos.address.city.keyword',
-        },
-      ],
-    },
-  ], [])
+    return [
+      {
+        id: 'identifiers',
+        label: 'Identifiants',
+        groups: [
+          {
+            id: 'rnsr',
+            getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
+            label: 'RNSR',
+          },
+          {
+            id: 'idref',
+            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', '', '', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+            getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
+            isFilterable: true,
+            filterType: 'missing',
+            label: 'IdRef',
+          },
+          {
+            id: 'ror',
+            getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
+            getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
+            isFilterable: true,
+            filterType: 'missing',
+            label: 'ROR',
+          },
+        ],
+      },
+      {
+        id: 'rnsr',
+        label: 'RNSR',
+        groups: [
+          {
+            filterType: 'select',
+            id: 'rnsr_level',
+            isFilterable: true,
+            label: 'Niveau',
+          },
+          {
+            id: 'rnsr_label',
+            isSortable: true,
+            label: 'Label',
+            sortableField: 'label.fr.keyword',
+          },
+          {
+            id: 'rnsr_city',
+            isSortable: true,
+            label: 'Ville',
+            sortableField: 'address.city.keyword',
+          },
+          {
+            id: 'rnsr_acronym',
+            isSortable: true,
+            label: 'Acronyme',
+            sortableField: 'acronym.fr.keyword',
+          },
+        ],
+      },
+      {
+        id: 'ror',
+        label: 'ROR',
+        groups: [
+          {
+            id: 'rnsr_ror_match',
+            getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+            label: 'Match RNSR',
+          },
+          {
+            id: 'ror_label',
+            getClassName: (row) => row.rnsr_ror_label_match === false ? 'bg-error' : '',
+            isSortable: true,
+            label: 'Label',
+            sortableField: 'ror_infos.label.default.keyword',
+          },
+          {
+            id: 'ror_city',
+            getClassName: (row) => row.rnsr_ror_city_match === false ? 'bg-error' : '',
+            isSortable: true,
+            label: 'Ville',
+            sortableField: 'ror_infos.address.city.keyword',
+          },
+        ],
+      },
+    ]
+  }, [idref])
 
   const downloadCsv = (e) => {
     e.preventDefault()
