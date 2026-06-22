@@ -2,7 +2,7 @@ import { Network, NetworkSearchArgs } from "../../types/network";
 import { configCreate } from "./config/vosviewer"
 import { infoCreate } from "./config/vosviewer"
 import networkCreate from "./network/create";
-import { networkSearch } from "./search"
+import { networkCount, networkSearch } from "./search"
 import clustersAssignSimilarity from "./clusters/similarity";
 import { isInProduction } from "../../utils/helpers";
 
@@ -13,18 +13,18 @@ export default async function getNetwork(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { nfilters, ...searchArgs } = args
     const aggregation = await networkSearch(searchArgs)
+    const count = await networkCount(searchArgs)
     const [network, meta] = await networkCreate({ ...args, aggregation })
     const config = configCreate(args.source, args.model)
-    const info = infoCreate(args.source, args.model, args.query)
+    const info = infoCreate(args.source, args.query, args.model)
+
     return {
       network: network,
       config: config,
       info: info,
       meta: {
         all_nodes: meta.all_nodes,
-        ...(args.parameters.sample && {
-          count: aggregation.map((bucket) => bucket.doc_count).reduce((a, b) => a + b),
-        }),
+        count: count,
       },
     }
   } catch (error) {
