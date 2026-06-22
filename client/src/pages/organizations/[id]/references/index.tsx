@@ -71,6 +71,7 @@ export default function References() {
   const [acronym, setAcronym] = useState<string>()
   const [breadcrumbLabel, setBreadcrumbLabel] = useState<string>()
   const [filters, setFilters] = useState<Filter[]>([])
+  const [idOrganization, setIdOrganization] = useState<string>()
   const [idref, setIdref] = useState<string>()
   const [matchCity, setMatchCity] = useState<number>(0)
   const [matchLabel, setMatchLabel] = useState<number>(0)
@@ -88,14 +89,14 @@ export default function References() {
   })
 
   const { data: dataReferences, isLoading: isLoadingReferences } = useQuery({
-    queryKey: ["organizations", "references", filters, id, pagination, sorting],
-    queryFn: () => getOrganizationReferences(filters, id, pagination, sorting),
+    queryKey: ["organizations", "references", filters, idOrganization, pagination, sorting],
+    queryFn: () => getOrganizationReferences(filters, idOrganization, pagination, sorting),
     throwOnError: true,
   })
 
   const { data: dataReferencesAll, isLoading: isLoadingReferencesAll } = useQuery({
-    queryKey: ["organizations", "references-all", filters, id],
-    queryFn: () => getOrganizationReferences(filters, id, { from: 0, size: 2000 }, {}),
+    queryKey: ["organizations", "references-all", filters, idOrganization],
+    queryFn: () => getOrganizationReferences(filters, idOrganization, { from: 0, size: 2000 }, {}),
     throwOnError: true,
   })
 
@@ -104,6 +105,8 @@ export default function References() {
   }, [])
 
   useEffect(() => {
+    const idOrganizationTmp = data?.id?.toString()
+    if (idOrganizationTmp) setIdOrganization(idOrganizationTmp)
     const idrefTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
     if (idrefTmp) setIdref(idrefTmp)
     const breadcrumbLabelTmp: string = getLangFieldValue(locale)(data?.label)
@@ -111,12 +114,13 @@ export default function References() {
   }, [data, locale])
 
   useEffect(() => {
-    setNumberOfResults(dataReferencesAll?.results?.length ?? 0)
-    setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResults * 100))
-    setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResults * 100))
-    setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
-    setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
-  }, [dataReferencesAll?.results, numberOfResults])
+    const numberOfResultsTmp = dataReferencesAll?.results?.length ?? 0
+    setNumberOfResults(numberOfResultsTmp)
+    setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResultsTmp * 100))
+    setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResultsTmp * 100))
+    setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResultsTmp * 100))
+    setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResultsTmp * 100))
+  }, [dataReferencesAll?.results])
 
   const columns = useMemo<Column[]>(() => {
     const getZones = (row: any) => {
@@ -134,6 +138,9 @@ export default function References() {
       if (row?.rnsr_creation) zones += `,z103_a:"${row.rnsr_creation}-...."`
       // z210: Nom de la collectivité / du congrès
       if (row?.rnsr_label) zones += `,z210_a:"@${row.rnsr_label}"`
+      if (row?.rnsr_city) zones += `,z210_c:"${row.rnsr_city}"`
+      // z410: Variante de point d'accès
+      if (row?.rnsr_acronym) zones += `,z410_a:@${row.rnsr_acronym}`
       // z510: Nom de Collectivité ou de Congrès
       if (idref) {
         zones += `,z510_3:"${idref}",z510_5:"xxq"`
@@ -244,7 +251,7 @@ export default function References() {
       ].join('\n')
       // Create a hidden download link
       const link = document.createElement('a')
-      link.download = `scan_references_${id}.csv`
+      link.download = `scan_references_${idOrganization}.csv`
       link.href = URL.createObjectURL(new Blob([csvContent], { type: 'text/csv;charset=utf-8' }))
       link.style.visibility = 'hidden'
       // Append link to DOM, trigger click, and clean up
@@ -290,7 +297,7 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {(dataReferencesAll?.aggregations?.rnsr_level?.buckets ?? []).map((level) => <li key={`${id}-rnsr-level-${level.key}`}>
+                  {(dataReferencesAll?.aggregations?.rnsr_level?.buckets ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
                     {level.key} : {level.doc_count}
                   </li>)}
                 </ul>
