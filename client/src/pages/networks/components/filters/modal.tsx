@@ -23,9 +23,9 @@ const MODEL_FILTERS = {
   domains: null,
   authors: <NetworkFiltersAuthors />,
   institutions: <NetworkFiltersOrganizations />,
-  structures: null,
+  structures: <NetworkFiltersOrganizations />,
   software: null,
-  projects: null,
+  projects: <NetworkFiltersProjects as="model" />,
   countries: null,
   persons: null,
   organizations: null,
@@ -82,7 +82,6 @@ export default function NetworkFiltersModal() {
                 style={{ width: "100%", textAlign: "center", fontWeight: 500, fontSize: "1.2rem" }}
                 aria-current={tab === 1}
                 onClick={() => setTab(1)}
-                disabled={MODEL_FILTERS[currentModel] === null}
               >
                 <span className="fr-icon-network-line fr-mr-1w" aria-hidden="true" />
                 <Text as="span" size="lg" bold className="fr-mr-1w">
