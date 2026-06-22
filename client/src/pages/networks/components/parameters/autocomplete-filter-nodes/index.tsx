@@ -32,7 +32,11 @@ export default function AutocompleteFilterNodes() {
             const [value, label] = id.split("###")
             return { value, label }
           })
-          ?.filter((id) => id.value.includes(filterText) || id.label.includes(filterText))
+          ?.filter(
+            (id) =>
+              id.value.toLowerCase().includes(filterText.toLowerCase()) ||
+              id.label.toLowerCase().includes(filterText.toLowerCase()),
+          )
           ?.slice(0, 7),
       }
     },
