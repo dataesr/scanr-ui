@@ -69,7 +69,7 @@ function ClusterItem({ currentModel, community, isFetching }: ClusterItemArgs) {
           )}
         </ButtonGroup>
       </Container>
-      {!!metadata ? (
+      {metadata ? (
         <Container fluid>
           <Separator className="fr-mb-1w" />
           <Row className="cluster-metrics fr-mt-1w">
