@@ -53,6 +53,12 @@ const AGGS = {
       size: 100
     },
   },
+  byRegions: {
+    terms: {
+      field: "address.region.keyword",
+      size: 20
+    }
+  }
 }
 
 

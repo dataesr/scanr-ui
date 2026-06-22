@@ -197,6 +197,8 @@
     "search.filters.organizations.by-agreements-description": "Sélectionnez une ou plusieurs accréditations",
     "search.filters.organizations.by-awards": "Filtrer par distinction",
     "search.filters.organizations.by-awards-description": "Sélectionnez une ou plusieurs distinctions",
+    "search.filters.organizations.by-regions": "Filtrer par région",
+    "search.filters.organizations.by-regions-description": "Sélectionnez une ou plusieurs régions",
     "networks.analytics.clusters.title": "Analyse des communautés",
     "networks.analytics.clusters.size.title": "Nombre {tab}",
     "networks.analytics.clusters.size.description": "Nombre {tab} par communauté",

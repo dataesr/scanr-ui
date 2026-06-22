@@ -193,6 +193,8 @@
     "search.filters.organizations.by-agreements-description": "Select one or more accreditations",
     "search.filters.organizations.by-awards": "Filter by distinction",
     "search.filters.organizations.by-awards-description": "Select one or more distinctions",
+    "search.filters.organizations.by-regions": "Filter by region",
+    "search.filters.organizations.by-regions-description": "Select one or more regions",
     "networks.analytics.clusters.title": "Communities analytics",
     "networks.analytics.clusters.size.title": "Number {tab}",
     "networks.analytics.clusters.size.description": "Number {tab} per community",

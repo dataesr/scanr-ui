@@ -133,6 +133,7 @@ export type OrganizationAggregations = {
   byTags: Aggregation[];
   byAwards: Aggregation[];
   byAgreements: Aggregation[];
+  byRegions: Aggregation[];
 };
 
 export type LightOrganization = {
