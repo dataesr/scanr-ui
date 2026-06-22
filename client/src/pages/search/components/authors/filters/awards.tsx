@@ -14,20 +14,18 @@ import OperatorButton from "../../../../../components/operator-button";
 
 const SEE_MORE_AFTER = 8;
 
-export default function AuthorAwardsFilter() {
-  const intl = useIntl();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
-  const { data = { byAward: [] } } = useAggregateData("filters");
-  const { byAward } = data as AuthorsAggregations;
+export default function AuthorAwardsFilter({ filtersParam = "filters" }: { filtersParam?: string }) {
+  const intl = useIntl()
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(filtersParam)
+  const { data = { byAward: [] } } = useAggregateData("filters")
+  const { byAward } = data as AuthorsAggregations
 
-  const [seeMore, setSeeMore] = useState(false);
+  const [seeMore, setSeeMore] = useState(false)
 
-  const [searchInput, setSearchInput] = useState("");
-  const filter = currentFilters["awards.label"];
-  const operator = filter?.operator || "or";
-  const filteredByAward = byAward.filter((type) =>
-    type.label.toLowerCase().includes(searchInput.toLowerCase())
-  );
+  const [searchInput, setSearchInput] = useState("")
+  const filter = currentFilters["awards.label"]
+  const operator = filter?.operator || "or"
+  const filteredByAward = byAward.filter((type) => type.label.toLowerCase().includes(searchInput.toLowerCase()))
 
   return (
     <>
@@ -42,9 +40,7 @@ export default function AuthorAwardsFilter() {
         </div>
         <OperatorButton
           operator={operator}
-          setOperator={(key) =>
-            setOperator("awards.label", key === "and" ? "and" : "or")
-          }
+          setOperator={(key) => setOperator("awards.label", key === "and" ? "and" : "or")}
         />
       </div>
       <TextInput
@@ -54,36 +50,23 @@ export default function AuthorAwardsFilter() {
         placeholder={intl.formatMessage({ id: "search.filters.search-tags" })}
       />
       <TagGroup>
-        {filteredByAward
-          .slice(0, seeMore ? 10000 : SEE_MORE_AFTER)
-          .map((type) => (
-            <SelectableTag
-              selected={filter?.values
-                ?.map((v) => v.value)
-                ?.includes(type.value)}
-              key={type.value}
-              onClick={() =>
-                handleFilterChange({ field: "awards.label", value: type.value })
-              }
-            >
-              {type.label}
-            </SelectableTag>
-          ))}
+        {filteredByAward.slice(0, seeMore ? 10000 : SEE_MORE_AFTER).map((type) => (
+          <SelectableTag
+            selected={filter?.values?.map((v) => v.value)?.includes(type.value)}
+            key={type.value}
+            onClick={() => handleFilterChange({ field: "awards.label", value: type.value })}
+          >
+            {type.label}
+          </SelectableTag>
+        ))}
       </TagGroup>
       {!!(byAward?.length > SEE_MORE_AFTER) && (
-        <Button
-          variant="text"
-          size="sm"
-          onClick={() => setSeeMore((prev) => !prev)}
-        >
+        <Button variant="text" size="sm" onClick={() => setSeeMore((prev) => !prev)}>
           {seeMore
             ? intl.formatMessage({ id: "search.filters.see-less" })
-            : intl.formatMessage(
-                { id: "search.filters.see-more" },
-                { count: byAward?.length }
-              )}
+            : intl.formatMessage({ id: "search.filters.see-more" }, { count: byAward?.length })}
         </Button>
       )}
     </>
-  );
+  )
 }

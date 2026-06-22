@@ -92,50 +92,60 @@ const getAPI = (pathname: string) => {
   return api as ApiTypes;
 };
 
-export default function useUrl() {
-  const { pathname } = useLocation();
-  const { integrationId } = useIntegration();
+export default function useUrl(filtersParam: string = "filters") {
+  const { pathname } = useLocation()
+  const { integrationId } = useIntegration()
 
-  const api = getAPI(pathname);
+  const api = getAPI(pathname)
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const currentQuery = searchParams.get("q") || "";
-  const currentFilters = parseSearchFiltersFromURL(searchParams.get("filters"));
-  const filters = filtersToElasticQuery(currentFilters);
-  if (integrationId) filters.push({ terms: { "bso_local_affiliations.keyword": integrationId.trim().toLowerCase().split(/[ ,]+/).filter((local) => local !== '').map((local) => local.trim()) } })
+  const [searchParams, setSearchParams] = useSearchParams()
+  const currentQuery = searchParams.get("q") || ""
+  const currentFilters = parseSearchFiltersFromURL(searchParams.get(filtersParam))
+  const filters = filtersToElasticQuery(currentFilters)
+  if (integrationId)
+    filters.push({
+      terms: {
+        "bso_local_affiliations.keyword": integrationId
+          .trim()
+          .toLowerCase()
+          .split(/[ ,]+/)
+          .filter((local) => local !== "")
+          .map((local) => local.trim()),
+      },
+    })
 
   const clearFilters = useCallback(() => {
-    searchParams.delete("filters");
-    setSearchParams(searchParams);
-  }, [searchParams, setSearchParams]);
+    searchParams.delete(filtersParam)
+    setSearchParams(searchParams)
+  }, [searchParams, setSearchParams, filtersParam])
 
   const handleDeleteFilter = useCallback(
     ({ field }: { field: string }) => {
-      const { [field]: currentField, ...nextFilters } = currentFilters;
-      if (!currentField) return;
-      if (!Object.keys(nextFilters).length) return clearFilters();
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      return setSearchParams(searchParams);
+      const { [field]: currentField, ...nextFilters } = currentFilters
+      if (!currentField) return
+      if (!Object.keys(nextFilters).length) return clearFilters()
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      return setSearchParams(searchParams)
     },
-    [clearFilters, currentFilters, searchParams, setSearchParams]
-  );
+    [clearFilters, currentFilters, searchParams, setSearchParams, filtersParam],
+  )
 
   const handleRangeFilterChange = useCallback(
     ({ field, value }: { field: string; value?: [number, number] }) => {
-      const prev = { ...currentFilters };
-      if (!value) return handleDeleteFilter({ field });
+      const prev = { ...currentFilters }
+      if (!value) return handleDeleteFilter({ field })
       const nextFilters: Filters = {
         ...prev,
         [field]: {
           values: [{ value: value?.[0] }, { value: value?.[1] }],
           type: "range" as const,
         },
-      };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      return setSearchParams(searchParams);
+      }
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      return setSearchParams(searchParams)
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
-  );
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, filtersParam],
+  )
 
   const handleBoolFilterChange = useCallback(
     ({
@@ -144,31 +154,41 @@ export default function useUrl() {
       label,
       forceValue = false,
     }: {
-      field: string;
-      value: boolean;
-      label?: string;
-      forceValue?: boolean;
+      field: string
+      value: boolean
+      label?: string
+      forceValue?: boolean
     }) => {
-      const prev = { ...currentFilters };
-      if (!value && !forceValue) return handleDeleteFilter({ field });
+      const prev = { ...currentFilters }
+      if (!value && !forceValue) return handleDeleteFilter({ field })
       const nextFilters = {
         ...prev,
         [field]: {
           values: [{ value: value.toString(), label }],
           type: "bool" as const,
         },
-      };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      return setSearchParams(searchParams);
+      }
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      return setSearchParams(searchParams)
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
-  );
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, filtersParam],
+  )
 
   const handleArrayFilterChange = useCallback(
-    ({ field, value, filterType = "terms", label = null }: { field: string; value: (string | number)[]; filterType?: "terms" | "range" | "bool"; label?: string }) => {
-      if (!field || !value) return;
-      const prev = { ...currentFilters };
-      const filter = prev?.[field];
+    ({
+      field,
+      value,
+      filterType = "terms",
+      label = null,
+    }: {
+      field: string
+      value: (string | number)[]
+      filterType?: "terms" | "range" | "bool"
+      label?: string
+    }) => {
+      if (!field || !value) return
+      const prev = { ...currentFilters }
+      const filter = prev?.[field]
       if (!filter) {
         const nextFilters = {
           ...prev,
@@ -177,35 +197,35 @@ export default function useUrl() {
             type: filterType,
             operator: "or" as "or" | "and",
           },
-        };
-        searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-        setSearchParams(searchParams);
-        return;
+        }
+        searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+        setSearchParams(searchParams)
+        return
       }
       // we assume the first value is the main one for array filters (see PublicationsOrganizationsFilter)
       const arrayExists = filter?.values?.some((el) => el.value[0] === value[0])
       const nextFilterValues = arrayExists
         ? filter?.values?.filter((el) => el.value[0] !== value[0])
-        : [...filter.values, { value, label }];
+        : [...filter.values, { value, label }]
       if (!nextFilterValues.length && filter?.operator !== "and") {
-        return handleDeleteFilter({ field });
+        return handleDeleteFilter({ field })
       }
       const nextFilters = {
         ...prev,
         [field]: { ...filter, values: nextFilterValues },
-      };
+      }
 
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      setSearchParams(searchParams);
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      setSearchParams(searchParams)
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
-  );
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, filtersParam],
+  )
 
   const handleFilterChange = useCallback(
     ({ field, value, filterType = "terms", label = null }) => {
-      if (!field || !value) return;
-      const prev = { ...currentFilters };
-      const filter = prev?.[field];
+      if (!field || !value) return
+      const prev = { ...currentFilters }
+      const filter = prev?.[field]
       if (!filter) {
         const nextFilters = {
           ...prev,
@@ -214,54 +234,51 @@ export default function useUrl() {
             type: filterType,
             operator: "or",
           },
-        };
-        searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-        setSearchParams(searchParams);
-        return;
+        }
+        searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+        setSearchParams(searchParams)
+        return
       }
-      const nextFilterValues = filter?.values
-        ?.map((value) => value?.value)
-        ?.includes(value)
+      const nextFilterValues = filter?.values?.map((value) => value?.value)?.includes(value)
         ? filter?.values?.filter((el) => el.value !== value)
-        : [...filter.values, { value, label }];
+        : [...filter.values, { value, label }]
       if (!nextFilterValues.length && filter?.operator !== "and") {
-        return handleDeleteFilter({ field });
+        return handleDeleteFilter({ field })
       }
       const nextFilters = {
         ...prev,
         [field]: { ...filter, values: nextFilterValues },
-      };
+      }
 
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      setSearchParams(searchParams);
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      setSearchParams(searchParams)
     },
-    [currentFilters, handleDeleteFilter, searchParams, setSearchParams]
-  );
+    [currentFilters, handleDeleteFilter, searchParams, setSearchParams, filtersParam],
+  )
 
   const setOperator = useCallback(
     (field, operator = "and") => {
-      const prev = { ...currentFilters };
-      const filter = prev?.[field] || {};
-      const nextFilters = { ...prev, [field]: { ...filter, operator } };
-      searchParams.set("filters", stringifySearchFiltersForURL(nextFilters));
-      setSearchParams(searchParams);
+      const prev = { ...currentFilters }
+      const filter = prev?.[field] || {}
+      const nextFilters = { ...prev, [field]: { ...filter, operator } }
+      searchParams.set(filtersParam, stringifySearchFiltersForURL(nextFilters))
+      setSearchParams(searchParams)
     },
-    [currentFilters, searchParams, setSearchParams]
-  );
+    [currentFilters, searchParams, setSearchParams, filtersParam],
+  )
 
   const handleQueryChange = useCallback(
     (query) => {
-      if(api === "networks") {
+      if (api === "networks") {
         searchParams.delete("clusters")
-      }
-      else {
-        searchParams.delete("filters")
+      } else {
+        searchParams.delete(filtersParam)
       }
       searchParams.set("q", query)
       setSearchParams(searchParams)
     },
-    [api, searchParams, setSearchParams]
-  );
+    [api, searchParams, setSearchParams, filtersParam],
+  )
 
   const values = useMemo(() => {
     return {
@@ -277,7 +294,7 @@ export default function useUrl() {
       handleRangeFilterChange,
       handleBoolFilterChange,
       handleArrayFilterChange,
-    };
+    }
   }, [
     api,
     handleFilterChange,
@@ -291,7 +308,7 @@ export default function useUrl() {
     handleRangeFilterChange,
     handleBoolFilterChange,
     handleArrayFilterChange,
-  ]);
+  ])
 
-  return values;
+  return values
 }
