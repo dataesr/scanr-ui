@@ -1,12 +1,12 @@
 import { Container } from "@dataesr/dsfr-plus"
 import { useNetworkContext } from "../../context/hook"
-import OrganizationLocalisationsFilter from "../../../search/components/organizations/filters/localisation"
 import OrganizationKindFilter from "../../../search/components/organizations/filters/kind"
 import OrganizationLevelFilter from "../../../search/components/organizations/filters/level"
 import OrganizationSupervisorsFilter from "../../../search/components/organizations/filters/supervisors"
 import OrganizationFunderFilter from "../../../search/components/organizations/filters/funders"
 import OrganizationAgreementsFilter from "../../../search/components/organizations/filters/agreements"
 import OrganizationAwardsFilter from "../../../search/components/organizations/filters/awards"
+import OrganizationRegionsFilter from "../../../search/components/organizations/filters/regions"
 
 export default function NetworkFiltersOrganizations() {
   const {
@@ -16,13 +16,13 @@ export default function NetworkFiltersOrganizations() {
 
   return (
     <Container fluid>
-      <OrganizationLocalisationsFilter filterParam="nfilters" filterIds={filterIds} />
+      <OrganizationRegionsFilter filterParam="nfilters" filterIds={filterIds} />
       <hr className="fr-mt-3w" />
       <OrganizationKindFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
       <OrganizationLevelFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
-      <OrganizationSupervisorsFilter filterParam="nfilters" filterIds={filterIds} />
+      <OrganizationSupervisorsFilter filterParam="nfilters" />
       <hr className="fr-mt-3w" />
       <OrganizationFunderFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />

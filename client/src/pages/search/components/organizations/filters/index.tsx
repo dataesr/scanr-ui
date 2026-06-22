@@ -9,10 +9,10 @@ import useUrl from "../../../hooks/useUrl";
 import OrganizationKindFilter from "./kind";
 import OrganizationLevelFilter from "./level";
 import OrganizationSupervisorsFilter from "./supervisors";
-import OrganizationLocalisationsFilter from "./localisation";
 import OrganizationFunderFilter from "./funders";
 import OrganizationAgreementsFilter from "./agreements";
 import OrganizationAwardsFilter from "./awards";
+import OrganizationRegionsFilter from "./regions";
 
 
 
@@ -50,7 +50,7 @@ export default function OrganizationFilters() {
         title={intl.formatMessage({ id: "search.filters.organizations.title" })}
       >
         <Container fluid className="fr-my-2w filter-list">
-          <OrganizationLocalisationsFilter />
+          <OrganizationRegionsFilter />
           <hr className="fr-mt-3w" />
           <OrganizationKindFilter />
           <hr className="fr-mt-3w" />
