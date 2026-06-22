@@ -43,7 +43,6 @@ export default function useAggregateData(type: "analytics" | "filters", filterPr
   const [searchParam] = useSearchParams()
   const networkSource = searchParam.get("source") || "publications"
   const filterIdsElastic = { terms: { id: filterIds } }
-  console.log("filterIds", filterIds)
   if (filterIds.length > 0) {
     filters.push(filterIdsElastic)
   }
@@ -52,7 +51,6 @@ export default function useAggregateData(type: "analytics" | "filters", filterPr
   const _api = forceApi ? forceApi : api === "networks" ? networkSource : api
   const _query = ignoreQuery ? "" : currentQuery
   const _filters = type === "analytics" ? filters : filterIds.length > 0 ? [filterIdsElastic] : []
-  console.log("_filters", _filters)
 
   const { data, isLoading, isError } = useQuery<AggregationsModel, unknown, AggregationsModel>({
     queryKey: [_api, "analytics", _query, _filters],
