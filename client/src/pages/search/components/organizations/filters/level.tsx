@@ -4,14 +4,15 @@ import useAggregateData from "../../../hooks/useAggregationData";
 import useUrl from "../../../hooks/useUrl";
 import { OrganizationAggregations } from "../../../../../types/organization";
 import { useState } from "react";
+import { FilterProps } from "../../../types";
 
 const SEE_MORE_AFTER = 8;
 
 
-export default function OrganizationLevelFilter() {
+export default function OrganizationLevelFilter(props: FilterProps) {
   const intl = useIntl();
-  const { currentFilters, handleFilterChange } = useUrl()
-  const { data = { byLevel: [] } } = useAggregateData('filters')
+  const { currentFilters, handleFilterChange } = useUrl(props.filterParam)
+  const { data = { byLevel: [] } } = useAggregateData('filters', props)
   const { byLevel } = data as OrganizationAggregations;
 
   const [seeMore, setSeeMore] = useState(false)

@@ -10,6 +10,7 @@ import NetworkFiltersPublications from "./publications"
 import useUrl from "../../../search/hooks/useUrl"
 import ModelFilters from "./model"
 import NetworkFiltersAuthors from "./authors"
+import NetworkFiltersOrganizations from "./organizations"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -20,7 +21,7 @@ const SOURCE_FILTERS = {
 const MODEL_FILTERS = {
   domains: null,
   authors: <NetworkFiltersAuthors />,
-  institutions: null,
+  institutions: <NetworkFiltersOrganizations />,
   structures: null,
   software: null,
   projects: null,
@@ -33,7 +34,7 @@ const MODEL_FILTERS = {
 
 export default function NetworkFiltersModal() {
   const intl = useIntl()
-  const { currentFilters, clearFilters } = useUrl()
+  const { clearFilters } = useUrl()
   // const [tab, setTab] = useState<number>(0)
   const {
     options: { currentSource, currentModel },

@@ -13,10 +13,11 @@ import { autocompleteOrganizations } from "../../../../../api/organizations/auto
 import { LightOrganization } from "../../../../../types/organization";
 import OperatorButton from "../../../../../components/operator-button";
 import getLangFieldValue from "../../../../../utils/lang";
+import { FilterProps } from "../../../types";
 
-export default function OrganizationSupervisorsFilter() {
+export default function OrganizationSupervisorsFilter(props: FilterProps) {
   const { locale } = useDSFRConfig();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam);
 
   const authorsAutocompletedList = useAutocompleteList<LightOrganization>({
     async load({ filterText }) {

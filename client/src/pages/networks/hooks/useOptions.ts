@@ -36,8 +36,9 @@ export default function useOptions() {
   const handleModelChange = useCallback(
     (model: string) => {
       searchParams.set("model", model)
-      searchParams.delete("filterNodes")
+      searchParams.delete("nfilters")
       searchParams.delete("clusters")
+      searchParams.delete("filterNodes")
       setSearchParams(searchParams)
     },
     [searchParams, setSearchParams]
@@ -47,6 +48,7 @@ export default function useOptions() {
     (source: string) => {
       searchParams.delete("model")
       searchParams.delete("filters")
+      searchParams.delete("nfilters")
       searchParams.delete("clusters")
       searchParams.delete("filterNodes")
       searchParams.set("source", source)

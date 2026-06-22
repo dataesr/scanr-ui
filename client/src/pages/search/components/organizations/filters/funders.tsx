@@ -4,10 +4,11 @@ import useAggregateData from "../../../hooks/useAggregationData";
 import useUrl from "../../../hooks/useUrl";
 import { OrganizationAggregations } from "../../../../../types/organization";
 import OperatorButton from "../../../../../components/operator-button";
+import { FilterProps } from "../../../types";
 
-export default function OrganizationFunderFilter() {
-  const { currentFilters, handleFilterChange, setOperator } = useUrl()
-  const { data = { byFundings: [] } } = useAggregateData('filters')
+export default function OrganizationFunderFilter(props: FilterProps) {
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const { data = { byFundings: [] } } = useAggregateData('filters', props)
   const { byFundings } = data as OrganizationAggregations
 
   const filter = currentFilters?.['projects.type']

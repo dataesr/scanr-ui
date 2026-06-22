@@ -13,9 +13,10 @@ import {
   autocompleteLocalisations,
 } from "../../../../../api/localisations";
 import OperatorButton from "../../../../../components/operator-button";
+import { FilterProps } from "../../../types";
 
-export default function OrganizationLocalisationsFilter() {
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
+export default function OrganizationLocalisationsFilter(props: FilterProps) {
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam);
 
   const localisationAutocompletedList =
     useAutocompleteList<LocalisationAutocomplete>({

@@ -17,6 +17,7 @@ import { ProjectAggregations } from "../../../types/project";
 import { PublicationAggregations } from "../../../types/publication";
 import { aggregateClinicalTrials } from "../../../api/clinical-trials/aggregate";
 import useUrl from "./useUrl";
+import { FilterProps } from "../types"
 
 const API_MAPPING = {
   authors: aggregateAuthors,
@@ -36,18 +37,26 @@ type AggregationsModel =
   | ProjectAggregations
   | PublicationAggregations
 
-export default function useAggregateData(type: "analytics" | "filters") {
-  const { api, currentQuery, filters } = useUrl()
+export default function useAggregateData(type: "analytics" | "filters", filterProps: FilterProps = {}) {
+  const { filterParam, filterIds = [], forceApi, ignoreQuery = false } = filterProps
+  const { api, currentQuery, filters } = useUrl(filterParam)
   const [searchParam] = useSearchParams()
   const networkSource = searchParam.get("source") || "publications"
+  const filterIdsElastic = { terms: { id: filterIds } }
+  console.log("filterIds", filterIds)
+  if (filterIds.length > 0) {
+    filters.push(filterIdsElastic)
+  }
 
-  const queryFn = api === "networks" ? API_MAPPING[networkSource] : API_MAPPING[api]
-  const _api = api === "networks" ? networkSource : api
-  const _filters = type === "analytics" ? filters : []
+  const queryFn = forceApi ? API_MAPPING[forceApi] : api === "networks" ? API_MAPPING[networkSource] : API_MAPPING[api]
+  const _api = forceApi ? forceApi : api === "networks" ? networkSource : api
+  const _query = ignoreQuery ? "" : currentQuery
+  const _filters = type === "analytics" ? filters : filterIds.length > 0 ? [filterIdsElastic] : []
+  console.log("_filters", _filters)
 
   const { data, isLoading, isError } = useQuery<AggregationsModel, unknown, AggregationsModel>({
-    queryKey: [_api, "analytics", currentQuery, _filters],
-    queryFn: () => queryFn({ query: currentQuery, filters: _filters }),
+    queryKey: [_api, "analytics", _query, _filters],
+    queryFn: () => queryFn({ query: _query, filters: _filters }),
   })
 
   const values = useMemo(() => {

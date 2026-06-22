@@ -5,14 +5,15 @@ import useUrl from "../../../hooks/useUrl";
 import { OrganizationAggregations } from "../../../../../types/organization";
 import OperatorButton from "../../../../../components/operator-button";
 import { useState } from "react";
+import { FilterProps } from "../../../types";
 
 const SEE_MORE_AFTER = 8
 
 
-export default function OrganizationAgreementsFilter() {
+export default function OrganizationAgreementsFilter(props: FilterProps) {
   const intl = useIntl();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl()
-  const { data = { byAgreements: [] } } = useAggregateData('filters')
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const { data = { byAgreements: [] } } = useAggregateData('filters', props)
   const { byAgreements } = data as OrganizationAggregations
 
   const [seeMore, setSeeMore] = useState(false)

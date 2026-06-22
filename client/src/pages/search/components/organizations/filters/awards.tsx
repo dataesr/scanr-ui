@@ -5,14 +5,15 @@ import useUrl from "../../../hooks/useUrl";
 import { OrganizationAggregations } from "../../../../../types/organization";
 import OperatorButton from "../../../../../components/operator-button";
 import { useState } from "react";
+import { FilterProps } from "../../../types";
 
 const SEE_MORE_AFTER = 8
 
 
-export default function OrganizationAwardsFilter() {
+export default function OrganizationAwardsFilter(props: FilterProps) {
   const intl = useIntl();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl()
-  const { data = { byAwards: [] } } = useAggregateData('filters')
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const { data = { byAwards: [] } } = useAggregateData('filters', props)
   const { byAwards } = data as OrganizationAggregations
 
   const [seeMore, setSeeMore] = useState(false)

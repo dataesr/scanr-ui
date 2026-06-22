@@ -26,9 +26,12 @@ export default async function graphFilterNodes(
     if (nodes?.length) _filterNodes.push(...nodes)
   }
 
-  if (_filterNodes.length) {
-    const filterIds = _filterNodes.map((node) => node.split("###")[0]).filter((key) => graph.hasNode(key)).flatMap((id) => [...(filterNeighbors ? graph.neighbors(id) : []), id])
-    if (filterIds.length >= 3) graph = subgraph(graph, filterIds)
+  if (_filterNodes.length || nfilters.length) {
+    const filterIds = _filterNodes
+      .map((node) => node.split("###")[0])
+      .filter((key) => graph.hasNode(key))
+      .flatMap((id) => [...(filterNeighbors ? graph.neighbors(id) : []), id])
+    graph = subgraph(graph, filterIds) //TODO: warning on front ?
   }
 
   // Keep only largests components

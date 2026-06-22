@@ -11,13 +11,14 @@ import useAggregateData from "../../../hooks/useAggregationData";
 import useUrl from "../../../hooks/useUrl";
 import { AuthorsAggregations } from "../../../../../types/author";
 import OperatorButton from "../../../../../components/operator-button";
+import { FilterProps } from "../../../types"
 
 const SEE_MORE_AFTER = 8;
 
-export default function AuthorAwardsFilter({ filtersParam = "filters" }: { filtersParam?: string }) {
+export default function AuthorAwardsFilter(props: FilterProps) {
   const intl = useIntl()
-  const { currentFilters, handleFilterChange, setOperator } = useUrl(filtersParam)
-  const { data = { byAward: [] } } = useAggregateData("filters")
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const { data = { byAward: [] } } = useAggregateData("filters", props)
   const { byAward } = data as AuthorsAggregations
 
   const [seeMore, setSeeMore] = useState(false)
