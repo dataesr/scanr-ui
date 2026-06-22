@@ -141,21 +141,21 @@ function initPopUp() {
 	
 	// check to see if this is IE version 6 or lower. hide select boxes if so
 	// maybe they'll fix this in version 7?
-	var brsVersion = parseInt(window.navigator.appVersion.charAt(0), 10);
+	const brsVersion = parseInt(window.navigator.appVersion.charAt(0), 10);
 	if (brsVersion <= 6 && window.navigator.userAgent.indexOf("MSIE") > -1) {
 		gHideSelects = true;
 	}
 	
 	// Add onclick handlers to 'a' elements of class submodal or submodal-width-height
-	var elms = document.getElementsByTagName('a');
+	const elms = document.getElementsByTagName('a');
 	for (let i = 0; i < elms.length; i++) {
 		if (elms[i].className.indexOf("submodal") == 0) { 
 			// var onclick = 'function (){showPopWin(\''+elms[i].href+'\','+width+', '+height+', null);return false;};';
 			// elms[i].onclick = eval(onclick);
 			elms[i].onclick = function(){
 				// default width and height
-				var width = 400;
-				var height = 200;
+				let width = 400;
+				let height = 200;
 				// Parse out optional width and height from className
 				const params = this.className.split('-');
 				if (params.length == 3) {

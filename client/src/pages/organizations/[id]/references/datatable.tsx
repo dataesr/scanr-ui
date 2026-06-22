@@ -93,7 +93,7 @@ export default function DataTable(
                   Tout ({numberOfResults})
                 </option>
                 {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
-                  <option key={bucket.key} value={bucket.key}>
+                  <option key={`aggs-${column.id}-${bucket.key}`} value={bucket.key}>
                     {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
                   </option>
                 ))}
@@ -161,7 +161,7 @@ export default function DataTable(
                   <tr>
                     {columns.map((column) => column?.groups ?? []).flat().map((column) => {
                       return (
-                        <th scope="col">
+                        <th scope="col" key={column.id}>
                           <ColumnHeader column={column} />
                         </th>
                       )
@@ -170,17 +170,17 @@ export default function DataTable(
                 </thead>
                 <tbody>
                   {dataTable && dataTable.map((row) => (
-                    <tr key={row.uniqId}>
+                    <tr key={`datatable-row-${row.id}`}>
                       {columns.map((column) => {
                         if ((column?.groups ?? []).length > 0) {
                           return column.groups.map((group) => (
-                            <td key={`${group.id}-${row.id}`} className={group?.getClassName ? group.getClassName(row) : ''}>
+                            <td key={`datatable-cell-${group.id}-${row.id}`} className={group?.getClassName ? group.getClassName(row) : ''}>
                               {group.getCellValue ? group.getCellValue(row) : <span title={row?.[group?.id]}>{row?.[group?.id]}</span>}
                             </td>
                           ))
                         } else {
                           return (
-                            <td key={`${column.id}-${row.id}`} className={column?.getClassName ? column.getClassName(row) : ''}>
+                            <td key={`datatable-cell-${column.id}-${row.id}`} className={column?.getClassName ? column.getClassName(row) : ''}>
                               {column.getCellValue ? column.getCellValue(row) : <span title={row?.[column?.id]}>{row?.[column?.id]}</span>}
                             </td>
                           )

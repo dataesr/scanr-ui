@@ -4,16 +4,15 @@
 
 import { hidePopWin, initPopUp, showPopWin } from "./subModal";
 
-var remoteClientExist = false;
-var oFrame;
-var idrefinit = false;
+let remoteClientExist = false;
+let idrefinit = false;
 
 const serializer = {
   parse: function (message) {
-    var data = {};
-    var d = message.split("&");
-    var pair, key, value;
-    for (var i = 0, len = d.length; i < len; i++) {
+    const data = {};
+    const d = message.split("&");
+    let pair, key, value;
+    for (let i = 0, len = d.length; i < len; i++) {
       pair = d[i];
       key = pair.substring(0, pair.indexOf("="));
       value = pair.substring(key.length + 1);
@@ -23,7 +22,7 @@ const serializer = {
   },
   stringify: function (data) {
     let message = "";
-    for (var key in data) {
+    for (let key in data) {
       if (data.hasOwnProperty(key)) {
         message += key + "=" + escape(data[key]) + "&";
       }
@@ -45,7 +44,7 @@ function envoiClient(
 ) {
   index1Value = index1Value.replace(/'/g, "\\\'");
   if (initClient() == 0) {}
-  oFrame = document.getElementById("popupFrame");
+  const oFrame = document.getElementById("popupFrame");
   if (!idrefinit) {
     oFrame.contentWindow.postMessage(
       serializer.stringify({ Init: "true" }),
@@ -55,29 +54,28 @@ function envoiClient(
   }
   try {
     if (zones!=null && zones!=='')
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
-        else if (filtre2!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
-        else if (filtre1!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
-        else if (index2!=null)
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
-        else
-            eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ');
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+    else if (filtre2!=null)
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+    else if (filtre1!=null)
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+    else if (index2!=null)
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+    else
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Famille\',Index1Value:\''+index1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
   } catch (e) {
     alert("oFrame.contentWindow Failed? " + e);
   }
 }
 
 function initClient() {
-  initPopUp();
   if (remoteClientExist) {
     showPopWin("", screen.width * 0.89, screen.height * 0.74, null);
     return 0;
   }
   showPopWin("", screen.width * 0.89, screen.height * 0.74, null);
   remoteClientExist = true;
-  if (document.addEventListener) {
+  if (window?.addEventListener) {
     window.addEventListener("message", function (e) {
       traiteResultat(e);
     });
@@ -91,10 +89,10 @@ function initClient() {
 
 function traiteResultat(e) {
   //partie Ã  adapter pour votre client
-  var data = serializer.parse(e.data);
+  const data = serializer.parse(e.data);
 
   if (data["g"] != null) {
-    var resHtml = "<ul>";
+    let resHtml = "<ul>";
     resHtml += "<li>data['a'] : " + data["a"] + "</li>";
     resHtml += "<li>data['b'] : " + data["b"] + "</li>";
     resHtml += "<li>data['c'] : " + data["c"] + "</li>";
@@ -103,8 +101,7 @@ function traiteResultat(e) {
     resHtml += "<li>data['f'] : " + escapeHtml(data["f"]) + "</li>";
     resHtml += "<li>data['g'] : " + data["g"] + "</li>";
     resHtml += "</ul>";
-    $("#resultat").html(resHtml);
-    $("#resultat").show();
+    console.log(resHtml)
     hidePopWin(null);
   }
 }
@@ -118,4 +115,4 @@ function escapeHtml(texte) {
     .replace(/'/g, "&#039;");
 }
 
-export { envoiClient };
+export { envoiClient, initPopUp };

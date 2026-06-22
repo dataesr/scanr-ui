@@ -22,7 +22,7 @@ import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
 import RorModal from "./components/ror-modal"
 import DataTable from "./datatable.tsx"
-import { envoiClient } from "./formulaire.js"
+import { envoiClient, initPopUp } from "./formulaire.js"
 
 import "./subModal.css"
 
@@ -104,6 +104,10 @@ export default function References() {
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResults * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResults * 100))
   }, [dataReferencesAll?.results, numberOfResults])
+
+  useEffect(() => {
+    initPopUp()
+  }, [])
 
   const breadcrumbLabel = getLangFieldValue(locale)(data?.label)
 
