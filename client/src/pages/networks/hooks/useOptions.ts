@@ -27,7 +27,7 @@ export default function useOptions() {
       maxComponents: Number(searchParams.get("maxComponents") || Number(NETWORK_PARAMETERS.maxComponents.default)),
       clusters: getBooleanParam(searchParams.get("clusters"), Boolean(NETWORK_PARAMETERS.clusters.default)),
       filterNodes: parseStringURL(searchParams.get("filterNodes")) || NETWORK_PARAMETERS.filterNodes.default,
-      filterFocus: getBooleanParam(searchParams.get("filterFocus"), Boolean(NETWORK_PARAMETERS.filterFocus.default)),
+      filterNeighbors: getBooleanParam(searchParams.get("filterNeighbors"), Boolean(NETWORK_PARAMETERS.filterNeighbors.default)),
       sample: getBooleanParam(searchParams.get("sample"), Boolean(NETWORK_PARAMETERS.sample.default)),
     }),
     [searchParams],

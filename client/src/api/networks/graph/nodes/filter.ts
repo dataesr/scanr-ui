@@ -24,9 +24,11 @@ export default async function graphFilterNodes(
   // Filter nodes
   if (filterNodes.length) {
     // TODO: option to toggle neighbors
+    const filterIds = filterNodes.map((node) => node.split("###")[0]).filter((key) => graph.hasNode(key))
+
     graph = subgraph(
       graph,
-      [...filterNodes.filter((key) => graph.hasNode(key)).flatMap((key) => [...graph.neighbors(key), key])],
+      [...filterIds.flatMap((id) => [...graph.neighbors(id), id])],
     )
   }
 

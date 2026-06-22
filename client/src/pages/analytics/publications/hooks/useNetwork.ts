@@ -11,8 +11,8 @@ const PARAMS: NetworkParameters = {
   maxComponents: 5,
   clusters: false,
   filterNodes: [],
+  filterNeighbors: false,
   sample: false,
-  filterFocus: false,
 }
 
 export default function useNetworks(currentModel: "authors" | "structures") {

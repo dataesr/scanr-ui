@@ -1,86 +1,116 @@
 import {
-  // Autocomplete,
-  // AutocompleteItem,
+  Autocomplete,
+  AutocompleteItem,
+  Col,
   Container,
-  // DismissibleTag,
-  // TagGroup,
-  TagInput,
+  DismissibleTag,
+  Row,
+  TagGroup,
   Text,
-  // useAutocompleteList,
+  Toggle,
+  useAutocompleteList,
 } from "@dataesr/dsfr-plus"
 import { useNetworkContext } from "../../../context"
-import { useIntl } from "react-intl"
+import { FormattedMessage, useIntl } from "react-intl"
 
-export default function AutocompleteFilterNode() {
+export default function AutocompleteFilterNodes() {
   const intl = useIntl()
   const {
-    // search,
+    search: { data },
     options: { parameters, handleParameterChange },
   } = useNetworkContext()
+  const allIds = data?.meta?.all_ids || []
 
-  // const nodes = search?.data?.network?.items?.map((item) => ({ label: item.label, id: item.id }))
-  // const autocomplete = useAutocompleteList<Record<string, string>>({
-  //   async load({ filterText }) {
-  //     return {
-  //       items: nodes?.filter((node) => node.label.toLowerCase().startsWith(filterText.toLowerCase())) ?? [],
-  //     }
-  //   },
-  // })
+  const nodesAutocompletedList = useAutocompleteList<Record<string, string>>({
+    async load({ filterText }) {
+      if (!filterText) {
+        return { items: [] }
+      }
+      return {
+        items: allIds
+          ?.map((id) => {
+            const [value, label] = id.split("###")
+            return { value, label }
+          })
+          ?.filter((id) => id.value.includes(filterText) || id.label.includes(filterText))
+          ?.slice(0, 7),
+      }
+    },
+  })
+  const nodes = parameters?.filterNodes || []
 
   return (
     <Container fluid className="fr-mb-3w">
-      <Text className="fr-label fr-mb-1v" size="md">
-        {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.label" })}
-      </Text>
-      <Text className="fr-hint-text fr-mb-1w">
-        {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.hint" })}
-      </Text>
-      {/* <TagGroup>
-        {Object.entries(parameters.filterNodes || {}).map(([key, value]) => (
+      <Row verticalAlign="middle">
+        <Col md={8}>
+          <Text className="fr-label fr-mb-1v" size="md">
+            {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.label" })}
+          </Text>
+          <Text className="fr-hint-text fr-mb-1w">
+            {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.hint" })}
+          </Text>
+        </Col>
+        <Col md={4}>
+          <Row verticalAlign="middle">
+            <Toggle checked={parameters.filterNeighbors} onChange={(event) => handleParameterChange("filterNeighbors", event.target.checked)} />
+            <Text className="fr-hint-text fr-mb-1v" size="md">
+              {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.toggle" })}
+            </Text>
+          </Row>
+        </Col>
+      </Row>
+      {
+        nodes.length ? (
+          <Text bold size="sm" className="fr-mb-1v">
+            <FormattedMessage id="search.filters.selected" /> {":"}
+          </Text>
+        ) : null
+      }
+      <TagGroup>
+        {nodes?.map((currentNode) => (
           <DismissibleTag
-            key={key}
+            key={String(currentNode.split("###")[0])}
             className="fr-mr-1v"
-            color="green-bourgeon"
+            color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              const nextFilterNodes = parameters.filterNodes
-              delete nextFilterNodes?.[key]
-              handleParameterChange("filterNodes", nextFilterNodes)
+              handleParameterChange("filterNodes", nodes?.filter((node) => node != currentNode))
             }}
           >
-            {value || key}
+            {currentNode.split("###")[1]}
           </DismissibleTag>
         ))}
       </TagGroup>
-      {autocomplete ? (
-        <Autocomplete
-          items={autocomplete.items}
-          inputValue={autocomplete.filterText}
-          onInputChange={autocomplete.setFilterText}
-          onSelectionChange={(item) => {
-            if (!item) return
-            const [id, label] = item.toString().split("###")
-            handleParameterChange("filterNodes", { ...parameters.filterNodes, [id]: label || "" })
-          }}
-          menuTrigger="input"
-          size="md"
-        >
-          {(item) => <AutocompleteItem key={`${item.id}###${item.label}`}>{item.label}</AutocompleteItem>}
-        </Autocomplete>
-      ) : (
-        <Autocomplete size="md" isDisabled>
-          {<div></div>}
-        </Autocomplete>
-      )} */}
-      <TagInput
-        key={"filter-nodes"}
-        label=""
-        tags={parameters.filterNodes?.map((tag) => String(tag))}
-        onTagsChange={(tags) => {
-          handleParameterChange("filterNodes", tags)
+      <Autocomplete
+        label="Search nodes"
+        items={nodesAutocompletedList.items}
+        inputValue={nodesAutocompletedList.filterText}
+        onInputChange={nodesAutocompletedList.setFilterText}
+        loadingState={nodesAutocompletedList.loadingState}
+        // menuTrigger="focus"
+        size="md"
+        onSelectionChange={(item) => {
+          if (!item) return
+          handleParameterChange("filterNodes", [...parameters.filterNodes, item.toString()])
+          nodesAutocompletedList.setFilterText("")
         }}
-      />
-      {Object.keys(parameters.filterNodes || {}).length > 0 && Object.keys(parameters.filterNodes || {}).length < 3 && (
+      >
+        {(item) => (
+          <AutocompleteItem
+            startContent={<span className="fr-mr-3v fr-icon--md fr-icon-user-line" />}
+            // endContent={
+            //   item.publicationsCount ? (
+            //     <span className="fr-text--xs fr-text-mention--grey">{item.publicationsCount} publications</span>
+            //   ) : null
+            // }
+            // description={item.address?.find((a) => a.main)?.city}
+            key={`${item.value}###${item.label}`}
+          >
+            {item.label}
+          </AutocompleteItem>
+        )}
+      </Autocomplete>
+      {!parameters.filterNeighbors && parameters.filterNodes.length && parameters.filterNodes.length < 3 && (
         <Text className="fr-mt-3w fr-message fr-message--warning" size="xs">
           {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.warning" })}
         </Text>

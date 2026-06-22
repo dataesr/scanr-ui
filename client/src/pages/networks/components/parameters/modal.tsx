@@ -5,8 +5,6 @@ import InputMaxComponents from "./input-max-components"
 import { useIntl } from "react-intl"
 import ToggleSample from "./toggle-sample"
 import { useNetworkContext } from "../../context"
-import ToggleFilterFocus from "./toggle-filter-focus"
-import AutocompleteFilterNode from "./autocomplete-filter-nodes"
 
 export default function NetworkParametersModal() {
   const intl = useIntl()
@@ -22,8 +20,6 @@ export default function NetworkParametersModal() {
         <ToggleSample />
         <InputMaxNodes />
         <InputMaxComponents />
-        <AutocompleteFilterNode />
-        <ToggleFilterFocus />
         {/* <SelectLayout /> */}
         {/* <SelectClustering /> */}
       </Container>

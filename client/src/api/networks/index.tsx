@@ -88,8 +88,8 @@ export async function getStructureNetworkById(
       maxComponents: 5,
       clusters: false,
       filterNodes: [],
+      filterNeighbors: true,
       sample: true,
-      filterFocus: true,
     },
   })
     .then((data) => data)
@@ -114,8 +114,8 @@ export async function getAuthorsNetworkById(
       maxComponents: 5,
       clusters: false,
       filterNodes: [],
+      filterNeighbors: true,
       sample: true,
-      filterFocus: true,
     },
   })
     .then((data) => data)

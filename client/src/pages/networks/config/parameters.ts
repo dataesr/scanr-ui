@@ -15,8 +15,8 @@ export const NETWORK_PARAMETERS = {
   filterNodes: {
     default: [],
   },
-  filterFocus: {
-    default: false,
+  filterNeighbors: {
+    default: true,
   },
   sample: {
     default: true,
