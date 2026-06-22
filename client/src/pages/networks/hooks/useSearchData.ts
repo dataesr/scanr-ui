@@ -36,8 +36,8 @@ export default function useSearchData(forceClusters?: boolean) {
       const currentParameters = currentKey[8] as NetworkParameters
       if (
         previousQuery?.queryKey &&
-        previousQuery.queryKey.slice(0, 7).every((value, index) => value === currentKey[index])
-        && previousQuery[8].clusters !== currentParameters.clusters
+        previousQuery.queryKey.slice(0, 7).every((value, index) => value === currentKey[index]) &&
+        previousQuery[8]?.clusters !== currentParameters?.clusters
       ) {
         return previousData
       }
