@@ -13,17 +13,17 @@ interface NetworkCreateArgs {
   query?: string;
   model: string;
   filters?: NetworkFilters;
-  nodeFilters?: NetworkFilters;
+  nfilters?: NetworkFilters;
   aggregation: Array<ElasticBucket>;
   parameters: NetworkParameters;
   lang?: string;
   integration?: string;
 }
 export default async function networkCreate(args: NetworkCreateArgs): Promise<[NetworkData, Record<string, any>]> {
-  const { query, aggregation, source, model, lang, parameters, filters, integration } = args
+  const { query, aggregation, source, model, lang, parameters, filters, nfilters, integration } = args
 
   // Get graph
-  const graph = await graphCreate(aggregation, source, model, lang, parameters, filters)
+  const graph = await graphCreate(aggregation, source, model, lang, parameters, nfilters)
 
   // Get clusters
   const clusters = await clustersCreate(graph, query, source, model, filters, parameters.clusters)
@@ -58,7 +58,7 @@ export default async function networkCreate(args: NetworkCreateArgs): Promise<[N
 
   // meta
   const meta = {
-    all_ids: graph.getAttribute("all_ids"),
+    all_nodes: graph.getAttribute("all_nodes"),
   }
 
   const network: NetworkData = {

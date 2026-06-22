@@ -7,6 +7,7 @@ import {
   NetworkSearchAggsArgs,
   NetworkCountBody,
   NetworkCountArgs,
+  NetworkSearchNodesArgs,
 } from "../../../types/network"
 import { ELASTIC_CONFIG as config } from "../config/elastic"
 import { ElasticAggregations, ElasticBuckets } from "../../../types/commons"
@@ -34,7 +35,7 @@ export async function networkCount({ source, model, query, filters }: NetworkCou
   }
   if (filters && filters.length > 0) body.query.bool.filter = filters
 
-  const res = await fetch(`${config[source][model].index}/_count`, {
+  const res = await fetch(`${config[source][model].source_index}/_count`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -89,7 +90,7 @@ export async function networkSearch({
   if (parameters.sample && isFilters && !isQuery)
     body.query = { function_score: { query: body.query, random_score: { seed: 42, field: "_seq_no" } } }
 
-  const res = await fetch(`${config[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].source_index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -135,7 +136,7 @@ export async function networkSearchHits({
     },
   }
 
-  const res = await fetch(`${config[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].source_index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
@@ -188,11 +189,36 @@ export async function networkSearchAggs({
     },
   }
 
-  const res = await fetch(`${config[source][model].index}/_search`, {
+  const res = await fetch(`${config[source][model].source_index}/_search`, {
     method: "POST",
     body: JSON.stringify(body),
     headers: postHeaders,
   }).then((response) => response.json())
 
   return res?.aggregations
+}
+
+export async function networkSearchNodes({
+  source,
+  model,
+  filters,
+  ids,
+}: NetworkSearchNodesArgs): Promise<Array<string>> {
+  const body = {
+    size: DEFAULT_SIZE,
+    _source: ["id"],
+    query: {
+      bool: {
+        filter: filters.concat({ terms: { id: ids } })
+      },
+    },
+  }
+
+  const res = await fetch(`${config[source][model].model_index}/_search`, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: postHeaders,
+  }).then((response) => response.json())
+
+  return res?.hits?.hits?.map((hit) => hit._source.id) ?? []
 }

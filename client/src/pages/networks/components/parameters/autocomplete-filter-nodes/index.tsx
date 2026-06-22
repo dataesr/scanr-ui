@@ -19,7 +19,7 @@ export default function AutocompleteFilterNodes() {
     search: { data },
     options: { parameters, handleParameterChange },
   } = useNetworkContext()
-  const allIds = data?.meta?.all_ids || []
+  const allNodes = data?.meta?.all_nodes || []
 
   const nodesAutocompletedList = useAutocompleteList<Record<string, string>>({
     async load({ filterText }) {
@@ -27,7 +27,7 @@ export default function AutocompleteFilterNodes() {
         return { items: [] }
       }
       return {
-        items: allIds
+        items: allNodes
           ?.map((id) => {
             const [value, label] = id.split("###")
             return { value, label }
@@ -43,28 +43,28 @@ export default function AutocompleteFilterNodes() {
     <Container fluid className="fr-mb-3w">
       <Row verticalAlign="middle">
         <Col md={8}>
-          <Text className="fr-label fr-mb-1v" size="md">
+          <Text bold className="fr-mb-1v" size="md">
             {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.label" })}
           </Text>
-          <Text className="fr-hint-text fr-mb-1w">
+          <Text className="fr-card__detail fr-mb-1w" size="sm">
             {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.hint" })}
           </Text>
         </Col>
         <Col md={4}>
           <Row verticalAlign="middle">
-            <Toggle checked={parameters.filterNeighbors} onChange={(event) => handleParameterChange("filterNeighbors", event.target.checked)} />
             <Text className="fr-hint-text fr-mb-1v" size="md">
               {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.toggle" })}
             </Text>
+            <Toggle className="fr-ml-2w" checked={parameters.filterNeighbors} onChange={(event) => handleParameterChange("filterNeighbors", event.target.checked)} />
           </Row>
         </Col>
       </Row>
       {
-        nodes.length ? (
+        !!nodes.length && (
           <Text bold size="sm" className="fr-mb-1v">
             <FormattedMessage id="search.filters.selected" /> {":"}
           </Text>
-        ) : null
+        )
       }
       <TagGroup>
         {nodes?.map((currentNode) => (
@@ -110,7 +110,7 @@ export default function AutocompleteFilterNodes() {
           </AutocompleteItem>
         )}
       </Autocomplete>
-      {!parameters.filterNeighbors && parameters.filterNodes.length && parameters.filterNodes.length < 3 && (
+      {!parameters.filterNeighbors && !!parameters.filterNodes.length && parameters.filterNodes.length < 3 && (
         <Text className="fr-mt-3w fr-message fr-message--warning" size="xs">
           {intl.formatMessage({ id: "networks.parameters.autocomplete-filter-nodes.warning" })}
         </Text>

@@ -15,6 +15,7 @@ type NetworkContextType = {
   }
   currentQuery: string
   filters: Record<string, unknown>[]
+  nfilters: Record<string, unknown>[]
   options: {
     currentModel: string
     currentSource: string
@@ -42,7 +43,7 @@ export function useNetworkContext() {
 }
 
 export function NetworkContext({ children }: { children: ReactNode }) {
-  const { search, currentQuery, filters } = useSearchData()
+  const { search, currentQuery, filters, nfilters } = useSearchData()
   const options = useOptions()
   const integration = useIntegration()
   const { locale: lang } = useDSFRConfig()
@@ -57,6 +58,7 @@ export function NetworkContext({ children }: { children: ReactNode }) {
         JSON.stringify({
           currentQuery,
           filters,
+          nfilters,
           currentModel: options.currentModel,
           currentSource: options.currentSource,
           ...options.parameters,
@@ -70,6 +72,7 @@ export function NetworkContext({ children }: { children: ReactNode }) {
   }, [
     currentQuery,
     filters,
+    nfilters,
     search.isFetching,
     search.data,
     options.currentModel,
@@ -92,10 +95,11 @@ export function NetworkContext({ children }: { children: ReactNode }) {
       },
       currentQuery,
       filters,
+      nfilters,
       options: { ...options, focusItem, setFocusItem, selectedTerm, setSelectedTerm },
       integration,
     }),
-    [search, key, currentQuery, filters, options, focusItem, integration, selectedTerm],
+    [search, key, currentQuery, filters, nfilters, options, focusItem, integration, selectedTerm],
   )
 
   return <Context.Provider value={value}>{children}</Context.Provider>

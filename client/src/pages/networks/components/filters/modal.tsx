@@ -9,6 +9,7 @@ import NetworkFiltersProjects from "./projects"
 import NetworkFiltersPublications from "./publications"
 import useUrl from "../../../search/hooks/useUrl"
 import ModelFilters from "./model"
+import NetworkFiltersAuthors from "./authors"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -18,7 +19,7 @@ const SOURCE_FILTERS = {
 
 const MODEL_FILTERS = {
   domains: null,
-  authors: null,
+  authors: <NetworkFiltersAuthors />,
   institutions: null,
   structures: null,
   software: null,

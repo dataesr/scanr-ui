@@ -1,4 +1,4 @@
-import { patentsIndex, projectsIndex, publicationsIndex } from "../../../config/api"
+import { authorsIndex, organizationsIndex, patentsIndex, projectsIndex, publicationsIndex } from "../../../config/api"
 import { FIELDS as publicationsFields } from "../../publications/_utils/constants"
 import { FIELDS as patentsFields, LIGHT_SOURCE as patentsSourceFields } from "../../patents/_utils/constants"
 import { FIELDS as projectsFields, LIGHT_SOURCE as projectsSourceFields } from "../../projects/_utils/constants"
@@ -16,7 +16,8 @@ const publicationsSourceFields = [
 export const ELASTIC_CONFIG = {
   publications: {
     authors: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
+      model_index: authorsIndex,
       field: "authors.person",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -38,7 +39,8 @@ export const ELASTIC_CONFIG = {
       },
     },
     institutions: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
+      model_index: organizationsIndex,
       field: "affiliations.id",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -59,7 +61,8 @@ export const ELASTIC_CONFIG = {
       },
     },
     structures: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
+      model_index: organizationsIndex,
       field: "affiliations.id",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -80,7 +83,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     domains: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
       field: "domains.code",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -101,7 +104,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     software: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
       field: "software.softwareName",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -121,7 +124,8 @@ export const ELASTIC_CONFIG = {
       },
     },
     projects: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
+      model_index: projectsIndex,
       field: "projects.id",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -142,7 +146,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     countries: {
-      index: publicationsIndex,
+      source_index: publicationsIndex,
       field: "affiliations.mainAddress.country",
       topics: "domains.label.default.keyword",
       search_fields: publicationsFields,
@@ -164,7 +168,7 @@ export const ELASTIC_CONFIG = {
   },
   patents: {
     persons: {
-      index: patentsIndex,
+      source_index: patentsIndex,
       field: "applicants.name",
       topics: "cpc.groupe.label.keyword",
       search_fields: patentsFields,
@@ -184,7 +188,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     organizations: {
-      index: patentsIndex,
+      source_index: patentsIndex,
       field: "applicants.name",
       topics: "cpc.groupe.label.keyword",
       search_fields: patentsFields,
@@ -205,7 +209,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     subclasses: {
-      index: patentsIndex,
+      source_index: patentsIndex,
       field: "cpc.ss_classe.code",
       topics: "cpc.groupe.label.keyword",
       search_fields: patentsFields,
@@ -225,7 +229,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     classes: {
-      index: patentsIndex,
+      source_index: patentsIndex,
       field: "cpc.classe.code",
       topics: "cpc.groupe.label.keyword",
       search_fields: patentsFields,
@@ -247,7 +251,8 @@ export const ELASTIC_CONFIG = {
   },
   projects: {
     institutions: {
-      index: projectsIndex,
+      source_index: projectsIndex,
+      model_index: organizationsIndex,
       field: "participants.structure.id",
       topics: "project_domains.label.default.keyword",
       search_fields: projectsFields,
@@ -268,7 +273,8 @@ export const ELASTIC_CONFIG = {
       },
     },
     structures: {
-      index: projectsIndex,
+      source_index: projectsIndex,
+      model_index: organizationsIndex,
       field: "participants.structure.id",
       topics: "project_domains.label.default.keyword",
       search_fields: projectsFields,
@@ -289,7 +295,7 @@ export const ELASTIC_CONFIG = {
       },
     },
     domains: {
-      index: projectsIndex,
+      source_index: projectsIndex,
       field: "project_domains.code",
       topics: "project_domains.label.default.keyword",
       search_fields: projectsFields,

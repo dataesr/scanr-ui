@@ -7,7 +7,7 @@ export type Network = {
   meta?: NetworkMeta
 }
 export type NetworkMeta = {
-  all_ids: Array<string>
+  all_nodes: Array<string>
   count?: number
 }
 export type NetworkData = {
@@ -123,7 +123,7 @@ export type NetworkSearchArgs = {
   source: string
   model: string
   filters?: NetworkFilters
-  nodeFilters?: NetworkFilters
+  nfilters?: NetworkFilters
   parameters: NetworkParameters
   lang?: string
   integration?: string
@@ -141,6 +141,13 @@ export type NetworkSearchAggsArgs = {
   query?: string
   filters?: NetworkFilters
   links?: Array<string>
+}
+export type NetworkSearchNodesArgs = {
+  source: string
+  model: string
+  filters: NetworkFilters
+  ids: Array<string>
+
 }
 
 export type NetworkHits = Array<NetworkHit>

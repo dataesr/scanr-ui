@@ -10,7 +10,7 @@ export default async function getNetwork(
   args: NetworkSearchArgs,
 ): Promise<Network> {
   try {
-    const { nodeFilters, ...searchArgs } = args
+    const { nfilters, ...searchArgs } = args
     const aggregation = await networkSearch(searchArgs);
     const [network, meta] = await networkCreate({ ...args, aggregation })
     const config = configCreate(args.source, args.model);
@@ -20,7 +20,7 @@ export default async function getNetwork(
       config: config,
       info: info,
       meta: {
-        all_ids: meta.all_ids,
+        all_nodes: meta.all_nodes,
         ...(args.parameters.sample && {
           count: aggregation.map((bucket) => bucket.doc_count).reduce((a, b) => a + b),
         }),

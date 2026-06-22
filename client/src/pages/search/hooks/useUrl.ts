@@ -100,8 +100,9 @@ export default function useUrl(filtersParam: string = "filters") {
 
   const [searchParams, setSearchParams] = useSearchParams()
   const currentQuery = searchParams.get("q") || ""
-  const currentFilters = parseSearchFiltersFromURL(searchParams.get(filtersParam))
-  const filters = filtersToElasticQuery(currentFilters)
+  const rawFilters = searchParams.get(filtersParam)
+  const currentFilters = useMemo(() => parseSearchFiltersFromURL(rawFilters), [rawFilters])
+  const filters = useMemo(() => filtersToElasticQuery(currentFilters), [currentFilters])
   if (integrationId)
     filters.push({
       terms: {

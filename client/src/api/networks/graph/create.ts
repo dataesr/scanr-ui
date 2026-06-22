@@ -14,7 +14,7 @@ export default async function graphCreate(
   model: string,
   lang: string,
   parameters: NetworkParameters,
-  filters: NetworkFilters
+  nfilters: NetworkFilters
 ): Promise<UndirectedGraph> {
   // Create Graph object from aggregation
   let graph = graphBuild(aggregation, model, lang)
@@ -23,7 +23,7 @@ export default async function graphCreate(
   graph = graphMergeNodes(graph, model)
 
   // Filter graph
-  graph = await graphFilterNodes(graph, source, model, filters, parameters)
+  graph = await graphFilterNodes(graph, source, model, nfilters, parameters)
 
   // Replace labels
   graphReplaceNodesLabels(graph, model)

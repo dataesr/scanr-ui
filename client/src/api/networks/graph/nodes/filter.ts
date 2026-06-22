@@ -2,34 +2,33 @@ import { UndirectedGraph } from "graphology"
 import subgraph from "graphology-operators/subgraph"
 import { connectedComponents } from "graphology-components"
 import betweennessCentrality from "graphology-metrics/centrality/betweenness"
-import { ELASTIC_CONFIG } from "../../config/elastic"
 import { NetworkFilters, NetworkParameters } from "../../../../types/network"
-import { getBsoLocals } from "../../../bso"
+import { networkSearchNodes } from "../../search"
 
 export default async function graphFilterNodes(
   graph: UndirectedGraph,
   source: string,
   model: string,
-  filters: NetworkFilters,
+  nfilters: NetworkFilters,
   parameters: NetworkParameters,
 ): Promise<UndirectedGraph> {
-  const { maxNodes, maxComponents, filterNodes } = parameters
+  const { maxNodes, maxComponents, filterNodes, filterNeighbors } = parameters
 
   // store nodes ids before filter
   graph.setAttribute(
-    "all_ids",
+    "all_nodes",
     graph.nodes().map((n) => `${n}###${graph.getNodeAttribute(n, "label")}`),
   )
 
-  // Filter nodes
-  if (filterNodes.length) {
-    // TODO: option to toggle neighbors
-    const filterIds = filterNodes.map((node) => node.split("###")[0]).filter((key) => graph.hasNode(key))
+  const _filterNodes = [...filterNodes] // avoid mutation of parameters
+  if (nfilters.length) {
+    const nodes = await networkSearchNodes({ source, model, filters: nfilters, ids: graph.nodes() })
+    if (nodes?.length) _filterNodes.push(...nodes)
+  }
 
-    graph = subgraph(
-      graph,
-      [...filterIds.flatMap((id) => [...graph.neighbors(id), id])],
-    )
+  if (_filterNodes.length) {
+    const filterIds = _filterNodes.map((node) => node.split("###")[0]).filter((key) => graph.hasNode(key)).flatMap((id) => [...(filterNeighbors ? graph.neighbors(id) : []), id])
+    if (filterIds.length >= 3) graph = subgraph(graph, filterIds)
   }
 
   // Keep only largests components
