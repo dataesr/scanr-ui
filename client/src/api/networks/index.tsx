@@ -10,11 +10,12 @@ export default async function getNetwork(
   args: NetworkSearchArgs,
 ): Promise<Network> {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { nfilters, ...searchArgs } = args
-    const aggregation = await networkSearch(searchArgs);
+    const aggregation = await networkSearch(searchArgs)
     const [network, meta] = await networkCreate({ ...args, aggregation })
-    const config = configCreate(args.source, args.model);
-    const info = infoCreate(args.source, args.model, args.query);
+    const config = configCreate(args.source, args.model)
+    const info = infoCreate(args.source, args.model, args.query)
     return {
       network: network,
       config: config,
@@ -28,7 +29,7 @@ export default async function getNetwork(
     }
   } catch (error) {
     console.error(error);
-    throw new Error(error);
+    throw error
   }
 }
 
@@ -57,18 +58,13 @@ export async function getMultipleNetworks(
       }),
     }),
   ];
-  const networks = await Promise.all(networksPromises)
-    .then((data) => data)
-    .catch((error) => {
-      console.error(error);
-      return undefined;
-    });
+  const networks = await Promise.all(networksPromises).then((data) => data)
 
-  const clustersGroups = networks.map((network) => network.network.clusters);
+  const clustersGroups = networks.map((network) => network.network.clusters)
   clustersAssignSimilarity(clustersGroups);
   networks.forEach((network, index) => {
-    network.network.clusters = clustersGroups[index];
-  });
+    network.network.clusters = clustersGroups[index]
+  })
   return networks;
 }
 

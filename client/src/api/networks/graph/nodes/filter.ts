@@ -4,6 +4,7 @@ import { connectedComponents } from "graphology-components"
 import betweennessCentrality from "graphology-metrics/centrality/betweenness"
 import { NetworkFilters, NetworkParameters } from "../../../../types/network"
 import { networkSearchNodes } from "../../search"
+import { configGetItemPage } from "../../config/vosviewer"
 
 export default async function graphFilterNodes(
   graph: UndirectedGraph,
@@ -57,7 +58,19 @@ export default async function graphFilterNodes(
   }
 
   if (graph.order < 3) {
-    throw new Error(`Network error: need at least three items to display the network (items=${graph.order})`)
+    throw new Error(`Network error: need at least three items to display the network (items=${graph.order})`, {
+      cause: {
+        reason: "not_enough_nodes",
+        order: graph.order,
+        nodes: graph
+          .nodes()
+          .map((node) => ({
+            id: node,
+            label: graph.getNodeAttribute(node, "label"),
+            page: configGetItemPage(source, model, node),
+          })),
+      },
+    })
   }
 
   return graph

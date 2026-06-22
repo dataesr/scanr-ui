@@ -244,3 +244,9 @@ $icons:
 .fr-text-black-white--grey {
   fill: var(--text-black-white-grey);
 }
+
+.link-no-icon {
+  &:after {
+    display: none !important;
+  }
+}

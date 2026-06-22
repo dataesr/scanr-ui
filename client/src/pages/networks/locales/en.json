@@ -103,6 +103,8 @@
     "networks.panel.button": "Communities information",
     "networks.search.error204.title": "No Result",
     "networks.search.error204.text": "This search returns no data.",
+    "networks.search.error204.text-notenough": "This search doesn't return enough elements to build a network. (min=3)",
+    "networks.search.error204.details-notenough": "{element} returned :",
     "networks.exports.title": "Export",
     "networks.exports.is-exporting": "Downloading...",
     "networks.exports.xlsx.title": "XLSX",

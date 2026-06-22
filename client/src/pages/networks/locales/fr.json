@@ -105,6 +105,8 @@
     "networks.panel.button": "Informations des communautés",
     "networks.search.error204.title": "Pas de résultat",
     "networks.search.error204.text": "Cette recherche ne retourne aucune donnée.",
+    "networks.search.error204.text-notenough": "Cette recherche ne retourne pas assez d'éléments pour tracer un réseau. (min=3)",
+    "networks.search.error204.details-notenough": "{element} retournés : ",
     "networks.exports.title": "Exporter",
     "networks.exports.is-exporting": "Téléchargement...",
     "networks.exports.xlsx.title": "XLSX",
