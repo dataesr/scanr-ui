@@ -39,8 +39,6 @@ export default function NetworkFiltersModal() {
   } = useNetworkContext()
   const id = "networks-options-filters-modal"
 
-  console.log("current_filters", currentFilters)
-
   return (
     <>
       <Modal id={id} size="lg">

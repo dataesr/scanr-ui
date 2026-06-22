@@ -1,14 +1,12 @@
 import { Autocomplete, AutocompleteItem, DismissibleTag, TagGroup, Text, useAutocompleteList } from "@dataesr/dsfr-plus"
 import { useNetworkContext } from "../../context"
 import { FormattedMessage } from "react-intl"
-import useUrl from "../../../search/hooks/useUrl"
 // import OperatorButton from "../../../../components/operator-button"
 
 export default function NetworkAutocompleteNodes() {
   const {
-    search: { data },
+    search: { data }, options: { parameters, handleParameterChange }
   } = useNetworkContext()
-  const { currentFilters, handleFilterChange } = useUrl("nw")
   const allIds = data?.meta?.all_ids || []
 
   const nodesAutocompletedList = useAutocompleteList<Record<string, string>>({
@@ -29,12 +27,7 @@ export default function NetworkAutocompleteNodes() {
     },
   })
 
-  const nodesField = "nodes"
-  const filter = currentFilters?.[nodesField]
-  // const operator = filter?.operator || "or"
-
-  console.log("currentFilters", currentFilters)
-  console.log("filter", filter)
+  const nodes = parameters?.filterNodes || []
 
   return (
     <>
@@ -49,23 +42,23 @@ export default function NetworkAutocompleteNodes() {
         </div>
         {/* <OperatorButton operator={operator} setOperator={(key) => setOperator(nodesField, key === "and" ? "and" : "or")} /> */}
       </div>
-      {filter ? (
+      {nodes ? (
         <Text bold size="sm" className="fr-mb-1v">
           <FormattedMessage id="search.filters.selected" /> {":"}
         </Text>
       ) : null}
       <TagGroup>
-        {filter?.values?.map(({ value, label }) => (
+        {nodes?.map((currentNode) => (
           <DismissibleTag
-            key={String(value)}
+            key={String(currentNode.split("###")[0])}
             className="fr-mr-1v"
             color="orange-terre-battue"
             onClick={(e) => {
               e.preventDefault()
-              handleFilterChange({ field: nodesField, value: value, label: label })
+              handleParameterChange("filterNodes", nodes?.filter((node) => node != currentNode))
             }}
           >
-            {label}
+            {currentNode.split("###")[1]}
           </DismissibleTag>
         ))}
       </TagGroup>
@@ -79,8 +72,7 @@ export default function NetworkAutocompleteNodes() {
         size="md"
         onSelectionChange={(item) => {
           if (!item) return
-          const [value, label] = item.toString().split("###")
-          handleFilterChange({ field: nodesField, value, label })
+          handleParameterChange("filterNodes", [...parameters.filterNodes, item.toString()])
           nodesAutocompletedList.setFilterText("")
         }}
       >

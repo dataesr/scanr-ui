@@ -14,7 +14,7 @@ export default async function graphCreate(
   model: string,
   lang: string,
   parameters: NetworkParameters,
-  filters: NetworkFilters,
+  filters: NetworkFilters
 ): Promise<UndirectedGraph> {
   // Create Graph object from aggregation
   let graph = graphBuild(aggregation, model, lang)

@@ -85,8 +85,6 @@ export async function networkSearch({
     aggs: aggs,
   }
 
-  console.log("api_filters", filters)
-
   if (filters && filters.length > 0) body.query.bool.filter = filters
   if (parameters.sample && isFilters && !isQuery)
     body.query = { function_score: { query: body.query, random_score: { seed: 42, field: "_seq_no" } } }

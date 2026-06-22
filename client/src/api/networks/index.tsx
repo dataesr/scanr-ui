@@ -10,7 +10,8 @@ export default async function getNetwork(
   args: NetworkSearchArgs,
 ): Promise<Network> {
   try {
-    const aggregation = await networkSearch(args);
+    const { nodeFilters, ...searchArgs } = args
+    const aggregation = await networkSearch(searchArgs);
     const [network, meta] = await networkCreate({ ...args, aggregation })
     const config = configCreate(args.source, args.model);
     const info = infoCreate(args.source, args.model, args.query);
