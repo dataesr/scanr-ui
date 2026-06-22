@@ -7,10 +7,11 @@ import SourcesFilters from "./sources"
 import NetworkFiltersPatents from "./patents"
 import NetworkFiltersProjects from "./projects"
 import NetworkFiltersPublications from "./publications"
-import useUrl from "../../../search/hooks/useUrl"
+// import useUrl from "../../../search/hooks/useUrl"
 import ModelFilters from "./model"
 import NetworkFiltersAuthors from "./authors"
 import NetworkFiltersOrganizations from "./organizations"
+import { useSearchParams } from "react-router-dom"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -34,12 +35,19 @@ const MODEL_FILTERS = {
 
 export default function NetworkFiltersModal() {
   const intl = useIntl()
-  const { clearFilters } = useUrl()
+  const [searchParams, setSearchParams] = useSearchParams()
   // const [tab, setTab] = useState<number>(0)
   const {
     options: { currentSource, currentModel },
   } = useNetworkContext()
   const id = "networks-options-filters-modal"
+
+  const clearFilters = () => {
+    searchParams.delete("filters")
+    searchParams.delete("nfilters")
+    searchParams.delete("filterNodes")
+    setSearchParams(searchParams)
+  }
 
   return (
     <>
@@ -106,7 +114,7 @@ export default function NetworkFiltersModal() {
         </Container>
         <div className="fr-modal__footer fr-px-0" style={{ display: "flex", width: "100%", alignItems: "center" }}>
           <div style={{ flexGrow: 1 }}>
-            <Button variant="secondary" onClick={() => clearFilters()}>
+            <Button variant="secondary" onClick={clearFilters}>
               {intl.formatMessage({ id: "networks.filters.modal.clear" })}
             </Button>
           </div>

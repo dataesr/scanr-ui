@@ -13,7 +13,7 @@ export default function PublicationVariationsFilter() {
 
   const handleTagsChange = (tags: string[]) => {
     handleDeleteFilter({ field: key }) // delete before repopulate
-    tags.forEach((tag) => handleFilterChange({ field: key, value: tag.toLocaleLowerCase().trim() }))
+    tags.forEach((tag) => handleFilterChange({ field: key, value: tag.trim().toLowerCase() }))
   }
 
   return (

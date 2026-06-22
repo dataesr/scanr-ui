@@ -59,8 +59,12 @@ export default function useOptions() {
 
   const handleParameterChange = useCallback(
     (parameter: string, value: NetworkParameter) => {
-      if (parameter == "filterNodes") searchParams.set(parameter, encodeURIComponent(JSON.stringify(value)))
-      else searchParams.set(parameter, String(value))
+      if ([undefined, null].includes(value)) {
+        searchParams.delete(parameter)
+      } else {
+        if (parameter == "filterNodes") searchParams.set(parameter, encodeURIComponent(JSON.stringify(value)))
+        else searchParams.set(parameter, String(value))
+      }
       if (parameter !== "clusters") searchParams.delete("clusters")
       setSearchParams(searchParams)
     },

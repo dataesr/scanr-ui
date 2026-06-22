@@ -8,6 +8,7 @@ export default function NetworkFiltersButton() {
   const { screen } = useScreenSize()
   const {
     filters,
+    nfilters,
     integration: { integrationOptions },
   } = useNetworkContext()
 
@@ -25,7 +26,7 @@ export default function NetworkFiltersButton() {
     >
       {["xs", "sm", "mg"].includes(screen) ? null : intl.formatMessage({ id: "networks.filters.button.label" })}
       <Badge className="fr-ml-1w" size="md" color="blue-ecume">
-        {`${Object.keys(filters)?.length}`}
+        {(filters.length || 0) + (nfilters.length || 0)}
       </Badge>
     </Button>
   )
