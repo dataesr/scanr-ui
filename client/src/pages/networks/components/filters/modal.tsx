@@ -9,7 +9,6 @@ import NetworkFiltersProjects from "./projects"
 import NetworkFiltersPublications from "./publications"
 import useUrl from "../../../search/hooks/useUrl"
 import ModelFilters from "./model"
-import NetworkFiltersPublicationsAuthors from "./publications.authors"
 
 const SOURCE_FILTERS = {
   publications: <NetworkFiltersPublications />,
@@ -19,7 +18,7 @@ const SOURCE_FILTERS = {
 
 const MODEL_FILTERS = {
   domains: null,
-  authors: <NetworkFiltersPublicationsAuthors />,
+  authors: null,
   institutions: null,
   structures: null,
   software: null,
@@ -100,8 +99,8 @@ export default function NetworkFiltersModal() {
                 {intl.formatMessage({ id: "networks.filters.modal.title-plural" })}{" "}
                 {intl.formatMessage({ id: `networks.model.${currentModel}` }).toLowerCase()}
               </Title>
-              {MODEL_FILTERS[currentModel]}
               <ModelFilters />
+              {MODEL_FILTERS[currentModel]}
             </Tab>
           </Tabs>
         </Container>
