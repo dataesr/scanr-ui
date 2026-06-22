@@ -13,24 +13,26 @@ import { autocompleteOrganizations } from "../../../../../api/organizations/auto
 import { LightOrganization } from "../../../../../types/organization";
 import OperatorButton from "../../../../../components/operator-button";
 import getLangFieldValue from "../../../../../utils/lang";
+import { FilterProps } from "../../../types"
 
-export default function ProjectOrganizationsFilter() {
-  const { locale } = useDSFRConfig();
-  const { currentFilters, handleFilterChange, setOperator } = useUrl();
+export default function ProjectOrganizationsFilter(props: FilterProps) {
+  const { locale } = useDSFRConfig()
+  const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam)
+  const autocompleteFilters = props.filterIds ? [{ terms: { "id.keyword": props.filterIds } }] : []
 
   const authorsAutocompletedList = useAutocompleteList<LightOrganization>({
     async load({ filterText }) {
       if (!filterText) {
-        return { items: [] };
+        return { items: [] }
       }
-      const res = await autocompleteOrganizations({ query: filterText });
+      const res = await autocompleteOrganizations({ query: filterText, filters: autocompleteFilters })
 
-      return { items: res.data?.map((org) => org._source) };
+      return { items: res.data?.map((org) => org._source) }
     },
-  });
+  })
 
-  const filter = currentFilters?.["participants_id_search"];
-  const operator = filter?.operator || "or";
+  const filter = currentFilters?.["participants_id_search"]
+  const operator = filter?.operator || "or"
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function ProjectOrganizationsFilter() {
             value,
             label,
           })
-          authorsAutocompletedList.setFilterText('')
+          authorsAutocompletedList.setFilterText("")
         }}
       >
         {(item) => (

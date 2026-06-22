@@ -3,12 +3,13 @@ import { useIntl } from "react-intl";
 import { ProjectAggregations } from "../../../../../types/project";
 import useAggregateData from "../../../hooks/useAggregationData";
 import { RangeSlider } from "../../../../../components/year-range-sliders";
+import { FilterProps } from "../../../types";
 import useUrl from "../../../hooks/useUrl";
 
-export default function ProjectYearFilter() {
+export default function ProjectYearFilter(props: FilterProps) {
   const intl = useIntl();
-  const { handleRangeFilterChange, currentFilters } = useUrl();
-  const { data = { byYear: [] } } = useAggregateData('filters')
+  const { handleRangeFilterChange, currentFilters } = useUrl(props.filterParam);
+  const { data = { byYear: [] } } = useAggregateData('filters', props)
   const { byYear = [] } = data as ProjectAggregations
 
   if (!byYear.length) return null;

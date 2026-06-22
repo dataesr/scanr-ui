@@ -18,8 +18,7 @@ import { FilterProps } from "../../../types";
 export default function OrganizationSupervisorsFilter(props: FilterProps) {
   const { locale } = useDSFRConfig();
   const { currentFilters, handleFilterChange, setOperator } = useUrl(props.filterParam);
-  const autocompleteFilters = props.filterIds ? [{ terms: { id: props.filterIds } }] : []
-
+  const autocompleteFilters = props.filterIds ? [{ terms: { "id.keyword": props.filterIds } }] : []
   const authorsAutocompletedList = useAutocompleteList<LightOrganization>({
     async load({ filterText }) {
       if (!filterText) {

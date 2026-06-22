@@ -3,10 +3,11 @@ import { FormattedMessage } from "react-intl";
 import { ProjectAggregations } from "../../../../../types/project";
 import useAggregateData from "../../../hooks/useAggregationData";
 import useUrl from "../../../hooks/useUrl";
+import { FilterProps } from "../../../types";
 
-export default function ProjectTypeFilter() {
-  const { currentFilters, handleFilterChange } = useUrl()
-  const { data = { byType: [] } } = useAggregateData('filters')
+export default function ProjectTypeFilter(props: FilterProps) {
+  const { currentFilters, handleFilterChange } = useUrl(props.filterParam)
+  const { data = { byType: [] } } = useAggregateData('filters', props)
   const { byType } = data as ProjectAggregations
 
   return (

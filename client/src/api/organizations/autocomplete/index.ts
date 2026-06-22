@@ -34,7 +34,7 @@ export async function autocompleteOrganizations({ query, filters }: SearchArgs):
       },
     },
   }
-  if (filters.length) body.query.bool.filter.concat(filters)
+  if (filters.length) body.query.bool.filter.push(...filters)
 
   const res = await fetch(
     `${organizationsIndex}/_search`,
