@@ -16,7 +16,7 @@ export default function NetworkFiltersOrganizations() {
 
   return (
     <Container fluid>
-      <OrganizationRegionsFilter filterParam="nfilters" filterIds={filterIds} />
+      <OrganizationRegionsFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
       <OrganizationKindFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
