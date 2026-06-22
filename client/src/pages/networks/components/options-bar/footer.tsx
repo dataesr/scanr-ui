@@ -1,7 +1,7 @@
 import { Container } from "@dataesr/dsfr-plus"
 import NavigateToSearch from "../navigate-to-search"
 import ContributeButton from "../contribute/button"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworksOptionsFooter() {
   const { integration } = useNetworkContext()

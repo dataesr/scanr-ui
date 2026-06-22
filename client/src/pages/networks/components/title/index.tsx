@@ -1,6 +1,6 @@
 import { Container, Title } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import { GetBsoLocals } from "../../hooks/getBsoLocals"
 
 export default function NetworkTitle() {

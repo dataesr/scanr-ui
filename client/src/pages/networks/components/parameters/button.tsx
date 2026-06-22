@@ -1,7 +1,7 @@
 import { Button } from "@dataesr/dsfr-plus"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkParametersButton() {
   const intl = useIntl()

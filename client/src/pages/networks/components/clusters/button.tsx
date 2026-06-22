@@ -1,7 +1,7 @@
 import { useIntl } from "react-intl"
 import { Button, ButtonGroup } from "@dataesr/dsfr-plus"
 import useOptions from "../../hooks/useOptions"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function ClustersButton() {
   const intl = useIntl()

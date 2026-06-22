@@ -3,7 +3,7 @@ import { useIntl } from "react-intl"
 import NetworkGetStartedPage from "../get-started/template"
 import { NETWORK_SOURCES } from "../../config/sources"
 import useGetStarted from "../../hooks/useGetStarted"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkSelectSourceGetStarted() {
   const intl = useIntl()

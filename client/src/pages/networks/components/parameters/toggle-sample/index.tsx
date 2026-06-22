@@ -1,6 +1,6 @@
 import { useIntl } from "react-intl"
 import { Toggle } from "@dataesr/dsfr-plus"
-import { useNetworkContext } from "../../../context"
+import { useNetworkContext } from "../../../context/hook"
 
 export default function ToggleSample() {
   const intl = useIntl()

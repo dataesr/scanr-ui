@@ -8,7 +8,7 @@ import useScreenSize from "../../../../hooks/useScreenSize"
 import useIntegration from "../../hooks/useIntegration"
 import useOptions from "../../hooks/useOptions"
 import ClustersButton from "./button"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkAnalytics() {
   const intl = useIntl()

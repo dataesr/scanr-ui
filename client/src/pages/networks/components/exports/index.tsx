@@ -1,7 +1,7 @@
 import { Row, Title, MenuButton, MenuItem } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
 import useExportData from "../../hooks/useExportData"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkExports() {
   const intl = useIntl()

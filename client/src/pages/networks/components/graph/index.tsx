@@ -1,6 +1,6 @@
 import { VOSviewerOnline } from "vosviewer-online"
 import Error204 from "../errors/error204"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import NetworkSpinner from "../spinner"
 
 export default function NetworkGraph() {

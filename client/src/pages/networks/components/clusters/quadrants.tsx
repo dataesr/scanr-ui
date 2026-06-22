@@ -9,7 +9,7 @@ import { isInProduction } from "../../../../utils/helpers"
 import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import NetworkSelectTerm from "../select-term"
 
 // function NetworkNodesQuadrants({ nodes }: { nodes: NetworkItems }) {

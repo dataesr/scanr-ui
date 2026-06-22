@@ -1,5 +1,5 @@
 import { Container } from "@dataesr/dsfr-plus"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import NetworksBreadcrumb from "./breadcrumb"
 import NetworkTitle from "../title"
 

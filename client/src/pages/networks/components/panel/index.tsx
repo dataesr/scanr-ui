@@ -6,7 +6,7 @@ import NetworkClusters from "../clusters"
 import NetworkGraph from "../graph"
 import { useIntl } from "react-intl"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 function PanelButton({ isOpen, onChange }: { isOpen: boolean; onChange: () => void }) {
   const intl = useIntl()

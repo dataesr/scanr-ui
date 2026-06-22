@@ -1,5 +1,5 @@
 import { Button, Container, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import { useExportQuadrants } from "../../hooks/useExportQuadrants"
 
 export default function NetworkSelectTerm() {

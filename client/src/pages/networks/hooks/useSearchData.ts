@@ -4,7 +4,6 @@ import { useDSFRConfig } from "@dataesr/dsfr-plus"
 import useUrl from "../../search/hooks/useUrl"
 import useIntegration from "./useIntegration"
 import useOptions from "./useOptions"
-import { NetworkParameters } from "../../../types/network"
 import { getMultipleNetworks } from "../../../api/networks"
 
 export default function useSearchData(forceClusters?: boolean) {
@@ -32,13 +31,12 @@ export default function useSearchData(forceClusters?: boolean) {
         nfilters,
       }),
     placeholderData: (previousData, previousQuery) => {
-      // return previous data if only clusters parameter changed
-      const previousKey = previousQuery?.queryKey
-      if (previousKey && previousKey.slice(0, 7).every((value, index) => value === currentKey[index])) {
-        const previousParameters = previousQuery?.queryKey[8] as NetworkParameters
-        if (previousParameters?.clusters !== parameters.clusters) {
-          return previousData
-        }
+      // return previous data if only nfilters and parameters changed
+      if (
+        previousQuery?.queryKey &&
+        previousQuery.queryKey.slice(0, 6).every((value, index) => value === currentKey[index])
+      ) {
+        return previousData
       }
       return undefined
     },

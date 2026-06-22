@@ -2,7 +2,7 @@
 import { useIntl } from "react-intl"
 import { Button, Container, Tab, Tabs, Title } from "@dataesr/dsfr-plus"
 import Modal from "../../../../components/modal"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import SourcesFilters from "./sources"
 import NetworkFiltersPatents from "./patents"
 import NetworkFiltersProjects from "./projects"

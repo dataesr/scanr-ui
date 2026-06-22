@@ -1,4 +1,4 @@
-import { useContext, createContext, useState, useMemo, useEffect, ReactNode } from "react"
+import { createContext, useState, useMemo, useEffect, ReactNode } from "react"
 import { useDSFRConfig } from "@dataesr/dsfr-plus"
 import useSearchData from "../hooks/useSearchData"
 import useOptions from "../hooks/useOptions"
@@ -36,11 +36,7 @@ type NetworkContextType = {
   }
 }
 
-const Context = createContext<NetworkContextType>(null)
-
-export function useNetworkContext() {
-  return useContext(Context)
-}
+export const Context = createContext<NetworkContextType>(null)
 
 export function NetworkContext({ children }: { children: ReactNode }) {
   const { search, currentQuery, filters, nfilters } = useSearchData()
@@ -51,6 +47,8 @@ export function NetworkContext({ children }: { children: ReactNode }) {
   const [focusItem, setFocusItem] = useState<string>("")
   const [selectedTerm, setSelectedTerm] = useState<number>(0)
   const [key, setKey] = useState("")
+
+  console.log("search", search)
 
   useEffect(() => {
     if (!search.isFetching && search.data) {

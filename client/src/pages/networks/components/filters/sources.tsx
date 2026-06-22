@@ -3,7 +3,7 @@ import { Container, Text } from "@dataesr/dsfr-plus"
 import useUrl from "../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
 import { RangeSlider } from "../../../../components/range-slider"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 function CoElementsFilters({ countField }: { countField?: string }) {
   const intl = useIntl()

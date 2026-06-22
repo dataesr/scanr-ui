@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useIntl } from "react-intl"
 import { TextInput } from "@dataesr/dsfr-plus"
 import { NETWORK_PARAMETERS } from "../../../config/parameters"
-import { useNetworkContext } from "../../../context"
+import { useNetworkContext } from "../../../context/hook"
 
 export default function InputMaxComponents() {
   const intl = useIntl()

@@ -1,7 +1,7 @@
 import { useIntl } from "react-intl"
 import { Badge, Button } from "@dataesr/dsfr-plus"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkFiltersButton() {
   const intl = useIntl()

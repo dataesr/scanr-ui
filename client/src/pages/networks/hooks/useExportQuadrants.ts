@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from "react"
-import { useNetworkContext } from "../context"
+import { useNetworkContext } from "../context/hook"
 import { getDefined } from "../utils"
 import * as XLSX from "xlsx"
 import { NetworkData } from "../../../types/network"

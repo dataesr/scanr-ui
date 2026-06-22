@@ -4,7 +4,7 @@ import InputMaxNodes from "./input-max-nodes"
 import InputMaxComponents from "./input-max-components"
 import { useIntl } from "react-intl"
 import ToggleSample from "./toggle-sample"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkParametersModal() {
   const intl = useIntl()

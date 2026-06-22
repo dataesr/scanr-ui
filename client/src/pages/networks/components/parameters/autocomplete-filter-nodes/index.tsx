@@ -10,7 +10,7 @@ import {
   Toggle,
   useAutocompleteList,
 } from "@dataesr/dsfr-plus"
-import { useNetworkContext } from "../../../context"
+import { useNetworkContext } from "../../../context/hook"
 import { FormattedMessage, useIntl } from "react-intl"
 
 export default function AutocompleteFilterNodes() {

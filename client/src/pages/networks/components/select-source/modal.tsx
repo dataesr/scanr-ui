@@ -2,7 +2,7 @@ import { Button, Container, Listbox, ListboxItem, Text } from "@dataesr/dsfr-plu
 import Modal from "../../../../components/modal"
 import { useIntl } from "react-intl"
 import { NETWORK_SOURCES } from "../../config/sources"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkSelectSourceModal() {
   const intl = useIntl()

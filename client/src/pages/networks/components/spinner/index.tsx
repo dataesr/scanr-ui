@@ -1,7 +1,7 @@
 import { Container, Spinner, Text } from "@dataesr/dsfr-plus"
 import useCountData from "../../hooks/useCountData"
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkSpinner() {
   const intl = useIntl()

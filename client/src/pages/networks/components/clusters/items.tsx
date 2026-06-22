@@ -6,7 +6,7 @@ import useOptions from "../../hooks/useOptions"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import Separator from "../../../../components/separator"
 import { encode } from "../../../../utils/string"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import ClustersButton from "./button"
 import "./styles.scss"
 

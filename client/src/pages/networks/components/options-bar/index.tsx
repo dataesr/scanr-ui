@@ -5,7 +5,7 @@ import NetworkSelectModelButton from "../select-model/button"
 import NetworkSelectSourceButton from "../select-source/button"
 import NetworkFiltersButton from "../filters/button"
 import NetworkParametersButton from "../parameters/button"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworksOptionsBar() {
   const {

@@ -1,7 +1,7 @@
 import { Button } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkSearchBarButton() {
   const intl = useIntl()

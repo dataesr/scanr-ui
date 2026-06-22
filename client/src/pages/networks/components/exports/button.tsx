@@ -2,7 +2,7 @@ import { MenuButton, MenuItem } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
 import useExportData from "../../hooks/useExportData"
 import useScreenSize from "../../../../hooks/useScreenSize"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkExportsButton() {
   const intl = useIntl()

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Notice } from "@dataesr/dsfr-plus"
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkNotice() {
   const intl = useIntl()

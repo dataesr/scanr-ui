@@ -6,7 +6,7 @@ import NetworksOptionsModals from "../components/options-bar/modals"
 import NetworkNotice from "../components/notice"
 import NetworkPanel from "../components/panel"
 import NetworksOptionsFooter from "../components/options-bar/footer"
-import { useNetworkContext } from "../context"
+import { useNetworkContext } from "../context/hook"
 
 export default function NetworksLayout() {
   const {

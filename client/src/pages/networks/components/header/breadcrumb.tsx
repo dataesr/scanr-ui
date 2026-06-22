@@ -1,5 +1,5 @@
 import { useIntl } from "react-intl"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 import { Breadcrumb, Link } from "@dataesr/dsfr-plus"
 
 export default function NetworksBreadcrumb() {

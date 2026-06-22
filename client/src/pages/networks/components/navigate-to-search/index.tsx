@@ -3,7 +3,7 @@ import { useIntl } from "react-intl"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import useScreenSize from "../../../../hooks/useScreenSize"
 import { NETWORK_SOURCES } from "../../config/sources"
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NavigateToSearch() {
   const intl = useIntl()

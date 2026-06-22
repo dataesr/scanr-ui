@@ -1,6 +1,6 @@
 import { Container } from "@dataesr/dsfr-plus";
 import AuthorAwardsFilter from "../../../search/components/authors/filters/awards";
-import { useNetworkContext } from "../../context"
+import { useNetworkContext } from "../../context/hook"
 
 export default function NetworkFiltersAuthors() {
     const {
