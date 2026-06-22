@@ -22,12 +22,12 @@ export default async function graphFilterNodes(
   )
 
   const _filterNodes = [...filterNodes] // avoid mutation of parameters
-  if (nfilters.length) {
+  if (nfilters?.length) {
     const nodes = await networkSearchNodes({ source, model, filters: nfilters, ids: graph.nodes() })
     if (nodes?.length) _filterNodes.push(...nodes)
   }
 
-  if (_filterNodes.length || nfilters.length) {
+  if (_filterNodes?.length || nfilters?.length) {
     const filterIds = _filterNodes
       .map((node) => node.split("###")[0])
       .filter((key) => graph.hasNode(key))

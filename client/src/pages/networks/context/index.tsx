@@ -48,8 +48,6 @@ export function NetworkContext({ children }: { children: ReactNode }) {
   const [selectedTerm, setSelectedTerm] = useState<number>(0)
   const [key, setKey] = useState("")
 
-  console.log("search", search)
-
   useEffect(() => {
     if (!search.isFetching && search.data) {
       setKey(
