@@ -21,7 +21,7 @@ export default function NetworkClusters() {
       <Container fluid className="clusters-tabs">
         <Container fluid className="clusters-tabs__nav">
           {clustersTabs.map((tab) => (
-            <Button size="sm" className={tabCss(clustersTab === tab)} onClick={() => setClustersTab(tab)}>
+            <Button key={tab} size="sm" className={tabCss(clustersTab === tab)} onClick={() => setClustersTab(tab)}>
               {intl.formatMessage({ id: `networks.clusters.tabs.${tab}` })}
             </Button>
           ))}
