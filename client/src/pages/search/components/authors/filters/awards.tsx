@@ -45,6 +45,7 @@ export default function AuthorAwardsFilter(props: FilterProps) {
         />
       </div>
       <TextInput
+        type="text"
         disableAutoValidation
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

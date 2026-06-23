@@ -293,6 +293,7 @@ export default function Suggest() {
                   Veuillez entrer votre adresse email pour soumettre la liste.
                 </Text>
                 <TextInput
+                  type="text"
                   label="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

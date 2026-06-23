@@ -26,7 +26,7 @@ export default function TrendsTableHeader() {
         </th>
         <th>
           {openSearch ? (
-            <TextInput value={includes} placeholder="Search topics" onChange={(event) => setIncludes(event.target.value)} />
+            <TextInput type="text" value={includes} placeholder="Search topics" onChange={(event) => setIncludes(event.target.value)} />
           ) : (
             intl.formatMessage({ id: `trends.ranking.header.domains` })
           )}

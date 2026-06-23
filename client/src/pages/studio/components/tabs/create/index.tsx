@@ -47,6 +47,7 @@ export default function StudioCreate() {
   return (
     <section className="studio-section-create">
       <TextInput
+        type="text"
         hint={intl.formatMessage({ id: "studio.create.identifier.hint" })}
         label={intl.formatMessage({ id: "studio.create.identifier.label" })}
         message={intl.formatMessage({ id: "studio.create.identifier.message" })}

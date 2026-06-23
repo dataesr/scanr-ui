@@ -38,6 +38,7 @@ export default function PublicationAuthorsAwardsFilter() {
         />
       </div>
       <TextInput
+        type="text"
         disableAutoValidation
         value={searchInput}
         onChange={(e) => setSearchInput(e.target.value)}

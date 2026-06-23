@@ -36,6 +36,7 @@ function KeywordsManager({ tags = [], suggestedTags = [] }: { tags: string[], su
   return (
     <Modal id="add-keywords" title="Ajouter des mot-clés">
       <TextInput
+        type="text"
         disableAutoValidation
         placeholder="Ajouter des mots-clés"
         className="fr-mb-1w"
