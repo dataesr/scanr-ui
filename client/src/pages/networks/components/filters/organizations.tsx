@@ -8,7 +8,7 @@ import OrganizationAgreementsFilter from "../../../search/components/organizatio
 import OrganizationAwardsFilter from "../../../search/components/organizations/filters/awards"
 import OrganizationRegionsFilter from "../../../search/components/organizations/filters/regions"
 
-export default function NetworkFiltersOrganizations() {
+export default function NetworkFiltersOrganizations({ isStructure = false }: { isStructure?: boolean }) {
   const {
     search: { data },
   } = useNetworkContext()
@@ -18,16 +18,24 @@ export default function NetworkFiltersOrganizations() {
     <Container fluid>
       <OrganizationRegionsFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
-      <OrganizationKindFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
-      <hr className="fr-mt-3w" />
-      <OrganizationLevelFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
-      <hr className="fr-mt-3w" />
+      {!isStructure && (
+        <>
+          <OrganizationKindFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
+          <hr className="fr-mt-3w" />
+          <OrganizationLevelFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
+          <hr className="fr-mt-3w" />
+        </>
+      )}
       <OrganizationSupervisorsFilter filterParam="nfilters" />
       <hr className="fr-mt-3w" />
       <OrganizationFunderFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
-      <OrganizationAgreementsFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
-      <hr className="fr-mt-3w" />
+      {!isStructure && (
+        <>
+          <OrganizationAgreementsFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
+          <hr className="fr-mt-3w" />
+        </>
+      )}
       <OrganizationAwardsFilter filterParam="nfilters" filterIds={filterIds} forceApi="organizations" ignoreQuery />
       <hr className="fr-mt-3w" />
     </Container>

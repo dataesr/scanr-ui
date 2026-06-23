@@ -23,7 +23,7 @@ const MODEL_FILTERS = {
   domains: null,
   authors: <NetworkFiltersAuthors />,
   institutions: <NetworkFiltersOrganizations />,
-  structures: <NetworkFiltersOrganizations />,
+  structures: <NetworkFiltersOrganizations isStructure />,
   software: null,
   projects: <NetworkFiltersProjects as="model" />,
   countries: null,
