@@ -213,6 +213,7 @@ export async function networkSearchNodes({
       },
     },
   }
+  if (!config[source][model].model_index) return []
 
   const res = await fetch(`${config[source][model].model_index}/_search`, {
     method: "POST",
