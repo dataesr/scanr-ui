@@ -42,7 +42,7 @@ export default function useAggregateData(type: "analytics" | "filters", filterPr
   const { api, currentQuery, filters } = useUrl(filterParam)
   const [searchParam] = useSearchParams()
   const networkSource = searchParam.get("source") || "publications"
-  const filterIdsElastic = { terms: { id: filterIds } }
+  const filterIdsElastic = { terms: { "id.keyword": filterIds } }
   if (filterIds.length > 0) {
     filters.push(filterIdsElastic)
   }
