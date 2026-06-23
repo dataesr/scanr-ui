@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useLocation, useSearchParams } from "react-router-dom";
 import { ApiTypes } from "../../../types/commons";
 import useIntegration from "../../networks/hooks/useIntegration";
@@ -103,17 +103,21 @@ export default function useUrl(filtersParam: string = "filters") {
   const rawFilters = searchParams.get(filtersParam)
   const currentFilters = useMemo(() => parseSearchFiltersFromURL(rawFilters), [rawFilters])
   const filters = useMemo(() => filtersToElasticQuery(currentFilters), [currentFilters])
-  if (integrationId)
-    filters.push({
-      terms: {
-        "bso_local_affiliations.keyword": integrationId
-          .trim()
-          .toLowerCase()
-          .split(/[ ,]+/)
-          .filter((local) => local !== "")
-          .map((local) => local.trim()),
-      },
-    })
+
+  // manage local variations
+  useEffect(() => {
+    if (integrationId && filtersParam === "filters")
+      filters.push({
+        terms: {
+          "bso_local_affiliations.keyword": integrationId
+            .trim()
+            .toLowerCase()
+            .split(/[ ,]+/)
+            .filter((local) => local !== "")
+            .map((local) => local.trim()),
+        },
+      })
+  }, [integrationId, filtersParam, filters])
 
   const clearFilters = useCallback(() => {
     searchParams.delete(filtersParam)
