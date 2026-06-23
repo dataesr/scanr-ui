@@ -23,13 +23,14 @@ export default function StudioCreate() {
   const [lang, setLang] = useState(currentLang)
   const search = location?.search || ""
 
+  const urlText = useCallback((): string => `${window.location.origin}/${tool}/integration${search}`, [tool, search])
+
   const iframeText = useCallback((): string => {
     const src = urlText()
     const text = `<iframe height="900" width="900" id="iframe_${tool}_${local}" src="${src}"></iframe>`
     return text
-  }, [tool, search])
+  }, [tool, local, urlText])
 
-  const urlText = useCallback((): string => `${window.location.origin}/${tool}/integration${search}`, [tool, search])
 
   const setOption = (name: string, value: string) => {
     searchParams.set(name, value)
@@ -41,7 +42,7 @@ export default function StudioCreate() {
       searchParams.set("local", local)
       setSearchParams(searchParams)
     }
-  }, [local])
+  }, [local, searchParams, setSearchParams])
 
   return (
     <section className="studio-section-create">
