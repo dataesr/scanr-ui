@@ -223,7 +223,7 @@ function ObjectsBanner() {
               <svg
                 className="fr-artwork"
                 aria-hidden="true"
-                viewBox="0 0 21.166667 21.166667"
+                viewBox="0 0 80 80"
                 width="100px"
                 height="100px"
               >
