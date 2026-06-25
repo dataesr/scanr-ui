@@ -24,7 +24,6 @@ type Sort = {
   order: 'asc' | 'desc'
 } | Record<string, never>
 
-// TODO: type the array of objects returned by the promise
 export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: { rnsr_level?: { buckets: any[] } }, results: any[] }> {
   if (!id) return { aggregations: {}, results: [] }
   const body: any = {
@@ -74,23 +73,19 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     })
   }
 
-  const referencesQueryES = fetch(`${organizationsIndex}/_search`, {
+  const organizations = await fetch(`${organizationsIndex}/_search`, {
     body: JSON.stringify(body),
     headers: postHeaders,
     method: "POST",
   }).then((r) => r.json())
-  const referencesQueryPydref = fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
-  const [referencesResponseES, referencesResponsePydref] = await Promise.all([referencesQueryES, referencesQueryPydref])
 
   const results = [];
-  (referencesResponseES?.hits?.hits ?? []).forEach((item) => {
+  (organizations?.hits?.hits ?? []).forEach((item) => {
     const result: any = {};
     // RNSR data
     const rnsr = item?._source?.externalIds?.find((id) => id?.type === "rnsr")?.id
     result["id"] = rnsr
     result["rnsr"] = rnsr
-    result["idref"] = referencesResponsePydref?.[rnsr]?.find((id) => id?.type === "idref")?.id
-    result["ror"] = referencesResponsePydref?.[rnsr]?.find((id) => id?.type === "ror")?.id
     result["rnsr_label"] = item?._source?.label?.fr
     result["rnsr_level"] = item?._source?.level
     result["rnsr_address"] = item?._source?.address?.[0]?.address
@@ -117,7 +112,12 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
     results.push(result)
   })
-  const aggregations = referencesResponseES.aggregations
+  const aggregations = organizations.aggregations
 
   return { aggregations, results };
+}
+
+export async function getRnsrReferences(): Promise<any> {
+  const references = await fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
+  return references
 }

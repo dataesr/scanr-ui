@@ -17,7 +17,7 @@ import { RawIntlProvider, createIntl } from "react-intl"
 import { useParams } from "react-router-dom"
 
 import { getOrganizationById } from "../../../../api/organizations/[id]/index.ts"
-import { getOrganizationReferences } from "../../../../api/organizations/[id]/references.ts"
+import { getOrganizationReferences, getRnsrReferences } from "../../../../api/organizations/[id]/references.ts"
 import Gauge from "../../../../components/gauge/index.tsx"
 import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
@@ -104,9 +104,14 @@ export default function References() {
     throwOnError: true,
   })
 
-  useEffect(() => {
-    initPopUp()
-  }, [])
+  const { data: dataRnsrReferences } = useQuery({
+    queryFn: () => getRnsrReferences(),
+    queryKey: ["organizations", "rnsr-references"],
+    refetchInterval: 1 * 60 * 1000, // 1 minute
+    throwOnError: true,
+  })
+
+  useEffect(() => initPopUp(), [])
 
   useEffect(() => {
     const breadcrumbLabelTmp: string = getLangFieldValue(locale)(data?.label)
@@ -116,6 +121,27 @@ export default function References() {
     const idrefTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
     if (idrefTmp) setIdref(idrefTmp)
   }, [data, locale])
+
+  useEffect(() => {
+    if (dataReferences?.results && dataRnsrReferences) {
+      dataReferences?.results.forEach((item) => {
+        const rnsr = item?.rnsr
+        const idref = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "idref")?.id
+        if (idref) item.idref = idref
+        const ror = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "ror")?.id
+        if (ror) item.ror = ror
+      });
+    }
+    if (dataReferencesAll?.results && dataRnsrReferences) {
+      dataReferencesAll?.results.forEach((item) => {
+        const rnsr = item?.rnsr
+        const idref = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "idref")?.id
+        if (idref) item.idref = idref
+        const ror = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "ror")?.id
+        if (ror) item.ror = ror
+      });
+    }
+  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
 
   useEffect(() => {
     const numberOfResultsTmp = dataReferencesAll?.results?.length ?? 0
@@ -164,7 +190,7 @@ export default function References() {
             id: 'rnsr',
             getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
             label: 'RNSR',
-            width: '8rem',
+            width: '9rem',
           },
           {
             id: 'idref',
