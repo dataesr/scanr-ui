@@ -8,6 +8,7 @@ import {
   Row,
   Text,
   Title,
+  Toggle,
   useDSFRConfig,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
@@ -27,15 +28,17 @@ import { envoiClient, initPopUp } from "./formulaire.js"
 import "./subModal.css"
 
 export type Column = {
+  filterType?: 'missing' | 'select', // If "isFilterable" is True, "select" will display a dropdown, "missing" will diplay a button to filter on missing values only
   getCellValue?: (object) => ReactElement,
   getClassName?: (object) => string,
   groups?: Column[],
-  filterType?: 'missing' | 'select', // If "isFilterable" is True, "select" will display a dropdown, "missing" will diplay a button to filter on missing values only
   id: string,
+  isDisplayed?: boolean, // Is the column displayed or not, True if not set
   isFilterable?: boolean, // Is the column filterable, by default a simple tetx input is displayed. False if omitted
   isSortable?: boolean, // Is the column sortable. False if omitted
   label?: string, // Column label as header. If omitted, the column id is displayed instead
   sortableField?: string, // Is the column sortable
+  width?: string, // To master the width of the column, ex: '25rem'
 }
 
 export type Filter = {
@@ -70,6 +73,7 @@ export default function References() {
 
   const [acronym, setAcronym] = useState<string>()
   const [breadcrumbLabel, setBreadcrumbLabel] = useState<string>()
+  const [expanded, setExpanded] = useState<number>(0)
   const [filters, setFilters] = useState<Filter[]>([])
   const [idOrganization, setIdOrganization] = useState<string>()
   const [idref, setIdref] = useState<string>()
@@ -160,14 +164,16 @@ export default function References() {
             id: 'rnsr',
             getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
             label: 'RNSR',
+            width: '8rem',
           },
           {
             id: 'idref',
-            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', '', '', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', 'PESTO', '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
             getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
             filterType: 'missing',
             label: 'IdRef',
+            width: '8rem',
           },
           {
             id: 'ror',
@@ -176,11 +182,13 @@ export default function References() {
             isFilterable: true,
             filterType: 'missing',
             label: 'ROR',
+            width: '8rem',
           },
         ],
       },
       {
         id: 'rnsr',
+        isDisplayed: expanded == 0,
         label: 'RNSR',
         groups: [
           {
@@ -188,35 +196,49 @@ export default function References() {
             id: 'rnsr_level',
             isFilterable: true,
             label: 'Niveau',
+            width: '8rem',
           },
           {
             id: 'rnsr_label',
             isSortable: true,
             label: 'Label',
             sortableField: 'label.fr.keyword',
+            width: '8rem',
           },
           {
             id: 'rnsr_city',
             isSortable: true,
             label: 'Ville',
             sortableField: 'address.city.keyword',
+            width: '8rem',
           },
           {
             id: 'rnsr_acronym',
             isSortable: true,
             label: 'Acronyme',
             sortableField: 'acronym.fr.keyword',
+            width: '5rem',
           },
         ],
       },
       {
+        id: 'rnsr_expanded',
+        getCellValue: (row) => <><b>Niveau: </b>{row.rnsr_level}<br /><b>Label: </b>{row.rnsr_label}<br /><b>Ville: </b>{row.rnsr_city}<br /><b>Acronyme: </b>{row.rnsr_acronym}</>,
+        getClassName: () => 'expanded',
+        isDisplayed: expanded == 1,
+        label: 'RNSR',
+        width: '45rem',
+      },
+      {
         id: 'ror',
         label: 'ROR',
+        isDisplayed: expanded == 0,
         groups: [
           {
             id: 'rnsr_ror_match',
             getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
             label: 'Match RNSR',
+            width: '6rem',
           },
           {
             id: 'ror_label',
@@ -224,6 +246,7 @@ export default function References() {
             isSortable: true,
             label: 'Label',
             sortableField: 'ror_infos.label.default.keyword',
+            width: '8rem',
           },
           {
             id: 'ror_city',
@@ -231,11 +254,20 @@ export default function References() {
             isSortable: true,
             label: 'Ville',
             sortableField: 'ror_infos.address.city.keyword',
+            width: '8rem',
           },
         ],
       },
+      {
+        id: 'ror_expanded',
+        getCellValue: (row) => row?.ror ? <><br /><b>Label: </b>{row.ror_label}<br /><b>Ville: </b>{row.ror_city}</> : <></>,
+        getClassName: () => 'expanded',
+        isDisplayed: expanded == 1,
+        label: 'ROR',
+        width: '45rem',
+      },
     ]
-  }, [idref])
+  }, [expanded, idref])
 
   const downloadCsv = (e) => {
     e.preventDefault()
@@ -304,13 +336,16 @@ export default function References() {
               </Col>
             </Row>
             <Row className="fr-grid-row--middle fr-mb-3w">
-              <Col>
+              <Col xs="12" md="6">
                 <Title as="h2" look="h4">Données détaillées</Title>
                 <Text className="fr-text--sm fr-mb-0" style={{ color: "var(--text-mention-grey)" }}>
                   Liste des structures de {breadcrumbLabel}
                 </Text>
               </Col>
-              <Col style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Col xs="6" md="3">
+                <Toggle label="Vue agrandie" value={expanded} onChange={() => setExpanded(expanded === 0 ? 1 : 0)} />
+              </Col>
+              <Col xs="6" md="3" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button
                   icon="download-line"
                   iconPosition="left"

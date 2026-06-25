@@ -54,15 +54,15 @@ function envoiClient(
   }
   try {
     if (zones!=null && zones!=='')
-      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\','+zones+',fromApp:\'scanR\',AutoClick:\'false\'}), "*"); ')
     else if (filtre2!=null)
-      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',Filtre2:\''+filtre2+"/"+filtre2Value+'\',fromApp:\'scanR\',AutoClick:\'false\'}), "*"); ')
     else if (filtre1!=null)
-      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',Filtre1:\''+filtre1+"/"+filtre1Value+'\',fromApp:\'scanR\',AutoClick:\'false\'}), "*"); ')
     else if (index2!=null)
-      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\''+index1+'\',Index1Value:\''+index1Value+'\',Index2:\''+index2+'\',Index2Value:\''+index2Value+'\',fromApp:\'scanR\',AutoClick:\'false\'}), "*"); ')
     else
-      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Famille\',Index1Value:\''+index1Value+'\',fromApp:\'scanR\',AutoClick:\'false\',End:\'true\'}), "*"); ')
+      eval('oFrame.contentWindow.postMessage(serializer.stringify({Index1:\'Famille\',Index1Value:\''+index1Value+'\',fromApp:\'scanR\',AutoClick:\'false\'}), "*"); ')
   } catch (e) {
     alert("oFrame.contentWindow Failed? " + e);
   }

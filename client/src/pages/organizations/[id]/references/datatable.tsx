@@ -75,8 +75,6 @@ export default function DataTable(
         <div className="references-datatable__header">
           {column?.label ?? column.id}
           {' '}
-          {column?.isFilterable}
-          {' '}
           {getSortableIcon(column)}
         </div>
         <div>
@@ -150,18 +148,18 @@ export default function DataTable(
               <table>
                 <thead>
                   <tr>
-                    {columns.map((column) => {
+                    {columns.filter((column) => column?.isDisplayed ?? true).map((column) => {
                       return (
-                        <th colSpan={columnHasGroups && column?.groups ? column.groups.length : 1} key={column.id} rowSpan={columnHasGroups && column?.groups ? 1 : 2} scope="col">
+                        <th colSpan={columnHasGroups && column?.groups ? column.groups.length : 1} key={column.id} rowSpan={columnHasGroups && column?.groups ? 1 : 2} scope="col" style={{ width: column?.width }}>
                           <ColumnHeader column={column} />
                         </th>
                       )
                     })}
                   </tr>
                   <tr>
-                    {columns.map((column) => column?.groups ?? []).flat().map((column) => {
+                    {columns.filter((column) => column?.isDisplayed ?? true).map((column) => column?.groups ?? []).flat().filter((column) => column?.isDisplayed ?? true).map((column) => {
                       return (
-                        <th scope="col" key={column.id}>
+                        <th key={column.id} scope="col" style={{ width: column?.width }}>
                           <ColumnHeader column={column} />
                         </th>
                       )
@@ -171,9 +169,9 @@ export default function DataTable(
                 <tbody>
                   {dataTable && dataTable.map((row) => (
                     <tr key={`datatable-row-${row.id}`}>
-                      {columns.map((column) => {
+                      {columns.filter((column) => column?.isDisplayed ?? true).map((column) => {
                         if ((column?.groups ?? []).length > 0) {
-                          return column.groups.map((group) => (
+                          return column.groups.filter((column) => column?.isDisplayed ?? true).map((group) => (
                             <td key={`datatable-cell-${group.id}-${row.id}`} className={group?.getClassName ? group.getClassName(row) : ''}>
                               {group.getCellValue ? group.getCellValue(row) : <span title={row?.[group?.id]}>{row?.[group?.id]}</span>}
                             </td>
