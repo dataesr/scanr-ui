@@ -319,6 +319,12 @@ export default function References() {
     }
   }
 
+  const getGaugeColor = (mean: number): string => {
+    if (mean < 33) return "var(--background-alt-pink-tuile-active)"
+    if (mean < 66) return "var(--background-alt-yellow-tournesol-active)"
+    return "var(--background-alt-green-emeraude-active)"
+  }
+
   return (
     <RawIntlProvider value={intl}>
       <RorModal acronym={acronym} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
@@ -337,18 +343,18 @@ export default function References() {
           <>
             <Row gutters>
               <Col>
-                <Gauge label="Taux de présence d'IdRef" percent={meanWithIdref} />
+                <Gauge color={getGaugeColor(meanWithIdref)} label="Taux de présence d'IdRef" percent={meanWithIdref} />
               </Col>
               <Col>
-                <Gauge label="Taux de présence de ROR" percent={meanWithRor} />
+                <Gauge color={getGaugeColor(meanWithRor)} label="Taux de présence de ROR" percent={meanWithRor} />
               </Col>
             </Row>
             <Row gutters>
               <Col>
-                <Gauge label="Accord RNSR-ROR Label" percent={matchLabel} />
+                <Gauge color={getGaugeColor(matchLabel)} label="Accord RNSR-ROR Label" percent={matchLabel} />
               </Col>
               <Col>
-                <Gauge label="Accord RNSR-ROR Ville" percent={matchCity} />
+                <Gauge color={getGaugeColor(matchCity)} label="Accord RNSR-ROR Ville" percent={matchCity} />
               </Col>
             </Row>
             <Row>
