@@ -74,19 +74,23 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     })
   }
 
-  const referencesQuery = await fetch(`${organizationsIndex}/_search`, {
-    method: "POST",
+  const referencesQueryES = fetch(`${organizationsIndex}/_search`, {
     body: JSON.stringify(body),
     headers: postHeaders,
+    method: "POST",
   }).then((r) => r.json())
+  const referencesQueryPydref = fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
+  const [referencesResponseES, referencesResponsePydref] = await Promise.all([referencesQueryES, referencesQueryPydref])
 
   const results = [];
-  (referencesQuery?.hits?.hits ?? []).forEach((item) => {
+  (referencesResponseES?.hits?.hits ?? []).forEach((item) => {
     const result: any = {};
     // RNSR data
-    (item?._source?.externalIds ?? [])
-      .filter((externalId) => ["idref", "rnsr", "ror"].includes(externalId?.type))
-      .forEach((externalId) => result[externalId.type] = externalId.id)
+    const rnsr = item?._source?.externalIds?.find((id) => id?.type === "rnsr")?.id
+    result["id"] = rnsr
+    result["rnsr"] = rnsr
+    result["idref"] = referencesResponsePydref?.[rnsr]?.find((id) => id?.type === "idref")?.id
+    result["ror"] = referencesResponsePydref?.[rnsr]?.find((id) => id?.type === "ror")?.id
     result["rnsr_label"] = item?._source?.label?.fr
     result["rnsr_level"] = item?._source?.level
     result["rnsr_address"] = item?._source?.address?.[0]?.address
@@ -113,7 +117,7 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
     results.push(result)
   })
-  const aggregations = referencesQuery.aggregations
+  const aggregations = referencesResponseES.aggregations
 
   return { aggregations, results };
 }

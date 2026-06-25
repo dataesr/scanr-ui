@@ -88,8 +88,7 @@ function initClient() {
 }
 
 function traiteResultat(e) {
-  //partie Ã  adapter pour votre client
-  const data = serializer.parse(e.data);
+  const data = serializer.parse(e.data)
 
   if (data["g"] != null) {
     // let resHtml = "<ul>";
@@ -102,7 +101,7 @@ function traiteResultat(e) {
     // resHtml += "<li>data['g'] : " + data["g"] + "</li>";
     // resHtml += "</ul>";
     // console.log(resHtml)
-    hidePopWin(null);
+    hidePopWin(null)
   }
 }
 

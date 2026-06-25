@@ -105,12 +105,12 @@ export default function References() {
   }, [])
 
   useEffect(() => {
+    const breadcrumbLabelTmp: string = getLangFieldValue(locale)(data?.label)
+    if (breadcrumbLabelTmp) setBreadcrumbLabel(breadcrumbLabelTmp)
     const idOrganizationTmp = data?.id?.toString()
     if (idOrganizationTmp) setIdOrganization(idOrganizationTmp)
     const idrefTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
     if (idrefTmp) setIdref(idrefTmp)
-    const breadcrumbLabelTmp: string = getLangFieldValue(locale)(data?.label)
-    if (breadcrumbLabelTmp) setBreadcrumbLabel(breadcrumbLabelTmp)
   }, [data, locale])
 
   useEffect(() => {
