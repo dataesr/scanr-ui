@@ -7,7 +7,7 @@ const normalize = (str: string) => str
   ?.normalize("NFD")
   ?.replace(/[\u0300-\u036f]/g, "")
   ?.toLowerCase()
-  ?? ''
+  ?? ""
 
 type Filter = {
   id: string
@@ -90,8 +90,8 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr"] = rnsr
     result["rnsr_label"] = item?._source?.label?.fr
     result["rnsr_level"] = item?._source?.level
-    result["rnsr_address"] = item?._source?.address?.[0]?.address
-    result["rnsr_city"] = item?._source?.address?.[0]?.city?.replace('œ', 'oe')
+    result["rnsr_address"] = item?._source?.address?.[0]?.address?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
+    result["rnsr_city"] = item?._source?.address?.[0]?.city?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     result["rnsr_acronym"] = item?._source?.acronym?.fr
     result["rnsr_creation"] = item?._source?.creationYear
     let isTutelle = false // pour s'assurer que etab_id est bien dans les tutelles vivantes (et pas slt participant)
@@ -109,9 +109,9 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
       result["ror"] = rnsrReferencesResponses[rnsr].find((item) => item.type === "ror")?.id
     }
     // ROR data
-    result["ror_label"] = item?._source?.ror_infos?.label?.default
+    result["ror_label"] = item?._source?.ror_infos?.label?.default?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     result["ror_creation"] = item?._source?.ror_infos?.creationYear
-    result["ror_city"] = item?._source?.ror_infos?.address?.[0]?.city?.replace('œ', 'oe')
+    result["ror_city"] = item?._source?.ror_infos?.address?.[0]?.city?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     // Matches between RNSR and ROR
     result["rnsr_ror_city_match"] = !result?.rnsr_city || result.rnsr_city == '' || !result?.ror_city || result.ror_city === '' ? undefined : normalize(result?.rnsr_city) === normalize(result?.ror_city)
     result["rnsr_ror_creation_match"] = !result?.rnsr_creation || result.rnsr_creation === '' || !result?.ror_creation || result.ror_creation === '' ? undefined : result?.rnsr_creation === result?.ror_creation
