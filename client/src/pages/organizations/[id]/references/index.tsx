@@ -141,16 +141,13 @@ export default function References() {
         if (ror) item.ror = ror
       });
     }
-  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
-
-  useEffect(() => {
     const numberOfResultsTmp = dataReferencesAll?.results?.length ?? 0
     setNumberOfResults(numberOfResultsTmp)
     setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResultsTmp * 100))
     setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResultsTmp * 100))
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResultsTmp * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResultsTmp * 100))
-  }, [dataReferencesAll?.results])
+  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
 
   const columns = useMemo<Column[]>(() => {
     const getZones = (row: any) => {

@@ -73,14 +73,16 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     })
   }
 
-  const organizations = await fetch(`${organizationsIndex}/_search`, {
+  const organizationsQuery = fetch(`${organizationsIndex}/_search`, {
     body: JSON.stringify(body),
     headers: postHeaders,
     method: "POST",
   }).then((r) => r.json())
+  const rnsrReferencesQuery = fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
+  const [organizationsResponses, rnsrReferencesResponses] = await Promise.all([organizationsQuery, rnsrReferencesQuery])
 
-  const results = [];
-  (organizations?.hits?.hits ?? []).forEach((item) => {
+  let results = [];
+  (organizationsResponses?.hits?.hits ?? []).forEach((item) => {
     const result: any = {};
     // RNSR data
     const rnsr = item?._source?.externalIds?.find((id) => id?.type === "rnsr")?.id
@@ -102,6 +104,10 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
       })
     if (!isTutelle) return
     result["rnsr_tutelles"] = tutelles
+    if (rnsr && rnsrReferencesResponses?.[rnsr]) {
+      result["idref"] = rnsrReferencesResponses[rnsr].find((item) => item.type === "idref")?.id
+      result["ror"] = rnsrReferencesResponses[rnsr].find((item) => item.type === "ror")?.id
+    }
     // ROR data
     result["ror_label"] = item?._source?.ror_infos?.label?.default
     result["ror_creation"] = item?._source?.ror_infos?.creationYear
@@ -112,7 +118,15 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
     results.push(result)
   })
-  const aggregations = organizations.aggregations
+  const idrefFilter = filters.find((filter) => filter?.id === "idref" && filter?.value === "missing")
+  if (idrefFilter) {
+    results = results.filter((result) => result?.idref === undefined)
+  }
+  const rorFilter = filters.find((filter) => filter?.id === "ror" && filter?.value === "missing")
+  if (rorFilter) {
+    results = results.filter((result) => result?.ror === undefined)
+  }
+  const aggregations = organizationsResponses.aggregations
 
   return { aggregations, results };
 }
