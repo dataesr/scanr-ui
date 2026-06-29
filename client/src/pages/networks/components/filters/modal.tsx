@@ -40,7 +40,7 @@ export default function NetworkFiltersModal() {
   const { filters } = useUrl()
   const { filters: nfilters } = useUrl("nfilters")
   const {
-    options: { currentSource, currentModel },
+    options: { currentSource, currentModel, parameters },
   } = useNetworkContext()
   const id = "networks-options-filters-modal"
 
@@ -88,7 +88,7 @@ export default function NetworkFiltersModal() {
                   {intl.formatMessage({ id: "networks.filters.modal.model.title" })}
                 </Text>
                 <Badge className="fr-ml-1w" size="md" color="blue-ecume">
-                  {nfilters.length || 0}
+                  {nfilters.length || 0 + parameters.filterNodes?.length || 0}
                 </Badge>
               </button>
             </li>
@@ -121,7 +121,7 @@ export default function NetworkFiltersModal() {
             <Button variant="secondary" onClick={() => clearFilters(tab)}>
               {intl.formatMessage({ id: "networks.filters.modal.clear" })}
               <Badge className="fr-ml-1w" size="md" color="blue-ecume">
-                {tab === 0 ? filters?.length || 0 : nfilters?.length || 0}
+                {tab === 0 ? filters?.length || 0 : nfilters?.length || 0 + parameters.filterNodes?.length || 0}
               </Badge>
             </Button>
           </div>

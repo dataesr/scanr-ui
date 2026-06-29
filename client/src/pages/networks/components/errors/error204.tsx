@@ -33,7 +33,14 @@ export default function Error204() {
                 )}
               </Text>
               {error?.cause?.["nodes"]?.map((node) => (
-                <Badge className="link-no-icon" as="a" target="_blank" href={node.page} color="blue-cumulus">
+                <Badge
+                  key={node.id}
+                  className="link-no-icon fr-mr-1w"
+                  as="a"
+                  target="_blank"
+                  href={node.page}
+                  color="blue-cumulus"
+                >
                   {node.label}
                 </Badge>
               ))}

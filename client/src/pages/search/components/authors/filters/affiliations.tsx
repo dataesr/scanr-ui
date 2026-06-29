@@ -31,7 +31,7 @@ export default function AuthorsAffiliationsFilter(props: FilterProps) {
     },
   })
 
-  const field = "affiliations.structure"
+  const field = "affiliations.structure.id"
   const filter = currentFilters?.[field]
   const operator = filter?.operator || "or"
 

@@ -141,16 +141,13 @@ export default function References() {
         if (ror) item.ror = ror
       });
     }
-  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
-
-  useEffect(() => {
     const numberOfResultsTmp = dataReferencesAll?.results?.length ?? 0
     setNumberOfResults(numberOfResultsTmp)
     setMeanWithIdref(Math.round(dataReferencesAll?.results?.filter((item) => item?.idref && item.idref)?.length / numberOfResultsTmp * 100))
     setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResultsTmp * 100))
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResultsTmp * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResultsTmp * 100))
-  }, [dataReferencesAll?.results])
+  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
 
   const columns = useMemo<Column[]>(() => {
     const getZones = (row: any) => {
@@ -263,7 +260,7 @@ export default function References() {
           {
             id: 'rnsr_ror_match',
             getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
-            label: 'Match RNSR',
+            label: 'Match RNSR (label + ville)',
             width: '6rem',
           },
           {
@@ -286,7 +283,7 @@ export default function References() {
       },
       {
         id: 'ror_expanded',
-        getCellValue: (row) => row?.ror ? <><br /><b>Label: </b>{row.ror_label}<br /><b>Ville: </b>{row.ror_city}</> : <></>,
+        getCellValue: (row) => row?.ror ? <><br /><span className={row.rnsr_ror_label_match === false ? 'bg-error' : ''}><b>Label: </b>{row.ror_label}</span><br /><span className={row.rnsr_ror_city_match === false ? 'bg-error' : ''}><b>Ville: </b>{row.ror_city}</span></> : <></>,
         getClassName: () => 'expanded',
         isDisplayed: expanded == 1,
         label: 'ROR',
@@ -375,7 +372,7 @@ export default function References() {
                 </Text>
               </Col>
               <Col xs="6" md="3">
-                <Toggle label="Vue agrandie" value={expanded} onChange={() => setExpanded(expanded === 0 ? 1 : 0)} />
+                <Toggle label="Vue détaillée" value={expanded} onChange={() => setExpanded(expanded === 0 ? 1 : 0)} />
               </Col>
               <Col xs="6" md="3" style={{ display: "flex", justifyContent: "flex-end" }}>
                 <Button

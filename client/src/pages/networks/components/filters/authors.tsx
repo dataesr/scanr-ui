@@ -13,7 +13,7 @@ export default function NetworkFiltersAuthors() {
       <Container fluid>
         <AuthorAwardsFilter filterParam="nfilters" filterIds={filterIds} forceApi="authors" ignoreQuery />
         <hr className="fr-mt-3w" />
-        <AuthorsAffiliationsFilter />
+        <AuthorsAffiliationsFilter filterParam="nfilters" />
         <hr className="fr-mt-3w" />
       </Container>
     )

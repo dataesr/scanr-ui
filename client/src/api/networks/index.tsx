@@ -38,10 +38,10 @@ export async function getMultipleNetworks(
 ): Promise<Network[]> {
   // TODO: only to test vector quadrants in staging
   if (isInProduction()) {
-    return [await getNetwork(args)];
+    return [await getNetwork(args)]
   }
 
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear()
 
   const networksPromises = [
     getNetwork(args),
@@ -57,15 +57,17 @@ export async function getMultipleNetworks(
         range: { year: { gte: currentYear - 6, lte: currentYear } },
       }),
     }),
-  ];
-  const networks = await Promise.all(networksPromises).then((data) => data)
+  ]
+
+  const networkResults = await Promise.allSettled(networksPromises)
+  const networks = networkResults.flatMap((result) => (result.status === "fulfilled" ? [result.value] : []))
 
   const clustersGroups = networks.map((network) => network.network.clusters)
-  clustersAssignSimilarity(clustersGroups);
+  clustersAssignSimilarity(clustersGroups)
   networks.forEach((network, index) => {
     network.network.clusters = clustersGroups[index]
   })
-  return networks;
+  return networks
 }
 
 export async function getStructureNetworkById(

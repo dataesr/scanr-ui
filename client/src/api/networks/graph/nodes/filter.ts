@@ -25,9 +25,10 @@ export default async function graphFilterNodes(
   if (nfilters?.length) {
     const nodes = await networkSearchNodes({ source, model, filters: nfilters, ids: graph.nodes() })
     if (nodes?.length) _filterNodes.push(...nodes)
+    else return subgraph(graph, [])
   }
 
-  if (_filterNodes?.length || nfilters?.length) {
+  if (_filterNodes?.length) {
     const filterIds = _filterNodes
       .map((node) => node.split("###")[0])
       .filter((key) => graph.hasNode(key))

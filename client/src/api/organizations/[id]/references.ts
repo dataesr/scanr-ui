@@ -7,7 +7,7 @@ const normalize = (str: string) => str
   ?.normalize("NFD")
   ?.replace(/[\u0300-\u036f]/g, "")
   ?.toLowerCase()
-  ?? ''
+  ?? ""
 
 type Filter = {
   id: string
@@ -73,14 +73,16 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     })
   }
 
-  const organizations = await fetch(`${organizationsIndex}/_search`, {
+  const organizationsQuery = fetch(`${organizationsIndex}/_search`, {
     body: JSON.stringify(body),
     headers: postHeaders,
     method: "POST",
   }).then((r) => r.json())
+  const rnsrReferencesQuery = fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
+  const [organizationsResponses, rnsrReferencesResponses] = await Promise.all([organizationsQuery, rnsrReferencesQuery])
 
-  const results = [];
-  (organizations?.hits?.hits ?? []).forEach((item) => {
+  let results = [];
+  (organizationsResponses?.hits?.hits ?? []).forEach((item) => {
     const result: any = {};
     // RNSR data
     const rnsr = item?._source?.externalIds?.find((id) => id?.type === "rnsr")?.id
@@ -88,8 +90,8 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr"] = rnsr
     result["rnsr_label"] = item?._source?.label?.fr
     result["rnsr_level"] = item?._source?.level
-    result["rnsr_address"] = item?._source?.address?.[0]?.address
-    result["rnsr_city"] = item?._source?.address?.[0]?.city?.replace('œ', 'oe')
+    result["rnsr_address"] = item?._source?.address?.[0]?.address?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
+    result["rnsr_city"] = item?._source?.address?.[0]?.city?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     result["rnsr_acronym"] = item?._source?.acronym?.fr
     result["rnsr_creation"] = item?._source?.creationYear
     let isTutelle = false // pour s'assurer que etab_id est bien dans les tutelles vivantes (et pas slt participant)
@@ -102,17 +104,29 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
       })
     if (!isTutelle) return
     result["rnsr_tutelles"] = tutelles
+    if (rnsr && rnsrReferencesResponses?.[rnsr]) {
+      result["idref"] = rnsrReferencesResponses[rnsr].find((item) => item.type === "idref")?.id
+      result["ror"] = rnsrReferencesResponses[rnsr].find((item) => item.type === "ror")?.id
+    }
     // ROR data
-    result["ror_label"] = item?._source?.ror_infos?.label?.default
+    result["ror_label"] = item?._source?.ror_infos?.label?.default?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     result["ror_creation"] = item?._source?.ror_infos?.creationYear
-    result["ror_city"] = item?._source?.ror_infos?.address?.[0]?.city?.replace('œ', 'oe')
+    result["ror_city"] = item?._source?.ror_infos?.address?.[0]?.city?.replace(/œ/gi, 'oe')?.replace(/’/gi, '\'')
     // Matches between RNSR and ROR
     result["rnsr_ror_city_match"] = !result?.rnsr_city || result.rnsr_city == '' || !result?.ror_city || result.ror_city === '' ? undefined : normalize(result?.rnsr_city) === normalize(result?.ror_city)
     result["rnsr_ror_creation_match"] = !result?.rnsr_creation || result.rnsr_creation === '' || !result?.ror_creation || result.ror_creation === '' ? undefined : result?.rnsr_creation === result?.ror_creation
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
     results.push(result)
   })
-  const aggregations = organizations.aggregations
+  const idrefFilter = filters.find((filter) => filter?.id === "idref" && filter?.value === "missing")
+  if (idrefFilter) {
+    results = results.filter((result) => result?.idref === undefined)
+  }
+  const rorFilter = filters.find((filter) => filter?.id === "ror" && filter?.value === "missing")
+  if (rorFilter) {
+    results = results.filter((result) => result?.ror === undefined)
+  }
+  const aggregations = organizationsResponses.aggregations
 
   return { aggregations, results };
 }
