@@ -27,7 +27,7 @@ export default async function graphFilterNodes(
     if (nodes?.length) _filterNodes.push(...nodes)
   }
 
-  if (_filterNodes?.length || nfilters?.length) {
+  if (_filterNodes?.length) {
     const filterIds = _filterNodes
       .map((node) => node.split("###")[0])
       .filter((key) => graph.hasNode(key))
