@@ -24,8 +24,8 @@ type Sort = {
   order: 'asc' | 'desc'
 } | Record<string, never>
 
-export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: { rnsr_level?: { buckets: any[] } }, results: any[] }> {
-  if (!id) return { aggregations: {}, results: [] }
+export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: { rnsr_level: any[], rnsr_ror_match: any[] }, results: any[] }> {
+  if (!id) return { aggregations: { rnsr_level: [], rnsr_ror_match: [] }, results: [] }
   const body: any = {
     _source: [
       "acronym",
@@ -50,9 +50,6 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
         must_not: [],
       },
     },
-    aggregations: {
-      rnsr_level: { terms: { field: 'level.keyword' } },
-    },
   }
   if (sorting?.id) {
     body.sort = { [sorting.id]: sorting.order }
@@ -68,7 +65,7 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
       } else if (filter.id === 'idref' && filter.value === 'missing') {
         body.query.bool.must_not.push({ match: { 'externalIds.type.keyword': 'idref' } })
       } else {
-        console.error(`Filter id not supported : ${filter.id}`)
+        if (!["idref", "rnsr_ror_match", "ror"].includes(filter.id)) console.error(`Filter id not supported : ${filter.id}`)
       }
     })
   }
@@ -116,8 +113,10 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     result["rnsr_ror_city_match"] = !result?.rnsr_city || result.rnsr_city == '' || !result?.ror_city || result.ror_city === '' ? undefined : normalize(result?.rnsr_city) === normalize(result?.ror_city)
     result["rnsr_ror_creation_match"] = !result?.rnsr_creation || result.rnsr_creation === '' || !result?.ror_creation || result.ror_creation === '' ? undefined : result?.rnsr_creation === result?.ror_creation
     result["rnsr_ror_label_match"] = !result?.rnsr_label || result.rnsr_label === '' || !result?.ror_label || result.ror_label === '' ? undefined : normalize(result?.rnsr_label) === normalize(result?.ror_label)
+    result["rnsr_ror_match"] = result.rnsr_ror_city_match === undefined || result.rnsr_ror_label_match === undefined ? undefined : result.rnsr_ror_city_match && result.rnsr_ror_label_match
     results.push(result)
   })
+  // Apply specific filters based on field not on ES but computed after the ES query
   const idrefFilter = filters.find((filter) => filter?.id === "idref" && filter?.value === "missing")
   if (idrefFilter) {
     results = results.filter((result) => result?.idref === undefined)
@@ -126,9 +125,34 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
   if (rorFilter) {
     results = results.filter((result) => result?.ror === undefined)
   }
-  const aggregations = organizationsResponses.aggregations
+  const rnsrRorMatchFilter = filters.find((filter) => filter.id === "rnsr_ror_match")
+  let v = undefined;
+  if (rnsrRorMatchFilter) {
+    switch (rnsrRorMatchFilter.value) {
+      case 'true':
+        v = true
+        break
+      case 'false':
+        v = false
+        break
+    }
+    results = results.filter((result) => result.rnsr_ror_match === v)
+  }
 
-  return { aggregations, results };
+  const rnsr_ror_match = [
+    { key: 'undefined', count: results.filter((result) => result?.rnsr_ror_match === undefined).length, value: undefined },
+    { key: 'true', count: results.filter((result) => result.rnsr_ror_match === true).length, value: true },
+    { key: 'false', count: results.filter((result) => result.rnsr_ror_match === false).length, value: false },
+  ]
+  const rnsrLevelsTmp = {}
+  results.forEach((result) => {
+    if (!Object.keys(rnsrLevelsTmp).includes(result?.rnsr_level)) rnsrLevelsTmp[result?.rnsr_level] = 0
+    rnsrLevelsTmp[result?.rnsr_level] += 1
+  })
+  const rnsr_level = Object.keys(rnsrLevelsTmp).map((key) => ({ key, count: rnsrLevelsTmp[key], label: key, value: key }))
+
+
+  return { aggregations: { rnsr_level, rnsr_ror_match }, results };
 }
 
 export async function getRnsrReferences(): Promise<any> {

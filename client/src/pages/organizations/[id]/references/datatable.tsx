@@ -15,17 +15,6 @@ export default function DataTable(
   })
   const [inputs, setInputs] = useState(inputsTmp)
 
-  const getLabelByBucketKey = (key: string) => {
-    switch (key) {
-      case '1':
-        return 'Oui'
-      case '0':
-        return 'Non'
-      default:
-        return key
-    }
-  }
-
   const getSortableIcon = (column) => {
     if (column.isSortable) {
       const id = column?.sortableField ?? column.id
@@ -90,9 +79,9 @@ export default function DataTable(
                 <option key='all' value=''>
                   Tout ({numberOfResults})
                 </option>
-                {(aggregations?.[column.id]?.buckets ?? []).map((bucket) => (
-                  <option key={`aggs-${column.id}-${bucket.key}`} value={bucket.key}>
-                    {getLabelByBucketKey(bucket.key.toString())} ({bucket.doc_count})
+                {(aggregations?.[column.id] ?? []).map((item) => (
+                  <option key={`aggs-${column.id}-${item.key}`} value={item.value}>
+                    {item.key} ({item.count})
                   </option>
                 ))}
               </select>
