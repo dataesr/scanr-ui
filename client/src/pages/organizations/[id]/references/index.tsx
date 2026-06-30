@@ -155,7 +155,6 @@ export default function References() {
       let zones = 'z008_a:"Tb5"'
       // z035: Autres identifiants (ROR, HAL, RNSR ...)
       if (row?.rnsr) zones += `,z035_a_1:"${row.rnsr}",z035_2_1:"RNSR",z035_C_1:"RNSR"`
-      // z035: Autres identifiants (ROR, HAL, RNSR ...)
       if (row?.ror) zones += `,z035_a_2:"${row.ror}",z035_2_2:"ROR",z035_C_2:"ROR"`
       // z101: Langue d'expression
       zones += ',z101_a:"fre"'
@@ -360,7 +359,7 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {(dataReferencesAll?.aggregations?.rnsrLevels ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
+                  {(dataReferencesAll?.aggregations?.rnsr_level ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
                     {level.label} : {level.count}
                   </li>)}
                 </ul>
