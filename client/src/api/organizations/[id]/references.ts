@@ -25,7 +25,7 @@ type Sort = {
 } | Record<string, never>
 
 export async function getOrganizationReferences(filters: Filter[], id: string, pagination: Pagination, sorting: Sort): Promise<{ aggregations: { rnsr_level: any[], rnsr_ror_match: any[] }, results: any[] }> {
-  if (!id) return { aggregations: {}, results: [] }
+  if (!id) return { aggregations: { rnsr_level: [], rnsr_ror_match: [] }, results: [] }
   const body: any = {
     _source: [
       "acronym",
