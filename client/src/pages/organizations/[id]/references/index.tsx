@@ -190,20 +190,20 @@ export default function References() {
             width: '9rem',
           },
           {
+            filterType: 'missing',
             id: 'idref',
             getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
             getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
-            filterType: 'missing',
             label: 'IdRef',
             width: '8rem',
           },
           {
+            filterType: 'missing',
             id: 'ror',
             getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
             getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
-            filterType: 'missing',
             label: 'ROR',
             width: '8rem',
           },
@@ -258,8 +258,10 @@ export default function References() {
         isDisplayed: expanded == 0,
         groups: [
           {
+            filterType: 'select',
             id: 'rnsr_ror_match',
-            getCellValue: (row) => (row.rnsr_ror_label_match === undefined || row.rnsr_ror_city_match === undefined) ? <></> : (row.rnsr_ror_label_match && row.rnsr_ror_city_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
+            isFilterable: true,
+            getCellValue: (row) => row?.rnsr_ror_match === undefined ? <></> : (row.rnsr_ror_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
             label: 'Match RNSR (label + ville)',
             width: '6rem',
           },
@@ -358,8 +360,8 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {(dataReferencesAll?.aggregations?.rnsr_level?.buckets ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
-                    {level.key} : {level.doc_count}
+                  {(dataReferencesAll?.aggregations?.rnsrLevels ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
+                    {level.label} : {level.count}
                   </li>)}
                 </ul>
               </Col>
@@ -387,7 +389,7 @@ export default function References() {
               </Col>
             </Row>
             <DataTable
-              aggregations={dataReferences?.aggregations ?? {}}
+              aggregations={dataReferencesAll?.aggregations ?? {}}
               columns={columns}
               dataTable={dataReferences?.results ?? []}
               filters={filters}
