@@ -12,7 +12,8 @@ import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
 import { envoiClient } from "../../formulaire.js"
 
 export default function RorModal({ acronym, setShowRorModal, showRorModal }: { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
-  const [ror, setRor] = useState<string>()
+  const [otherRor, setOtherRor] = useState<string>('')
+  const [ror, setRor] = useState<string>('')
 
   const url = `https://api.ror.org/v2/organizations?query.advanced=types:facility%20AND%20locations.geonames_details.country_code:FR%20AND%20names.value:${acronym}%20AND%20status:active`
   const { data, isLoading } = useQuery({
@@ -26,17 +27,26 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
   })
 
   const getZones = () => {
+    const rorTmp = ror === 'other' ? otherRor : ror
     // z008: Type d'autorité ou type de notice
     let zones = 'z008_a:"Tb5"'
-    if (ror) zones += `,z035_a_2:"${ror}",z035_2_2:"ROR",z035_C_2:"ROR"`
+    if (rorTmp !== '') zones += `,z035_a_2:"${rorTmp}",z035_2_2:"ROR",z035_C_2:"ROR"`
     // z810: Source consultée avec profit
     zones += ',z810_a:"ROR"'
     return zones
   }
 
+  const getInputValidationClass = () => {
+    if (otherRor !== '') {
+      const rorRegex = /^https:\/\/ror\.org\/0\w{8}$/gm;
+      return rorRegex.test(otherRor) ? 'fr-input-group--valid' : 'fr-input-group--error'
+    }
+    return ''
+  }
+
   return (
-    <Modal isOpen={showRorModal} hide={() => setShowRorModal(false)}>
-      <ModalTitle>5 propositions de ROR pour "{acronym}":</ModalTitle>
+    <Modal isOpen={showRorModal} hide={() => { setShowRorModal(false); setOtherRor(''); setRor(''); }}>
+      <ModalTitle>Top 5 propositions de ROR pour "{acronym}"</ModalTitle>
       {isLoading && <PageSkeleton />}
       <ModalContent>
         <div className="fr-radio-group">
@@ -54,16 +64,18 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
               </label>
             </>
           ))}
-          {/* <input id="ror-other" name="ror" onChange={() => setRor(item.id)} type="radio" />
+          <input id="ror-other" name="ror" type="radio" onChange={() => setRor("other")} />
           <label className="fr-label" htmlFor="ror-other">
-            Autre
-            <input type="text" className="fr-input"/>
-          </label> */}
+            <span className="fr-mb-1w">Autre <i><a href={`https://ror.org/search?query=${acronym}`} target="_blank">(Rechercher sur ror.org)</a></i></span>
+            <span className="fr-hint-text">Format attendu: https://ror.org/04vfs2w97</span>
+            <div className={`fr-input-group ${getInputValidationClass()}`}>
+              <input className="fr-input" type="text" value={otherRor} onChange={(e) => setOtherRor(e.target.value)} />
+            </div>
+          </label>
         </div>
-        {/* <a href={`https://ror.org/search?page=1&query=${acronym}`} target="_blank">Faire ma propre recherche sur ror.org</a> */}
       </ModalContent>
       <ModalFooter>
-        <Button disabled={ror === undefined} onClick={() => { setShowRorModal(false); envoiClient('Nom de collectivité', acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones()) }}>Continuer</Button>
+        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); envoiClient('Nom de collectivité', acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones()) }}>Continuer</Button>
       </ModalFooter>
     </Modal>
   )
