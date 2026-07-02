@@ -81,7 +81,7 @@ export default function DataTable(
                 </option>
                 {(aggregations?.[column.id] ?? []).map((item) => (
                   <option key={`aggs-${column.id}-${item.key}`} value={item.value}>
-                    {item.key} ({item.count})
+                    {item.label} ({item.count})
                   </option>
                 ))}
               </select>

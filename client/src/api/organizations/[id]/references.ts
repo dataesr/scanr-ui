@@ -140,17 +140,16 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
   }
 
   const rnsr_ror_match = [
-    { key: 'undefined', count: results.filter((result) => result?.rnsr_ror_match === undefined).length, value: undefined },
-    { key: 'true', count: results.filter((result) => result.rnsr_ror_match === true).length, value: true },
-    { key: 'false', count: results.filter((result) => result.rnsr_ror_match === false).length, value: false },
-  ]
+    { key: 'undefined', count: results.filter((result) => result?.rnsr_ror_match === undefined).length, label: "Vide", value: undefined },
+    { key: 'true', count: results.filter((result) => result.rnsr_ror_match === true).length, label: "Vrai", value: true },
+    { key: 'false', count: results.filter((result) => result.rnsr_ror_match === false).length, label: "Faux", value: false },
+  ].sort((a, b) => b.count - a.count)
   const rnsrLevelsTmp = {}
   results.forEach((result) => {
     if (!Object.keys(rnsrLevelsTmp).includes(result?.rnsr_level)) rnsrLevelsTmp[result?.rnsr_level] = 0
     rnsrLevelsTmp[result?.rnsr_level] += 1
   })
-  const rnsr_level = Object.keys(rnsrLevelsTmp).map((key) => ({ key, count: rnsrLevelsTmp[key], label: key, value: key }))
-
+  const rnsr_level = Object.keys(rnsrLevelsTmp).map((key) => ({ key, count: rnsrLevelsTmp[key], label: key, value: key })).sort((a, b) => b.count - a.count)
 
   return { aggregations: { rnsr_level, rnsr_ror_match }, results };
 }

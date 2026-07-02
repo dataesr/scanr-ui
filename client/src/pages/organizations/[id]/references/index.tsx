@@ -186,7 +186,7 @@ export default function References() {
             id: 'rnsr',
             getCellValue: (row) => row?.rnsr ? <a href={`https://rnsr.adc.education.fr/structure/${row.rnsr}`} target="_blank">{row.rnsr}</a> : <></>,
             label: 'RNSR',
-            width: '9rem',
+            width: '8rem',
           },
           {
             filterType: 'missing',
@@ -262,7 +262,7 @@ export default function References() {
             isFilterable: true,
             getCellValue: (row) => row?.rnsr_ror_match === undefined ? <></> : (row.rnsr_ror_match ? <Badge color="green-emeraude">Vrai</Badge> : <Badge color="orange-terre-battue">Faux</Badge>),
             label: 'Match RNSR (label + ville)',
-            width: '6rem',
+            width: '8rem',
           },
           {
             id: 'ror_label',
