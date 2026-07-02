@@ -8,7 +8,6 @@ import {
   Row,
   Text,
   Title,
-  Toggle,
   useDSFRConfig,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
