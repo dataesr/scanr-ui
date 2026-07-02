@@ -366,16 +366,24 @@ export default function References() {
               </Col>
             </Row>
             <Row className="fr-grid-row--middle fr-mb-3w">
-              <Col xs="12" md="6">
+              <Col xs="12" md="7">
                 <Title as="h2" look="h4">Données détaillées</Title>
                 <Text className="fr-text--sm fr-mb-0" style={{ color: "var(--text-mention-grey)" }}>
                   Liste des structures de {breadcrumbLabel}
                 </Text>
               </Col>
-              <Col xs="6" md="3">
-                <Toggle label="Vue détaillée" value={expanded} onChange={() => setExpanded(expanded === 0 ? 1 : 0)} />
+              <Col xs="3" md="3" className="fr-grid-row--right">
+                <Button
+                  icon={expanded === 0 ? 'layout-fill' : 'grid-fill'}
+                  iconPosition="left"
+                  onClick={() => setExpanded(expanded === 0 ? 1 : 0)}
+                  size="sm"
+                  variant="secondary"
+                >
+                  {expanded === 0 ? 'Vue détaillée' : 'Vue compacte'}
+                </Button>
               </Col>
-              <Col xs="6" md="3" style={{ display: "flex", justifyContent: "flex-end" }}>
+              <Col xs="3" md="2">
                 <Button
                   icon="download-line"
                   iconPosition="left"
