@@ -18,9 +18,9 @@ export default function StudioCreate() {
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
   const { locale: currentLang } = useDSFRConfig()
-  const [local, setLocal] = useState(searchParams.get("local") || "130015506") // University of Lorraine
-  const [tool, setTool] = useState("networks")
-  const [lang, setLang] = useState(currentLang)
+  const [local, setLocal] = useState<string>(searchParams.get("local") || "130015506") // University of Lorraine
+  const [tool, setTool] = useState<string>("networks")
+  const [lang, setLang] = useState<string>(currentLang)
   const search = location?.search || ""
 
   const urlText = useCallback((): string => `${window.location.origin}/${tool}/integration${search}`, [tool, search])
@@ -38,9 +38,15 @@ export default function StudioCreate() {
   }
 
   useEffect(() => {
-    if (local) {
-      searchParams.set("local", local)
-      setSearchParams(searchParams)
+    const timer = setTimeout(() => {
+      if (local) {
+        searchParams.set("local", local)
+        setSearchParams(searchParams)
+      }
+    }, 1000)
+
+    return () => {
+      clearTimeout(timer)
     }
   }, [local, searchParams, setSearchParams])
 
