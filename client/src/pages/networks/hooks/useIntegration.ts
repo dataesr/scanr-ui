@@ -1,6 +1,6 @@
 import { useLocation, useSearchParams } from "react-router-dom"
 import { useMemo } from "react"
-import { NetworksIntegrationOptions } from "../../../types/network"
+import { NetworkFilters, NetworksIntegrationOptions } from "../../../types/network"
 import { getBooleanParam } from "../utils"
 import { DEFAULT_INTEGRATION } from "../integration/config"
 
@@ -10,6 +10,7 @@ export default function useIntegration() {
   const isIntegration = pathname.split("/").includes("integration") || pathname.split("/").includes("studio")
   const integrationId = isIntegration ? searchParams.get("local") : undefined
   const integrationLang = searchParams.get("lang") || "fr"
+  const integrationField = "bso_local_affiliations.keyword"
 
   const integrationOptions = useMemo(
     (): NetworksIntegrationOptions =>
@@ -30,12 +31,29 @@ export default function useIntegration() {
             graphHeight: searchParams.get("graphHeight") || DEFAULT_INTEGRATION.graphHeight,
           }
         : DEFAULT_INTEGRATION,
-    [isIntegration, searchParams]
+    [isIntegration, searchParams],
   )
 
+  const integrationFilters = useMemo((): NetworkFilters => {
+    if (!integrationId) return []
+    return [
+      {
+        terms: {
+          [integrationField]: integrationId
+            .trim()
+            .toLowerCase()
+            .split(/[ ,]+/)
+            .filter((local) => local !== "")
+            .map((local) => local.trim()),
+        },
+      },
+    ]
+  }, [integrationId])
+  console.log("integrationFilters", integrationFilters)
+
   const values = useMemo(() => {
-    return { integrationId, integrationLang, integrationOptions }
-  }, [integrationId, integrationLang, integrationOptions])
+    return { integrationId, integrationLang, integrationOptions, integrationFilters }
+  }, [integrationId, integrationLang, integrationOptions, integrationFilters])
 
   return values
 }
