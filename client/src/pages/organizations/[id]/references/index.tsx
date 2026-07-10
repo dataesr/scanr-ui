@@ -150,17 +150,19 @@ export default function References() {
 
   const columns = useMemo<Column[]>(() => {
     const getZones = (row: any) => {
+      const today = new Date().toISOString().slice(0,10).replace(/-/g, '');
       // z008: Type d'autorité ou type de notice
       let zones = 'z008_a:"Tb5"'
       // z035: Autres identifiants (ROR, HAL, RNSR ...)
-      if (row?.rnsr) zones += `,z035_a_1:"${row.rnsr}",z035_2_1:"RNSR",z035_C_1:"RNSR"`
-      if (row?.ror) zones += `,z035_a_2:"${row.ror}",z035_2_2:"ROR",z035_C_2:"ROR"`
+      if (row?.rnsr) zones += `,z035_a_1:"${row.rnsr}",z035_2_1:"RNSR",z035_C_1:"RNSR",z035_d_1:"${today}"`
+      if (row?.ror) zones += `,z035_a_2:"${row.ror}",z035_2_2:"ROR",z035_C_2:"ROR",z035_d_2:"${today}"`
       // z101: Langue d'expression
       zones += ',z101_a:"fre"'
       // z102: Pays
       zones += ',z102_a:"FR"'
       // z103: Dtes d'activité
       if (row?.rnsr_creation) zones += `,z103_a:"${row.rnsr_creation}-...."`
+      if (row?.rnsr_creation) zones += `,z210_c:"${row.rnsr_creation}-...."`
       // z210: Nom de la collectivité / du congrès
       if (row?.rnsr_label) zones += `,z210_a:"@${row.rnsr_label}"`
       if (row?.rnsr_city) zones += `,z210_c:"${row.rnsr_city}"`

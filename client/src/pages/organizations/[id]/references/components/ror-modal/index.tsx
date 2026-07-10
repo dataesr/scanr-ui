@@ -27,10 +27,11 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
   })
 
   const getZones = () => {
+    const today = new Date().toISOString().slice(0,10).replace(/-/g, '');
     const rorTmp = ror === 'other' ? otherRor : ror
     // z008: Type d'autorité ou type de notice
     let zones = 'z008_a:"Tb5"'
-    if (rorTmp !== '') zones += `,z035_a_2:"${rorTmp}",z035_2_2:"ROR",z035_C_2:"ROR"`
+    if (rorTmp !== '') zones += `,z035_a_2:"${rorTmp}",z035_2_2:"ROR",z035_C_2:"ROR",z035_d_2:"${today}"`
     // z810: Source consultée avec profit
     zones += ',z810_a:"ROR"'
     return zones
