@@ -53,7 +53,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
         <div className="fr-radio-group">
           {(data?.items?.slice(0, 5) ?? []).map((item) => (
             <>
-              <input id={`ror-${item.id}`} name="ror" onChange={() => setRor(item.id)} type="radio" />
+              <input checked={ror === item.id} id={`ror-${item.id}`} name="ror" onChange={() => setRor(item.id)} type="radio" value={item.id} />
               <label className="fr-label" htmlFor={`ror-${item.id}`}>
                 {item.names.find((name) => name.types.includes("ror_display")).value}
                 {' ('}
@@ -65,7 +65,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
               </label>
             </>
           ))}
-          <input id="ror-other" name="ror" type="radio" onChange={() => setRor("other")} />
+          <input checked={ror === "other"} id="ror-other" name="ror" onChange={() => setRor("other")} type="radio" value="other" />
           <label className="fr-label" htmlFor="ror-other">
             <span className="fr-mb-1w">Autre <i><a href={`https://ror.org/search?query=${acronym}`} target="_blank">(Rechercher sur ror.org)</a></i></span>
             <span className="fr-hint-text">Format attendu: https://ror.org/04vfs2w97</span>
