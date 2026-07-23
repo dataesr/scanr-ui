@@ -72,7 +72,7 @@ export default function ProjectParticipants({
 								) : (
 									part.label?.default?.split("__")?.[0]
 								)}
-								{(part?.funding !== 0) && (
+								{(part?.funding) && (part?.funding !== 0) && (
 									<Text className="fr-card__detail" size="sm">
 										<i>
 											{intl.formatMessage(
