@@ -49,7 +49,6 @@ export default function useIntegration() {
       },
     ]
   }, [integrationId])
-  console.log("integrationFilters", integrationFilters)
 
   const values = useMemo(() => {
     return { integrationId, integrationLang, integrationOptions, integrationFilters }
