@@ -22,7 +22,7 @@ import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
 import RorModal from "./components/ror-modal"
 import DataTable from "./datatable.tsx"
-import { envoiClient, initPopUp } from "./formulaire.js"
+import { envoiClient, hidePopWin, initPopUp, serializer } from "./formulaire.js"
 
 import "./subModal.css"
 
@@ -84,6 +84,7 @@ export default function References() {
   const [pagination, setPagination] = useState<Pagination>({ from: 0, size: 100 })
   const [showRorModal, setShowRorModal] = useState(false)
   const [sorting, setSorting] = useState<Sort>({})
+  const [rnsr, setRnsr] = useState<string>()
 
   const { data, isLoading } = useQuery({
     queryKey: ["organizations", id],
@@ -192,7 +193,7 @@ export default function References() {
           {
             filterType: 'missing',
             id: 'idref',
-            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setRnsr(row.rnsr); setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
             getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
             label: 'IdRef',
@@ -322,6 +323,23 @@ export default function References() {
     if (mean < 33) return "var(--background-alt-pink-tuile-active)"
     if (mean < 66) return "var(--background-alt-yellow-tournesol-active)"
     return "var(--background-alt-green-emeraude-active)"
+  }
+
+  const traiteResultat = (e) => {
+    const data = serializer.parse(e.data)
+    if (data?.g != null && data?.b) {
+      const dR = dataReferences?.results?.find((item) => item.rnsr === rnsr)
+      const dRA = dataReferencesAll?.results?.find((item) => item.rnsr === rnsr)
+      if (dR) dR.idref = data.b
+      if (dRA) dRA.idref = data.b
+      hidePopWin(null)
+    }
+  }
+
+  if (window?.addEventListener) {
+    window.addEventListener("message", function (e) {
+      traiteResultat(e);
+    });
   }
 
   return (

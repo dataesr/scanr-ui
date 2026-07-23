@@ -114,4 +114,4 @@ function escapeHtml(texte) {
     .replace(/'/g, "&#039;");
 }
 
-export { envoiClient, initPopUp };
+export { envoiClient, hidePopWin, initPopUp, serializer };

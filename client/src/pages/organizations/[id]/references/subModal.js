@@ -14,18 +14,19 @@
  */
 
 // Popup code
-var gPopupMask = null;
-var gPopupContainer = null;
-var gPopFrame = null;
-var gReturnFunc;
-var gPopupIsShown = false;
-var gDefaultPage = "https://www.idref.fr";
-var gHideSelects = false;
-var gReturnVal = null;
+let gPopupMask = null;
+let gPopupContainer = null;
+let gPopFrame = null;
+let gReturnFunc;
+let gPopupIsShown = false;
+const gDefaultPage = "https://www.idref.fr";
+// const gDefaultPage = "https://www-test.idref.fr/";
+let gHideSelects = false;
+let gReturnVal = null;
 
-var gTabIndexes = new Array();
+const gTabIndexes = [];
 // Pre-defined list of tags we want to disable/enable tabbing into
-var gTabbableTags = new Array("A","BUTTON","TEXTAREA","INPUT","IFRAME");	
+const gTabbableTags = ["A", "BUTTON", "TEXTAREA", "INPUT", "IFRAME"];
 
 // If using Mozilla or Firefox, use Tab-key trap.
 if (!document.all) {
@@ -36,7 +37,7 @@ function addEvent(obj, evType, fn){
     obj.addEventListener(evType, fn, false);
     return true;
  } else if (obj.attachEvent){
-    var r = obj.attachEvent("on"+evType, fn);
+    const r = obj.attachEvent("on"+evType, fn);
     return r;
  } else {
     return false;
@@ -47,7 +48,7 @@ function removeEvent(obj, evType, fn, useCapture){
     obj.removeEventListener(evType, fn, useCapture);
     return true;
   } else if (obj.detachEvent){
-    var r = obj.detachEvent("on"+evType, fn);
+    const r = obj.detachEvent("on"+evType, fn);
     return r;
   } else {
     alert("Handler could not be removed");
@@ -69,8 +70,6 @@ function getViewportHeight() {
 	return window.undefined; 
 }
 function getViewportWidth() {
-	var offset = 17;
-	var width = null;
 	if (window.innerWidth!=window.undefined) return window.innerWidth; 
 	if (document.compatMode=='CSS1Compat') return document.documentElement.clientWidth; 
 	if (document.body) return document.body.clientWidth; 
@@ -211,12 +210,7 @@ function showPopWin(url, width, height, returnFunc, showCloseBox) {
 	if (gHideSelects == true) {
 		hideSelectBoxes();
 	}
-	
-	//window.setTimeout("setPopTitle();", 6000);
 }
-// addEvent(window, "load", initPopUp);
-//
-var gi = 0;
 function centerPopWin(width, height) {
 	if (gPopupIsShown == true) {
 		if (width == null || isNaN(width)) {
