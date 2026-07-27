@@ -9,7 +9,9 @@ import { useQuery } from "@tanstack/react-query"
 import { useState } from "react"
 
 import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
-import { envoiClient } from "../../formulaire.js"
+import { postHeadersTicketOffice } from "../../../../../../config/api"
+
+const { VITE_ABES_CONTACT } = import.meta.env;
 
 export default function RorModal({ acronym, setShowRorModal, showRorModal }: { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
   const [otherRor, setOtherRor] = useState<string>('')
@@ -26,15 +28,19 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
     throwOnError: true,
   })
 
-  const getZones = () => {
-    const today = new Date().toISOString().slice(0,10).replace(/-/g, '');
-    const rorTmp = ror === 'other' ? otherRor : ror
-    // z008: Type d'autorité ou type de notice
-    let zones = 'z008_a:"Tb5"'
-    if (rorTmp !== '') zones += `,z035_a_2:"${rorTmp}",z035_2_2:"ROR",z035_C_2:"ROR",z035_d_2:"${today}"`
-    // z810: Source consultée avec profit
-    zones += ',z810_a:"ROR"'
-    return zones
+  const sendEmail = async () => {
+    const payload = { message: `ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: VITE_ABES_CONTACT, to: VITE_ABES_CONTACT }
+    const resp = await fetch(`/ticket/api/send-simple-email`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+        ...postHeadersTicketOffice,
+      },
+    });
+
+    if (resp.status !== 200) throw new Error("error");
+    return resp.json();
   }
 
   const getInputValidationClass = () => {
@@ -76,7 +82,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
         </div>
       </ModalContent>
       <ModalFooter>
-        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); envoiClient('Nom de collectivité', acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones()) }}>Continuer</Button>
+        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); sendEmail() }}>Continuer</Button>
       </ModalFooter>
     </Modal>
   )
