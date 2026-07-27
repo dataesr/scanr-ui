@@ -30,7 +30,7 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
 
   const sendEmail = async () => {
     const email = VITE_ABES_CONTACT.replace(/4[@u/t_i]{0,5}2/gi, '')
-    const payload = { message: `IdRef : ${idref} - ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
+    const payload = { message: `IdRef : ${idref} - ROR:  ${ror} // ${otherRor}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
     const resp = await fetch(`/ticket/api/send-email`, {
       method: "POST",
       body: JSON.stringify(payload),
