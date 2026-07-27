@@ -16,6 +16,7 @@ const { VITE_ABES_CONTACT } = import.meta.env;
 export default function RorModal({ acronym, setShowRorModal, showRorModal }: { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
   const [otherRor, setOtherRor] = useState<string>('')
   const [ror, setRor] = useState<string>('')
+  console.log("VITE_ABES_CONTACT", VITE_ABES_CONTACT)
 
   const url = `https://api.ror.org/v2/organizations?query.advanced=types:facility%20AND%20locations.geonames_details.country_code:FR%20AND%20names.value:${acronym}%20AND%20status:active`
   const { data, isLoading } = useQuery({
