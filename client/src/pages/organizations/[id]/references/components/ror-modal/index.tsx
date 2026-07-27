@@ -13,10 +13,9 @@ import { postHeadersTicketOffice } from "../../../../../../config/api"
 
 const { VITE_ABES_CONTACT } = import.meta.env
 
-export default function RorModal({ acronym, setShowRorModal, showRorModal }: { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
+export default function RorModal({ acronym, idref, setShowRorModal, showRorModal }: { acronym: string, idref: string, setShowRorModal: any, showRorModal: boolean }) {
   const [otherRor, setOtherRor] = useState<string>('')
   const [ror, setRor] = useState<string>('')
-  console.log("VITE_ABES_CONTACT", VITE_ABES_CONTACT)
 
   const url = `https://api.ror.org/v2/organizations?query.advanced=types:facility%20AND%20locations.geonames_details.country_code:FR%20AND%20names.value:${acronym}%20AND%20status:active`
   const { data, isLoading } = useQuery({
@@ -31,7 +30,7 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
 
   const sendEmail = async () => {
     const email = VITE_ABES_CONTACT.replace(/4[@u/t_i]{0,5}2/gi, '')
-    const payload = { message: `ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
+    const payload = { message: `IdRef : ${idref} - ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
     const resp = await fetch(`/ticket/api/send-email`, {
       method: "POST",
       body: JSON.stringify(payload),

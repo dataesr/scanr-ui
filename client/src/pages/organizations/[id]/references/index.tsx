@@ -76,6 +76,7 @@ export default function References() {
   const [filters, setFilters] = useState<Filter[]>([])
   const [idOrganization, setIdOrganization] = useState<string>()
   const [idref, setIdref] = useState<string>()
+  const [idRefOrganization, setIdRefOrganization] = useState<string>()
   const [matchCity, setMatchCity] = useState<number>(0)
   const [matchLabel, setMatchLabel] = useState<number>(0)
   const [meanWithIdref, setMeanWithIdref] = useState<number>(0)
@@ -118,8 +119,8 @@ export default function References() {
     if (breadcrumbLabelTmp) setBreadcrumbLabel(breadcrumbLabelTmp)
     const idOrganizationTmp = data?.id?.toString()
     if (idOrganizationTmp) setIdOrganization(idOrganizationTmp)
-    const idrefTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
-    if (idrefTmp) setIdref(idrefTmp)
+    const idRefOrganizationTmp: string = data?.externalIds?.find((id) => id.type === 'idref')?.id?.toString()
+    if (idRefOrganizationTmp) setIdRefOrganization(idRefOrganizationTmp)
   }, [data, locale])
 
   useEffect(() => {
@@ -170,8 +171,8 @@ export default function References() {
       // z410: Variante de point d'accès
       if (row?.rnsr_acronym) zones += `,z410_a:"@${row.rnsr_acronym}"`
       // z510: Nom de Collectivité ou de Congrès
-      if (idref) {
-        zones += `,z510_3:"${idref}",z510_5:"xxq"`
+      if (idRefOrganization) {
+        zones += `,z510_3:"${idRefOrganization}",z510_5:"xxq"`
         if (row?.rnsr_creation) zones += `,z510_0:"${row.rnsr_creation}-...."`
       }
       // z810: Source consultée avec profit
@@ -193,7 +194,7 @@ export default function References() {
           {
             filterType: 'missing',
             id: 'idref',
-            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setRnsr(row.rnsr); setAcronym(row.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
+            getCellValue: (row) => row?.idref ? <a href={`https://www.idref.fr/${row.idref}`} target="_blank">{row.idref}</a> : (row?.rnsr_acronym ? <span onClick={() => { setRnsr(row?.rnsr); setIdref(row?.idref); setAcronym(row?.rnsr_acronym); envoiClient('Nom de collectivité', row.rnsr_acronym, '', '', 'Type de notice', 'Collectivité', '', '', getZones(row)) }} title="Trouver mon IdRef"><i>Trouver mon IdRef</i></span> : <></>),
             getClassName: (row) => (row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
             label: 'IdRef',
@@ -202,7 +203,7 @@ export default function References() {
           {
             filterType: 'missing',
             id: 'ror',
-            getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setAcronym(row.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
+            getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setRnsr(row?.rnsr); setIdref(row?.idref); setAcronym(row?.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
             getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
             label: 'ROR',
@@ -293,7 +294,7 @@ export default function References() {
         width: '45rem',
       },
     ]
-  }, [expanded, idref])
+  }, [expanded, idRefOrganization])
 
   const downloadCsv = (e) => {
     e.preventDefault()
@@ -344,7 +345,7 @@ export default function References() {
 
   return (
     <RawIntlProvider value={intl}>
-      <RorModal acronym={acronym} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
+      <RorModal acronym={acronym} idref={idref} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
       <Container>
         <Breadcrumb>
           <Link href="/">
