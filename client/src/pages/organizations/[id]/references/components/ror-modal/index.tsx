@@ -11,7 +11,7 @@ import { useState } from "react"
 import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
 import { postHeadersTicketOffice } from "../../../../../../config/api"
 
-const { VITE_ABES_CONTACT } = import.meta.env;
+const { VITE_ABES_CONTACT } = import.meta.env
 
 export default function RorModal({ acronym, setShowRorModal, showRorModal }: { acronym: string, setShowRorModal: any, showRorModal: boolean }) {
   const [otherRor, setOtherRor] = useState<string>('')
@@ -30,7 +30,8 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
   })
 
   const sendEmail = async () => {
-    const payload = { message: `ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: VITE_ABES_CONTACT, to: VITE_ABES_CONTACT }
+    const email = VITE_ABES_CONTACT.replace(/4[@ut_i]{0,5}2/gi, '')
+    const payload = { message: `ROR: ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
     const resp = await fetch(`/ticket/api/send-simple-email`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -38,10 +39,10 @@ export default function RorModal({ acronym, setShowRorModal, showRorModal }: { a
         "Content-Type": "application/json",
         ...postHeadersTicketOffice,
       },
-    });
+    })
 
-    if (resp.status !== 200) throw new Error("error");
-    return resp.json();
+    if (resp.status !== 200) throw new Error("error")
+    return resp.json()
   }
 
   const getInputValidationClass = () => {
