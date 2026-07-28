@@ -333,21 +333,18 @@ export default function References() {
   const onMessage = useCallback((e) => {
     const data = serializer.parse(e.data)
     if (data?.g != null && data?.b) {
-      const dR = dataTable?.results?.find((item) => item.rnsr === rnsr)
-      if (dR) {
-        console.log('in if dR')
-        console.log(dataTable)
-        dR.idref = data.b
+      const dataTableTmp = { ...dataTable }
+      const dR = dataTableTmp?.results?.findIndex((item) => item.rnsr === rnsr)
+      if (dR !== -1) {
+        dataTableTmp.results[dR].idref = data.b
+        setDataTable(dataTableTmp)
       }
-      setDataTable(dataTable)
-      const dRA = dataTableAll?.results?.find((item) => item.rnsr === rnsr)
-      if (dRA) {
-        console.log('in if drA')
-        console.log(dataTableAll)
-        dRA.idref = data.b
+      const dataTableAllTmp = { ...dataTableAll }
+      const dRA = dataTableAllTmp?.results?.findIndex((item) => item.rnsr === rnsr)
+      if (dRA!== -1) {
+        dataTableAllTmp.results[dR].idref = data.b
+        setDataTableAll(dataTableAllTmp)
       }
-      setDataTableAll(dataTableAll)
-      console.log('onMessage', data.b , ' // ', dR, ' // ', dRA)
     }
   }, [dataTable, dataTableAll, rnsr])
 
