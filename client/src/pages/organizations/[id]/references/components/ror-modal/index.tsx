@@ -13,7 +13,7 @@ import { postHeadersTicketOffice } from "../../../../../../config/api"
 
 const { VITE_ABES_CONTACT } = import.meta.env
 
-export default function RorModal({ acronym, idref, setShowRorModal, showRorModal }: { acronym: string, idref: string, setShowRorModal: any, showRorModal: boolean }) {
+export default function RorModal({ acronym, idref, rnsr, setShowRorModal, showRorModal }: { acronym: string, idref: string, rnsr: string, setShowRorModal: any, showRorModal: boolean }) {
   const [otherRor, setOtherRor] = useState<string>('')
   const [ror, setRor] = useState<string>('')
 
@@ -30,7 +30,14 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
 
   const sendEmail = async () => {
     const email = VITE_ABES_CONTACT.replace(/4[@u/t_i]{0,5}2/gi, '')
-    const payload = { message: `IdRef : https://www.idref.fr/${idref} - ROR:  ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
+    const payload = {
+      message: `RNSR: https://rnsr.adc.education.fr/structure/${rnsr} - IdRef: https://www.idref.fr/${idref} - ROR: ${ror === 'other' ? otherRor : ror}`,
+      name: email,
+      senderEmail: "scanr@recherche.gouv.fr",
+      senderName: "Equipe scanR",
+      subject: "[scanR] Alignement IdRef - ROR",
+      to: email,
+    }
     const resp = await fetch(`/ticket/api/send-email`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -87,7 +94,7 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
         </div>
       </ModalContent>
       <ModalFooter>
-        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); sendEmail() }}>Continuer</Button>
+        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); sendEmail() }}>Valider</Button>
       </ModalFooter>
     </Modal>
   )

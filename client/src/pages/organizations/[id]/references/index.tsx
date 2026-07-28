@@ -11,7 +11,7 @@ import {
   useDSFRConfig,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
-import { ReactElement, useEffect, useMemo, useState } from "react"
+import { ReactElement, useCallback, useEffect, useMemo, useState } from "react"
 import { RawIntlProvider, createIntl } from "react-intl"
 import { useParams } from "react-router-dom"
 
@@ -22,7 +22,7 @@ import PageSkeleton from "../../../../components/skeleton/page-skeleton"
 import getLangFieldValue from "../../../../utils/lang.ts"
 import RorModal from "./components/ror-modal"
 import DataTable from "./datatable.tsx"
-import { envoiClient, hidePopWin, initPopUp, serializer } from "./formulaire.js"
+import { envoiClient, initPopUp, serializer } from "./formulaire.js"
 
 import "./subModal.css"
 
@@ -86,6 +86,8 @@ export default function References() {
   const [showRorModal, setShowRorModal] = useState(false)
   const [sorting, setSorting] = useState<Sort>({})
   const [rnsr, setRnsr] = useState<string>()
+  const [dataTable, setDataTable] = useState({ results: [] })
+  const [dataTableAll, setDataTableAll] = useState({ aggregations: { rnsr_level: [] }, results: [] })
 
   const { data, isLoading } = useQuery({
     queryKey: ["organizations", id],
@@ -132,6 +134,7 @@ export default function References() {
         const ror = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "ror")?.id
         if (ror) item.ror = ror
       });
+      setDataTable(dataReferences)
     }
     if (dataReferencesAll?.results && dataRnsrReferences) {
       dataReferencesAll?.results.forEach((item) => {
@@ -141,6 +144,7 @@ export default function References() {
         const ror = dataRnsrReferences?.[rnsr]?.find((id) => id?.type === "ror")?.id
         if (ror) item.ror = ror
       });
+      setDataTableAll(dataReferencesAll)
     }
     const numberOfResultsTmp = dataReferencesAll?.results?.length ?? 0
     setNumberOfResults(numberOfResultsTmp)
@@ -148,7 +152,7 @@ export default function References() {
     setMeanWithRor(Math.round(dataReferencesAll?.results?.filter((item) => item?.ror && item.ror)?.length / numberOfResultsTmp * 100))
     setMatchCity(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_city_match && item.rnsr_ror_city_match)?.length / numberOfResultsTmp * 100))
     setMatchLabel(Math.round(dataReferencesAll?.results?.filter((item) => item?.rnsr_ror_label_match && item.rnsr_ror_label_match)?.length / numberOfResultsTmp * 100))
-  }, [dataReferences?.results, dataReferencesAll?.results, dataRnsrReferences])
+  }, [dataReferences, dataReferencesAll, dataRnsrReferences])
 
   const columns = useMemo<Column[]>(() => {
     const getZones = (row: any) => {
@@ -301,8 +305,8 @@ export default function References() {
     e.stopPropagation()
     if (numberOfResults > 0) {
       // Extract keys from the first object to use as headers
-      const headers = Object.keys(dataReferencesAll.results[0])
-      const rows = dataReferencesAll.results.map((row) => headers.map((header) => row?.[header] ? `"${row[header]}"` : ""))
+      const headers = Object.keys(dataTableAll.results[0])
+      const rows = dataTableAll.results.map((row) => headers.map((header) => row?.[header] ? `"${row[header]}"` : ""))
       // Combine headers and rows into a single CSV string
       const csvContent = [
         headers.join(','),
@@ -326,26 +330,37 @@ export default function References() {
     return "var(--background-alt-green-emeraude-active)"
   }
 
-  const traiteResultat = (e) => {
+  const onMessage = useCallback((e) => {
     const data = serializer.parse(e.data)
     if (data?.g != null && data?.b) {
-      const dR = dataReferences?.results?.find((item) => item.rnsr === rnsr)
-      const dRA = dataReferencesAll?.results?.find((item) => item.rnsr === rnsr)
-      if (dR) dR.idref = data.b
-      if (dRA) dRA.idref = data.b
-      hidePopWin(null)
+      const dR = dataTable?.results?.find((item) => item.rnsr === rnsr)
+      if (dR) {
+        console.log('in if dR')
+        console.log(dataTable)
+        dR.idref = data.b
+      }
+      setDataTable(dataTable)
+      const dRA = dataTableAll?.results?.find((item) => item.rnsr === rnsr)
+      if (dRA) {
+        console.log('in if drA')
+        console.log(dataTableAll)
+        dRA.idref = data.b
+      }
+      setDataTableAll(dataTableAll)
+      console.log('onMessage', data.b , ' // ', dR, ' // ', dRA)
     }
-  }
+  }, [dataTable, dataTableAll, rnsr])
 
-  if (window?.addEventListener) {
-    window.addEventListener("message", function (e) {
-      traiteResultat(e);
-    });
-  }
+  useEffect(() => {
+    if (window?.addEventListener) {
+      window.addEventListener("message", onMessage);
+      return () => window.removeEventListener("message", onMessage);
+    }
+  }, [onMessage])
 
   return (
     <RawIntlProvider value={intl}>
-      <RorModal acronym={acronym} idref={idref} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
+      <RorModal acronym={acronym} idref={idref} rnsr={rnsr} setShowRorModal={setShowRorModal} showRorModal={showRorModal} />
       <Container>
         <Breadcrumb>
           <Link href="/">
@@ -357,7 +372,7 @@ export default function References() {
           <Link>{breadcrumbLabel}</Link>
         </Breadcrumb>
         {(isLoading || isLoadingReferences || isLoadingReferencesAll) && <PageSkeleton />}
-        {dataReferencesAll?.results && (
+        {dataTableAll?.results && (
           <>
             <Row gutters>
               <Col>
@@ -379,7 +394,7 @@ export default function References() {
               <Col>
                 {numberOfResults} structure(s) dont
                 <ul>
-                  {(dataReferencesAll?.aggregations?.rnsr_level ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
+                  {(dataTableAll?.aggregations?.rnsr_level ?? []).map((level) => <li key={`${idOrganization}-rnsr-level-${level.key}`}>
                     {level.label} : {level.count}
                   </li>)}
                 </ul>
@@ -416,9 +431,9 @@ export default function References() {
               </Col>
             </Row>
             <DataTable
-              aggregations={dataReferencesAll?.aggregations ?? {}}
+              aggregations={dataTableAll?.aggregations ?? {}}
               columns={columns}
-              dataTable={dataReferences?.results ?? []}
+              dataTable={dataTable?.results ?? []}
               filters={filters}
               numberOfResults={numberOfResults}
               pagination={pagination}
