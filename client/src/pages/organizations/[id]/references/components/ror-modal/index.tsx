@@ -6,7 +6,7 @@ import {
   ModalFooter,
 } from "@dataesr/dsfr-plus"
 import { useQuery } from "@tanstack/react-query"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
 import { postHeadersTicketOffice } from "../../../../../../config/api"
@@ -30,7 +30,7 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
 
   const sendEmail = async () => {
     const email = VITE_ABES_CONTACT.replace(/4[@u/t_i]{0,5}2/gi, '')
-    const payload = { message: `IdRef : ${idref} - ROR:  ${ror} // ${otherRor}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
+    const payload = { message: `IdRef : ${idref} - ROR:  ${ror === 'other' ? otherRor : ror}`, subject: "[scanR] Alignement IdRef - ROR", name: email, to: email }
     const resp = await fetch(`/ticket/api/send-email`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -51,6 +51,10 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
     }
     return ''
   }
+
+  useEffect(() => {
+    setRor(data?.items?.length > 0 ? data.items[0].id : 'other')
+  }, [data])
 
   return (
     <Modal isOpen={showRorModal} hide={() => { setShowRorModal(false); setOtherRor(''); setRor(''); }}>
@@ -77,7 +81,7 @@ export default function RorModal({ acronym, idref, setShowRorModal, showRorModal
             <span className="fr-mb-1w">Autre <i><a href={`https://ror.org/search?query=${acronym}`} target="_blank">(Rechercher sur ror.org)</a></i></span>
             <span className="fr-hint-text">Format attendu: https://ror.org/04vfs2w97</span>
             <div className={`fr-input-group ${getInputValidationClass()}`}>
-              <input className="fr-input" type="text" value={otherRor} onChange={(e) => setOtherRor(e.target.value)} />
+              <input className="fr-input" disabled={ror !== 'other'} type="text" value={otherRor} onChange={(e) => setOtherRor(e.target.value)} />
             </div>
           </label>
         </div>

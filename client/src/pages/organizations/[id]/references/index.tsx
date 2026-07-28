@@ -203,8 +203,8 @@ export default function References() {
           {
             filterType: 'missing',
             id: 'ror',
-            getCellValue: (row) => row?.idref && row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.rnsr_acronym ? <span onClick={() => { setRnsr(row?.rnsr); setIdref(row?.idref); setAcronym(row?.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
-            getClassName: (row) => (row?.ror || !row?.rnsr_acronym) ? '' : 'bg-error',
+            getCellValue: (row) => row?.ror ? <a href={`https://ror.org/${row.ror}`} target="_blank">{row.ror}</a> : (row?.idref && row?.rnsr_acronym ? <span onClick={() => { setRnsr(row?.rnsr); setIdref(row?.idref); setAcronym(row?.rnsr_acronym); setShowRorModal(true); }} title="Trouver mon ROR"><i>Trouver mon ROR</i></span> : <></>),
+            getClassName: (row) => (row?.ror || !row?.idref || !row?.rnsr_acronym) ? '' : 'bg-error',
             isFilterable: true,
             label: 'ROR',
             width: '8rem',
