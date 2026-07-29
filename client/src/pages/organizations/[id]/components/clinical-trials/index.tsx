@@ -1,10 +1,13 @@
 import { Button, Col, Row, Spinner, Text } from "@dataesr/dsfr-plus";
 import { useQuery } from "@tanstack/react-query";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 import { useIntl } from "react-intl";
 
 import YearBars from "../../../../../components/year-bars";
 import { clinicalTrialsIndex, postHeadersBso } from "../../../../../config/api";
 import type { Organization } from "../../../../../types/organization";
+import { isInProduction } from "../../../../../utils/helpers";
 
 export default function OrganizationClinicalTrials({
   data,
@@ -62,6 +65,23 @@ export default function OrganizationClinicalTrials({
               order: { _key: "asc" },
               size: "50",
             },
+            aggs: {
+              hasResults: {
+                terms: {
+                  field: "results_details.2026Q2.has_results",
+                },
+              },
+              hasPublication: {
+                terms: {
+                  field: "results_details.2026Q2.has_publications_result",
+                },
+              },
+              hasResultsOrPublication: {
+                terms: {
+                  field: "results_details.2026Q2.has_results_or_publications",
+                },
+              },
+            },
           },
         },
       };
@@ -73,22 +93,71 @@ export default function OrganizationClinicalTrials({
           headers: postHeadersBso,
         },
       ).then((r) => r.json());
-      if (organizationClinicalTrials?.aggregations?.byYear) {
-        return {
-          byYear: (organizationClinicalTrials?.aggregations?.byYear?.buckets ?? []).map(
-            (bucket) => ({ count: bucket.doc_count, label: bucket.key }),
-          ),
-        };
-      }
-      return {};
+      return organizationClinicalTrials;
     },
     throwOnError: true,
   });
 
-  if (isLoading) return <Spinner />;
+  const counts = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.doc_count)
+  const countsHasResults = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResults?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
+  const countsHasPublication = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
+  const countsNoResultsNoPublications =  (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResultsOrPublication?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
+  const years = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.key)
+
+  const options = {
+    chart: {
+      height: '300px',
+      type: 'column',
+    },
+    title: {
+      text: 'Classement par résultat',
+    },
+    accessibility: {
+      description: 'Nombre par année',
+    },
+    xAxis: {
+      accessibility: { description: 'Années' },
+      categories: years,
+      crosshair: true,
+      type: 'category',
+    },
+    yAxis: {
+      accessibility: { description: 'Nombre' },
+      crosshair: true,
+      endofTick: true,
+      max: Math.max(...counts),
+      min: 0,
+      opposite: true,
+      style: { fontFamily: 'Marianne' },
+      title: { enabled: false },
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 0,
+        dataLabels: { enabled: false },
+        pointPadding: 0,
+        stacking: 'normal',
+      }
+    },
+    colors: ['#cbcf33', '#d06088', '#cecece'],
+    series: [
+      {
+        data: countsHasResults,
+        name: 'Has results',
+      }, {
+        data: countsHasPublication,
+        name: 'Has publication',
+      }, {
+        data: countsNoResultsNoPublications,
+        name: 'No results, no publication',
+      },
+    ]
+  }
+
+  if (isLoading) return <Spinner />
 
   return (
-    ((cts?.byYear?.length ?? 0) > 0) && (
+    ((cts?.aggregations?.byYear?.buckets?.length ?? 0) > 0) && (
       <>
         <div
           className="fr-mb-3w"
@@ -120,11 +189,21 @@ export default function OrganizationClinicalTrials({
                 id: "organizations.clinical-trials.year-bars.name",
               })}
               height="300px"
-              counts={(cts?.byYear ?? []).map((year) => year.count)}
-              years={(cts?.byYear ?? []).map((year) => year.label)}
+              counts={counts}
+              years={years}
             />
           </Col>
         </Row>
+        {!isInProduction() && (
+          <Row gutters>
+            <Col xs="12" className="fr-pb-6w">
+              <HighchartsReact
+                highcharts={Highcharts}
+                options={options}
+              />
+            </Col>
+          </Row>
+        )}
         <hr />
       </>
     )
