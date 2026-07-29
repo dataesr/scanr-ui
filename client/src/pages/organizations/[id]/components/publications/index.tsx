@@ -128,10 +128,11 @@ export default function OrganizationPublications({
               <div className="fr-segmented__element">
                 <input
                   checked={publicationGraph === "openalex"}
+                  disabled={disabledTabs.openalex}
+                  id={`${segmentId}-openalex`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("openalex")}
                   type="radio"
-                  id={`${segmentId}-openalex`}
-                  disabled={disabledTabs.openalex}
                 />
                 <label className="fr-label" htmlFor={`${segmentId}-openalex`}>
                   {intl.formatMessage({
@@ -142,10 +143,11 @@ export default function OrganizationPublications({
               <div className="fr-segmented__element">
                 <input
                   checked={publicationGraph === "wiki"}
+                  disabled={disabledTabs.wiki}
+                  id={`${segmentId}-wiki`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("wiki")}
                   type="radio"
-                  id={`${segmentId}-wiki`}
-                  disabled={disabledTabs.wiki}
                 />
                 <label className="fr-label" htmlFor={`${segmentId}-wiki`}>
                   {intl.formatMessage({
@@ -156,10 +158,11 @@ export default function OrganizationPublications({
               <div className="fr-segmented__element">
                 <input
                   checked={publicationGraph === "year"}
+                  disabled={disabledTabs.year}
+                  id={`${segmentId}-year`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("year")}
                   type="radio"
-                  id={`${segmentId}-year`}
-                  disabled={disabledTabs.year}
                 />
                 <label className="fr-label" htmlFor={`${segmentId}-year`}>
                   {intl.formatMessage({
@@ -170,10 +173,11 @@ export default function OrganizationPublications({
               <div className="fr-segmented__element">
                 <input
                   checked={publicationGraph === "journals"}
+                  disabled={disabledTabs.journals}
+                  id={`${segmentId}-journals`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("journals")}
                   type="radio"
-                  id={`${segmentId}-journals`}
-                  disabled={disabledTabs.journals}
                 />
                 <label className="fr-label" htmlFor={`${segmentId}-journals`}>
                   {intl.formatMessage({
@@ -184,10 +188,11 @@ export default function OrganizationPublications({
               <div className="fr-segmented__element">
                 <input
                   checked={publicationGraph === "authors"}
+                  disabled={disabledTabs.authors}
+                  id={`${segmentId}-authors`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("authors")}
                   type="radio"
-                  id={`${segmentId}-authors`}
-                  disabled={disabledTabs.authors}
                 />
                 <label className="fr-label" htmlFor={`${segmentId}-authors`}>
                   {intl.formatMessage({

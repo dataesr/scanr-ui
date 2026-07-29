@@ -44,10 +44,11 @@ export default function OrganizationPublicationsDetection({
             <div className="fr-segmented__elements">
               <div className="fr-segmented__element">
                 <input
-                  checked={(publicationGraph === "infra")}
+                  checked={publicationGraph === "infra"}
+                  id={`${segmentId}-infra`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("infra")}
                   type="radio"
-                  id={`${segmentId}-infra`}
                 />
                 <label
                   className="fr-label"
@@ -59,10 +60,11 @@ export default function OrganizationPublicationsDetection({
 
               <div className="fr-segmented__element">
                 <input
-                  checked={(publicationGraph === "grants")}
+                  checked={publicationGraph === "grants"}
+                  id={`${segmentId}-grants`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("grants")}
                   type="radio"
-                  id={`${segmentId}-grants`}
                 />
                 <label
                   className="fr-label"
@@ -73,10 +75,11 @@ export default function OrganizationPublicationsDetection({
               </div>
               <div className="fr-segmented__element">
                 <input
-                  checked={(publicationGraph === "support")}
+                  checked={publicationGraph === "support"}
+                  id={`${segmentId}-support`}
+                  onChange={() => {}}
                   onClick={() => setPublicationGraph("support")}
                   type="radio"
-                  id={`${segmentId}-support`}
                 />
                 <label
                   className="fr-label"

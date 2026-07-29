@@ -66,20 +66,20 @@ export default function OrganizationProjects({ data: projects, value, label }: O
             </legend>
             <div className="fr-segmented__elements">
               <div className="fr-segmented__element">
-                <input checked={(projectGraph === "type")} onClick={() => setProjectGraph("type")} type="radio" id="segmented-22187-4" />
+                <input checked={projectGraph === "type"} onChange={() => {}} onClick={() => setProjectGraph("type")} type="radio" id="segmented-22187-4" />
                 <label className="fr-label" htmlFor="segmented-22187-4">
                   {intl.formatMessage({ id: "organizations.projects.nav.type" })}
                 </label>
               </div>
               <div className="fr-segmented__element">
-                <input checked={(projectGraph === "year")} onClick={() => setProjectGraph("year")} type="radio" id="segmented-22187-3" />
+                <input checked={projectGraph === "year"} onChange={() => {}} onClick={() => setProjectGraph("year")} type="radio" id="segmented-22187-3" />
                 <label className="fr-label" htmlFor="segmented-22187-3">
                   {intl.formatMessage({ id: "organizations.projects.nav.year" })}
                 </label>
               </div>
               <div className="fr-segmented__element">
-                <input checked={(projectGraph === "keywords")} type="radio" id="segmented-22187-2" />
-                <label onClick={() => setProjectGraph("keywords")} className="fr-label" htmlFor="segmented-22187-2">
+                <input checked={projectGraph === "keywords"} onChange={() => {}} onClick={() => setProjectGraph("keywords")} type="radio" id="segmented-22187-2" />
+                <label className="fr-label" htmlFor="segmented-22187-2">
                   {intl.formatMessage({ id: "organizations.projects.nav.tag-cloud" })}
                 </label>
               </div>
