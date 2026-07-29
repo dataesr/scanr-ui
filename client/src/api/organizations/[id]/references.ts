@@ -75,7 +75,7 @@ export async function getOrganizationReferences(filters: Filter[], id: string, p
     headers: postHeaders,
     method: "POST",
   }).then((r) => r.json())
-  const rnsrReferencesQuery = fetch("https://pydref.staging.dataesr.ovh/rnsr_alignements").then((r) => r.json())
+  const rnsrReferencesQuery = getRnsrReferences()
   const [organizationsResponses, rnsrReferencesResponses] = await Promise.all([organizationsQuery, rnsrReferencesQuery])
 
   let results = [];

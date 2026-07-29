@@ -94,7 +94,7 @@ export default function RorModal({ acronym, idref, rnsr, setShowRorModal, showRo
         </div>
       </ModalContent>
       <ModalFooter>
-        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); sendEmail() }}>Valider</Button>
+        <Button disabled={(ror === '' && otherRor === '') || (ror === 'other' && getInputValidationClass() !== 'fr-input-group--valid')} onClick={() => { setShowRorModal(false); setRor(''); setOtherRor(''); sendEmail() }}>Valider</Button>
       </ModalFooter>
     </Modal>
   )
