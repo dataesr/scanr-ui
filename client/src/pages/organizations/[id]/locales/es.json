@@ -62,5 +62,10 @@
   "organizations.section.contribute.button-label": "Reportar un Error",
   "organizations.clinical-trials": "Ensayos clínicos finalizados, listados por scanR, por año de finalización del ensayo",
   "organizations.clinical-trials.year-bars.name": "Ensayos clínicos",
-  "organizations.clinical-trials.search": "Consulte la lista de ensayos clínicos"
+  "organizations.clinical-trials.search": "Consulte la lista de ensayos clínicos",
+  "organizations.clinical-trials-results.title": "Procedimientos para la publicación de los resultados de los ensayos clínicos finalizados, por año de finalización del ensayo",
+  "organizations.clinical-trials-results.has-results": "Resultados publicados únicamente en un registro",
+  "organizations.clinical-trials-results.has-publication": "Resultados publicados únicamente en una revista",
+  "organizations.clinical-trials-results.has-results-and-publication": "Resultados publicados y difundidos",
+  "organizations.clinical-trials-results.no-communication": "No hay mensajes"
 }

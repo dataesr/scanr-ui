@@ -9,6 +9,8 @@ import { clinicalTrialsIndex, postHeadersBso } from "../../../../../config/api";
 import type { Organization } from "../../../../../types/organization";
 import { isInProduction } from "../../../../../utils/helpers";
 
+const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
+
 export default function OrganizationClinicalTrials({
   data,
   label,
@@ -68,17 +70,31 @@ export default function OrganizationClinicalTrials({
             aggs: {
               hasResults: {
                 terms: {
-                  field: "results_details.2026Q2.has_results",
+                  field: `results_details.${lastYear}.has_results`,
                 },
+                aggs: {
+                  hasPublication: {
+                    terms: {
+                      field: `results_details.${lastYear}.has_publications_result`,
+                    },
+                  },
+                }
               },
               hasPublication: {
                 terms: {
-                  field: "results_details.2026Q2.has_publications_result",
+                  field: `results_details.${lastYear}.has_publications_result`,
                 },
+                aggs: {
+                  hasResults: {
+                    terms: {
+                      field: `results_details.${lastYear}.has_results`,
+                    },
+                  },
+                }
               },
               hasResultsOrPublication: {
                 terms: {
-                  field: "results_details.2026Q2.has_results_or_publications",
+                  field: `results_details.${lastYear}.has_results_or_publications`,
                 },
               },
             },
@@ -99,18 +115,19 @@ export default function OrganizationClinicalTrials({
   });
 
   const counts = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.doc_count)
-  const countsHasResults = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResults?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
-  const countsHasPublication = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
-  const countsNoResultsNoPublications =  (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResultsOrPublication?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
+  const countsHasResultsOnly = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResults?.buckets?.find((item) => item.key === 1)?.hasPublication?.buckets.find((item) => item.key === 0)?.doc_count ?? 0)
+  const countsHasPublicationOnly = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
+  const countsHasResultsAndPublication = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
+  const countsNoResultsNoPublications = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResultsOrPublication?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
   const years = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.key)
 
   const options = {
     chart: {
-      height: '300px',
+      height: '400px',
       type: 'column',
     },
     title: {
-      text: 'Classement par résultat',
+      text: intl.formatMessage({ id: "organizations.clinical-trials-results.title" }),
     },
     accessibility: {
       description: 'Nombre par année',
@@ -139,18 +156,21 @@ export default function OrganizationClinicalTrials({
         stacking: 'normal',
       }
     },
-    colors: ['#cbcf33', '#d06088', '#cecece'],
+    colors: ['#cecece', '#cbcf33', '#d06088', '#e49a43'],
     series: [
       {
-        data: countsHasResults,
-        name: 'Has results',
-      }, {
-        data: countsHasPublication,
-        name: 'Has publication',
-      }, {
         data: countsNoResultsNoPublications,
-        name: 'No results, no publication',
-      },
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.no-communication", defaultMessage: "No communication" }),
+      }, {
+        data: countsHasResultsOnly,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results", defaultMessage: "Results posted in the register only" }),
+      }, {
+        data: countsHasPublicationOnly,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-publication", defaultMessage: "Results published in a journal only" }),
+      }, {
+        data: countsHasResultsAndPublication,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results-and-publication", defaultMessage: "Posted and published results" }),
+      }
     ]
   }
 

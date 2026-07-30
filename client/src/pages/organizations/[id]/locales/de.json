@@ -62,5 +62,10 @@
   "organizations.section.contribute.button-label": "Einen Fehler melden",
   "organizations.clinical-trials": "Abgeschlossene klinische Studien, aufgelistet nach scanR, nach Jahr des Studienabschlusses",
   "organizations.clinical-trials.year-bars.name": "Klinische Studien",
-  "organizations.clinical-trials.search": "Siehe die Liste der klinischen Studien"
+  "organizations.clinical-trials.search": "Siehe die Liste der klinischen Studien",
+  "organizations.clinical-trials-results.title": "Verfahren zur Berichterstattung über die Ergebnisse abgeschlossener klinischer Studien, nach Jahr des Studienabschlusses",
+  "organizations.clinical-trials-results.has-results": "Ergebnisse werden ausschließlich in einem Register erfasst",
+  "organizations.clinical-trials-results.has-publication": "Ergebnisse, die ausschließlich in einer Fachzeitschrift veröffentlicht wurden",
+  "organizations.clinical-trials-results.has-results-and-publication": "Veröffentlichte und bekannt gegebene Ergebnisse",
+  "organizations.clinical-trials-results.no-communication": "Keine Mitteilung"
 }
