@@ -309,7 +309,7 @@ export const questions = [
     },
     definition: {
       fr: "Les prix scientifiques attribués aux personnes sont référencés dans les pages \"Personnes\". Quand l'affiliation du lauréat au moment de l'attribution du prix est connue, scanR fait figurer le prix au niveau de l'institution d'affiliation. Malheureusement cette information n'est pas toujours disponible.",
-      en: 'The scientific prizes awarded to individuals are listed in the "People" pages. When the winner\'s affiliation at the time of awarding the prize is known, scanR includes the prize at the level of the affiliated institution or lab. Unfortunately, this information is not always available.\n <link>contact:::Contact us</link> !',
+      en: 'The scientific prizes awarded to individuals are listed in the "People" pages. When the winner’s affiliation at the time of awarding the prize is known, scanR includes the prize at the level of the affiliated institution or lab. Unfortunately, this information is not always available.\n <link>contact:::Contact us</link> !',
     },
   },
   {
@@ -781,6 +781,19 @@ export const questions = [
     },
   },
   {
+    key: "q62",
+    groupkey: "organizations",
+    icon: "fas fa-question-circle",
+    label: {
+      fr: "Comment est générée la description par IA ?",
+      en: "How is the IA description generated ?",
+    },
+    definition: {
+      fr: "Pour les entreprises privées qui ne disposent pas de description nous utilisons l'IA générative de <link>https://mistral.ai:::Mistral AI</link>. <br></br> À partir du contenu du site web de l'entreprise, nous demandons à Mistral de nous faire un résumé de ses principales activités.",
+      en: "For private companies that do not have a description, we use generative AI from <link>https://mistral.ai:::Mistral AI</link>. <br></br> Based on the content from the company's website, we ask Mistral to provide us with a summary of its main activities.",
+    },
+  },
+  {
     key: "q63",
     groupkey: "networks",
     icon: "fas fa-question-circle",
@@ -820,16 +833,29 @@ export const questions = [
     },
   },
   {
-    key: "q62",
-    groupkey: "organizations",
+    key: "q66",
+    groupkey: "projects",
     icon: "fas fa-question-circle",
     label: {
-      fr: "Comment est générée la description par IA ?",
-      en: "How is the IA description generated ?",
+      fr: "Quel traitement est effectué au niveau des bénéficiaires et des partenaires dans les programmes-cadre de financement de la recherche (PCRI) de la Commission européenne (CE) ?",
+      en: "What procedures are followed with regard to beneficiaries and partners in the European Commission’s (EC) research funding framework programs (PCRI)?",
     },
     definition: {
-      fr: "Pour les entreprises privées qui ne disposent pas de description nous utilisons l'IA générative de <link>https://mistral.ai:::Mistral AI</link>. <br></br> À partir du contenu du site web de l'entreprise, nous demandons à Mistral de nous faire un résumé de ses principales activités.",
-      en: "For private companies that do not have a description, we use generative AI from <link>https://mistral.ai:::Mistral AI</link>. <br></br> Based on the content from the company's website, we ask Mistral to provide us with a summary of its main activities.",
+      fr: 'La CE attribue un numéro d’immatriculation <link>https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/participant-register:::PIC (Participant Identification Code)</link> à chaque entité candidate lors de son inscription. Or une même entité peut au fil des PCRI avoir créé, volontairement ou non, plusieurs PIC distincts. Afin de regrouper sous un même identifiant l’ensemble des candidatures et des participations de chaque acteur, nous procédons à un rapprochement entre les PIC et un identifiant unique issu de référentiels institutionnels comme <link>https://sirene.gouv.fr/:::SIRENE</link> ou <link>https://ror.org/:::ROR</link>.',
+      en: 'The EC assigns a <link>https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/how-to-participate/participant-register:::PIC (Participant Identification Code)</link> registration number to each applicant entity upon registration. However, a single entity may have created, intentionally or unintentionally, several distinct PICs over the course of various PCRI cycles. In order to consolidate all of each entity’s applications and participations under a single identifier, we match the PICs with a unique identifier derived from institutional databases such as <link>https://sirene.gouv.fr/:::SIRENE</link> or <link>https://ror.org/:::ROR</link>.',
+    },
+  },
+  {
+    key: "q67",
+    groupkey: "projects",
+    icon: "fas fa-question-circle",
+    label: {
+      fr: "Au-delà des institutions désignées comme gestionnaires des projets financés par la Commission européenne dans le cadre des programmes européens de recherche et d’innovation (PCRI) (voir question précédente de la FAQ), quels traitements sont réalisés pour identifier l’ensemble des institutions, des établissements et des laboratoires impliqués dans la réalisation de ces projets ?",
+      en: "In addition to the institutions designated as project managers for projects funded by the European Commission under the European Research and Innovation Programs (PCRI) (see the previous FAQ question), what processes are used to identify all the institutions, organizations, and laboratories involved in carrying out these projects?",
+    },
+    definition: {
+      fr: 'Les données sur les financements des Programmes-cadres de l’Union européenne pour la recherche et l’innovation (PCRI) sont enrichies en tâchant d’identifier au mieux l’ensemble des entités participantes d’un projet financé. Selon les termes d’une convention, le CEA, le CNRS, Inrae, Inria, et l’ONERA communiquent une fois par an au MESRE des informations complémentaires sur les laboratoires impliqués dans chacun des projets financés par la Commission. A chaque laboratoire est associé un identifiant issu du <link>https://rnsr.adc.education.fr/:::référentiel national des structures de recherche (RNSR)</link>. Ce référentiel permet d’identifier l’ensemble des institutions qui partagent la tutelle de ces laboratoires et qui sont donc associées, via ces laboratoires, aux projets européens financés. Cet enrichissement conduit donc à identifier les laboratoires en charge des travaux scientifiques associés aux financements ET l’ensemble des institutions qui partagent leur tutelle (au-delà de l’institution gestionnaire du projet, seule connue de la Commission). Par ailleurs, des traitements complémentaires sont réalisés pour ajouter plus globalement des identifiants pérennes (SIRENE, RNSR, ROR). Ces traitements permettent par exemple d’identifier, dans les groupes hospitaliers, les hôpitaux dans lesquels sont réalisés les travaux de recherche. Les données obtenues sont disponibles via le jeu de données ouvert <link>https://mesr.opendatasoft.com/explore/assets/fr-esr-horizon-projects-entities/:::https://mesr.opendatasoft.com/explore/assets/fr-esr-horizon-projects-entities/</link>.',
+      en: 'Data on funding from the European Union’s Framework Programs for Research and Innovation (PCRI) are enhanced by making every effort to identify all entities participating in a funded project. Under the terms of an agreement, the CEA, the CNRS, Inrae, Inria, and ONERA provide the MESRE with additional information once a year regarding the laboratories involved in each of the projects funded by the Commission. Each laboratory is assigned an identifier from the <link>https://rnsr.adc.education.fr/:::National Registry of Research Institutions (RNSR)</link>. This registry identifies all the institutions that share oversight of these laboratories and are therefore associated, through these laboratories, with the funded European projects. This enrichment process therefore makes it possible to identify the laboratories responsible for the scientific work associated with the funding AND all the institutions that share oversight of them (beyond the project-managing institution, which is the only one known to the Commission). In addition, further processing is carried out to add persistent identifiers (SIRENE, RNSR, ROR) on a more comprehensive basis. For example, these analyses make it possible to identify, within hospital groups, the hospitals where research is conducted. The resulting data is available via the open dataset <link>https://mesr.opendatasoft.com/explore/assets/fr-esr-horizon-projects-entities/:::https://mesr.opendatasoft.com/explore/assets/fr-esr-horizon-projects-entities/</link>.',
     },
   },
 ]
