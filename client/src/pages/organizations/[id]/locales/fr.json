@@ -91,12 +91,14 @@
   "organizations.section.more-like-this": "Structures similaires",
   "organizations.section.contribute.title": "Contribuer",
   "organizations.section.contribute.button-label": "Signaler une erreur",
-  "organizations.clinical-trials": "Essais cliniques terminés, répertoriés par scanR, par année de fin de l'essai",
   "organizations.clinical-trials.year-bars.name": "Essais cliniques",
   "organizations.clinical-trials.search": "Voir la liste des essais cliniques",
-  "organizations.clinical-trials-results.title": "Modalités de communication des résultats des essais cliniques achevés, par année de fin de l'essai",
   "organizations.clinical-trials-results.has-results": "Résultats postés dans un registre uniquement",
   "organizations.clinical-trials-results.has-publication": "Résultats postés dans une revue uniquement",
   "organizations.clinical-trials-results.has-results-and-publication": "Résultats postés et publiés",
-  "organizations.clinical-trials-results.no-communication": "Aucune communication"
+  "organizations.clinical-trials-results.no-communication": "Aucune communication",
+  "organizations.clinical-trials.nav.years": "Répartition par année",
+  "organizations.clinical-trials.nav.results": "Répartition par résultat",
+  "organizations.clinical-trials.nav.types": "Répartition par type",
+  "organizations.clinical-trials.count": "essais cliniques terminés depuis 2010 répertoriés par scanR"
 }

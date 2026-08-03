@@ -1,10 +1,11 @@
-import { useIntl } from "react-intl";
-import { Button, Row, Col, Text } from "@dataesr/dsfr-plus";
-import useScreenSize from "../../../../../hooks/useScreenSize";
-import YearBars from "../../../../../components/year-bars";
+import { Button, Col, Row, Text } from "@dataesr/dsfr-plus";
 import { useState } from "react";
-import { OrganizationPatentsData } from "../../../../../types/organization";
+import { useIntl } from "react-intl";
+
 import CpcWordCloud from "../../../../../components/patent-chart";
+import YearBars from "../../../../../components/year-bars";
+import useScreenSize from "../../../../../hooks/useScreenSize";
+import { OrganizationPatentsData } from "../../../../../types/organization";
 
 type OrganizationPatentsProps = {
   data: OrganizationPatentsData;
@@ -19,7 +20,7 @@ export default function OrganizationPatents({
 }: OrganizationPatentsProps) {
   const { screen } = useScreenSize();
   const intl = useIntl();
-  const [projectGraph, setProjectGraph] = useState("type");
+  const [patentGraph, setPatentGraph] = useState("type");
 
   const searchFilters = {
     "applicants.ids.id": { values: [{ value, label }], type: "terms" },
@@ -69,8 +70,8 @@ export default function OrganizationPatents({
       <div
         className="fr-mb-3w"
         style={{
-          display: "flex",
           alignItems: "center",
+          display: "flex",
           justifyContent: "center",
         }}
       >
@@ -104,8 +105,8 @@ export default function OrganizationPatents({
             <div className="fr-segmented__elements">
               <div className="fr-segmented__element">
                 <input
-                  checked={projectGraph === "type"}
-                  onChange={() => setProjectGraph("type")}
+                  checked={patentGraph === "type"}
+                  onChange={() => setPatentGraph("type")}
                   type="radio"
                   id="segmented-patents-1"
                 />
@@ -115,10 +116,10 @@ export default function OrganizationPatents({
               </div>
               <div className="fr-segmented__element">
                 <input
-                  checked={projectGraph === "cpc"}
+                  checked={patentGraph === "cpc"}
                   type="radio"
                   id="segmented-patents-3"
-                  onChange={() => setProjectGraph("cpc")}
+                  onChange={() => setPatentGraph("cpc")}
                 />
                 <label className="fr-label" htmlFor="segmented-patents-3">
                   {intl.formatMessage({
@@ -130,7 +131,7 @@ export default function OrganizationPatents({
           </fieldset>
         </Col>
         <Col xs="12" className="fr-pb-6w">
-          {projectGraph === "type" && (
+          {patentGraph === "type" && (
             <YearBars
               name={intl.formatMessage({
                 id: "organizations.patents.year-bars.name",
@@ -140,7 +141,7 @@ export default function OrganizationPatents({
               years={patents.byYear.map((year) => year.label)}
             />
           )}
-          {projectGraph === "cpc" && patents.byCpc && (
+          {patentGraph === "cpc" && patents.byCpc && (
             <CpcWordCloud data={patents.byCpc} />
           )}
         </Col>

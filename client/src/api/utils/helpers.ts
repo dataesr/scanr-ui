@@ -9,3 +9,7 @@ export function toAggregationModel(data: ElasticBuckets, isYears: boolean = fals
     count: element.doc_count,
   })) || [];
 }
+
+export function capitalize(string: string) {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+}

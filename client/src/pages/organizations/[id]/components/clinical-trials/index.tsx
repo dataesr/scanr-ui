@@ -1,15 +1,12 @@
-import { Button, Col, Row, Spinner, Text } from "@dataesr/dsfr-plus";
-import { useQuery } from "@tanstack/react-query";
+import { Button, Col, Row, Text } from "@dataesr/dsfr-plus";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import { useState } from "react";
 import { useIntl } from "react-intl";
 
 import YearBars from "../../../../../components/year-bars";
-import { clinicalTrialsIndex, postHeadersBso } from "../../../../../config/api";
 import type { Organization } from "../../../../../types/organization";
 import { isInProduction } from "../../../../../utils/helpers";
-
-const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
 
 export default function OrganizationClinicalTrials({
   data,
@@ -21,6 +18,7 @@ export default function OrganizationClinicalTrials({
   value: string,
 }) {
   const intl = useIntl();
+  const [clinicalTrialGraph, setClinicalTrialGraph] = useState("years");
 
   const searchFilters = {
     "ror": { values: [{ label, value: `https://ror.org/${value}` }], type: "terms" },
@@ -29,112 +27,18 @@ export default function OrganizationClinicalTrials({
     JSON.stringify(searchFilters),
   )}`;
 
-  const { data: cts, isLoading } = useQuery({
-    queryKey: ["organizations", "clinical-trials", data.id],
-    queryFn: async () => {
-
-      const previousYear = new Date().getFullYear() - 1;
-      const body: any = {
-        size: 0,
-        query: {
-          bool: {
-            filter: [
-              {
-                term: {
-                  "bso_local_affiliations.keyword": value,
-                },
-              },
-              {
-                term: {
-                  "status_simplified.keyword": "Completed",
-                },
-              },
-              {
-                range: {
-                  study_completion_year: {
-                    gte: 2010,
-                    lte: previousYear,
-                  },
-                },
-              },
-            ],
-          },
-        },
-        aggs: {
-          byYear: {
-            terms: {
-              field: "study_completion_year",
-              order: { _key: "asc" },
-              size: "50",
-            },
-            aggs: {
-              hasResults: {
-                terms: {
-                  field: `results_details.${lastYear}.has_results`,
-                },
-                aggs: {
-                  hasPublication: {
-                    terms: {
-                      field: `results_details.${lastYear}.has_publications_result`,
-                    },
-                  },
-                }
-              },
-              hasPublication: {
-                terms: {
-                  field: `results_details.${lastYear}.has_publications_result`,
-                },
-                aggs: {
-                  hasResults: {
-                    terms: {
-                      field: `results_details.${lastYear}.has_results`,
-                    },
-                  },
-                }
-              },
-              hasResultsOrPublication: {
-                terms: {
-                  field: `results_details.${lastYear}.has_results_or_publications`,
-                },
-              },
-            },
-          },
-        },
-      };
-      const organizationClinicalTrials = await fetch(
-        `${clinicalTrialsIndex}/_search`,
-        {
-          method: "POST",
-          body: JSON.stringify(body),
-          headers: postHeadersBso,
-        },
-      ).then((r) => r.json());
-      return organizationClinicalTrials;
-    },
-    throwOnError: true,
-  });
-
-  const counts = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.doc_count)
-  const countsHasResultsOnly = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResults?.buckets?.find((item) => item.key === 1)?.hasPublication?.buckets.find((item) => item.key === 0)?.doc_count ?? 0)
-  const countsHasPublicationOnly = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
-  const countsHasResultsAndPublication = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
-  const countsNoResultsNoPublications = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResultsOrPublication?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
-  const years = (cts?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket.key)
-
-  const options = {
+  const optionsResults = {
     chart: {
       height: '400px',
       type: 'column',
     },
-    title: {
-      text: intl.formatMessage({ id: "organizations.clinical-trials-results.title" }),
-    },
+    title: { text: null },
     accessibility: {
       description: 'Nombre par année',
     },
     xAxis: {
       accessibility: { description: 'Années' },
-      categories: years,
+      categories: data.clinicalTrials.years,
       crosshair: true,
       type: 'category',
     },
@@ -142,7 +46,59 @@ export default function OrganizationClinicalTrials({
       accessibility: { description: 'Nombre' },
       crosshair: true,
       endofTick: true,
-      max: Math.max(...counts),
+      max: Math.max(...data.clinicalTrials.countByYear),
+      min: 0,
+      opposite: true,
+      style: { fontFamily: 'Marianne' },
+      title: { enabled: true },
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 0,
+        dataLabels: { enabled: false },
+        pointPadding: 0,
+        stacking: 'normal',
+      }
+    },
+    series: [
+      {
+        color: '#cecece',
+        data: data.clinicalTrials.countsNoResultsNoPublications,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.no-communication", defaultMessage: "No communication" }),
+      }, {
+        color: '#cbcf33',
+        data: data.clinicalTrials.countsHasResultsOnly,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results", defaultMessage: "Results posted in the register only" }),
+      }, {
+        color: '#d06088',
+        data: data.clinicalTrials.countsHasPublicationOnly,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-publication", defaultMessage: "Results published in a journal only" }),
+      }, {
+        color: '#e49a43',
+        data: data.clinicalTrials.countsHasResultsAndPublication,
+        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results-and-publication", defaultMessage: "Posted and published results" }),
+      }
+    ]
+  }
+
+  const optionsTypes = {
+    chart: {
+      height: '400px',
+      type: 'column',
+    },
+    title: { text: null },
+    accessibility: { description: 'Nombre par année' },
+    xAxis: {
+      accessibility: { description: 'Années' },
+      categories: data.clinicalTrials.years,
+      crosshair: true,
+      type: 'category',
+    },
+    yAxis: {
+      accessibility: { description: 'Nombre' },
+      crosshair: true,
+      endofTick: true,
+      max: Math.max(...data.clinicalTrials.countByYear),
       min: 0,
       opposite: true,
       style: { fontFamily: 'Marianne' },
@@ -156,76 +112,115 @@ export default function OrganizationClinicalTrials({
         stacking: 'normal',
       }
     },
-    colors: ['#cecece', '#cbcf33', '#d06088', '#e49a43'],
-    series: [
-      {
-        data: countsNoResultsNoPublications,
-        name: intl.formatMessage({ id: "organizations.clinical-trials-results.no-communication", defaultMessage: "No communication" }),
-      }, {
-        data: countsHasResultsOnly,
-        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results", defaultMessage: "Results posted in the register only" }),
-      }, {
-        data: countsHasPublicationOnly,
-        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-publication", defaultMessage: "Results published in a journal only" }),
-      }, {
-        data: countsHasResultsAndPublication,
-        name: intl.formatMessage({ id: "organizations.clinical-trials-results.has-results-and-publication", defaultMessage: "Posted and published results" }),
-      }
-    ]
+    series: data?.clinicalTrials?.byType,
   }
 
-  if (isLoading) return <Spinner />
-
   return (
-    ((cts?.aggregations?.byYear?.buckets?.length ?? 0) > 0) && (
-      <>
-        <div
-          className="fr-mb-3w"
-          style={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ flexGrow: 1 }}>
-            <Text size="lg" className="fr-m-0" bold>
-              {intl.formatMessage({ id: "organizations.clinical-trials" })}
-            </Text>
-          </div>
-          <Button
-            as="a"
-            href={clinicalTrialsFilterUrl}
-            icon="arrow-right-s-line"
-            iconPosition="right"
-            variant="text"
-          >
-            {intl.formatMessage({ id: "organizations.clinical-trials.search" })}
-          </Button>
+    <>
+      <div
+        className="fr-mb-3w"
+        style={{
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ flexGrow: 1 }}>
+          <Text size="lg" className="fr-m-0" bold>
+            {data.clinicalTrials.clinicalTrialsCount}{" "}
+            {intl.formatMessage({ id: "organizations.clinical-trials.count" })}
+          </Text>
         </div>
-        <Row gutters>
-          <Col xs="12" className="fr-pb-6w">
-            <YearBars
-              name={intl.formatMessage({
-                id: "organizations.clinical-trials.year-bars.name",
+        <Button
+          as="a"
+          href={clinicalTrialsFilterUrl}
+          icon="arrow-right-s-line"
+          iconPosition="right"
+          variant="text"
+        >
+          {intl.formatMessage({ id: "organizations.clinical-trials.search" })}
+        </Button>
+      </div>
+      <Row gutters>
+        <Col xs="12">
+          <fieldset
+            id="publication-graph-selector"
+            className="fr-segmented fr-segmented--sm"
+          >
+            <legend className="fr-segmented__legend">
+              {intl.formatMessage({
+                id: "organizations.activity.fieldset.legend",
               })}
+            </legend>
+            <div className="fr-segmented__elements">
+              <div className="fr-segmented__element">
+                <input
+                  checked={clinicalTrialGraph === "years"}
+                  onChange={() => setClinicalTrialGraph("years")}
+                  type="radio"
+                  id="segmented-clinical-trials-years"
+                />
+                <label className="fr-label" htmlFor="segmented-clinical-trials-years">
+                  {intl.formatMessage({ id: "organizations.clinical-trials.nav.years" })}
+                </label>
+              </div>
+              {!isInProduction() && (
+                <div className="fr-segmented__element">
+                  <input
+                    checked={clinicalTrialGraph === "results"}
+                    type="radio"
+                    id="segmented-clinical-trials-results"
+                    onChange={() => setClinicalTrialGraph("results")}
+                  />
+                  <label className="fr-label" htmlFor="segmented-clinical-trials-results">
+                    {intl.formatMessage({
+                      id: "organizations.clinical-trials.nav.results",
+                    })}
+                  </label>
+                </div>
+              )}
+              {!isInProduction() && (
+                <div className="fr-segmented__element">
+                  <input
+                    checked={clinicalTrialGraph === "types"}
+                    type="radio"
+                    id="segmented-clinical-trials-types"
+                    onChange={() => setClinicalTrialGraph("types")}
+                  />
+                  <label className="fr-label" htmlFor="segmented-clinical-trials-types">
+                    {intl.formatMessage({
+                      id: "organizations.clinical-trials.nav.types",
+                    })}
+                  </label>
+                </div>
+              )}
+            </div>
+          </fieldset>
+        </Col>
+        <Col xs="12" className="fr-pb-6w">
+          {(clinicalTrialGraph === "years") && (
+            <YearBars
+              counts={data.clinicalTrials.countByYear}
               height="300px"
-              counts={counts}
-              years={years}
+              name={intl.formatMessage({ id: "organizations.clinical-trials.year-bars.name" })}
+              years={data.clinicalTrials.years}
             />
-          </Col>
-        </Row>
-        {!isInProduction() && (
-          <Row gutters>
-            <Col xs="12" className="fr-pb-6w">
-              <HighchartsReact
-                highcharts={Highcharts}
-                options={options}
-              />
-            </Col>
-          </Row>
-        )}
-        <hr />
-      </>
-    )
+          )}
+          {!isInProduction() && (clinicalTrialGraph === "results") && (
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={optionsResults}
+            />
+          )}
+          {!isInProduction() && (clinicalTrialGraph === "types") && (
+            <HighchartsReact
+              highcharts={Highcharts}
+              options={optionsTypes}
+            />
+          )}
+        </Col>
+      </Row>
+      <hr />
+    </>
   );
 }

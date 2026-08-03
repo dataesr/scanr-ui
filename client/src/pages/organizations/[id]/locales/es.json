@@ -52,7 +52,7 @@
   "organizations.publications.count": "publicaciones listadas por scanR",
   "organizations.publications.search": "Ver la lista de publicaciones",
   "organizations.publications.nav.wikis": "Nube de Palabras Clave",
-  "organizations.publications.nav.year": "Distribución por Año",
+  "organizations.publications.nav.year": "Distribución por año",
   "organizations.publications.nav.journals": "Top 10 de Revistas",
   "organizations.publications.nav.authors": "Top 10 de Autores",
   "organizations.publications.year-bars.name": "Publicaciones",
@@ -60,12 +60,14 @@
   "organizations.section.more-like-this": "Estructuras Similares",
   "organizations.section.contribute.title": "Contribuir",
   "organizations.section.contribute.button-label": "Reportar un Error",
-  "organizations.clinical-trials": "Ensayos clínicos finalizados, listados por scanR, por año de finalización del ensayo",
   "organizations.clinical-trials.year-bars.name": "Ensayos clínicos",
   "organizations.clinical-trials.search": "Consulte la lista de ensayos clínicos",
-  "organizations.clinical-trials-results.title": "Procedimientos para la publicación de los resultados de los ensayos clínicos finalizados, por año de finalización del ensayo",
   "organizations.clinical-trials-results.has-results": "Resultados publicados únicamente en un registro",
   "organizations.clinical-trials-results.has-publication": "Resultados publicados únicamente en una revista",
   "organizations.clinical-trials-results.has-results-and-publication": "Resultados publicados y difundidos",
-  "organizations.clinical-trials-results.no-communication": "No hay mensajes"
+  "organizations.clinical-trials-results.no-communication": "No hay mensajes",
+  "organizations.clinical-trials.nav.years": "Distribución por año",
+  "organizations.clinical-trials.nav.results": "Distribución por resultado",
+  "organizations.clinical-trials.nav.types": "Distribución por tipo",
+  "organizations.clinical-trials.count": "ensayos clínicos finalizados desde 2010 registrados en scanR"
 }

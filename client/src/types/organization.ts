@@ -6,6 +6,17 @@ import type {
 } from "./commons";
 import type { Network } from "./network";
 
+export type OrganizationClinicalTrialsData = {
+  byType: Aggregation[];
+  clinicalTrialsCount: number;
+  countByYear: number[];
+  countsHasPublicationOnly: number[];
+  countsHasResultsAndPublication: number[];
+  countsHasResultsOnly: number[];
+  countsNoResultsNoPublications: number[];
+  years: string[];
+};
+
 export type OrganizationPublicationsData = {
   byYear: Aggregation[];
   byType: Aggregation[];
@@ -18,6 +29,7 @@ export type OrganizationPublicationsData = {
   bySupportEntity: Aggregation[];
   publicationsCount: number;
 };
+
 export type OrganizationProjectsData = {
   byYear: Aggregation[];
   byType: Aggregation[];
@@ -99,6 +111,7 @@ export type Organization = {
   awards: OrganizationAwardsData[];
   badges?: OrganizationBadgesData[];
   categories?: string[];
+  clinicalTrials: OrganizationClinicalTrialsData;
   creationYear?: number;
   description: LangField;
   endDate?: string;

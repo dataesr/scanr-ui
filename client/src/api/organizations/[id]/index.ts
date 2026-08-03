@@ -1,25 +1,28 @@
 import {
+  clinicalTrialsIndex,
   organizationsIndex,
   patentsIndex,
   postHeaders,
+  postHeadersBso,
   projectsIndex,
   publicationsIndex,
 } from "../../../config/api";
 import { Organization } from "../../../types/organization";
 import { publicationTypeMapping } from "../../../utils/string";
 import { getStructureNetworkById } from "../../networks";
+import { capitalize } from "../../utils/helpers";
 import { processYearAggregations } from "../../utils/years";
 
 export async function getOrganizationById(id: string): Promise<Organization> {
   const body: any = {
     _source: {
       excludes: [
-        "publications",
-        "projects",
-        "web_content",
-        "patents",
         "autocompleted",
         "autocompletedText",
+        "patents",
+        "projects",
+        "publications",
+        "web_content",
       ],
     },
     query: {
@@ -38,22 +41,25 @@ export async function getOrganizationById(id: string): Promise<Organization> {
   const { _id } = structureQuery?.hits?.hits?.[0] || {};
   const externalIdsList =
     structureData.externalIds?.map((ext: any) => ext.id) || [];
-  const publicationsQuery = getStructurePublicationsById(externalIdsList);
-  const projectsQuery = getStructureProjectsById(externalIdsList);
-  const patentsQuery = getStructurePatentsById(externalIdsList);
+  const ror = structureData.externalIds?.find((id) => id.type === "ror")?.id
   const networkQuery = getStructureNetworkById(
     externalIdsList,
     "publications",
     "domains",
   );
-  const [publications, projects, patents, network] = await Promise.all([
-    publicationsQuery,
-    projectsQuery,
-    patentsQuery,
+  const clinicalTrialsQuery = getStructureClinicalTrialsById(ror);
+  const patentsQuery = getStructurePatentsById(externalIdsList);
+  const projectsQuery = getStructureProjectsById(externalIdsList);
+  const publicationsQuery = getStructurePublicationsById(externalIdsList);
+  const [clinicalTrials, network, patents, projects, publications] = await Promise.all([
+    clinicalTrialsQuery,
     networkQuery,
+    patentsQuery,
+    projectsQuery,
+    publicationsQuery,
   ]);
 
-  return { ...structureData, _id, publications, projects, patents, network };
+  return { ...structureData, _id, clinicalTrials, network, patents, projects, publications };
 }
 
 async function getStructurePublicationsById(ids: any): Promise<any> {
@@ -414,4 +420,104 @@ async function getStructurePatentsById(ids: any): Promise<any> {
       })
       .filter((el) => el) || [];
   return { byYear, byCpc, patentsCount };
+}
+
+async function getStructureClinicalTrialsById(ror: any): Promise<any> {
+  const lastYear = import.meta.env.VITE_CLINICAL_TRIALS_LAST_YEAR;
+  const previousYear = new Date().getFullYear() - 1;
+  const body: any = {
+    size: 0,
+    query: {
+      bool: {
+        filter: [
+          {
+            term: {
+              "bso_local_affiliations.keyword": ror,
+            },
+          },
+          {
+            term: {
+              "status_simplified.keyword": "Completed",
+            },
+          },
+          {
+            range: {
+              study_completion_year: {
+                gte: 2010,
+                lte: previousYear,
+              },
+            },
+          },
+        ],
+      },
+    },
+    aggs: {
+      byYear: {
+        terms: {
+          field: "study_completion_year",
+          order: { _key: "asc" },
+          size: "50",
+        },
+        aggs: {
+          hasResults: {
+            terms: {
+              field: `results_details.${lastYear}.has_results`,
+            },
+            aggs: {
+              hasPublication: {
+                terms: {
+                  field: `results_details.${lastYear}.has_publications_result`,
+                },
+              },
+            }
+          },
+          hasPublication: {
+            terms: {
+              field: `results_details.${lastYear}.has_publications_result`,
+            },
+            aggs: {
+              hasResults: {
+                terms: {
+                  field: `results_details.${lastYear}.has_results`,
+                },
+              },
+            }
+          },
+          hasResultsOrPublication: {
+            terms: {
+              field: `results_details.${lastYear}.has_results_or_publications`,
+            },
+          },
+          byType: {
+            terms: {
+              field: "intervention_type.keyword"
+            }
+          }
+        },
+      },
+    },
+  };
+  const response = await fetch(`${clinicalTrialsIndex}/_search`, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: postHeadersBso,
+  });
+  const result = await response.json();
+  const clinicalTrialsCount = result?.hits?.total?.value || 0;
+  const countByYear = result?.aggregations?.byYear?.buckets?.map((bucket) => (bucket.doc_count)).filter((el) => el) || [];
+  const years = result?.aggregations?.byYear?.buckets?.map((bucket) => bucket.key)
+  let types = (result?.aggregations?.byYear?.buckets ?? []).map((year) => (year?.byType?.buckets ?? []).map((type) => type.key))
+  types = [...new Set(types.flat())].sort()
+  const byType = types.map((type) => {
+    const data = years.map((_, yearIndex) => {
+      const yearBucket = (result?.aggregations?.byYear?.buckets ?? []).find((bucket) => bucket.key === years[yearIndex])
+      return yearBucket?.byType?.buckets?.find((bucket) => bucket.key === type)?.doc_count ?? 0
+    })
+    return { name: capitalize(type.replace('_', ' ')), data }
+  });
+  const countsHasPublicationOnly = (result?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
+  const countsHasResultsAndPublication = (result?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasPublication?.buckets?.find((item) => item.key === 1)?.hasResults?.buckets?.find((item) => item.key === 1)?.doc_count ?? 0)
+  const countsHasResultsOnly = (result?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResults?.buckets?.find((item) => item.key === 1)?.hasPublication?.buckets.find((item) => item.key === 0)?.doc_count ?? 0)
+  const countsNoResultsNoPublications = (result?.aggregations?.byYear?.buckets ?? []).map((bucket) => bucket?.hasResultsOrPublication?.buckets?.find((item) => item.key === 0)?.doc_count ?? 0)
+  return { byType, clinicalTrialsCount, countByYear, countsHasPublicationOnly, countsHasResultsAndPublication, countsHasResultsOnly, countsNoResultsNoPublications, years };
 }
