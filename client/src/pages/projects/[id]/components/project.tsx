@@ -392,8 +392,8 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                             y="-10"
                             fill="var(--text-mention-grey)"
                             stroke="none"
-                            text-anchor="start"
-                            font-size=".75rem"
+                            textAnchor="start"
+                            fontSize=".75rem"
                           >
                             {new Date(data.startDate).toLocaleDateString()}
                           </text>
@@ -402,8 +402,8 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                             y="-10"
                             fill="var(--text-mention-grey)"
                             stroke="none"
-                            text-anchor="end"
-                            font-size=".75rem"
+                            textAnchor="end"
+                            fontSize=".75rem"
                           >
                             {new Date(data.endDate).toLocaleDateString()}
                           </text>
@@ -413,8 +413,8 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                               y="-10"
                               fill="var(--text-mention-grey)"
                               stroke="none"
-                              text-anchor="middle"
-                              font-size=".75rem"
+                              textAnchor="middle"
+                              fontSize=".75rem"
                             >
                               {data.duration} mois
                             </text>
@@ -529,14 +529,14 @@ export default function ProjectPresentation({ data }: { data: Project }) {
                               y="-10"
                               fill="var(--text-mention-grey)"
                               stroke="none"
-                              text-anchor={
+                              textAnchor={
                                 fundingPercent > 80
                                   ? "end"
                                   : fundingPercent < 20
                                     ? "start"
                                     : "middle"
                               }
-                              font-size=".75rem"
+                              fontSize=".75rem"
                             >
                               {intl.formatMessage({
                                 id: "projects.section.funding.financed-at",

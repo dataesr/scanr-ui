@@ -1,5 +1,5 @@
-import { projectsIndex, postHeaders } from "../../../config/api"
-import { Project } from "../../../types/project"
+import { postHeaders, projectsIndex } from "../../../config/api";
+import { Project } from "../../../types/project";
 
 export async function getProjectById(id: string): Promise<Project> {
   const body: any = {
