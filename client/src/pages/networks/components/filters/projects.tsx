@@ -34,8 +34,6 @@ export default function NetworkFiltersProjects({ as = "source" }: { as?: "source
         <hr className="fr-mt-3w" />
         <ProjectOrganizationsFilter filterParam="nfilters" filterIds={filterIds} />
         <hr className="fr-mt-3w" />
-        <ProjectLocalisationsFilter />
-        <hr className="fr-mt-3w" />
       </Container>
     )
   }
