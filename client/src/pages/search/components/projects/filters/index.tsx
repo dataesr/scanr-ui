@@ -2,14 +2,14 @@ import {
   Button, Container, Text
 } from "@dataesr/dsfr-plus";
 import { useIntl } from "react-intl";
-import useSearchData from "../../../hooks/useSearchData";
+
 import Modal from "../../../../../components/modal";
 import BaseSkeleton from "../../../../../components/skeleton/base-skeleton";
+import useSearchData from "../../../hooks/useSearchData";
 import useUrl from "../../../hooks/useUrl";
+import ProjectOrganizationsFilter from "./organizations";
 import ProjectTypeFilter from "./types";
 import ProjectYearFilter from "./years";
-import ProjectOrganizationsFilter from "./organizations";
-import ProjectLocalisationsFilter from "./localisation";
 
 
 export default function ProjectFilters() {
@@ -29,8 +29,6 @@ export default function ProjectFilters() {
           <ProjectTypeFilter />
           <hr className="fr-mt-3w" />
           <ProjectOrganizationsFilter />
-          <hr className="fr-mt-3w" />
-          <ProjectLocalisationsFilter />
           <hr className="fr-mt-3w" />
         </Container>
         <div className='fr-modal__footer fr-px-0' style={{ display: 'flex', width: '100%', alignItems: "center" }}>

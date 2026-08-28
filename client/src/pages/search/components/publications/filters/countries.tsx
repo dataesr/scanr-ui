@@ -57,18 +57,17 @@ export default function PublicationCountriesFilter() {
         ))}
       </TagGroup>
       <Autocomplete
-        label="Rechercher des pays"
-        items={countriesAutocompletedList.items}
         inputValue={countriesAutocompletedList.filterText}
-        onInputChange={countriesAutocompletedList.setFilterText}
+        items={countriesAutocompletedList.items}
+        label="Rechercher des pays"
         loadingState={countriesAutocompletedList.loadingState}
-        // menuTrigger="focus"
-        size="md"
+        onInputChange={countriesAutocompletedList.setFilterText}
         onSelectionChange={(item) => {
           if (!item) return
           handleFilterChange({ field: "affiliations.mainAddress.country", value: item })
           countriesAutocompletedList.setFilterText('')
         }}
+        size="md"
       >
         {({ autocompleted }) => <AutocompleteItem key={autocompleted?.[0]}>{autocompleted?.[0]}</AutocompleteItem>}
       </Autocomplete>
