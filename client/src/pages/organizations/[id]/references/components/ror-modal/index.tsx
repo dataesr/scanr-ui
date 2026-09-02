@@ -9,7 +9,6 @@ import { useQuery } from "@tanstack/react-query"
 import { useEffect, useState } from "react"
 
 import PageSkeleton from "../../../../../../components/skeleton/page-skeleton"
-import { postHeadersTicketOffice } from "../../../../../../config/api"
 
 const { VITE_ABES_CONTACT } = import.meta.env
 
@@ -43,7 +42,6 @@ export default function RorModal({ acronym, idref, rnsr, setShowRorModal, showRo
       body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
-        ...postHeadersTicketOffice,
       },
     })
 
