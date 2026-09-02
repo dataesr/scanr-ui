@@ -5,7 +5,6 @@ const {
   VITE_API_KEY: API_KEY,
   VITE_API_KEY_BSO: API_KEY_BSO,
   VITE_TOPICS_URL: TOPICS_URL,
-  VITE_TICKET_OFFICE_API_KEY: TICKET_OFFICE_API_KEY,
 } = import.meta.env;
 
 // Headers
@@ -16,13 +15,6 @@ export const headersBso = API_KEY_BSO
 export const postHeaders = { ...headers, "Content-Type": "application/json" };
 export const postHeadersBso = {
   ...headersBso,
-  "Content-Type": "application/json",
-};
-export const ticketOfficeHeaders = TICKET_OFFICE_API_KEY
-  ? { Authorization: `Basic ${TICKET_OFFICE_API_KEY}` }
-  : {};
-export const postHeadersTicketOffice = {
-  ...ticketOfficeHeaders,
   "Content-Type": "application/json",
 };
 

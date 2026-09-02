@@ -13,7 +13,6 @@ import useForm from "../../hooks/useForm";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useLocation } from "react-router-dom";
 import { createIntl, RawIntlProvider } from "react-intl";
-import { postHeadersTicketOffice } from "../../config/api";
 
 const modules = import.meta.glob("./locales/*.json", {
   eager: true,
@@ -93,7 +92,6 @@ export default function ContactForm({ objectId, objectType }: Props) {
         body: JSON.stringify(payload),
         headers: {
           "Content-Type": "application/json",
-          ...postHeadersTicketOffice,
         },
       });
 

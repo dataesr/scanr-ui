@@ -30,7 +30,6 @@ import useSuggestionList from "./useList";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getAuthorById } from "../../api/authors/[id]";
-import { postHeadersTicketOffice } from "../../config/api";
 import { useNavigate } from "react-router-dom";
 
 const modules = import.meta.glob("./locales/*.json", {
@@ -89,7 +88,6 @@ export default function Suggest() {
       body: JSON.stringify(body),
       headers: {
         "Content-Type": "application/json",
-        ...postHeadersTicketOffice,
       },
     });
     const json = await resp.json();
