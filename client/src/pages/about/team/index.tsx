@@ -78,15 +78,6 @@ const formating = {
       {chunks}
     </a>
   ),
-  aCoexya: (chunks: any) => (
-    <a
-      href="https://www.coexya.eu/en/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {chunks}
-    </a>
-  ),
   aMit: (chunks: any) => (
     <a
       href="https://direct.mit.edu/qss/article/3/1/18/109245/Identifying-scientific-publications-countrywide"

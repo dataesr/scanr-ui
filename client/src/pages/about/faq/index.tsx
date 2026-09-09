@@ -64,7 +64,7 @@ export default function FAQ() {
         {chunks}
       </Title>
     ),
-    br: () => <br />,
+    br: () => <><br /><br /></>,
     ol: (chunks: any) => <ol>{chunks}</ol>,
     ul: (chunks: any) => <ul>{chunks}</ul>,
     li: (chunks: any) => <li>{chunks}</li>,
