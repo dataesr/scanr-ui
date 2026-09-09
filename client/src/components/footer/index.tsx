@@ -85,19 +85,6 @@ export function FooterBody({
 					<br />
 					et de l'espace
 				</p>
-				<a
-					title="Retour à l'accueil du site"
-					href="/"
-					className="fr-footer__brand-link"
-				>
-					<svg aria-hidden="true" viewBox="0 0 1167.77 752.85" width="100%">
-						<use
-							className="fr-text-black-white--grey"
-							href="/logos/sies_logo_signature.svg#sies-logo-text"
-						/>
-						<use href="/logos/sies_logo_signature.svg#sies-logo-artwork" />
-					</svg>
-				</a>
 			</div>
 			<div className="fr-footer__content">
 				{description ? (
