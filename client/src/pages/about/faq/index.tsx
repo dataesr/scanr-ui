@@ -64,11 +64,10 @@ export default function FAQ() {
         {chunks}
       </Title>
     ),
-    br: () => <><br /><br /></>,
+    br: () => <><br></br><br></br></>,
     ol: (chunks: any) => <ol>{chunks}</ol>,
     ul: (chunks: any) => <ul>{chunks}</ul>,
     li: (chunks: any) => <li>{chunks}</li>,
-
     link: (chunks) => (
       <a className="fr-link" href={String(chunks).split(":::")[0]} target="_blank" rel="noopener noreferrer">
         {String(chunks).split(":::")?.[1] || String(chunks).split(":::")[0]}
