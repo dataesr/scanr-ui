@@ -64,7 +64,7 @@ export async function getPublicationsTrends({
     return null
   }
 
-  const trends = publicationsTrends(model, aggregation, page, years, normalized, includes)
+  const trends = await publicationsTrends(model, aggregation, page, years, normalized, includes)
   return { ...trends, sourceCount: count }
 }
 
@@ -128,6 +128,6 @@ export async function getCitationsTrends({
     return null
   }
 
-  const trends = citationsTrends(model, aggregation, page, years, normalized, includes)
+  const trends = await citationsTrends(model, aggregation, page, years, normalized, includes)
   return { ...trends, sourceCount: count }
 }

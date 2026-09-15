@@ -1,5 +1,3 @@
-import openAlexData from "./openalex_topic_mapping_table.json"
-
 const fieldsMapping = {
   topic: ["subfield", "field", "domain"],
   subfield: ["field", "domain"],
@@ -7,16 +5,31 @@ const fieldsMapping = {
   domain: [],
 }
 
-function openAlexGetTable(indexField: string) {
-  const openAlexTable = openAlexData.reduce((acc, row) => {
-    acc[row[indexField]] = row
-    return acc
-  }, {})
-  return openAlexTable
+type OpenAlexRow = Record<string, string | number>
+type OpenAlexTable = Record<string, OpenAlexRow>
+
+let openAlexData: Promise<Array<OpenAlexRow>> | undefined
+const openAlexTables: Record<string, OpenAlexTable> = {}
+
+// The mapping table is only needed on the trends page: load it on demand, once
+function openAlexLoadData() {
+  if (!openAlexData) openAlexData = import("./openalex_topic_mapping_table.json").then((module) => module.default)
+  return openAlexData
 }
 
-export default function openAlexGetData(field: string, value: string | number) {
-  const openAlexTable = openAlexGetTable(`${field}_name`)
+async function openAlexGetTable(indexField: string) {
+  if (!openAlexTables[indexField]) {
+    const data = await openAlexLoadData()
+    openAlexTables[indexField] = data.reduce<OpenAlexTable>((acc, row) => {
+      acc[String(row[indexField])] = row
+      return acc
+    }, {})
+  }
+  return openAlexTables[indexField]
+}
+
+export default async function openAlexGetData(field: string, value: string | number) {
+  const openAlexTable = await openAlexGetTable(`${field}_name`)
   const allData = openAlexTable[value]
   const fields = fieldsMapping[field]
 

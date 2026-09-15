@@ -1,6 +1,6 @@
 import { Button, Container, Text } from "@dataesr/dsfr-plus"
 import { Network } from "../../../../../types/network"
-import { VOSviewerOnline } from "vosviewer-online"
+import VOSviewerOnline from "../../../../../components/vosviewer-online"
 import { stringifySearchFiltersForURL } from "../../../../search/hooks/useUrl"
 import { useIntl } from "react-intl"
 
@@ -51,7 +51,7 @@ export default function OrganizationNetwork({ data: network, affiliationsIds }: 
         {intl.formatMessage({ id: "organizations.network.desc2" })}
       </Text>
       <Container fluid className="fr-mt-2w" style={{ height: "400px" }}>
-        <VOSviewerOnline key={[affiliationsIds[0].value, theme]} data={network} parameters={parameters} />
+        <VOSviewerOnline key={`${affiliationsIds[0].value}-${theme}`} data={network} parameters={parameters} />
       </Container>
       <Text className="fr-m-0 fr-text-mention-grey" size="xs">
         {intl.formatMessage({ id: "organizations.network.desc3" })}

@@ -1,4 +1,4 @@
-import { VOSviewerOnline } from "vosviewer-online"
+import VOSviewerOnline from "../../../../components/vosviewer-online"
 import Error204 from "../errors/error204"
 import { useNetworkContext } from "../../context/hook"
 import NetworkSpinner from "../spinner"
@@ -22,5 +22,5 @@ export default function NetworkGraph() {
     max_label_length: 100,
   }
 
-  return <VOSviewerOnline key={key} data={search.data} parameters={params} />
+  return <VOSviewerOnline key={key} data={search.data} parameters={params} fallback={<NetworkSpinner />} />
 }

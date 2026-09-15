@@ -16,7 +16,7 @@ import Analytics from "./pages/analytics";
 import Author from "./pages/authors/[id]";
 import BugsReport from "./pages/bugs/[api]/[id]";
 import ClinicalTrial from "./pages/clinical-trials/[id]";
-import { DocsLayout } from "./pages/docs/layout";
+import DocsLayout from "./pages/docs/layout";
 import OrganizationsDocs from "./pages/docs/objects/organizations";
 import Overview from "./pages/docs/objects/overview";
 import PersonsDocs from "./pages/docs/objects/persons";

@@ -1,4 +1,4 @@
-import { VOSviewerOnline } from "vosviewer-online"
+import VOSviewerOnline from "../../../../components/vosviewer-online"
 import useNetwork from "../hooks/useNetwork"
 import BaseSkeleton from "../../../../components/skeleton/base-skeleton"
 import { Fragment, useState } from "react"

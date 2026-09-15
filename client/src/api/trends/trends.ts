@@ -8,7 +8,7 @@ const ITEMS_PER_PAGE = 25
 
 type TrendsAggregation = Array<ElasticBucket & { [x: string]: ElasticAggregation }>
 
-function computeTrends(
+async function computeTrends(
   model: string,
   data: Array<any>,
   page: number,
@@ -38,9 +38,9 @@ function computeTrends(
   if (model.startsWith("open-alex")) {
     const openAlexField = model.split("-").pop().slice(0, -1)
 
-    items.forEach((item) => {
-      item.openAlexData = openAlexGetData(openAlexField, item.label)
-    })
+    for (const item of items) {
+      item.openAlexData = await openAlexGetData(openAlexField, item.label)
+    }
   }
 
   // Sort items by volume max year
@@ -85,7 +85,7 @@ function computeTrends(
   return trends
 }
 
-export function publicationsTrends(
+export async function publicationsTrends(
   model: string,
   aggregation: TrendsAggregation,
   cursor: number,
@@ -110,11 +110,11 @@ export function publicationsTrends(
   }, {})
   const items = Object.values(_items)
 
-  const trends = computeTrends(model, items, cursor, years, normalized, includes)
+  const trends = await computeTrends(model, items, cursor, years, normalized, includes)
   return trends
 }
 
-export function citationsTrends(
+export async function citationsTrends(
   model: string,
   aggregation: ElasticBuckets,
   cursor: number,
@@ -140,6 +140,6 @@ export function citationsTrends(
   }, {})
   const items = Object.values(_items)
 
-  const trends = computeTrends(model, items, cursor, years, normalized, includes)
+  const trends = await computeTrends(model, items, cursor, years, normalized, includes)
   return trends
 }

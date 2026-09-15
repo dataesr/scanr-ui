@@ -22,7 +22,7 @@ const messages = Object.keys(modules).reduce((acc, key) => {
   return acc;
 }, {});
 
-export function DocsLayout() {
+export default function DocsLayout() {
   const { pathname } = useLocation();
   const { locale } = useDSFRConfig();
   const intl = createIntl({ locale, messages: messages[locale] });
