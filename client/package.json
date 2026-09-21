@@ -12,7 +12,7 @@
     "test": "tsc"
   },
   "dependencies": {
-    "@dataesr/dsfr-plus": "^0.5.5",
+    "@dataesr/dsfr-plus": "^0.6.0",
     "@gouvfr/dsfr": "^1.10.2",
     "@jonkoops/matomo-tracker-react": "^0.7.0",
     "@tanstack/react-query": "^5.8.4",
