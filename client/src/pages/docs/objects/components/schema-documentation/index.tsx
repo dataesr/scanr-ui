@@ -161,14 +161,14 @@ const SchemaDocumentation = ({
     <Row gutters className="fr-my-2w">
       <RenderProperty
         key={i}
-        required={required.includes(subfield)}
+        required={Array.isArray(required) ? required.includes(subfield) : false}
         definitions={definitions}
         propertyName={subfield}
         propertySchema={subdoc}
         isNested={i !== Object.entries(properties).length}
       />
     </Row>
-  ));
+  ))
 };
 
 export default SchemaDocumentation;

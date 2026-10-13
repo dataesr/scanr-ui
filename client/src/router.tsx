@@ -22,6 +22,8 @@ import Overview from "./pages/docs/objects/overview";
 import PersonsDocs from "./pages/docs/objects/persons";
 import ProjectsDocs from "./pages/docs/objects/projects";
 import ScanrPublicationsDocs from "./pages/docs/objects/publications";
+import ProjectsParticipationsDocs from "./pages/docs/objects/participations"
+import PatentsDocs from "./pages/docs/objects/patents"
 import Home from "./pages/home";
 import Networks from "./pages/networks";
 import NetworksGetStarted from "./pages/networks/components/get-started";
@@ -64,6 +66,8 @@ export default function Router() {
             <Route path="objects/publications" element={<ScanrPublicationsDocs />} />
             <Route path="objects/organizations" element={<OrganizationsDocs />} />
             <Route path="objects/persons" element={<PersonsDocs />} />
+            <Route path="objects/participations" element={<ProjectsParticipationsDocs />} />
+            <Route path="objects/patents" element={<PatentsDocs />} />
             <Route path="quick-start" element={<div>QuickStart</div>} />
             <Route path="overview/" element={<Overview />} />
           </Route>

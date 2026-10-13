@@ -66,6 +66,14 @@ export default function DocsLayout() {
                 })}
               </Link>
               <Link
+                current={is("objects/participations")}
+                href="/docs/objects/participations"
+              >
+                {intl.formatMessage({
+                  id: "layout.docs.sidemenu.participations",
+                })}
+              </Link>
+              <Link
                 current={is("objects/organizations")}
                 href="/docs/objects/organizations"
               >
@@ -79,6 +87,14 @@ export default function DocsLayout() {
               >
                 {intl.formatMessage({
                   id: "layout.docs.sidemenu.persons",
+                })}
+              </Link>
+              <Link
+                current={is("objects/patents")}
+                href="/docs/objects/patents"
+              >
+                {intl.formatMessage({
+                  id: "layout.docs.sidemenu.patents",
                 })}
               </Link>
             </SideMenuItem>

@@ -4,5 +4,7 @@
     "layout.docs.sidemenu.publications": "Publications",
     "layout.docs.sidemenu.organizations": "Organizations",
     "layout.docs.sidemenu.projects": "Projects",
-    "layout.docs.sidemenu.persons": "Persons"
+    "layout.docs.sidemenu.persons": "Persons",
+    "layout.docs.sidemenu.participations": "Participations (Projects)",
+    "layout.docs.sidemenu.patents": "Patents"
 }
