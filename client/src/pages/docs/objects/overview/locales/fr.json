@@ -10,12 +10,8 @@
     "app.docs.overwiew.persons.index": "Index des personnes",
     "app.docs.overwiew.patents.index": "Index des brevets",
     "app.docs.overwiew.projects.index": "Index des projets",
-    "app.docs.overwiew.organizations.dump": "Dump des structures",
-    "app.docs.overwiew.publications.dump": "Dump des publications",
-    "app.docs.overwiew.persons.dump": "Dump des personnes",
-    "app.docs.overwiew.patents.dump": "Dump des brevets",
-    "app.docs.overwiew.projects.dump": "Dump des projets",
-    "app.docs.overwiew.indexes.download": "Les données sont aussi disponibles directement en téléchargement",
+    "app.docs.overwiew.indexes.download": "Les données sont aussi disponibles en téléchargement direct, sous forme de dumps complets pour chaque type d'entrée : structures, publications, auteurs, financements et brevets. Les fichiers sont au format JSON Lines compressé (.jsonl.gz), avec un objet dénormalisé par ligne. Les jeux de données les plus volumineux, comme les publications et les auteurs, sont découpés en plusieurs fichiers. Le fichier manifeste ci-dessous liste, pour chaque type d'entrée, l'URL de chaque fichier, sa taille et sa date de dernière mise à jour.",
+    "app.docs.overwiew.manifest": "Manifeste des fichiers de téléchargement (JSON)",
     "app.docs.overwiew.badge.warning": "Attention, les indexes peuvent être très volumineux et nécessiter un temps de traitement important.",
     "app.docs.overwiew.badge.info": "Un login et mot de passe sont nécessaires pour interroger ces indexes. Merci de nous contacter pour les obtenir."
 }

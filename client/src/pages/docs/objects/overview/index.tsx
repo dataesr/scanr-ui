@@ -34,14 +34,6 @@ export default function Overview() {
     projects: "scanr-projects",
     patents: "scanr-patents",
   };
-
-  const downloadUrls = {
-    organizations: "organizations",
-    publications: "publications",
-    persons: "persons",
-    projects: "projects",
-    patents: "patents",
-  };
   return (
     <Container className="fr-mb-8w">
       <Title as="h1" look="h3">
@@ -84,23 +76,17 @@ export default function Overview() {
       <Badge size="sm" variant="warning">
         {intl.formatMessage({ id: "app.docs.overwiew.badge.warning" })}
       </Badge>
-      <Row className="fr-mb-5v fr-mt-3v">
-        {Object.entries(downloadUrls).map(([key, value]) => (
-          <Col>
-            <Button
-              key={key}
-              as="a"
-              href={`https://scanr-data.s3.gra.io.cloud.ovh.net/production/${value}_denormalized.jsonl.gz`}
-              variant="tertiary"
-              icon="download-line"
-              iconPosition="left"
-              className="fr-mr-1w"
-            >
-              {intl.formatMessage({ id: `app.docs.overwiew.${key}.dump` })}
-            </Button>
-          </Col>
-        ))}
-      </Row>
+      <div className="fr-mt-3v">
+        <Button
+          as="a"
+          href="https://scanr-data.s3.gra.io.cloud.ovh.net/production/manifest_scanr.json"
+          variant="tertiary"
+          icon="file-text-line"
+          iconPosition="left"
+        >
+          {intl.formatMessage({ id: "app.docs.overwiew.manifest" })}
+        </Button>
+      </div>
     </Container>
   );
 }

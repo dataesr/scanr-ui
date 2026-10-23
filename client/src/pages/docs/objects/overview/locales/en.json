@@ -10,13 +10,9 @@
     "app.docs.overwiew.persons.index": "Person index",
     "app.docs.overwiew.patents.index": "Patent index",
     "app.docs.overwiew.projects.index": "Project index",
-    "app.docs.overwiew.organizations.dump": "Organization Dump",
-    "app.docs.overwiew.publications.dump": "Publication Dump",
-    "app.docs.overwiew.persons.dump": "Person Dump",
-    "app.docs.overwiew.patents.dump": "Patent Dump",
-    "app.docs.overwiew.projects.dump": "Project Dump",
     "app.docs.overwiew.indexes.info": "A login and password are required to query these indexes. Please contact us to obtain them.",
-    "app.docs.overwiew.indexes.download": "The data is also available for direct download.",
+    "app.docs.overwiew.indexes.download": "The data is also available for direct download, as full dumps for each type of entry: organizations, publications, authors, funding, and patents. The files are in compressed JSON Lines format (.jsonl.gz), with one denormalized object per line. The largest datasets, such as publications and authors, are split into several files. The manifest file below lists, for each type of entry, the URL of each file, its size, and its last update date.",
+    "app.docs.overwiew.manifest": "Manifest of download files (JSON)",
     "app.docs.overwiew.badge.warning": "Attention, indexes can be very large and may require significant processing time.",
     "app.docs.overwiew.badge.info": "A username and password are required to query these indexes. please contact us to obtain them."
 }
