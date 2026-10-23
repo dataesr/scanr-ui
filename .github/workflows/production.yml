@@ -93,7 +93,9 @@ jobs:
 
   notify:
     name: 📢 Notify in mattermost channel
-    needs: deploy
+    needs: 
+      - deploy
+      - release
     if: always()
     runs-on: ubuntu-latest
     steps:
