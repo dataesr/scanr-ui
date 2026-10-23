@@ -80,7 +80,7 @@ jobs:
   deploy:
     name: 💭 Update production deployment
     runs-on: ubuntu-latest
-    needs: publish-ghcr
+    needs: release
     steps:
       - name: Deploy to Cluster
         id: kubectl-deploy
@@ -93,9 +93,7 @@ jobs:
 
   notify:
     name: 📢 Notify in mattermost channel
-    needs: 
-      - deploy
-      - release
+    needs: deploy
     if: always()
     runs-on: ubuntu-latest
     steps:
