@@ -1,3 +1,7 @@
+# scanR-UI
+
+The backend of scanR can be found here : https://github.com/dataesr/scanr-backend.
+
 Server folder is just for testing purpose for now.
 
 To start developping,
